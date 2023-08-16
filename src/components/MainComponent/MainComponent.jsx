@@ -1,6 +1,8 @@
-import { useState } from 'react'
-import Avatar from '../Avatar/Avatar'
+import React from 'react'
+
 import InfoSidebar from '../InfoSidebar/InfoSidebar'
+import Avatar from '../Avatar/Avatar'
+import './MainComponent.css'
 
 function MainComponent() {
 

@@ -9,7 +9,7 @@ function Links ({socials}) {
     <div className="links-layout">
      {socials?.map(item => {
       return(
-        <div className="links-wrapper">
+        <div className="links-wrapper" key={item.name}>
             <img src={linkIcon} className="link-icon" />
             <a href={item.link} target="_blank" className="link-label"> {item.name} </a>
         </div>

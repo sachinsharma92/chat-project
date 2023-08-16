@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import './InfoSidebar.css'
-import pin from '../../assets/Pin.png'
+import pin from '../../assets/Pin.svg'
 import weatherIcon from '../../assets/weather-icon.svg'
 import locationPin from '../../assets/location-pin.svg'
+import userAvatar from '../../assets/camp-avatar.png'
 import IconText from '../IconText/IconText'
 import CloseButton from '../CloseButton/CloseButton'
 import Links from '../Links/Links'
@@ -10,6 +11,7 @@ import Links from '../Links/Links'
 const CampUserInfo = {
     campName: "Camp Cai",
     campHost: "Jeremy Cai",
+    campHostAvatar: userAvatar,
     campMessage: "Hi deep work crew! I created this space to focus on our deep work. Comment what you'll be working on.",
     location: "Park City, USA",
     weather: "Sunny 82 F",
@@ -42,6 +44,7 @@ function InfoSidebar() {
      </div>
      <div className="host-container">
         <p className="info-label"> Host </p>
+        <img src={CampUserInfo.campHostAvatar} className="user-avatar" alt="User Avatar" />
         <p className="info-host">
           {CampUserInfo.campHost}
         </p>
