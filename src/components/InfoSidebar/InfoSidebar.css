@@ -1,3 +1,10 @@
+@font-face {
+    font-family: Hello-Goops;
+    src: url("../../assets/fonts/Hello-Goops.otf") format("opentype");
+}
+
+
+
 .info-layout {
   border-radius: 12px;
   background: var(--off-white, #FFFFF7);
@@ -13,6 +20,7 @@
 .info-header {
   color: #44373C;
   font-size: 32px;
+  font-family: Hello-Goops;
   font-style: normal;
   font-weight: 400;
   line-height: 100%; 
@@ -37,6 +45,7 @@
   align-self: stretch;
   align-items: center;
   justify-content: space-around;
+  margin-top: 5px;
 }
 
 .conditions-container {
@@ -75,8 +84,8 @@
 
 .pin {
   position: absolute;
-  top: 5px;
-  left: 135px;
+  top: -3px;
+  left: 120px;
 }
 
 .camp-host {
