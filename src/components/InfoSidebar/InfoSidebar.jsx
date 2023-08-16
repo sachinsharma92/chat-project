@@ -15,7 +15,7 @@ const CampUserInfo = {
     campHostAvatar: userAvatar,
     campMessage: "Hi deep work crew! I created this space to focus on our deep work. Comment what you'll be working on.",
     location: "Park City, USA",
-    weather: "Sunny 82 F",
+    weather: "Sunny 82° F",
     socials: [
         {name: 'Substack ↗', link: ''},
         {name: 'Twitter ↗', link: 'https://twitter.com/'},
@@ -46,10 +46,12 @@ function InfoSidebar() {
      </div>
      <div className="host-container">
         <p className="info-label"> Host </p>
-        <img src={CampUserInfo.campHostAvatar} className="user-avatar" alt="User Avatar" />
-        <p className="info-host">
-          {CampUserInfo.campHost}
-        </p>
+        <div className="camp-host">
+          <img src={CampUserInfo.campHostAvatar} className="user-avatar" alt="User Avatar" />
+          <p className="info-host">
+            {CampUserInfo.campHost}
+          </p>
+        </div>
      </div>
 
      <div className="conditions-container">

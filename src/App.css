@@ -9,6 +9,5 @@ body {
   padding: 12px 12px 12px 16px;
   align-items: flex-start;
   gap: 12px;
-  background: url(<path-to-image>), lightgray 0% 0% / 7.999999821186066px 7.999999821186066px repeat, #8A5134;
-  background-blend-mode: color-burn, normal;
+  background-color:  #8A5134;
 }

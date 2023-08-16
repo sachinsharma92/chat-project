@@ -10,3 +10,11 @@
     cursor: pointer;
 }
 
+.subscribe-button {
+  color:  #44373C;
+  text-align: center;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}

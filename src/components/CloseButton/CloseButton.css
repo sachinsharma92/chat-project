@@ -8,4 +8,5 @@
   align-items: center;
   border-radius: 500px;
   background: var(--eggshell, #FFFBE7);
+  cursor: pointer;
 }
