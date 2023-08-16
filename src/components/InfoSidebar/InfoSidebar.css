@@ -25,6 +25,7 @@
   align-items: flex-start;
   gap: 16px;
   align-self: stretch;
+  border-bottom: 1px solid #EEE9CA;
 }
 
 .header-container {

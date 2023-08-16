@@ -1,0 +1,12 @@
+.subscribebutton-container {
+    display: flex;
+    height: 40px;
+    padding: 0px 12px;
+    justify-content: center;
+    align-items: center;
+    align-self: stretch;
+    background: #9FE870;
+    border-radius: 8px;
+    cursor: pointer;
+}
+

@@ -6,6 +6,7 @@ import locationPin from '../../assets/location-pin.svg'
 import userAvatar from '../../assets/camp-avatar.png'
 import IconText from '../IconText/IconText'
 import CloseButton from '../CloseButton/CloseButton'
+import SubscribeButton from '../SubscribeButton/SubscribeButton'
 import Links from '../Links/Links'
 
 const CampUserInfo = {
@@ -41,6 +42,7 @@ function InfoSidebar() {
         <p className="info-message">
           {CampUserInfo.campMessage}
         </p>
+        <SubscribeButton />
      </div>
      <div className="host-container">
         <p className="info-label"> Host </p>
