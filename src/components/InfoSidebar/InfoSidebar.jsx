@@ -5,6 +5,7 @@ import weatherIcon from '../../assets/weather-icon.svg'
 import locationPin from '../../assets/location-pin.svg'
 import IconText from '../IconText/IconText'
 import CloseButton from '../CloseButton/CloseButton'
+import Links from '../Links/Links'
 
 const CampUserInfo = {
     campName: "Camp Cai",
@@ -13,10 +14,10 @@ const CampUserInfo = {
     location: "Park City, USA",
     weather: "Sunny 82 F",
     socials: [
-        {name: 'Substack', link: ''},
-        {name: 'Twitter', link: 'https://twitter.com/'},
-        {name: 'Instagram', link: 'https://www.instagram.com/'},
-        {name: 'YouTube', link:'https://www.youtube.com/' }
+        {name: 'Substack ↗', link: ''},
+        {name: 'Twitter ↗', link: 'https://twitter.com/'},
+        {name: 'Instagram ↗', link: 'https://www.instagram.com/'},
+        {name: 'YouTube ↗', link:'https://www.youtube.com/' }
     ]
 };
 
@@ -50,6 +51,11 @@ function InfoSidebar() {
         <p className="info-label"> Conditions </p>
         <IconText src={locationPin} text={CampUserInfo.location} />
         <IconText src={weatherIcon} text={CampUserInfo.weather} />
+     </div>
+
+     <div className="links-container">
+        <p className="info-label"> Links </p>
+        <Links socials={CampUserInfo.socials} />
      </div>
     </div>
   )

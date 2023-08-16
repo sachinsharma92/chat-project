@@ -1,0 +1,24 @@
+.links-container {
+  display: flex;
+  padding: 20px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  align-self: stretch;
+}
+
+.links-wrapper {
+  flex-direction: row;
+  column-gap: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.link-label {
+  color:  #725C4E;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  text-align: left;
+}
