@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import Avatar from '../Avatar/Avatar'
+import InfoSidebar from '../InfoSidebar/InfoSidebar'
 
 function MainComponent() {
 
   return (
-    <>
-      <p> Camp UI</p>
+    <div className="main-component">
+      <InfoSidebar />
       <Avatar />
-    </>
+    </div>
   )
 }
 

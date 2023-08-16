@@ -1,0 +1,15 @@
+.icontext-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    column-gap: 10px;
+}
+
+
+.text-label {
+    color: #725C4E;
+    font-size: 14px;
+    font-style: bold;
+    font-weight: 600;
+    padding: 0;
+}
