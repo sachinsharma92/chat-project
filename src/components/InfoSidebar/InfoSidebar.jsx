@@ -8,6 +8,7 @@ import IconText from '../IconText/IconText'
 import CloseButton from '../CloseButton/CloseButton'
 import SubscribeButton from '../SubscribeButton/SubscribeButton'
 import Links from '../Links/Links'
+import Playlist from '../Playlist/Playlist'
 
 const CampUserInfo = {
     campName: "Camp Cai",
@@ -32,6 +33,7 @@ function InfoSidebar() {
         <div className="pin-container">
           <img src={pin} className="pin" alt="Pin Image" />
         </div>
+    <div className="main-content">
      <div className="header-container">
       <h1 className="info-header">
         {CampUserInfo.campName}
@@ -63,6 +65,12 @@ function InfoSidebar() {
      <div className="links-container">
         <p className="info-label"> Links </p>
         <Links socials={CampUserInfo.socials} />
+     </div>
+     </div>
+
+    
+     <div className="playlist-container">
+        <Playlist />
      </div>
     </div>
   )
