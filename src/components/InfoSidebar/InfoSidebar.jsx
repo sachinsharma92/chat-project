@@ -5,10 +5,11 @@ import weatherIcon from '../../assets/weather-icon.svg'
 import locationPin from '../../assets/location-pin.svg'
 import userAvatar from '../../assets/camp-avatar.png'
 import IconText from '../IconText/IconText'
-import CloseButton from '../CloseButton/CloseButton'
+import closeIcon from '../../assets/close-button.svg'
 import SubscribeButton from '../SubscribeButton/SubscribeButton'
 import Links from '../Links/Links'
 import Playlist from '../Playlist/Playlist'
+
 
 const CampUserInfo = {
     campName: "Camp Cai",
@@ -26,9 +27,12 @@ const CampUserInfo = {
 };
 
 
-function InfoSidebar() {
 
+function InfoSidebar() {
+  const [open, setOpen] = useState(true);
   return (
+  <>
+  {open ? 
     <div className="info-layout">
         <div className="pin-container">
           <img src={pin} className="pin" alt="Pin Image" />
@@ -38,7 +42,10 @@ function InfoSidebar() {
       <h1 className="info-header">
         {CampUserInfo.campName}
       </h1>
-      <CloseButton />
+      
+      <div className="closebutton-container" onClick={()=> setOpen(!open)}>
+        <img src={closeIcon} className="close-button" />
+      </div>
      </div>
      <div className="message-container">
         <p className="info-message">
@@ -68,11 +75,24 @@ function InfoSidebar() {
      </div>
      </div>
 
-    
+
      <div className="playlist-container">
         <Playlist />
      </div>
     </div>
+  :  
+  <div className="header-container-collapsed" onClick={() => setOpen(!open)}> 
+  <div className="info-layout-collapsed">
+    <div className="pin-container">
+      <img src={pin} className="pin-collapsed" alt="Pin Image" />
+    </div>
+  <h1 className="info-header-collapsed">
+   {CampUserInfo.campName}
+  </h1>
+  </div>
+  </div>}
+  
+  </>
   )
 }
 

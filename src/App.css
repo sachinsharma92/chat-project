@@ -4,8 +4,7 @@ body {
   flex-direction: row;
   justify-content: space-between;
   font-family: system;
-  width: 1280px;
-  height: 780px;
+  max-width: 400px;
   padding: 12px 12px 12px 16px;
   align-items: flex-start;
   gap: 12px;

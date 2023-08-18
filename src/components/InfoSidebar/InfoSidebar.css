@@ -4,7 +4,7 @@
 }
 
 .main-content {
-    height: calc(100vh - 155px);
+    height: 88vh;
 }
 
 .info-layout {
@@ -16,7 +16,19 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 10px;
-  height: 95vh;
+  height: 100%;
+}
+
+.info-layout-collapsed {
+    border-radius: 12px;
+    background: var(--off-white, #FFFFF7);
+    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.16);
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    height: 100%;
+    padding: 0px 10px;
 }
 
 
@@ -27,6 +39,17 @@
   font-style: normal;
   font-weight: 400;
   line-height: 100%; 
+  margin: 0px 10px;
+}
+
+.info-header-collapsed {
+  color: #44373C;
+  font-size: 32px;
+  font-family: Hello-Goops;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 100%; 
+  margin: 10px;
 }
 
 .message-container {
@@ -49,6 +72,20 @@
   align-items: center;
   justify-content: space-around;
   margin-top: 5px;
+}
+
+.header-container-collapsed {
+    display: flex;
+    padding: 0px;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 16px;
+    align-self: stretch;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 5px;
+    width: 163px;
+    cursor: pointer;
 }
 
 .conditions-container {
@@ -91,6 +128,12 @@
   left: 120px;
 }
 
+.pin-collapsed {
+  position: absolute;
+  top: 0px;
+  left: 73px;
+}
+
 .camp-host {
   display: flex;
   flex-direction: row;
@@ -108,3 +151,16 @@
   display: flex;
   flex-direction: column;
 }
+
+.closebutton-container {
+    display: flex;
+    width: 40px;
+    height: 40px;
+    transform: rotate(90deg);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 500px;
+    background: var(--eggshell, #FFFBE7);
+    cursor: pointer;
+  }
