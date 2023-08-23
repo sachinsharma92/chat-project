@@ -8,7 +8,7 @@ function MessageBox() {
   return (
     <div className="message-box-container">
     <div className="messenger-container">
-       <input type="text" id="message" name="message" placeholder="Send a message..." />
+       <input type="text" id="message" name="message" placeholder="Press ENTER to chat" />
        <img src={messengerIcon} className="messenger-icon" alt="Messenger Icon" />
     </div>
     </div>
