@@ -1,15 +1,15 @@
-import { useState } from 'react'
-import avatarImage from '../../assets/avatarImage.svg'
-import './Avatar.css'
-
+import './Avatar.css';
 
 function Avatar() {
-
   return (
     <div className="avatar-layout">
-     <img src={avatarImage} className="avatar" alt="Avatar Image" />
+      <img
+        src={'/assets/avatarImage.svg'}
+        className="avatar"
+        alt="Avatar Image"
+      />
     </div>
-  )
+  );
 }
 
-export default Avatar
+export default Avatar;

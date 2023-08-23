@@ -1,15 +1,11 @@
-import { useState } from 'react'
-import './CameraButton.css'
-import cameraIcon from '../../assets/camera-icon.svg'
-
+import './CameraButton.css';
 
 function CameraButton() {
-
   return (
     <div className="camera-button-container">
-      <img src={cameraIcon} className="camera-button" />
+      <img src={'/assets/camera-icon.svg'} className="camera-button" />
     </div>
-  )
+  );
 }
 
-export default CameraButton
+export default CameraButton;

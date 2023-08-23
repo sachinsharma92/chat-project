@@ -1,27 +1,24 @@
-import React from 'react'
-
-import InfoSidebar from '../InfoSidebar/InfoSidebar'
-import Avatar from '../Avatar/Avatar'
-import './MainComponent.css'
-import CameraButton from '../CameraButton/CameraButton'
-import MessageBox from '../MessageBox/MessageBox'
+import InfoSidebar from '../InfoSidebar/InfoSidebar';
+import Avatar from '../Avatar/Avatar';
+import './MainComponent.css';
+import CameraButton from '../CameraButton/CameraButton';
+import MessageBox from '../MessageBox/MessageBox';
 
 function MainComponent() {
-
   return (
     <>
-    <div className="main-component">
-      <InfoSidebar />
-      <div className="right-sidebar">
-        <Avatar />
-        <CameraButton />
+      <div className="main-component">
+        <InfoSidebar />
+        <div className="right-sidebar">
+          <Avatar />
+          <CameraButton />
+        </div>
       </div>
-    </div>
-    <div className="footer">
+      <div className="footer">
         <MessageBox />
-    </div>
+      </div>
     </>
-  )
+  );
 }
 
-export default MainComponent
+export default MainComponent;
