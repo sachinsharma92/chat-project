@@ -3,6 +3,7 @@
     justify-content: space-between;
     flex-direction: row;
     width: 98vw;
+    z-index: 3;
 }
 
 .right-sidebar {
