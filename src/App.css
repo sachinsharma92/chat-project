@@ -9,8 +9,8 @@ body {
   align-items: flex-start;
   gap: 12px;
   background-image: url("../public/seamless-9.png");
-  background-blend-mode: color-burn, normal;
   background-color: #8A5134;
   background-repeat: repeat;
-  background-size: 25%;
+  background-size: 21%;
+  background-blend-mode: overlay;
 }
