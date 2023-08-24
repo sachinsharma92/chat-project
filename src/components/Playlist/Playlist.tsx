@@ -1,7 +1,13 @@
 import './Playlist.css';
 import MusicPlayerButton from '../MusicPlayerButton/MusicPlayerButton';
 
-const SongInfo = {
+interface SongInfoProps {
+  song_title: string;
+  song_artist: string;
+  song_cover_art: string;
+}
+
+const SongInfo: SongInfoProps = {
   song_title: 'It Goes Like NaNaNa',
   song_artist: 'Greg Foat, Gigi Massin',
   song_cover_art: '/assets/song-cover-art.svg',

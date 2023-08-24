@@ -1,7 +1,13 @@
 import { map } from 'lodash';
 import './Links.css';
 
-function Links({ socials }: { socials: any[] }) {
+
+interface social { 
+  name: string;
+  link: string;
+}
+
+function Links({ socials }: { socials: social[] }) {
   return (
     <div className="links-layout">
       {map(socials, item => {
@@ -23,5 +29,5 @@ function Links({ socials }: { socials: any[] }) {
     </div>
   );
 }
-
+ 
 export default Links;

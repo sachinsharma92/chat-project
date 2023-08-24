@@ -5,7 +5,23 @@ import SubscribeButton from '../SubscribeButton/SubscribeButton';
 import Links from '../Links/Links';
 import Playlist from '../Playlist/Playlist';
 
-const CampUserInfo = {
+
+interface social {
+  name: string;
+  link: string;
+}
+
+interface CampUserInfoProps {
+  campName: string;
+  campHost: string;
+  campHostAvatar: string;
+  campMessage: string;
+  location: string;
+  weather: string;
+  socials: social[];
+}
+
+const CampUserInfo: CampUserInfoProps = {
   campName: 'Camp Cai',
   campHost: 'Jeremy Cai',
   campHostAvatar: '/assets/camp-avatar.png',

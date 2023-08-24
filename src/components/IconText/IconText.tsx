@@ -1,8 +1,11 @@
-import { useState } from 'react'
 import './IconText.css'
 
+interface IconTextProps {
+  src: string;
+  text: string;
+}
 
-function IconText({src, text}) {
+function IconText({src, text} : IconTextProps) {
 
   return (
     <div className="icontext-container">
