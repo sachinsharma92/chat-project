@@ -1,9 +1,17 @@
 .main-component {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-    width: 98vw;
-    z-index: 3;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
+  min-width: 400px;
+  min-height: 500px;
+  gap: 12px;
+  padding: 12px 12px 12px 16px;
+  box-sizing: border-box;
 }
 
 .right-sidebar {

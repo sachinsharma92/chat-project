@@ -1,0 +1,46 @@
+.MediaBar {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background: var(--eggshell, #fffbe7);
+  padding: 0px 10px 10px 10px;
+  box-sizing: border-box;
+
+  .MediaBarContentType {
+    position: relative;
+    width: 100%;
+  }
+
+  .MediaBarContentType {
+    box-sizing: border-box;
+
+    .MediaBarContentTypeNotFound {
+      position: relative;
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      & > p {
+        font-weight: bold;
+        font-size: 20px;
+      }
+    }
+
+    iframe {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+  }
+}
+
+.HideDocument {
+  display: none !important;
+  overflow: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+}

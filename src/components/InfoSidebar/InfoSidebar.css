@@ -1,54 +1,56 @@
 @font-face {
-    font-family: Hello-Goops;
-    src: url("../../assets/fonts/Hello-Goops.otf") format("opentype");
+  font-family: Hello-Goops;
+  src: url('/assets/fonts/Hello-Goops.otf') format('opentype');
 }
 
 .main-content {
-    height: 88vh;
+  height: calc(100% - 250px);
+  box-sizing: border-box;
+  overflow: hidden;
+  overflow-y: auto;
 }
 
 .info-layout {
   border-radius: 12px;
-  background: var(--off-white, #FFFFF7);
+  background: var(--off-white, #fffff7);
   box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.16);
   width: 260px;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  margin-top: 10px;
   height: 100%;
+  overflow: hidden;
+  overflow-y: auto;
 }
 
 .info-layout-collapsed {
-    border-radius: 12px;
-    background: var(--off-white, #FFFFF7);
-    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.16);
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
-    height: 100%;
-    padding: 0px 10px;
+  border-radius: 12px;
+  background: var(--off-white, #fffff7);
+  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.16);
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  padding: 0px 10px;
 }
 
-
 .info-header {
-  color: #44373C;
+  color: #44373c;
   font-size: 32px;
   font-family: Hello-Goops;
   font-style: normal;
   font-weight: 400;
-  line-height: 100%; 
+  line-height: 100%;
   margin: 0px 10px;
 }
 
 .info-header-collapsed {
-  color: #44373C;
+  color: #44373c;
   font-size: 32px;
   font-family: Hello-Goops;
   font-style: normal;
   font-weight: 400;
-  line-height: 100%; 
+  line-height: 100%;
   margin: 10px;
 }
 
@@ -59,7 +61,7 @@
   align-items: flex-start;
   gap: 16px;
   align-self: stretch;
-  border-bottom: 1px solid #EEE9CA;
+  border-bottom: 1px solid #eee9ca;
 }
 
 .header-container {
@@ -75,17 +77,16 @@
 }
 
 .header-container-collapsed {
-    display: flex;
-    padding: 0px;
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 16px;
-    align-self: stretch;
-    align-items: center;
-    justify-content: space-around;
-    margin-top: 5px;
-    width: 163px;
-    cursor: pointer;
+  display: flex;
+  padding: 0px;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 16px;
+  align-self: stretch;
+  justify-content: space-around;
+  margin-top: 5px;
+  width: 163px;
+  cursor: pointer;
 }
 
 .conditions-container {
@@ -104,8 +105,9 @@
   align-self: stretch;
 }
 
-.info-message, .info-host {
-  color: #725C4E;
+.info-message,
+.info-host {
+  color: #725c4e;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
@@ -114,7 +116,7 @@
 }
 
 .info-label {
-  color: #725C4E;
+  color: #725c4e;
   font-size: 12px;
   font-style: bold;
   font-weight: 600;
@@ -153,14 +155,14 @@
 }
 
 .closebutton-container {
-    display: flex;
-    width: 40px;
-    height: 40px;
-    transform: rotate(90deg);
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-radius: 500px;
-    background: var(--eggshell, #FFFBE7);
-    cursor: pointer;
-  }
+  display: flex;
+  width: 40px;
+  height: 40px;
+  transform: rotate(90deg);
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 500px;
+  background: var(--eggshell, #fffbe7);
+  cursor: pointer;
+}

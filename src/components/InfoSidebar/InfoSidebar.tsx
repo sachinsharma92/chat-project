@@ -3,8 +3,7 @@ import './InfoSidebar.css';
 import IconText from '../IconText/IconText';
 import SubscribeButton from '../SubscribeButton/SubscribeButton';
 import Links from '../Links/Links';
-import Playlist from '../Playlist/Playlist';
-
+import { MusicPlayer } from '@/packages';
 
 interface social {
   name: string;
@@ -39,6 +38,7 @@ const CampUserInfo: CampUserInfoProps = {
 
 function InfoSidebar() {
   const [open, setOpen] = useState(true);
+
   return (
     <>
       {open ? (
@@ -95,7 +95,7 @@ function InfoSidebar() {
           </div>
 
           <div className="playlist-container">
-            <Playlist />
+            <MusicPlayer />
           </div>
         </div>
       ) : (
