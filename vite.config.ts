@@ -6,5 +6,6 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx'],
+    alias: [{ find: '@', replacement: '/src' }]
   },
 });
