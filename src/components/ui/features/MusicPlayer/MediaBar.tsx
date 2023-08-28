@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { isEmpty } from 'lodash';
-import { MusicPlayerMediaType } from '../../types';
+import { MusicPlayerMediaType } from '@/types';
 import cx from 'classnames';
-
 import './MediaBar.scss';
 
 export type MediaBarProps = {
   mediaUrl: string;
+
   mediaType: MusicPlayerMediaType;
 };
 
@@ -71,8 +71,8 @@ const MediaBar = (props: MediaBarProps) => {
   }, [mediaUrl, isYoutube, isSpotify]);
 
   return (
-    <div className="MediaBar" data-testid={'MediaBarTestId'}>
-      <div className="MediaBarContentType">
+    <div className="media-bar" data-testid={'MediaBarTestId'}>
+      <div className="media-bar-content-type">
         <iframe
           ref={youtubeRef}
           width="100%"
@@ -82,7 +82,7 @@ const MediaBar = (props: MediaBarProps) => {
           allow="autoplay; encrypted-media"
           allowFullScreen
           title="YouTube"
-          className={cx({ HideDocument: !isYoutube })}
+          className={cx({ 'hide-document': !isYoutube })}
         />
         <iframe
           ref={spotifyRef}
@@ -92,11 +92,10 @@ const MediaBar = (props: MediaBarProps) => {
           frameBorder="0"
           allowFullScreen={false}
           allow="autoplay; encrypted-media;"
-          className={cx({ HideDocument: !isSpotify })}
+          className={cx({ 'hide-document': !isSpotify })}
         ></iframe>
-
         {!isSpotify && !isYoutube && (
-          <div className="MediaBarContentTypeNotFound">
+          <div className="media-bar-content-type-not-found">
             <p>404 not found</p>
           </div>
         )}

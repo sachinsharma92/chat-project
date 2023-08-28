@@ -1,4 +1,4 @@
-.MediaBar {
+.media-bar {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -8,15 +8,15 @@
   padding: 0px 10px 10px 10px;
   box-sizing: border-box;
 
-  .MediaBarContentType {
+  .media-bar-content-type {
     position: relative;
     width: 100%;
   }
 
-  .MediaBarContentType {
+  .media-bar-content-type {
     box-sizing: border-box;
 
-    .MediaBarContentTypeNotFound {
+    .media-bar-content-type-not-found {
       position: relative;
       width: 100%;
       padding: 8px;
@@ -38,7 +38,7 @@
   }
 }
 
-.HideDocument {
+.hide-document {
   display: none !important;
   overflow: hidden !important;
   height: 0 !important;

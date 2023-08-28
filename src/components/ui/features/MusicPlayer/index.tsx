@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { MusicPlayerMediaType } from '../../types';
 import { isNumber } from 'lodash';
+import { MusicPlayerMediaType } from '@/types';
 import MediaForm, { defaultYoutubeUrl } from './MediaForm';
 import MediaBar from './MediaBar';
+import MediaHeader from './MediaHeader';
 import './MusicPlayer.scss';
 
 const MusicPlayer = (props: { height?: number }) => {
@@ -17,12 +18,13 @@ const MusicPlayer = (props: { height?: number }) => {
 
   return (
     <div
-      className="MusicPlayer"
+      className="music-player"
       data-testid={'MusicPlayerTestId'}
       style={{
         ...(isNumber(height) && height > 0 && { height: `${height}px` }),
       }}
     >
+      <MediaHeader />
       <MediaForm onMediaChange={handleMediaChange} />
       <MediaBar mediaType={mediaType} mediaUrl={mediaUrl} />
     </div>

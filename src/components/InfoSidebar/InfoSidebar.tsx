@@ -3,7 +3,7 @@ import './InfoSidebar.css';
 import IconText from '../IconText/IconText';
 import SubscribeButton from '../SubscribeButton/SubscribeButton';
 import Links from '../Links/Links';
-import { MusicPlayer } from '@/features';
+import { MusicPlayer } from '../ui/features';
 
 interface social {
   name: string;

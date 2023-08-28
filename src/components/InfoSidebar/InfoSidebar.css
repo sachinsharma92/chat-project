@@ -4,7 +4,7 @@
 }
 
 .main-content {
-  height: calc(100% - 240px);
+  height: calc(100% - 270px);
   box-sizing: border-box;
   overflow: hidden;
   overflow-y: auto;
@@ -152,7 +152,7 @@
 .playlist-container {
   display: flex;
   flex-direction: column;
-  height: 240px;
+  height: 270px;
 }
 
 .closebutton-container {

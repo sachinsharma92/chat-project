@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { isEmpty, isFunction, isString } from 'lodash';
-import { MusicPlayerMediaType } from '../../types';
-import Button from '../../components/Button';
+import { MusicPlayerMediaType } from '@/types';
+import Button from '../../common/Button';
 import './MediaForm.scss';
 
 export type MediaFormProps = {
@@ -53,7 +53,7 @@ const MediaForm = (props: MediaFormProps) => {
   };
 
   return (
-    <div className="MediaForm">
+    <div className="media-form">
       <form onSubmit={handleSubmit(onSubmit)}>
         <input
           defaultValue={defaultYoutubeUrl}
