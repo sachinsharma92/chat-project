@@ -2,7 +2,7 @@ import InfoSidebar from '../InfoSidebar/InfoSidebar';
 import './MainComponent.css';
 import CameraButton from '../CameraButton/CameraButton';
 import MessageBox from '../MessageBox/MessageBox';
-import Avatar from '../ui/common/Avatar/Avatar';
+import Avatar from '../../common/Avatar/Avatar';
 
 function MainComponent({ handleCameraButtonClick }: any) {
   return (

@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import './InfoSidebar.css';
-import IconText from '../IconText/IconText';
+import IconText from '../../common/IconText/IconText';
 import SubscribeButton from '../SubscribeButton/SubscribeButton';
-import Links from '../Links/Links';
-import { MusicPlayer } from '../ui/features';
+import Links from '../../common/Links/Links';
+import MusicPlayer from '../MusicPlayer';
 
 interface social {
   name: string;

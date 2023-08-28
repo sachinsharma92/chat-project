@@ -1,6 +1,6 @@
 import { useRef, useCallback } from 'react'
 import { toPng } from 'html-to-image';
-import MainComponent from './components/MainComponent/MainComponent'
+import MainComponent from './ui/features/MainComponent/MainComponent'
 import './App.css'
 
 
