@@ -25,7 +25,7 @@ const CampUserInfo: CampUserInfoProps = {
   campHost: 'Jeremy Cai',
   campHostAvatar: '/assets/camp-avatar.png',
   campMessage:
-    "Hi deep work crew! I created this space to focus on our deep work. Comment what you'll be working on.",
+    "Welcome to my little internet campground! Enjoy the tunes and leave a message on the bulletin.",
   location: 'Park City, USA',
   weather: 'Sunny 82° F',
   socials: [
