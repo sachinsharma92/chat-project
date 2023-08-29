@@ -16,11 +16,20 @@ Project File Structure
 ```
 \node_modules
 \public
+  \assets
 \src
   \assets
-  \components
-    \MainComponent
-      \MainComponent.jsx
+  \hooks
+  \store
+  \types
+  \ui
+    \common
+      \Avatar
+      ...
+    \features
+      \MusicPlayer
+      ...
+  \game
   App.css
   App.jsx
   index.css
@@ -31,7 +40,8 @@ index.html
 package-lock.json
 package.json
 README.md
+tsconfig.json
+tsconfig.node.json
 vite.config.js
-
 
 ```
