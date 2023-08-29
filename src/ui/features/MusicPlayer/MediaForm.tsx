@@ -3,6 +3,7 @@ import { isEmpty, isFunction, isString } from 'lodash';
 import { MusicPlayerMediaType } from '@/types';
 import Button from '../../common/Button';
 import './MediaForm.scss';
+import TextInput from '../../common/TextInput';
 
 export type MediaFormProps = {
   onMediaChange: (mediaType: MusicPlayerMediaType, url: string) => void;
@@ -45,7 +46,6 @@ const MediaForm = (props: MediaFormProps) => {
       onMediaChange(MusicPlayerMediaType.notFound, '');
       return;
     }
-
     onMediaChange(
       isYoutube ? MusicPlayerMediaType.youtube : MusicPlayerMediaType.spotify,
       mediaUrl,
@@ -55,9 +55,8 @@ const MediaForm = (props: MediaFormProps) => {
   return (
     <div className="media-form">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <input
+        <TextInput
           defaultValue={defaultYoutubeUrl}
-          type="text"
           {...register('mediaUrl', { required: 'Media url is required.' })}
         />
         <Button type="submit" text="Save" />

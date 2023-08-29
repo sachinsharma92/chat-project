@@ -1,8 +1,8 @@
 import InfoSidebar from '../InfoSidebar/InfoSidebar';
-import './MainComponent.css';
 import CameraButton from '../CameraButton/CameraButton';
-import MessageBox from '../MessageBox/MessageBox';
-import Avatar from '../../common/Avatar/Avatar';
+import './MainComponent.css';
+import StickyChat from '../Chat/StickyChat';
+import Avatar from '@/ui/common/Avatar/Avatar';
 
 function MainComponent({ handleCameraButtonClick }: any) {
   return (
@@ -14,9 +14,7 @@ function MainComponent({ handleCameraButtonClick }: any) {
           <CameraButton onButtonClick={handleCameraButtonClick} />
         </div>
       </div>
-      <div className="footer">
-        <MessageBox />
-      </div>
+      <StickyChat />
     </>
   );
 }

@@ -10,7 +10,9 @@ export type ButtonProps = CSSProperties & {
   children?: ReactNode;
   text?: string;
   ariaLabel?: string;
-  onClick?: <T>(props: T) => any | undefined;
+  onClick?: <CB extends (...args: any[]) => any>(
+    ...args: Parameters<CB>
+  ) => ReturnType<CB>;
   style?: Partial<CSSProperties>;
   className?: string;
 };

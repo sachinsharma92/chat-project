@@ -19,10 +19,3 @@
   flex-direction: column;
   justify-content: space-between;
 }
-
-.footer {
-  position: absolute;
-  right: 50%;
-  left: 44%;
-  bottom: 0%;
-}

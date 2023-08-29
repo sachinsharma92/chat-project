@@ -1,0 +1,8 @@
+.sticky-chat {
+  position: fixed;
+  bottom: 0;
+  top: unset;
+  left: 50%;
+  transform: translate(-50%, 0);
+  max-width: 500px;
+}
