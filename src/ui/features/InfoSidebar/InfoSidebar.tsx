@@ -4,10 +4,16 @@ import IconText from '../../common/IconText/IconText';
 import SubscribeButton from '../SubscribeButton/SubscribeButton';
 import Links from '../../common/Links/Links';
 import MusicPlayer from '../MusicPlayer';
+import AppsList from '../AppsList/AppsList';
 
 interface social {
   name: string;
   link: string;
+}
+
+interface appsProps {
+  name: string;
+  icon: string;
 }
 
 interface CampUserInfoProps {
@@ -35,6 +41,12 @@ const CampUserInfo: CampUserInfoProps = {
     { name: 'YouTube ↗', link: 'https://www.youtube.com/' },
   ],
 };
+
+const apps: appsProps[] = [
+  { name: 'Bulletin', icon: '/assets/bulletin-icon.svg'},
+  { name: 'Store', icon: '/assets/store-icon.svg'},
+  { name: 'Chat', icon: '/assets/chat-icon.svg'}
+];
 
 function InfoSidebar() {
   const [open, setOpen] = useState(true);
@@ -87,6 +99,8 @@ function InfoSidebar() {
                 text={CampUserInfo.weather}
               />
             </div>
+
+            <AppsList appsList={apps} />
 
             <div className="links-container">
               <p className="info-label"> Links </p>
