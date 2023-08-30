@@ -12,13 +12,13 @@ function Avatar(props: AvatarComponentProps) {
 
   return (
     <div
-      className="avatar-layout"
+      className="avatar-layout flex justify-center"
       aria-label={!isEmpty(ariaLabel) ? ariaLabel : 'Avatar'}
     >
       {!isEmpty(src) && (
         <img src={src} className="avatar-image" alt="Avatar Image" />
       )}
-      {!src && <p>{head(toString(name))}</p>}
+      {!src && <p className="flex justify-center">{head(toString(name))}</p>}
     </div>
   );
 }

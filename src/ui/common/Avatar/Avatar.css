@@ -4,14 +4,20 @@
   border-radius: 12px;
   background: #eee9ca3d;
   box-shadow: 0px 2px 4px 0px #0000001a;
-  margin-top: 10px;
   padding: 6px;
   box-sizing: border-box;
 }
 
-.avatar {
-  height: inherit;
-  width: inherit;
+.avatar-image {
   border-radius: 6px;
   box-sizing: border-box;
+  object-position: center;
+}
+
+.avatar-layout > p {
+  height: inherit;
+  width: inherit;
+  text-align: center;
+  color: #fff;
+  background: transparent;
 }
