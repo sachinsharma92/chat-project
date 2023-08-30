@@ -15,7 +15,9 @@ function Avatar(props: AvatarComponentProps) {
       className="avatar-layout"
       aria-label={!isEmpty(ariaLabel) ? ariaLabel : 'Avatar'}
     >
-      {!isEmpty(src) && <img src={src} className="avatar" alt="Avatar Image" />}
+      {!isEmpty(src) && (
+        <img src={src} className="avatar-image" alt="Avatar Image" />
+      )}
       {!src && <p>{head(toString(name))}</p>}
     </div>
   );
