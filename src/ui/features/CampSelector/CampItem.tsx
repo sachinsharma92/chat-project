@@ -8,7 +8,7 @@ const CampItem = (props: { camp: ICamp }) => {
 
   return (
     <Button className="camp-item flex justify-center">
-      <Avatar src={camp?.image} name={camp?.name} className="selected-camp" />
+      <Avatar src={camp?.image} name={camp?.name} className={camp?.selected ? "selected-camp" : "camp"}/>
     </Button>
   );
 };

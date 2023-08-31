@@ -15,6 +15,7 @@ export interface ICamp {
   image: string;
   description: string;
   host: HostInfo;
+  selected: boolean;
 }
 
 export interface ICampStoreState {
