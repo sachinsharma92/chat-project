@@ -6,6 +6,8 @@ import Links from '../../common/Links/Links';
 import MusicPlayer from '../MusicPlayer';
 import AppsList from '../AppsList/AppsList';
 import MembersList from '../MembersList/MembersList';
+import JoinCampButton from '../JoinCampButton/JoinCampButton';
+import CopyLinkButton from '../CopyLinkButton/CopyLinkButton';
 
 interface social {
   name: string;
@@ -25,6 +27,12 @@ interface CampUserInfoProps {
   location: string;
   weather: string;
   socials: social[];
+}
+
+interface featureFlagProps {
+  subscribeFeature: boolean;
+  joinCampFeature: boolean;
+  copyLinkFeature: boolean;
 }
 
 const CampUserInfo: CampUserInfoProps = {
@@ -48,6 +56,12 @@ const apps: appsProps[] = [
   { name: 'Store', icon: '/assets/store-icon.svg'},
   { name: 'Chat', icon: '/assets/chat-icon.svg'}
 ];
+
+const featureFlags: featureFlagProps = {
+  subscribeFeature: false,
+  joinCampFeature: true,
+  copyLinkFeature: true
+}
 
 function InfoSidebar() {
   const [open, setOpen] = useState(true);
@@ -76,7 +90,9 @@ function InfoSidebar() {
             <div className="message-container">
               <p className="info-message">{CampUserInfo.campMessage}</p>
               <MembersList onlineMembers={2} memberCount={23} />
-              <SubscribeButton />
+              {featureFlags.subscribeFeature && <SubscribeButton />}
+              {featureFlags.joinCampFeature && <JoinCampButton />}
+              {featureFlags.copyLinkFeature && <CopyLinkButton />}
             </div>
             <div className="host-container">
               <p className="info-label"> Host </p>
