@@ -69,7 +69,7 @@ function InfoSidebar() {
               <div className="camp-host">
                 <img
                   src={CampUserInfo.campHostAvatar}
-                  className="user-avatar"
+                  className="info-user-avatar"
                   alt="User Avatar"
                 />
                 <p className="info-host">{CampUserInfo.campHost}</p>
