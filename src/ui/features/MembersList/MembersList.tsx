@@ -10,7 +10,7 @@ function MembersList({ memberCount, onlineMembers }: MembersListProps) {
   return (
     <div className="members-layout">
       <img src={'/assets/members-icon.svg'} className="members-icon" />
-      <p>{memberCount} {memberCount > 0 ? "members"  : "member" } </p>
+      <p>{memberCount} {memberCount > 1 ? "members"  : "member" } </p>
 
       <img src={'/assets/online-icon.svg'} className="online-icon" />
       <p>{onlineMembers} online </p>
