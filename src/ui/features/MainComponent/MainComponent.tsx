@@ -1,3 +1,5 @@
+'use client';
+
 import InfoSidebar from '../InfoSidebar/InfoSidebar';
 import CameraButton from '../CameraButton/CameraButton';
 import './MainComponent.css';

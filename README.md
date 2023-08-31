@@ -1,17 +1,20 @@
 # camp-ui
-The main UI for Camp on our web platform. 
 
+The main UI for Camp on our web platform.
 
-Starting with the project
+## Install dependencies
 
-`npm install`
+```ts
+npm install
+```
 
-Starting the local server 
+## Starting the local server
 
-`npm run dev`
+```ts
+npm run dev
+```
 
-
-Project File Structure 
+## Project File Structure
 
 ```
 \node_modules
