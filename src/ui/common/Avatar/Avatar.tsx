@@ -1,18 +1,22 @@
-import { head, isEmpty, toString } from 'lodash';
+import { head, isEmpty, isString, toString } from 'lodash';
+import cx from 'classnames';
 import './Avatar.css';
 
 type AvatarComponentProps = {
   src?: string;
   name?: string;
   ariaLabel?: string;
+  className?: string;
 };
 
 function Avatar(props: AvatarComponentProps) {
-  const { src, name, ariaLabel } = props;
+  const { src, name, ariaLabel, className } = props;
 
   return (
     <div
-      className="avatar-layout flex justify-center"
+      className={cx('avatar-layout flex justify-center', {
+        [`${className}`]: !isEmpty(className) && isString(className),
+      })}
       aria-label={!isEmpty(ariaLabel) ? ariaLabel : 'Avatar'}
     >
       {!isEmpty(src) && (
