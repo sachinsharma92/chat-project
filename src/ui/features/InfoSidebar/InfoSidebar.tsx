@@ -5,6 +5,7 @@ import SubscribeButton from '../SubscribeButton/SubscribeButton';
 import Links from '../../common/Links/Links';
 import MusicPlayer from '../MusicPlayer';
 import AppsList from '../AppsList/AppsList';
+import MembersList from '../MembersList/MembersList';
 
 interface social {
   name: string;
@@ -74,6 +75,7 @@ function InfoSidebar() {
             </div>
             <div className="message-container">
               <p className="info-message">{CampUserInfo.campMessage}</p>
+              <MembersList onlineMembers={2} memberCount={23} />
               <SubscribeButton />
             </div>
             <div className="host-container">
