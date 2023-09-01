@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import {
   CuboidCollider,
-  RapierRigidBody,
   RigidBody,
 } from '@react-three/rapier';
 import { Object3D } from 'three';

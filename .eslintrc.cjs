@@ -1,7 +1,7 @@
 module.exports = {
   root: true,
   env: { browser: true, es2020: true },
-  extends: [['next/babel', 'next/core-web-vitals']],
+  extends: ['next', 'next/core-web-vitals'],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
   settings: { react: { version: '18.2' } },
