@@ -11,6 +11,7 @@
 }
 
 .info-layout {
+  position: absolute;
   border-radius: 12px;
   background: var(--off-white, #fffff7);
   box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.16);
@@ -18,9 +19,12 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  height: 100%;
   overflow: hidden;
   overflow-y: auto;
+  margin: 0;
+  top: 12px;
+  left: 12px;
+  height: calc(100% - 24px);
 }
 
 .info-layout-collapsed {
@@ -30,8 +34,9 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 12px;
   padding: 0px 10px;
+  box-sizing: border-box;
 }
 
 .info-header {
@@ -51,6 +56,7 @@
   font-weight: 400;
   line-height: 100%;
   margin: 10px;
+  margin-top: 20px;
 }
 
 .message-container {
@@ -76,16 +82,16 @@
 }
 
 .header-container-collapsed {
+  position: absolute;
   display: flex;
-  padding: 0px;
   flex-direction: row;
   align-items: flex-start;
-  gap: 16px;
   align-self: stretch;
   justify-content: space-around;
-  margin-top: 5px;
   width: 163px;
   cursor: pointer;
+  top: 12px;
+  left: 12px;
 }
 
 .conditions-container {

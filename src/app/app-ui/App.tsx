@@ -4,6 +4,7 @@ import { useRef, useCallback } from 'react';
 import { toPng } from 'html-to-image';
 import MainComponent from '@/ui/features/MainComponent/MainComponent';
 import './App.css';
+import LoadingScreen from '@/canvas/LoadingReveal/LoadingScreen';
 
 function App() {
   const ref = useRef<HTMLDivElement>(null);
@@ -28,6 +29,7 @@ function App() {
   return (
     <div className="root-container" ref={ref}>
       <MainComponent handleCameraButtonClick={onButtonClick} />
+      <LoadingScreen />
     </div>
   );
 }

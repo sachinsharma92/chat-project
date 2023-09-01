@@ -15,6 +15,7 @@
 }
 
 .right-sidebar {
+  position: absolute;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -26,17 +27,23 @@
   display: flex;
   justify-content: space-between;
   flex-direction: row;
-  min-width: 800px;
+  min-width: 900px;
   min-height: 600px;
-  gap: 12px;
   padding: 12px 12px 12px 16px;
   box-sizing: border-box;
+  border-radius: 16px;
+  overflow: hidden;
 }
 
 .game-screen-shrink {
-  width: calc(100% - 50px);
+  width: calc(100% - 58px);
 }
 
 .game-screen-expand {
   width: 100%;
+}
+
+.right-sidebar-user {
+  top: 12px;
+  right: 12px;
 }

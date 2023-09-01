@@ -1,12 +1,15 @@
 .camera-button-container {
-    display: flex;
-    width: 40px;
-    height: 40px;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-radius: 500px;
-    background: var(--eggshell, #FFFBE7);
-    cursor: pointer;
-    opacity: 0.6;
+  display: flex;
+  width: 40px;
+  height: 40px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 500px;
+  background: var(--eggshell, #fffbe7);
+  cursor: pointer;
+  opacity: 0.6;
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
 }

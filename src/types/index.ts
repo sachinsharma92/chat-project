@@ -23,3 +23,18 @@ export interface ICampStoreState {
   campSelectedId: string;
   clearCampsList: () => void;
 }
+
+export interface iAsset {
+  id: string;
+  path: string | string[];
+  type: string;
+}
+export interface iBoard {
+  isBoardOpen: boolean;
+  setBoardOpen: () => void;
+}
+
+export interface iSkybox {
+  isNight: boolean;
+  setNight: () => void;
+}
