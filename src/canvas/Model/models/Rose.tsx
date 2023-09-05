@@ -44,7 +44,7 @@ export function Instances({
 export default function Rose(props: JSX.IntrinsicElements['group']) {
   const instances = useContext(context);
   return (
-    <group {...props} dispose={null}>
+    <group scale={1.7} {...props} dispose={null}>
       <instances.SmFlowerRose />
     </group>
   );

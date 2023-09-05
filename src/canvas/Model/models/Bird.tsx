@@ -23,10 +23,6 @@ export default function Bird(props: JSX.IntrinsicElements['group']) {
   const { nodes, materials, animations } = model as GLTFResult;
   const { actions } = useAnimations(animations, group);
 
-  const [birdPosition, setBirdPosition] = useState(0); // Position of the bird along the curve
-  const [_, setCurrentTime] = useState(0); // Current time for animation
-  const speed = 0.05; // Adjust the speed as needed
-
   useEffect(() => {
     if (actions && actions['fly']) {
       actions['fly'].play();
@@ -34,6 +30,7 @@ export default function Bird(props: JSX.IntrinsicElements['group']) {
   }, [actions]);
 
   //* Birds path
+  const [birdPosition, setBirdPosition] = useState(0);
   const curvePoints: any[] = [];
   const radius = 6;
   const numPoints = 8;
@@ -42,7 +39,7 @@ export default function Bird(props: JSX.IntrinsicElements['group']) {
     const angle = (i / (numPoints - 1)) * Math.PI * 2;
     const x = Math.cos(angle) * radius;
     const y = 3;
-    const z = 4 + Math.sin(angle) * radius;
+    const z = 2 + Math.sin(angle) * radius;
     curvePoints.push(new THREE.Vector3(x, y, z));
   }
 
@@ -52,15 +49,11 @@ export default function Bird(props: JSX.IntrinsicElements['group']) {
   }, []);
 
   useFrame((_, delta) => {
-    setCurrentTime(prevTime => prevTime + delta);
-    if (group.current) {
-      setBirdPosition(prevPosition => {
-        const newPosition = prevPosition + speed * delta;
-        if (newPosition >= 1) {
-          return newPosition - 1;
-        }
-        return newPosition;
-      });
+    if (group.current && curve) {
+      setBirdPosition(prevPosition => prevPosition + 0.03 * delta);
+      if (birdPosition > 1) {
+        setBirdPosition(0);
+      }
       const interpolatedPosition = curve.getPointAt(birdPosition);
       group.current.position.copy(interpolatedPosition);
       group.current.rotation.y = Math.atan2(

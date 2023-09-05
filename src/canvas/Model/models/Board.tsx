@@ -20,7 +20,7 @@ export default function Board(props: JSX.IntrinsicElements['group']) {
   const setBoardOpen = useBoardStore(state => state.setBoardOpen);
 
   return (
-    <group {...props} dispose={null}>
+    <group {...props} dispose={null} scale={1.3}>
       <RigidBody type="fixed">
         <mesh
           onClick={() => setBoardOpen()}

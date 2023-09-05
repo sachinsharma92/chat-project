@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { LoadingMaterial } from './LoadingMaterial';
-import { useProgress } from '@react-three/drei';
+import { useProgress, useTexture } from '@react-three/drei';
 import { ReactThreeFiber, useFrame } from '@react-three/fiber';
 import { gsap } from 'gsap';
 import * as THREE from 'three';
@@ -21,18 +21,27 @@ const LoadingReveal = () => {
   const $shader = useRef<THREE.ShaderMaterial>(null);
   const $mesh = useRef<THREE.Mesh>(null);
   const { progress } = useProgress();
-  const { start }: any = useWorldStore();
+  const { start } = useWorldStore();
 
-  let width = 2;
-  let height = 2;
+  const [tex1, tex2] = useTexture([
+    '/assets/textures/one.jpg',
+    '/assets/textures/two.jpg',
+  ]);
 
   useEffect(() => {
     if (progress === 100) {
       start();
+      if ($shader.current) {
+        gsap.to($shader.current?.uniforms.uProgress, {
+          value: 1,
+          duration: 3,
+          ease: 'power4.out',
+        });
+      }
       setTimeout(() => {
         if ($shader.current) {
           gsap.to($shader.current.uniforms.uScale, {
-            value: 7,
+            value: 10,
             duration: 8,
             ease: 'slow',
           });
@@ -42,7 +51,7 @@ const LoadingReveal = () => {
             ease: 'ease.out',
           });
         }
-      }, 1000);
+      }, 2000);
     }
   }, [progress, start]);
 
@@ -55,8 +64,16 @@ const LoadingReveal = () => {
   return (
     <>
       <mesh ref={$mesh}>
-        <planeGeometry args={[width, height]} />
-        <loadingMaterial ref={$shader} key={LoadingMaterial.key} transparent />
+        <planeGeometry args={[2, 2]} />
+        <loadingMaterial
+          ref={$shader}
+          key={LoadingMaterial.key}
+          transparent
+          //@ts-ignore
+          uTexture={tex1}
+          uImageRes={[tex1.source.data.width, tex1.source.data.height]}
+          uTexture2={tex2}
+        />
       </mesh>
     </>
   );

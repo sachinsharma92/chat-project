@@ -8,7 +8,9 @@ const Scene = () => {
     <>
       <Physics>
         <InputProvider>
-          <Environment />
+          <group position={[0, -1, -1]}>
+            <Environment />
+          </group>
           <Player />
         </InputProvider>
       </Physics>

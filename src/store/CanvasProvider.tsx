@@ -49,6 +49,16 @@ const assetsToLoad: iAsset[] = [
     type: 'model',
   },
   {
+    id: 'tulip',
+    path: '/assets/models/tulip.glb',
+    type: 'model',
+  },
+  {
+    id: 'whiteflower',
+    path: '/assets/models/whiteflower.glb',
+    type: 'model',
+  },
+  {
     id: 'soil',
     path: '/assets/models/soil.glb',
     type: 'model',
@@ -68,11 +78,6 @@ const assetsToLoad: iAsset[] = [
     path: '/assets/models/campfire.glb',
     type: 'model',
   },
-  {
-    id: 'cloud',
-    path: '/assets/models/cloud.glb',
-    type: 'model',
-  },
   //* Textures
   {
     id: 'grass',
@@ -80,8 +85,18 @@ const assetsToLoad: iAsset[] = [
     type: 'texture',
   },
   {
-    id: 'logo',
-    path: '/assets/textures/logo.jpg',
+    id: 'bigcloud',
+    path: '/assets/textures/bigCloud.png',
+    type: 'texture',
+  },
+  {
+    id: 'mediumcloud',
+    path: '/assets/textures/middleCloud.png',
+    type: 'texture',
+  },
+  {
+    id: 'smallcloud',
+    path: '/assets/textures/smallCloud.jpg',
     type: 'texture',
   },
 ];
@@ -157,3 +172,5 @@ export const useBoardStore = create<iBoard>(set => ({
   isBoardOpen: false,
   setBoardOpen: () => set(state => ({ isBoardOpen: !state.isBoardOpen })),
 }));
+
+export const tilt = 0.1;

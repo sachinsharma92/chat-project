@@ -28,12 +28,12 @@ function LoadingScreen() {
                   >
                     <Image
                       alt="logo"
-                      src="/assets/textures/bot.png"
-                      width={200}
-                      height={200}
+                      src="/assets/textures/one.jpg"
+                      fill
+                      objectFit='cover'
+                      priority
                     />
-                    <h1 className="mt-8">Botnet Experience Loading</h1>
-                    <motion.span className="loader" />
+                    {/* <motion.span className="loader" /> */}
                   </motion.div>
                 </>
               )}

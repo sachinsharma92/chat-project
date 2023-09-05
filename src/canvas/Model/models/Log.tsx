@@ -19,10 +19,16 @@ type GLTFResult = GLTF & {
   };
 };
 
-type ContextType = Record<string, React.ForwardRefExoticComponent<JSX.IntrinsicElements['mesh']>>
+type ContextType = Record<
+  string,
+  React.ForwardRefExoticComponent<JSX.IntrinsicElements['mesh']>
+>;
 
 const context = createContext({} as ContextType);
-export function Instances({ children, ...props }: JSX.IntrinsicElements['group']) {
+export function Instances({
+  children,
+  ...props
+}: JSX.IntrinsicElements['group']) {
   const model = useAsset('log');
   const { nodes } = model as GLTFResult;
   const instances = useMemo(
@@ -33,7 +39,7 @@ export function Instances({ children, ...props }: JSX.IntrinsicElements['group']
   );
   return (
     <Merged meshes={instances} {...props}>
-      {(instances : ContextType) => (
+      {(instances: ContextType) => (
         <context.Provider value={instances}>{children}</context.Provider>
       )}
     </Merged>
@@ -43,7 +49,7 @@ export function Instances({ children, ...props }: JSX.IntrinsicElements['group']
 export default function Log(props: JSX.IntrinsicElements['group']) {
   const instances = useContext(context);
   return (
-    <group {...props} dispose={null}>
+    <group scale={1.5} {...props} dispose={null}>
       <RigidBody type="fixed" colliders={false}>
         <CuboidCollider args={[0.5, 0.2, 0.2]} />
         <instances.LogBakedBaked />

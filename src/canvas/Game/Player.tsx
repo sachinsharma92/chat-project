@@ -33,7 +33,7 @@ function Player() {
       <RigidBody
         type="kinematicPosition"
         ref={rigidBodyRef}
-        position={[0, 2, 5]}
+        position={[0, 2, 0.5]}
       >
         <CuboidCollider args={[0.2, 0.6, 0.2]} position={[0, 0.6, 0]} />
       </RigidBody>

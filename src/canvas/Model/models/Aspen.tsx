@@ -36,6 +36,7 @@ export function Instances({
     }),
     [nodes],
   );
+
   return (
     <Merged meshes={instances} {...props}>
       {(instances: ContextType) => (
@@ -48,9 +49,9 @@ export function Instances({
 export default function Aspen(props: JSX.IntrinsicElements['group']) {
   const instances = useContext(context);
   return (
-    <group {...props} dispose={null} scale={0.2}>
-      <RigidBody type="fixed" colliders={false}>
-        <CuboidCollider args={[0.5, 2, 0.5]} position={[0, -5.3, 0]} />
+    <group {...props} dispose={null} scale={0.25}>
+      <RigidBody type="fixed" colliders={false} rotation={[-0.1, 0, 0]}>
+        <CuboidCollider args={[0.5, 4, 0.5]} position={[0, -3.3, 0]} />
         <instances.RetopoFlow position={[-0.07, 0.95, -0.05]} />
         <instances.Plane position={[-0.23, 3.93, -0.15]} />
       </RigidBody>

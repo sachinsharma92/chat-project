@@ -1,6 +1,6 @@
-import { shaderMaterial } from "@react-three/drei";
-import { extend } from "@react-three/fiber";
-import * as THREE from "three";
+import { shaderMaterial } from '@react-three/drei';
+import { extend } from '@react-three/fiber';
+import * as THREE from 'three';
 
 const LoadingMaterial = shaderMaterial(
   {
@@ -9,6 +9,11 @@ const LoadingMaterial = shaderMaterial(
     uResolution: new THREE.Vector2(window.innerWidth, window.innerHeight),
     uDpr: Number(window.devicePixelRatio.toFixed(2)),
     uScale: 0,
+    uTexture: null,
+    uTexture2: null,
+    uRes: new THREE.Vector2(1, 1),
+    uImageRes: [1, 1],
+    uProgress: 0,
   },
   /* glsl */ `
     varying vec2 vUv;
@@ -25,6 +30,11 @@ const LoadingMaterial = shaderMaterial(
     uniform float uScale;
     uniform vec2 uResolution;
     uniform float uDpr;
+    uniform sampler2D uTexture;
+    uniform sampler2D uTexture2;
+    uniform vec2 uRes;
+    uniform vec2 uImageRes;
+    uniform float uProgress;
 
     varying vec2 vUv;
 
@@ -91,13 +101,6 @@ const LoadingMaterial = shaderMaterial(
       return u * s / st + o;
     }
 
-    mat2 rotate(float angle) {
-      return mat2(
-          cos(angle), -sin(angle),
-          sin(angle), cos(angle)
-      );
-    }
-
     void main() {
       vec2 res = uResolution.xy * uDpr;
       vec2 st = gl_FragCoord.xy / res.xy - vec2(0.5);
@@ -105,23 +108,27 @@ const LoadingMaterial = shaderMaterial(
 
       //* Rotate the circle position by a full rotation
       vec2 circlePos = st;
-      st = rotate(uTime * 2.0 / 5.0) * st;
       st = st + vec2(0.5);
 
       float offsetX = vUv.x + sin(vUv.y + uTime * .2);
       float offsetY = vUv.y - uTime * 0.1 - cos(uTime * .2) * .01;
 
-      float c = circle(circlePos, uScale, 0.1) * 2.5;
+      float c = circle(circlePos, uScale, 0.4) * 2.5;
       float noise = snoise(vec3(offsetX * 1.5, offsetY * 1.5, uTime * 0.1) * 2.0) - 1.0;
       float finalMask = smoothstep(0.4, 0.5, noise + c);
 
-      vec4 colorA = vec4(vec3(1.0), 1.0);
+      vec4 texture1 = texture2D(uTexture, CoverUV(st, uRes, uImageRes));
+      vec4 texture2 = texture2D(uTexture2, CoverUV(st, uRes, uImageRes));
+
+      vec4 finalTexture = mix(texture1, texture2, uProgress);
+
+      vec4 colorA = vec4(vec3(1.0), finalTexture.r * uAlpha);
       vec4 colorB = vec4(0.0);
       vec4 finalColor = mix(colorA, colorB, finalMask);
       
       gl_FragColor = finalColor;
     }
-    `
+    `,
 );
 
 extend({ LoadingMaterial });
