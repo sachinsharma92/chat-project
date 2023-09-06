@@ -40,7 +40,7 @@ const CampUserInfo: CampUserInfoProps = {
   campHost: 'Jeremy Cai',
   campHostAvatar: '/assets/camp-avatar.png',
   campMessage:
-    "Welcome to my little internet campground! Enjoy the tunes and leave a message on the bulletin.",
+    'Welcome to my little internet campground! Enjoy the tunes and leave a message on the bulletin.',
   location: 'Park City, USA',
   weather: 'Sunny 82° F',
   socials: [
@@ -52,16 +52,16 @@ const CampUserInfo: CampUserInfoProps = {
 };
 
 const apps: appsProps[] = [
-  { name: 'Bulletin', icon: '/assets/bulletin-icon.svg'},
-  { name: 'Store', icon: '/assets/store-icon.svg'},
-  { name: 'Chat', icon: '/assets/chat-icon.svg'}
+  { name: 'Bulletin', icon: '/assets/bulletin-icon.svg' },
+  { name: 'Store', icon: '/assets/store-icon.svg' },
+  { name: 'Chat', icon: '/assets/chat-icon.svg' },
 ];
 
 const featureFlags: featureFlagProps = {
   subscribeFeature: false,
   joinCampFeature: true,
-  copyLinkFeature: true
-}
+  copyLinkFeature: true,
+};
 
 function InfoSidebar() {
   const [open, setOpen] = useState(true);
@@ -84,6 +84,7 @@ function InfoSidebar() {
                 <img
                   src={'/assets/close-button.svg'}
                   className="close-button"
+                  alt="Close icon"
                 />
               </div>
             </div>

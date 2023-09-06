@@ -11,9 +11,22 @@ import {
   BrightnessContrast,
 } from '@react-three/postprocessing';
 import { Perf } from 'r3f-perf';
+import { useHotkeys } from 'react-hotkeys-hook';
+import { useState } from 'react';
 
 const World = () => {
   useAssetLoader();
+
+  const [showThreeJsPerformance, setShowThreeJsPerformance] = useState(false);
+
+  useHotkeys(
+    'cmd+.,ctrl+.',
+    () => {
+      setShowThreeJsPerformance(!showThreeJsPerformance);
+    },
+    { enabled: true },
+  );
+
   return (
     <>
       <Canvas
@@ -28,7 +41,7 @@ const World = () => {
         shadows
         dpr={Math.min(window.devicePixelRatio, 2)}
       >
-        <Perf />
+        {showThreeJsPerformance && <Perf />}
         <Scene />
         <LoadingReveal />
         <EffectComposer multisampling={0} autoClear={false}>

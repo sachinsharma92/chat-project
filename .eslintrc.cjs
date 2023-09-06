@@ -11,5 +11,8 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    '@next/next/no-img-element': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    'react/react-in-jsx-scope': 'off',
   },
 };

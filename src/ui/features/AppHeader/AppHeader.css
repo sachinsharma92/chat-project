@@ -1,0 +1,33 @@
+.app-header {
+  @apply flex space-x-4 w-full;
+
+  background: transparent;
+  justify-content: space-between;
+  height: 28px;
+  gap: 8px;
+}
+
+.logo {
+  background: transparent;
+}
+
+.sign-in {
+  border-radius: 80px;
+  background: var(--tans-off-white, #fffff7);
+  padding: 4px 8px;
+  box-sizing: border-box;
+}
+
+.sign-in > p {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.spaces > p,
+.explore > p {
+  @apply ml-2;
+
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+}
