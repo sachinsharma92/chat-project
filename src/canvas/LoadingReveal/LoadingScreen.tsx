@@ -24,16 +24,16 @@ function LoadingScreen() {
                   <motion.div
                     initial={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
+                    transition={{ duration: 0.5, ease: 'easeInOut' }}
                     className="w-full h-full absolute -top-10 left-0 z-10 flex text-gray-500 justify-center items-center flex-col"
                   >
                     <Image
                       alt="logo"
                       src="/assets/textures/one.jpg"
                       fill
-                      objectFit='cover'
+                      objectFit="cover"
                       priority
                     />
-                    {/* <motion.span className="loader" /> */}
                   </motion.div>
                 </>
               )}

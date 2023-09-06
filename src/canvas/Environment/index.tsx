@@ -3,9 +3,18 @@ import { Suspense, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import gsap from 'gsap';
 import Model from '../Model';
-import { tilt, useAsset, useSkyboxStore } from '@/store/CanvasProvider';
+import { useAsset } from '@/store/CanvasProvider';
 import { CloudShaderMaterial } from './CloudShader';
 import { ReactThreeFiber, useFrame } from '@react-three/fiber';
+import { useControls } from 'leva';
+import { GradientTexture } from '@react-three/drei';
+import {
+  interpolateColor,
+  interpolatedSunPosition,
+  interpolatedTime,
+  night,
+  tilt,
+} from '@/canvas/Utils';
 
 declare global {
   namespace JSX {
@@ -19,30 +28,38 @@ declare global {
 }
 
 const Environment = () => {
+  // Refs
   const ref = useRef<THREE.DirectionalLight>(null);
   const $shader = useRef<THREE.ShaderMaterial>(null);
+
+  // Assets
   const grass = useAsset('grass');
   grass.wrapS = grass.wrapT = THREE.RepeatWrapping;
   grass.repeat.set(25, 15);
-  const baseColor = '#ffffff';
-  const targetColor = '#3575a3';
 
-  const isNight = useSkyboxStore(state => state.isNight);
+  const { times } = useControls('time', {
+    times: {
+      value: 0,
+      min: 0,
+      max: 24,
+      step: 1,
+    },
+  });
 
   useEffect(() => {
     if (ref.current) {
       gsap.to(ref.current.color, {
         duration: 3,
-        color: isNight ? targetColor : baseColor,
+        color: interpolateColor(times),
         ease: 'ease.out',
       });
       gsap.to(ref.current.position, {
         duration: 3,
-        x: isNight ? -6 : 6,
+        x: interpolatedSunPosition(times),
         ease: 'ease.out',
       });
     }
-  }, [isNight]);
+  }, [times]);
 
   const bigCloud = useAsset('bigcloud');
   bigCloud.wrapS = bigCloud.wrapT = THREE.RepeatWrapping;
@@ -57,21 +74,56 @@ const Environment = () => {
     }
   });
 
-  // const { timezone } = useControls('Skybox', {
-  //   setNight: {
-  //     value: false,
-  //     onChange: () => {
-  //       setNight();
-  //     },
-  //   },
-  // });
+  const {
+    skyColor,
+    cloudColor,
+    smallNoise,
+    mediumNoise,
+    largeNoise,
+    sunColor,
+    uvScale,
+    edgeColor,
+  } = useControls('clouds', {
+    skyColor: {
+      value: '#80B6F3',
+    },
+    cloudColor: {
+      value: '#ffffff',
+    },
+    sunColor: {
+      value: '#a6a6a4',
+    },
+    edgeColor: {
+      value: '#ffffff',
+    },
+    smallNoise: {
+      value: 16.0 * 4,
+      min: 0.0,
+      max: 100.0,
+    },
+    mediumNoise: {
+      value: 0.25 * 4,
+      min: 0.0,
+      max: 2.0,
+    },
+    largeNoise: {
+      value: 0.1 * 4,
+      min: 0.0,
+      max: 1.0,
+    },
+    uvScale: {
+      value: 4.0,
+      min: 0.0,
+      max: 10.0,
+    },
+  });
 
   return (
     <>
       <directionalLight
         ref={ref}
         castShadow
-        color={isNight ? targetColor : baseColor}
+        color={interpolateColor(times)}
         intensity={2}
         position={[6, 10, 7]}
         shadow-camera-near={-1}
@@ -85,7 +137,7 @@ const Environment = () => {
         shadow-bias={-0.001}
         shadow-normalBias={0.01}
       />
-      <ambientLight intensity={isNight ? 0.2 : 0.5} />
+      <ambientLight intensity={interpolatedTime(times) === night ? 0.2 : 0.5} />
 
       <RigidBody type="fixed" rotation={[tilt, 0, 0]} position={[0, -0.6, 0]}>
         <mesh name="floor" receiveShadow position={[0, -0.968, 0]}>
@@ -107,7 +159,6 @@ const Environment = () => {
           color="#a0dcac"
         />
       </mesh>
-
       {/* cloud */}
       <mesh>
         <sphereGeometry args={[30]} />
@@ -121,7 +172,25 @@ const Environment = () => {
           uLNoise={mediumCloud}
           uSNoise={smallCloud}
           key={CloudShaderMaterial.key}
+          uSmall={smallNoise}
+          uMedium={mediumNoise}
+          uLarge={largeNoise}
+          uCloudColor={cloudColor}
+          uSkyColor={skyColor}
+          uSunColor={sunColor}
+          uvScale={uvScale}
+          uEdgeColor={edgeColor}
         />
+      </mesh>
+      {/* skydome */}
+      <mesh>
+        <sphereGeometry args={[32, 16, 16]} />
+        <meshBasicMaterial side={THREE.BackSide}>
+          <GradientTexture
+            stops={[0.35, 0.4, 0.45, 0.5, 0.55]}
+            colors={interpolatedTime(times)}
+          />
+        </meshBasicMaterial>
       </mesh>
 
       <Suspense fallback={null}>

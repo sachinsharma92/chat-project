@@ -10,9 +10,9 @@ import {
   SMAA,
   BrightnessContrast,
 } from '@react-three/postprocessing';
-import { Perf } from 'r3f-perf';
-import { useHotkeys } from 'react-hotkeys-hook';
 import { useState } from 'react';
+import { useHotkeys } from 'react-hotkeys-hook';
+import { Perf } from 'r3f-perf';
 
 const World = () => {
   useAssetLoader();

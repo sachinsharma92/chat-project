@@ -103,23 +103,21 @@ const LoadingMaterial = shaderMaterial(
 
     void main() {
       vec2 res = uResolution.xy * uDpr;
-      vec2 st = gl_FragCoord.xy / res.xy - vec2(0.5);
-      st.y *= res.y / res.x;
+      vec2 uv = vUv - vec2(0.5);
+      uv.y *= res.y / res.x;
 
-      //* Rotate the circle position by a full rotation
-      vec2 circlePos = st;
-      st = st + vec2(0.5);
+      vec2 circlePos = uv + vec2(0.5);
+      vec2 scaledUv = uv * 2.0;
 
-      float offsetX = vUv.x + sin(vUv.y + uTime * .2);
-      float offsetY = vUv.y - uTime * 0.1 - cos(uTime * .2) * .01;
+      float offsetX = uv.x + sin(uv.y + uTime * .2);
+      float offsetY = uv.y - uTime * 0.1 - cos(uTime * .2) * .01;
 
-      float c = circle(circlePos, uScale, 0.4) * 2.5;
+      float c = circle(circlePos - vec2(0.5), uScale, 0.4) * 2.5;
       float noise = snoise(vec3(offsetX * 1.5, offsetY * 1.5, uTime * 0.1) * 2.0) - 1.0;
       float finalMask = smoothstep(0.4, 0.5, noise + c);
 
-      vec4 texture1 = texture2D(uTexture, CoverUV(st, uRes, uImageRes));
-      vec4 texture2 = texture2D(uTexture2, CoverUV(st, uRes, uImageRes));
-
+      vec4 texture1 = texture2D(uTexture, CoverUV(scaledUv + vec2(0.5), uRes, uImageRes));
+      vec4 texture2 = texture2D(uTexture2, CoverUV(scaledUv + vec2(0.5), uRes, uImageRes));
       vec4 finalTexture = mix(texture1, texture2, uProgress);
 
       vec4 colorA = vec4(vec3(1.0), finalTexture.r * uAlpha);

@@ -38,8 +38,8 @@ export default function Bird(props: JSX.IntrinsicElements['group']) {
   for (let i = 0; i < numPoints; i++) {
     const angle = (i / (numPoints - 1)) * Math.PI * 2;
     const x = Math.cos(angle) * radius;
-    const y = 3;
-    const z = 2 + Math.sin(angle) * radius;
+    const y = 4.5;
+    const z = 1 + Math.sin(angle) * radius;
     curvePoints.push(new THREE.Vector3(x, y, z));
   }
 
@@ -50,7 +50,7 @@ export default function Bird(props: JSX.IntrinsicElements['group']) {
 
   useFrame((_, delta) => {
     if (group.current && curve) {
-      setBirdPosition(prevPosition => prevPosition + 0.03 * delta);
+      setBirdPosition(prevPosition => prevPosition + 0.05 * delta);
       if (birdPosition > 1) {
         setBirdPosition(0);
       }

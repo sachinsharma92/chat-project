@@ -164,6 +164,10 @@ export const useAsset = (id: string) => {
 };
 
 export const useSkyboxStore = create<iSkybox>(set => ({
+  isMorning: false,
+  setMorning: () => set(state => ({ isMorning: !state.isMorning })),
+  isEvening: false,
+  setEvening: () => set(state => ({ isEvening: !state.isEvening })),
   isNight: false,
   setNight: () => set(state => ({ isNight: !state.isNight })),
 }));
@@ -173,4 +177,4 @@ export const useBoardStore = create<iBoard>(set => ({
   setBoardOpen: () => set(state => ({ isBoardOpen: !state.isBoardOpen })),
 }));
 
-export const tilt = 0.1;
+

@@ -36,5 +36,9 @@ export interface iBoard {
 
 export interface iSkybox {
   isNight: boolean;
+  isMorning: boolean;
+  isEvening: boolean;
   setNight: () => void;
+  setMorning: () => void;
+  setEvening: () => void;
 }

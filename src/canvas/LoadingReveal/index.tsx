@@ -28,14 +28,17 @@ const LoadingReveal = () => {
     '/assets/textures/two.jpg',
   ]);
 
+  const width = 2;
+  const height = 2;
+
   useEffect(() => {
     if (progress === 100) {
       start();
       if ($shader.current) {
         gsap.to($shader.current?.uniforms.uProgress, {
           value: 1,
-          duration: 3,
-          ease: 'power4.out',
+          duration: 0.9,
+          ease: 'ease.in',
         });
       }
       setTimeout(() => {
@@ -43,7 +46,7 @@ const LoadingReveal = () => {
           gsap.to($shader.current.uniforms.uScale, {
             value: 10,
             duration: 8,
-            ease: 'slow',
+            ease: 'ease.out',
           });
           gsap.to($shader.current.uniforms.uAlpha, {
             value: 0,
@@ -64,14 +67,14 @@ const LoadingReveal = () => {
   return (
     <>
       <mesh ref={$mesh}>
-        <planeGeometry args={[2, 2]} />
+        <planeGeometry args={[width, height]} />
         <loadingMaterial
           ref={$shader}
           key={LoadingMaterial.key}
           transparent
           //@ts-ignore
           uTexture={tex1}
-          uImageRes={[tex1.source.data.width, tex1.source.data.height]}
+          uImageRes={[tex2.source.data.width, tex2.source.data.height]}
           uTexture2={tex2}
         />
       </mesh>

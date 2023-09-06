@@ -1,5 +1,6 @@
 import { shaderMaterial } from '@react-three/drei';
 import { extend } from '@react-three/fiber';
+import * as THREE from 'three';
 
 const CloudShaderMaterial = shaderMaterial(
   {
@@ -8,6 +9,23 @@ const CloudShaderMaterial = shaderMaterial(
     uMNoise: null,
     uLNoise: null,
     uTime: 0,
+    // scale
+    uSmall: 16,
+    uMedium: 0.25,
+    uLarge: 0.1,
+    uCloud: 1,
+    uvScale: 3,
+    // speed
+    uScrollSpeed: 70,
+    // direction
+    uVector: [0.5, 1],
+    // cloud factor
+    uCloudFactor: 0.42,
+    //color
+    uSkyColor: new THREE.Color(),
+    uCloudColor: new THREE.Color(),
+    uSunColor: new THREE.Color(),
+    uEdgeColor: new THREE.Color(),
   },
   /* glsl */ `
     varying vec2 vUv;
@@ -24,19 +42,22 @@ const CloudShaderMaterial = shaderMaterial(
   uniform sampler2D uMNoise;
   uniform sampler2D uLNoise;
   uniform float uTime;
+  uniform float uSmall;
+  uniform float uMedium;
+  uniform float uLarge;
+  uniform float uCloud;
+  uniform float uScrollSpeed;
+  uniform vec2 uVector;
+  uniform float uCloudFactor;
+  uniform vec3 uSkyColor;
+  uniform vec3 uCloudColor;
+  uniform vec3 uSunColor;
+  uniform vec3 uEdgeColor;
+  uniform float uvScale;
+
 
   varying vec2 vUv;
   varying vec3 vNormal;
-
-  float uvScale = 3.0;
-  float uSFloat = 16.0 * 4.0;
-  float uMFloat = 0.25 * 4.0;
-  float uLFloat = 0.1 * 4.0;
-  float uCloudFloat = 1.0 * 4.0;
-
-  float uScrollSpeed = 70.0;
-  vec2 uVector = vec2(0.5, 1.0);
-  float uCloudFactor = 0.42;
 
   float toSRGB(float value) {
     if (value <= 0.0031308) {
@@ -45,13 +66,11 @@ const CloudShaderMaterial = shaderMaterial(
     else {
       return 1.055 * pow(value, 1.0 / 2.4) - 0.055;
   }}
-
-  void main() {
-  vec3 uSkyColor = vec3(0.2, 0.7, 0.9);
-  vec3 uCloudColor = vec3(1.0, 1.0, 1.0);
+  
+void main() {
   vec2 uv = vUv * uvScale;
   //SNoise Scale
-  vec2 sNScale = uv * uSFloat;
+  vec2 sNScale = uv * uSmall;
   //SNoise
   vec4 sNoise = texture2D(uSNoise, sNScale);
   float g1 = sNoise.g;
@@ -62,7 +81,7 @@ const CloudShaderMaterial = shaderMaterial(
   vec2 addSNToUv = uv + xy;
 
   //MNoise Scale
-  vec2 mNScale = uv * uMFloat;
+  vec2 mNScale = uv * uMedium;
   //MNoise
   vec4 mNoise = texture2D(uMNoise, mNScale);
   float g2 = mNoise.g;
@@ -73,7 +92,7 @@ const CloudShaderMaterial = shaderMaterial(
   vec2 addMNToUv = addSNToUv + xy1;
 
   //LNoise Scale
-  vec2 lNScale = uv * uLFloat;
+  vec2 lNScale = uv * uLarge;
   //LNoise
   vec4 lNoise = texture2D(uLNoise, lNScale);
   float g3 = lNoise.g;
@@ -83,7 +102,7 @@ const CloudShaderMaterial = shaderMaterial(
   //Add LNoise to UV
   vec2 addLNToUv = addMNToUv + xy2;
   float output17 = uTime / uScrollSpeed;
-  vec2 xy3 = vec2(output17, uLFloat);
+  vec2 xy3 = vec2(output17, uLarge);
 
   //addtime to uv
   vec2 timedUv = addLNToUv + xy3;
@@ -97,11 +116,19 @@ const CloudShaderMaterial = shaderMaterial(
   float remappedCloud = 0.0 + (g - uCloudFactor) * (1.0 - 0.0) / (1.0 - uCloudFactor);
   float clampedCloud = clamp(remappedCloud, 0.0, 1.0);
 
-  vec3 sunColor = vec3(1.0, 1.0, 1.0);
-  vec3 shadedCloud = mix(uCloudColor, sunColor, clampedCloud);
+  vec3 cloudNormal = normalize(vNormal);
+  vec3 sunDir = normalize(vec3(0.0, 0.0, 10.0));
+  vec3 viewDir = normalize(vec3(0.0, 0.0, -1.0));
+  float sunLightIntensity = max(dot(cloudNormal, sunDir), 1.0);
 
-  vec3 lerpedCloud = mix(uSkyColor, shadedCloud, clampedCloud);
-  gl_FragColor = vec4(lerpedCloud, 1.0);
+  // Calculate the angle between the view direction and cloud normal
+  float edgeIntensity = smoothstep(0.0, 0.5, 1.0 - dot(cloudNormal, normalize(viewDir)));
+  edgeIntensity = clamp(edgeIntensity, 0.0, 1.0);
+
+  vec3 shadedCloud = mix(uCloudColor, uSunColor, sunLightIntensity);
+  vec3 cloudWithEdge = mix(shadedCloud, uEdgeColor, edgeIntensity);
+  vec3 lerpedCloud = mix(uSkyColor, cloudWithEdge, clampedCloud);
+  gl_FragColor = vec4(lerpedCloud, clampedCloud);
 }
 
 `,

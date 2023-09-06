@@ -8,11 +8,6 @@ interface social {
   link: string;
 }
 
-interface appsProps {
-  name: string;
-  icon: string;
-}
-
 interface CampUserInfoProps {
   campName: string;
   campHost: string;
@@ -45,7 +40,6 @@ const CampUserInfo: CampUserInfoProps = {
   ],
 };
 
-
 const featureFlags: featureFlagProps = {
   subscribeFeature: false,
   joinCampFeature: true,
@@ -62,7 +56,7 @@ function InfoSidebar() {
           <div className="main-content">
             <div className="header-container">
               <div className="header-icon">
-              <img
+                <img
                   src={'/assets/cover-art.svg'}
                   className="cover-art"
                   alt="Cover Art"
@@ -81,16 +75,15 @@ function InfoSidebar() {
             </div>
             <h1 className="info-header">{CampUserInfo.campName}</h1>
             <div className="message-container">
-              {featureFlags.joinCampFeature && <JoinCampButton />}  
-              <p className="info-message">{CampUserInfo.campMessage}</p>  
+              {featureFlags.joinCampFeature && <JoinCampButton />}
+              <p className="info-message">{CampUserInfo.campMessage}</p>
             </div>
-        
+
             <div className="links-container">
               <p className="info-label"> Links </p>
               <Links socials={CampUserInfo.socials} />
             </div>
           </div>
-
         </div>
       ) : (
         <div
