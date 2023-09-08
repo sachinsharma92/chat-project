@@ -1,3 +1,4 @@
+import { useDirectionStore } from '@/store';
 import React, {
   createContext,
   useEffect,
@@ -25,6 +26,27 @@ export const useInputs = () => {
 function InputProvider({ children }: PropsWithChildren<{}>) {
   const [movementInputs, setMovementInputs] = useState({ x: 0, y: 0 });
   const [keyPressed, setKeyPressed] = useState<{ [key: string]: boolean }>({});
+  //
+  const direction = useDirectionStore(state => state.direction);
+
+  useEffect(() => {
+    if (direction.direction === 'FORWARD') {
+      setMovementInputs(draft => ({ ...draft, y: direction.y }));
+    }
+    if (direction.direction === 'BACKWARD') {
+      setMovementInputs(draft => ({ ...draft, y: direction.y }));
+    }
+    if (direction.direction === 'LEFT') {
+      setMovementInputs(draft => ({ ...draft, x: direction.x }));
+    }
+    if (direction.direction === 'RIGHT') {
+      setMovementInputs(draft => ({ ...draft, x: direction.x }));
+    }
+
+    if (!direction.direction) {
+      setMovementInputs({ x: 0, y: 0 });
+    }
+  }, [direction]);
 
   const onKeyDown = (event: KeyboardEvent) => {
     if (!keyPressed[event.code]) {

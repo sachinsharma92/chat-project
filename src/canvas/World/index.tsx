@@ -1,7 +1,6 @@
 'use client';
 
 import { Canvas } from '@react-three/fiber';
-import * as THREE from 'three';
 import LoadingReveal from '../LoadingReveal';
 import Scene from '../Scene';
 import useAssetLoader from '@/hooks/useAssetLoader';
@@ -11,13 +10,15 @@ import {
   BrightnessContrast,
 } from '@react-three/postprocessing';
 import { useState } from 'react';
-import { useHotkeys } from 'react-hotkeys-hook';
 import { Perf } from 'r3f-perf';
+import { useHotkeys } from 'react-hotkeys-hook';
+import { Joystick } from 'react-joystick-component';
+import { useDirectionStore } from '@/store';
 
 const World = () => {
   useAssetLoader();
-
   const [showThreeJsPerformance, setShowThreeJsPerformance] = useState(false);
+  const setDirection = useDirectionStore(state => state.setDirection);
 
   useHotkeys(
     'cmd+.,ctrl+.',
@@ -30,11 +31,6 @@ const World = () => {
   return (
     <>
       <Canvas
-        camera={{
-          fov: 50,
-          position: [0, 4, 6],
-          rotation: [THREE.MathUtils.degToRad(-25), 0, 0],
-        }}
         gl={{
           antialias: false,
         }}
@@ -45,10 +41,20 @@ const World = () => {
         <Scene />
         <LoadingReveal />
         <EffectComposer multisampling={0} autoClear={false}>
-          <BrightnessContrast brightness={0.15} contrast={0.3} />
+          <BrightnessContrast brightness={0.15} contrast={0.4} />
           <SMAA />
         </EffectComposer>
       </Canvas>
+      <div className="absolute bottom-5 left-10">
+        <Joystick
+          baseColor="gray"
+          stickColor="white"
+          size={100}
+          stickSize={50}
+          move={e => setDirection(e)}
+          stop={e => setDirection(e)}
+        />
+      </div>
     </>
   );
 };

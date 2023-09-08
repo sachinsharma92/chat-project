@@ -31,15 +31,15 @@ export default function Bird(props: JSX.IntrinsicElements['group']) {
 
   //* Birds path
   const [birdPosition, setBirdPosition] = useState(0);
-  const curvePoints: any[] = [];
-  const radius = 6;
-  const numPoints = 8;
+  const curvePoints: THREE.Vector3[] = [];
+  const radius = 12;
+  const numPoints = 10;
 
   for (let i = 0; i < numPoints; i++) {
     const angle = (i / (numPoints - 1)) * Math.PI * 2;
     const x = Math.cos(angle) * radius;
-    const y = 4.5;
-    const z = 1 + Math.sin(angle) * radius;
+    const y = 3;
+    const z = 2 - Math.sin(angle) * radius;
     curvePoints.push(new THREE.Vector3(x, y, z));
   }
 
@@ -54,8 +54,7 @@ export default function Bird(props: JSX.IntrinsicElements['group']) {
       if (birdPosition > 1) {
         setBirdPosition(0);
       }
-      const interpolatedPosition = curve.getPointAt(birdPosition);
-      group.current.position.copy(interpolatedPosition);
+      group.current.position.copy(curve.getPointAt(birdPosition));
       group.current.rotation.y = Math.atan2(
         curve.getTangentAt(birdPosition).x,
         curve.getTangentAt(birdPosition).z,

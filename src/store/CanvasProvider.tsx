@@ -78,6 +78,11 @@ const assetsToLoad: iAsset[] = [
     path: '/assets/models/campfire.glb',
     type: 'model',
   },
+  {
+    id: 'mountain',
+    path: '/assets/models/mountain.glb',
+    type: 'model',
+  },
   //* Textures
   {
     id: 'grass',
@@ -177,4 +182,13 @@ export const useBoardStore = create<iBoard>(set => ({
   setBoardOpen: () => set(state => ({ isBoardOpen: !state.isBoardOpen })),
 }));
 
+interface iDirection {
+  direction: any;
+  setDirection: (direction: any) => void;
+}
+
+export const useDirectionStore = create<iDirection>(set => ({
+  direction: '',
+  setDirection: (direction: string) => set({ direction }),
+}));
 

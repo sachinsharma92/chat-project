@@ -7,6 +7,7 @@ import Campfire from './models/Campfire';
 import Log, { Instances as Logs } from './models/Log';
 import Flower from './Flower';
 import Tree from './Tree';
+import Mountain from './models/Mountain';
 
 const Model = () => {
   const tiltFactor: number = -0.1;
@@ -24,6 +25,8 @@ const Model = () => {
         <Log position={[2, 0.1, 4.3]} rotation={[0, Math.PI / 2, 0]} />
         <Log position={[-1, 0.1, 4.3]} rotation={[0, Math.PI / 2, 0]} />
       </Logs>
+      {/* mountain */}
+      <Mountain  />
     </>
   );
 };

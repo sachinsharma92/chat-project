@@ -31,7 +31,7 @@ const Environment = () => {
   // Refs
   const ref = useRef<THREE.DirectionalLight>(null);
   const $shader = useRef<THREE.ShaderMaterial>(null);
-
+  
   // Assets
   const grass = useAsset('grass');
   grass.wrapS = grass.wrapT = THREE.RepeatWrapping;
@@ -161,7 +161,7 @@ const Environment = () => {
       </mesh>
       {/* cloud */}
       <mesh>
-        <sphereGeometry args={[30]} />
+        <sphereGeometry args={[50]} />
         <cloudShaderMaterial
           transparent
           side={THREE.BackSide}
@@ -184,7 +184,7 @@ const Environment = () => {
       </mesh>
       {/* skydome */}
       <mesh>
-        <sphereGeometry args={[32, 16, 16]} />
+        <sphereGeometry args={[51, 16, 16]} />
         <meshBasicMaterial side={THREE.BackSide}>
           <GradientTexture
             stops={[0.35, 0.4, 0.45, 0.5, 0.55]}
@@ -192,7 +192,6 @@ const Environment = () => {
           />
         </meshBasicMaterial>
       </mesh>
-
       <Suspense fallback={null}>
         <group position={[-0.5, 0, -6.4]} rotation-x={tilt} scale={1.3}>
           <Model />

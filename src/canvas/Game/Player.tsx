@@ -1,12 +1,11 @@
 import React, { useEffect, useRef } from 'react';
-import {
-  CuboidCollider,
-  RigidBody,
-} from '@react-three/rapier';
+import { CuboidCollider, RigidBody } from '@react-three/rapier';
 import { Object3D } from 'three';
 import { useAsset } from '@/store/CanvasProvider';
 import useCharacterController from '@/hooks/useCharacterController';
 import useAnimationController from '@/hooks/useAnimationController';
+// import useThirdPersonCamera from '@/hooks/useThirdPersonCamera';
+
 
 function Player() {
   const playerModel = useAsset('avatar');
@@ -33,7 +32,7 @@ function Player() {
       <RigidBody
         type="kinematicPosition"
         ref={rigidBodyRef}
-        position={[0, 2, 0.5]}
+        position={[0, 0, 0.5]}
       >
         <CuboidCollider args={[0.2, 0.6, 0.2]} position={[0, 0.6, 0]} />
       </RigidBody>
