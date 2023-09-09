@@ -42,3 +42,11 @@ export interface iSkybox {
   setMorning: () => void;
   setEvening: () => void;
 }
+
+export interface iDirection {
+  direction: any;
+  setDirection: (direction: any) => void;
+}
+
+export * from './gameserver';
+export * from './three';

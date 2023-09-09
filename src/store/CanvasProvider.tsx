@@ -2,7 +2,7 @@ import { produce } from 'immer';
 import { createWithEqualityFn } from 'zustand/traditional';
 import { shallow } from 'zustand/shallow';
 import { create } from 'zustand';
-import { iAsset, iBoard, iSkybox } from '@/types';
+import { iAsset, iBoard, iDirection, iSkybox } from '@/types';
 
 const assetsToLoad: iAsset[] = [
   //* Models
@@ -182,13 +182,7 @@ export const useBoardStore = create<iBoard>(set => ({
   setBoardOpen: () => set(state => ({ isBoardOpen: !state.isBoardOpen })),
 }));
 
-interface iDirection {
-  direction: any;
-  setDirection: (direction: any) => void;
-}
-
 export const useDirectionStore = create<iDirection>(set => ({
   direction: '',
   setDirection: (direction: string) => set({ direction }),
 }));
-

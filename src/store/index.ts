@@ -1,2 +1,2 @@
-export * from './CampProvider';
-export * from "./CanvasProvider"
+export * from './CanvasProvider';
+export * from './Camp';

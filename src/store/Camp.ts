@@ -1,5 +1,8 @@
-import { ICampStoreState } from '@/types';
+'use client';
+
+import { ICampStoreState, IGameServerState, RoomUser } from '@/types';
 import { create } from 'zustand';
+import { Room, Client } from 'colyseus.js';
 
 // for demo purposes only
 const demoCamps = [
@@ -13,7 +16,7 @@ const demoCamps = [
       name: 'Jeremy Cai',
       image: '',
     },
-    selected: true
+    selected: true,
   },
   {
     image: '/assets/camp-notpot.svg',
@@ -25,7 +28,7 @@ const demoCamps = [
       name: 'Not Pot',
       image: '',
     },
-    selected: false
+    selected: false,
   },
   {
     image: '/assets/camp-3.svg',
@@ -37,7 +40,7 @@ const demoCamps = [
       name: 'Camp 3',
       image: '',
     },
-    selected: false
+    selected: false,
   },
 ];
 
@@ -46,4 +49,22 @@ export const useCampStore = create<ICampStoreState>()(set => ({
   campSelectedId: '',
   clearCampsList: () =>
     set(state => ({ ...state, campSelectedId: '', camps: [] })),
+}));
+
+export const useGameServer = create<IGameServerState>()(set => ({
+  userId: '',
+  clientConnection: null,
+  room: null,
+  isConnecting: false,
+  players: [],
+  setPlayers: (players: RoomUser[]) => set(() => ({ players })),
+  setUserId: (userId: string) => set(() => ({ userId })),
+  startConnecting: () => set(() => ({ isConnecting: true })),
+  endConnecting: () => set(() => ({ isConnecting: false })),
+  setRoom: (room: Room) => {
+    set(() => ({ room }));
+  },
+  setClientConnection: (clientConnection: Client) => {
+    set(() => ({ clientConnection }));
+  },
 }));

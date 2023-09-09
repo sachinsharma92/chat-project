@@ -11,12 +11,17 @@
     "test": "jest --watch"
   },
   "dependencies": {
+    "@colyseus/schema": "^2.0.15",
+    "@paralleldrive/cuid2": "^2.2.2",
     "@react-three/drei": "^9.80.9",
     "@react-three/fiber": "^8.13.7",
     "@react-three/postprocessing": "^2.15.1",
     "@react-three/rapier": "^1.1.1",
+    "@rivet-gg/api": "^23.1.0-rc4",
     "@types/three": "^0.155.1",
+    "bufferutil": "^4.0.7",
     "classnames": "^2.3.2",
+    "colyseus.js": "^0.15.13",
     "framer-motion": "^10.16.2",
     "gsap": "^3.12.2",
     "html-to-image": "^1.11.11",
@@ -24,6 +29,7 @@
     "leva": "^0.9.35",
     "lodash": "^4.17.21",
     "next": "^13.4.19",
+    "p-queue": "^7.4.1",
     "postprocessing": "^6.33.0",
     "r3f-perf": "^7.1.2",
     "react": "^18.2.0",
@@ -33,6 +39,7 @@
     "react-joystick-component": "^6.2.1",
     "three": "^0.155.0",
     "typescript": "^5.2.2",
+    "utf-8-validate": "^6.0.3",
     "zustand": "^4.4.1"
   },
   "devDependencies": {

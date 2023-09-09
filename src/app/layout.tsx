@@ -1,6 +1,7 @@
 import './globals.css';
 import { ReactNode } from 'react';
 import type { Metadata } from 'next';
+import Providers from './providers';
 
 export const metadata: Metadata = {
   title: 'Camp',
@@ -17,7 +18,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         ></script>
       </head>
       <body>
-        <div id="root">{children}</div>
+        <div id="root">
+          <Providers>{children}</Providers>
+        </div>
       </body>
     </html>
   );

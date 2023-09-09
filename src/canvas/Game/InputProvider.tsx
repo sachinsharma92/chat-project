@@ -1,4 +1,7 @@
+'use client';
+
 import { useDirectionStore } from '@/store';
+import { isChatFocused } from '@/ui/features/Chat/ChatInput';
 import React, {
   createContext,
   useEffect,
@@ -49,6 +52,10 @@ function InputProvider({ children }: PropsWithChildren<{}>) {
   }, [direction]);
 
   const onKeyDown = (event: KeyboardEvent) => {
+    if (isChatFocused()) {
+      return;
+    }
+
     if (!keyPressed[event.code]) {
       switch (event.code) {
         case 'KeyW':
@@ -70,11 +77,16 @@ function InputProvider({ children }: PropsWithChildren<{}>) {
         default:
           break;
       }
+
       setKeyPressed(draft => ({ ...draft, [event.code]: true }));
     }
   };
 
   const onKeyUp = (event: KeyboardEvent) => {
+    if (isChatFocused()) {
+      return;
+    }
+
     switch (event.code) {
       case 'KeyW':
       case 'ArrowUp':
@@ -102,7 +114,7 @@ function InputProvider({ children }: PropsWithChildren<{}>) {
     window.addEventListener('keydown', onKeyDown, false);
     window.addEventListener('keyup', onKeyUp);
     return () => {
-      window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('keydown', onKeyDown, false);
       window.removeEventListener('keyup', onKeyUp);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

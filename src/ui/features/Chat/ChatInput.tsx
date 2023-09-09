@@ -3,10 +3,22 @@ import Button from '../../common/Button';
 import TextInput from '../../common/TextInput';
 import './ChatInput.scss';
 import { useForm } from 'react-hook-form';
-import { Microphone, PaperPlane, EmojiSmileIcon, ExpandIcon } from '@/icons';
+import { PaperPlane, EmojiSmileIcon, ExpandIcon } from '@/icons';
+import { isEmpty, isString } from 'lodash';
 
 type ChatInputPropsType = {
   hideExpand?: boolean;
+  className?: string;
+};
+
+export const isChatFocused = () => {
+  const activeElemenet = document?.activeElement;
+
+  if (activeElemenet && activeElemenet.classList.contains('chat-form-input')) {
+    return true;
+  }
+
+  return false;
 };
 
 const ChatInput = (props: ChatInputPropsType) => {
@@ -17,7 +29,7 @@ const ChatInput = (props: ChatInputPropsType) => {
     // watch,
     // formState: { errors },
   } = useForm();
-  const { hideExpand } = props;
+  const { hideExpand, className } = props;
 
   const sendChat = (data: any) => {
     const { chatInput } = data;
@@ -28,18 +40,21 @@ const ChatInput = (props: ChatInputPropsType) => {
   };
 
   return (
-    <div className="chat-input">
-      <Button
-        type="button"
-        className={cx('start-microphone', 'center-content')}
-      >
-        <Microphone />
+    <div
+      className={cx('chat-input', {
+        [`${className}`]: isString(className) && !isEmpty(className),
+      })}
+    >
+      <Button type="button" className={cx('toggle-emojis', 'center-content')}>
+        <EmojiSmileIcon />
       </Button>
+
       <form
         onSubmit={handleSubmit(sendChat)}
         className={cx('chat-form', 'center-content')}
       >
         <TextInput
+          className="chat-form-input"
           placeholder={'Press ENTER to chat'}
           {...register('chatInput', { required: false })}
         />
@@ -47,9 +62,6 @@ const ChatInput = (props: ChatInputPropsType) => {
           <PaperPlane height={'20px'} width={'20px'} />
         </Button>
       </form>
-      <Button type="button" className={cx('toggle-emojis', 'center-content')}>
-        <EmojiSmileIcon />
-      </Button>
       {!hideExpand && (
         <Button className={cx('expand-chat', 'center-content')}>
           <ExpandIcon />

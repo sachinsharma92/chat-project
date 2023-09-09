@@ -1,7 +1,6 @@
 'use client';
 
 import InfoSidebar from '../InfoSidebar/InfoSidebar';
-import CameraButton from '../CameraButton/CameraButton';
 import StickyChat from '../Chat/StickyChat';
 
 import UserAvatar from '@/ui/common/UserAvatar';
@@ -11,7 +10,7 @@ import AppHeader from '../AppHeader';
 
 const World = dynamic(() => import('@/canvas/World'), { ssr: false });
 
-function MainComponent({ handleCameraButtonClick }: any) {
+function MainComponent() {
   return (
     <>
       <div className="main-component flex flex-col w-full fix-screen-overflow">
@@ -22,10 +21,9 @@ function MainComponent({ handleCameraButtonClick }: any) {
           </div>
           <InfoSidebar />
           <UserAvatar className="right-sidebar-user absolute" />
-          <CameraButton onButtonClick={handleCameraButtonClick} />
+          <StickyChat />
         </div>
       </div>
-      <StickyChat />
     </>
   );
 }

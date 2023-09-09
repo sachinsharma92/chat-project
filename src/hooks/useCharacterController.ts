@@ -1,32 +1,69 @@
-import { useMemo } from "react";
+import { useMemo } from 'react';
 
-import { useFrame } from "@react-three/fiber";
-import { Quaternion, Vector3, MathUtils, Object3D } from "three";
-import { RapierRigidBody, useRapier } from "@react-three/rapier";
-import { useInputs } from "@/canvas/Game/InputProvider";
+import { useFrame } from '@react-three/fiber';
+import { Quaternion, Vector3, MathUtils, Object3D } from 'three';
+import { RapierRigidBody, useRapier } from '@react-three/rapier';
+import { useInputs } from '@/canvas/Game/InputProvider';
+import { RoomUser } from '@/types';
+import { isEmpty, isNumber } from 'lodash';
+import { serverRoomSendQueue } from '@/lib/rivet';
+import { useGameServer } from '@/store';
+import { shallow } from 'zustand/shallow';
 
 const PLAYERSPEED = 4;
 
 function useCharacterController(
   character: Object3D,
-  rigidBody: RapierRigidBody
+  rigidBody: RapierRigidBody,
+  playerData?: Partial<RoomUser>,
 ) {
-  const { x, y } = useInputs();
+  const userInputs = useInputs();
   const { world } = useRapier();
+  const controlled = useMemo(() => !playerData, [playerData]);
+
+  const [room, userId] = useGameServer(
+    state => [state.room, state.userId],
+    shallow,
+  );
+
+  /**
+   * Use x,y player data from gameserver if not user controlled
+   */
+  const [x, y, posX, posY, posZ] = useMemo(() => {
+    if (!controlled || !isEmpty(playerData)) {
+      return [
+        playerData?.x || 0,
+        playerData?.y || 0,
+        playerData?.posX,
+        playerData?.posY,
+        playerData?.posZ,
+      ];
+    }
+
+    return [userInputs.x, userInputs.y];
+  }, [playerData, controlled, userInputs]);
 
   const characterController = useMemo(() => {
+    if (!character) {
+      return null;
+    }
+
     const characterController = world.createCharacterController(0.01);
     characterController.enableSnapToGround(0.5);
     characterController.setApplyImpulsesToDynamicBodies(true);
     characterController.enableAutostep(1, 0.1, true);
     characterController.setMinSlopeSlideAngle(MathUtils.degToRad(30));
     return characterController;
-  }, [world]);
+  }, [world, character]);
 
   useFrame((_, delta) => {
-    const characterRigidBody = rigidBody;
-    if (!characterRigidBody) return;
     const characterMesh = character;
+    const characterRigidBody = rigidBody;
+    if (!characterMesh || !characterController) {
+      return;
+    }
+
+    if (!characterRigidBody && controlled) return;
 
     const movement = new Vector3();
     movement.z = -y; // accommodate for webgl z-axis (forward is negative)
@@ -36,26 +73,46 @@ function useCharacterController(
       const angle = Math.atan2(movement.x, movement.z);
       const characterRotation = new Quaternion().setFromAxisAngle(
         new Vector3(0, 1, 0),
-        angle
+        angle,
       );
       characterMesh.quaternion.slerp(characterRotation, 0.1);
     }
     movement.normalize().multiplyScalar(PLAYERSPEED * delta);
     movement.y = -1;
 
-    characterController.computeColliderMovement(
-      characterRigidBody?.collider(0),
-      movement
-    );
-    const newPosition = new Vector3()
-      //@ts-ignore
-      .copy(characterRigidBody.translation())
-      //@ts-ignore
-      .add(characterController.computedMovement());
+    if (controlled) {
+      characterController.computeColliderMovement(
+        characterRigidBody?.collider(0),
+        movement,
+      );
+      const newPosition = new Vector3()
+        //@ts-ignore
+        .copy(characterRigidBody.translation())
+        //@ts-ignore
+        .add(characterController.computedMovement());
 
-    characterRigidBody.setNextKinematicTranslation(newPosition);
-    //@ts-ignore
-    characterMesh.position.lerp(characterRigidBody.translation(), 0.1);
+      characterRigidBody.setNextKinematicTranslation(newPosition);
+      //@ts-ignore
+      characterMesh.position.lerp(characterRigidBody.translation(), 0.1);
+
+      if (room?.send) {
+        serverRoomSendQueue.add(async () => {
+          room.send('action', {
+            userId,
+            x,
+            y,
+            z: 0,
+            displayName: '', // todo for authenticated users
+            posX: newPosition.x,
+            posY: newPosition.y,
+            posZ: newPosition.z,
+          });
+        });
+      }
+    } else if (isNumber(posX) && isNumber(posY) && isNumber(posZ)) {
+      const newPosition = new Vector3(posX, posY, posZ);
+      characterMesh.position.lerp(newPosition, 0.1);
+    }
   });
 }
 
