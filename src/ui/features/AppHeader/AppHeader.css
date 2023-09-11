@@ -11,23 +11,46 @@
   background: transparent;
 }
 
-.sign-in {
+.sign-in,
+.login {
   border-radius: 80px;
   background: var(--tans-off-white, #fffff7);
   padding: 4px 8px;
   box-sizing: border-box;
 }
 
-.sign-in > p {
+.sign-in > p,
+.login > p {
   font-size: 14px;
-  font-weight: 500;
 }
 
-.spaces > p,
-.explore > p {
-  @apply ml-2;
+.login {
+  margin-right: 8px;
+  background: transparent;
+}
 
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 500;
+.login > p {
+  color: var(--browns-button-brown, #8a7b66);
+}
+
+.center {
+  display: none;
+}
+
+@media screen and (max-width: 720px) {
+  .app-header {
+    padding: 0 12px;
+    gap: unset;
+  }
+
+  .center {
+    display: flex;
+    width: 100%;
+    max-width: calc(100% - 200px);
+    justify-content: space-between;
+  }
+
+  .login {
+    display: none;
+  }
 }

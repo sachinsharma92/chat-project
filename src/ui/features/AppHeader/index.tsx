@@ -1,6 +1,13 @@
-import { BotnetIcon, ExploreIcon, SpacesIcon } from '@/icons';
-import './AppHeader.css';
+'use client';
+
 import Button from '@/ui/common/Button';
+import {
+  BotnetIcon,
+  ExploreIcon,
+  NotificationBellIcon,
+  SearchIcon,
+} from '@/icons';
+import './AppHeader.css';
 
 const AppHeader = () => {
   return (
@@ -10,18 +17,26 @@ const AppHeader = () => {
           <BotnetIcon />
         </Button>
       </div>
+
       <div className="center flex">
-        <Button className="spaces flex justify-center">
-          <SpacesIcon />
-          <p>Spaces</p>
-        </Button>
-        <Button className="explore ml-2 flex justify-center">
+        <Button className="explore flex justify-center">
           <ExploreIcon />
-          <p>Explore </p>
+        </Button>
+
+        <Button className="search flex justify-center">
+          <SearchIcon />
+        </Button>
+
+        <Button className="notification flex justify-center">
+          <NotificationBellIcon />
         </Button>
       </div>
+
       <div className="right flex justify-center">
-        <Button className="sign-in flex justify-center">
+        <Button className="login flex justify-center items-center">
+          <p>Login</p>
+        </Button>
+        <Button className="sign-in flex justify-center items-center">
           <p>Sign In</p>
         </Button>
       </div>

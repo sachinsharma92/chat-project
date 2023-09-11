@@ -44,7 +44,7 @@ const featureFlags: featureFlagProps = {
 };
 
 function InfoSidebar() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   return (
     <>

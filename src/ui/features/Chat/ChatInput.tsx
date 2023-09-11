@@ -5,7 +5,7 @@ import Button from '../../common/Button';
 import TextInput from '../../common/TextInput';
 import './ChatInput.scss';
 import { useForm } from 'react-hook-form';
-import { PaperPlane, EmojiSmileIcon, ExpandIcon } from '@/icons';
+import { PaperPlane, EmojiSmileIcon, ExpandIcon, ChatIcon } from '@/icons';
 import { isEmpty, isString } from 'lodash';
 
 type ChatInputPropsType = {
@@ -47,25 +47,38 @@ const ChatInput = (props: ChatInputPropsType) => {
         [`${className}`]: isString(className) && !isEmpty(className),
       })}
     >
-      <Button type="button" className={cx('toggle-emojis', 'center-content')}>
+      <Button
+        type="button"
+        className={cx('toggle-emojis', 'flex justify-center items-center')}
+      >
         <EmojiSmileIcon />
       </Button>
 
       <form
         onSubmit={handleSubmit(sendChat)}
-        className={cx('chat-form', 'center-content')}
+        className={cx('chat-form', 'flex justify-center items-center')}
       >
         <TextInput
           className="chat-form-input"
           placeholder={'Press ENTER to chat'}
           {...register('chatInput', { required: false })}
         />
-        <Button className={cx('send-button', 'center-content')}>
+        <Button
+          type="submit"
+          className={cx('send-button', 'flex justify-center items-center')}
+        >
           <PaperPlane height={'20px'} width={'20px'} />
         </Button>
       </form>
+
+      <Button type="button" className="chat flex justify-center items-center">
+        <ChatIcon />
+      </Button>
+
       {!hideExpand && (
-        <Button className={cx('expand-chat', 'center-content')}>
+        <Button
+          className={cx('expand-chat', 'flex justify-center items-center')}
+        >
           <ExpandIcon />
         </Button>
       )}

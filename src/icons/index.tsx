@@ -7,3 +7,5 @@ export { default as BotnetIcon } from './BotnetIcon';
 export { default as SpacesIcon } from './SpacesIcon';
 export { default as ExploreIcon } from './ExploreIcon';
 export { default as LinkIcon } from './LinkIcon';
+export { default as ChatIcon } from './ChatIcon';
+export { default as NotificationBellIcon } from './NotificationBellIcon';

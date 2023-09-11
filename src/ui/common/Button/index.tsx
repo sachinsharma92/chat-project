@@ -39,7 +39,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           [`${className}`]: isString(className) && !isEmpty(className),
         })}
       >
-        {children || null} {text}
+        {children || null} {text || null}
       </button>
     );
   },

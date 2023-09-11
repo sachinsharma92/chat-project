@@ -45,11 +45,11 @@ const World = () => {
           <SMAA />
         </EffectComposer>
       </Canvas>
-      <div className="absolute bottom-5 left-10">
+      <div className="absolute bottom-2 left-2">
         <Joystick
           baseColor="gray"
           stickColor="white"
-          size={100}
+          size={112}
           stickSize={50}
           move={e => setDirection(e)}
           stop={e => setDirection(e)}
