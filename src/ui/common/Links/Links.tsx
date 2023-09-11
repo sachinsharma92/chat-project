@@ -1,27 +1,26 @@
 import { map } from 'lodash';
 import './Links.css';
+import { LinkIcon } from '@/icons';
 
-
-interface social { 
+export interface SocialLink {
   name: string;
   link: string;
 }
 
-function Links({ socials }: { socials: social[] }) {
+function Links({ socials }: { socials: SocialLink[] }) {
   return (
     <div className="links-layout">
       {map(socials, item => {
         return (
           <div className="links-wrapper" key={item.name}>
-            <img src={'/assets/link-icon.svg'} className="link-icon" />
+            <LinkIcon />
             <a
               href={item.link}
               target="_blank"
               className="link-label"
               rel="noreferrer"
             >
-              {' '}
-              {item.name}{' '}
+              {item.name}
             </a>
           </div>
         );
@@ -29,5 +28,5 @@ function Links({ socials }: { socials: social[] }) {
     </div>
   );
 }
- 
+
 export default Links;

@@ -3,6 +3,7 @@ import React, { useMemo, useContext, createContext } from 'react';
 import { useGLTF, Merged } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { useAsset } from '@/store/CanvasProvider';
+import { roseModelPath } from '@/contants';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -50,4 +51,4 @@ export default function Rose(props: JSX.IntrinsicElements['group']) {
   );
 }
 
-useGLTF.preload('/assets/models/rose.glb');
+useGLTF.preload(roseModelPath);

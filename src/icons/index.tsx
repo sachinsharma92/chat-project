@@ -6,3 +6,4 @@ export { default as SearchIcon } from './SearchIcon';
 export { default as BotnetIcon } from './BotnetIcon';
 export { default as SpacesIcon } from './SpacesIcon';
 export { default as ExploreIcon } from './ExploreIcon';
+export { default as LinkIcon } from './LinkIcon';

@@ -8,6 +8,7 @@ import { useGLTF } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { CuboidCollider, RigidBody } from '@react-three/rapier';
 import { useAsset } from '@/store/CanvasProvider';
+import { cabinModelPath } from '@/contants';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -45,4 +46,4 @@ export default function Cabin(props: JSX.IntrinsicElements['group']) {
   );
 }
 
-useGLTF.preload('/assets/models/cabin.glb');
+useGLTF.preload(cabinModelPath);

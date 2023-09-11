@@ -3,6 +3,7 @@ import { useMemo, useContext, createContext } from 'react';
 import { useGLTF, Merged } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { useAsset } from '@/store/CanvasProvider';
+import { sunflowerModelPath } from '@/contants';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -50,4 +51,4 @@ export default function Sunflower(props: JSX.IntrinsicElements['group']) {
   );
 }
 
-useGLTF.preload('/assets/models/sunflower.glb');
+useGLTF.preload(sunflowerModelPath);

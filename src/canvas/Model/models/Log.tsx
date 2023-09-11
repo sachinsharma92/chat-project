@@ -9,6 +9,7 @@ import { useGLTF, Merged } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { CuboidCollider, RigidBody } from '@react-three/rapier';
 import { useAsset } from '@/store/CanvasProvider';
+import { logModelPath } from '@/contants';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -58,4 +59,4 @@ export default function Log(props: JSX.IntrinsicElements['group']) {
   );
 }
 
-useGLTF.preload('/assets/models/log.glb');
+useGLTF.preload(logModelPath);

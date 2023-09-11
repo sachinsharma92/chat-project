@@ -4,6 +4,7 @@ import { useGLTF, useAnimations } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { useFrame } from '@react-three/fiber';
 import { useAsset } from '@/store/CanvasProvider';
+import { birdModelPath } from '@/contants';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -116,4 +117,4 @@ export default function Bird(props: JSX.IntrinsicElements['group']) {
   );
 }
 
-useGLTF.preload('/assets/models/bird.glb');
+useGLTF.preload(birdModelPath);

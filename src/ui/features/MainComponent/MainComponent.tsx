@@ -2,15 +2,27 @@
 
 import InfoSidebar from '../InfoSidebar/InfoSidebar';
 import StickyChat from '../Chat/StickyChat';
-
 import UserAvatar from '@/ui/common/UserAvatar';
 import dynamic from 'next/dynamic';
 import './MainComponent.css';
 import AppHeader from '../AppHeader';
+import { useEffect } from 'react';
 
 const World = dynamic(() => import('@/canvas/World'), { ssr: false });
 
 function MainComponent() {
+  /**
+   * Record entry time to check duration(in seconds)-
+   *  it'll take to fully load 3D world
+   */
+  useEffect(() => {
+    // @ts-ignore
+    if (!window?.entryTimestamp) {
+      // @ts-ignore
+      window.entryTimestamp = Date.now();
+    }
+  }, []);
+
   return (
     <>
       <div className="main-component flex flex-col w-full fix-screen-overflow">

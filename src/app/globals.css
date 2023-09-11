@@ -9,6 +9,11 @@
     local('Roboto-Light'), local('DroidSans'), local('Tahoma');
 }
 
+@font-face {
+  font-family: Hello-Goops;
+  src: url('/assets/fonts/Hello-Goops.otf') format('opentype');
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -21,8 +26,8 @@
 
 body {
   margin: 0;
-  font-family: system;
   box-sizing: border-box;
+  font-family: var(--font-inter);
 }
 
 div[data-testid='joystick-base'] {
@@ -32,8 +37,6 @@ div[data-testid='joystick-base'] {
 div[data-testid='joystick-base'] button {
   outline: none !important;
 }
-
-
 
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
 
@@ -48,6 +51,7 @@ div[data-testid='joystick-base'] button {
 html {
   line-height: 1.15; /* 1 */
   -webkit-text-size-adjust: 100%; /* 2 */
+  font-family: var(--font-inter);
 }
 
 /* Sections

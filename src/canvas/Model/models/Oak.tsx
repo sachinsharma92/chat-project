@@ -9,6 +9,7 @@ import { useGLTF, Merged } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { CuboidCollider, RigidBody } from '@react-three/rapier';
 import { useAsset } from '@/store/CanvasProvider';
+import { oakModelPath } from '@/contants';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -63,4 +64,4 @@ export default function Oak(props: JSX.IntrinsicElements['group']) {
   );
 }
 
-useGLTF.preload('/assets/models/oak.glb');
+useGLTF.preload(oakModelPath);

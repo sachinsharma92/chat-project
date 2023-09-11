@@ -5,6 +5,7 @@ import { ReactThreeFiber, useFrame } from '@react-three/fiber';
 import { gsap } from 'gsap';
 import * as THREE from 'three';
 import { useWorldStore } from '@/store/CanvasProvider';
+import { isNumber } from 'lodash';
 
 declare global {
   namespace JSX {
@@ -34,6 +35,20 @@ const LoadingReveal = () => {
   useEffect(() => {
     if (progress === 100) {
       start();
+
+      // @ts-ignore
+      if (isNumber(window?.entryTimestamp)) {
+        const timestamp = Date.now();
+        // @ts-ignore
+        const entryTimestamp = window.entryTimestamp;
+
+        console.log(
+          'Time it took to load:',
+          ((timestamp - entryTimestamp) / 1000).toFixed(2),
+          'seconds',
+        );
+      }
+
       if ($shader.current) {
         gsap.to($shader.current?.uniforms.uProgress, {
           value: 1,

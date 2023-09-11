@@ -1,5 +1,3 @@
-'use client';
-
 import { GameServerProvider } from '@/store/GameServerProvider';
 import { ReactNode } from 'react';
 

@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { useGLTF } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { useAsset } from '@/store/CanvasProvider';
+import { villagerModelPath } from '@/contants';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -36,4 +37,4 @@ export default function Villager(props: JSX.IntrinsicElements['group']) {
   );
 }
 
-useGLTF.preload('/assets/models/villager.glb');
+useGLTF.preload(villagerModelPath);

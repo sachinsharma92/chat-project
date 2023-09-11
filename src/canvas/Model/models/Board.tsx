@@ -3,6 +3,7 @@ import { useGLTF, meshBounds } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { RigidBody } from '@react-three/rapier';
 import { useAsset, useBoardStore } from '@/store/CanvasProvider';
+import { boardModelPath } from '@/contants';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -35,4 +36,4 @@ export default function Board(props: JSX.IntrinsicElements['group']) {
   );
 }
 
-useGLTF.preload('/assets/models/board.glb');
+useGLTF.preload(boardModelPath);

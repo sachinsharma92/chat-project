@@ -2,6 +2,7 @@ import './globals.css';
 import { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import Providers from './providers';
+import { inter } from './fonts';
 
 export const metadata: Metadata = {
   title: 'Camp',
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={inter.className}>
       <head>
         <script
           src="https://open.spotify.com/embed-podcast/iframe-api/v1"

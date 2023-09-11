@@ -1,12 +1,9 @@
+'use client';
+
 import { useState } from 'react';
 import './InfoSidebar.css';
-import Links from '../../common/Links/Links';
+import Links, { SocialLink } from '../../common/Links/Links';
 import JoinCampButton from '../JoinCampButton/JoinCampButton';
-
-interface social {
-  name: string;
-  link: string;
-}
 
 interface CampUserInfoProps {
   campName: string;
@@ -15,7 +12,7 @@ interface CampUserInfoProps {
   campMessage: string;
   location: string;
   weather: string;
-  socials: social[];
+  socials: SocialLink[];
 }
 
 interface featureFlagProps {

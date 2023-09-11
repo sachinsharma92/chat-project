@@ -7,6 +7,7 @@ import * as THREE from 'three';
 import { useGLTF } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { useAsset } from '@/store/CanvasProvider';
+import { soilModelPath } from '@/contants';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -34,4 +35,4 @@ export default function Soil(props: JSX.IntrinsicElements['group']) {
   );
 }
 
-useGLTF.preload('/assets/models/soil.glb');
+useGLTF.preload(soilModelPath);

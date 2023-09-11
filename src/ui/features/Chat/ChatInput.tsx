@@ -1,3 +1,5 @@
+'use client';
+
 import cx from 'classnames';
 import Button from '../../common/Button';
 import TextInput from '../../common/TextInput';

@@ -9,6 +9,7 @@ import { useGLTF, useAnimations } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { useAsset } from '@/store/CanvasProvider';
 import { CylinderCollider, RigidBody } from '@react-three/rapier';
+import { campfireModelPath } from '@/contants';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -59,4 +60,4 @@ export default function Campfire(props: JSX.IntrinsicElements['group']) {
   );
 }
 
-useGLTF.preload('/assets/models/campfire.glb');
+useGLTF.preload(campfireModelPath);

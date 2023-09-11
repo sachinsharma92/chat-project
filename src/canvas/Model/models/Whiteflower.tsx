@@ -4,15 +4,11 @@ Command: npx gltfjsx@6.1.4 whiteflower.glb -T -S -I -t
 */
 
 import * as THREE from 'three';
-import React, {
-  useRef,
-  useMemo,
-  useContext,
-  createContext,
-} from 'react';
-import { useGLTF, Merged} from '@react-three/drei';
+import React, { useRef, useMemo, useContext, createContext } from 'react';
+import { useGLTF, Merged } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { useAsset } from '@/store/CanvasProvider';
+import { whiteflowerModelPath } from '@/contants';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -62,4 +58,4 @@ export default function Whiteflower(props: JSX.IntrinsicElements['group']) {
   );
 }
 
-useGLTF.preload('/assets/models/whiteflower.glb');
+useGLTF.preload(whiteflowerModelPath);

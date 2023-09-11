@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@colyseus/schema": "^2.0.15",
+    "@next/font": "^13.4.19",
     "@paralleldrive/cuid2": "^2.2.2",
     "@react-three/drei": "^9.80.9",
     "@react-three/fiber": "^8.13.7",
@@ -60,6 +61,7 @@
     "jest-environment-jsdom": "^29.6.3",
     "postcss": "^8.4.29",
     "sass": "^1.66.1",
+    "supabase": "^1.93.0",
     "tailwindcss": "^3.3.3",
     "ts-jest": "^29.1.1"
   }

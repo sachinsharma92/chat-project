@@ -4,6 +4,7 @@ import { useGLTF, Merged } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { CuboidCollider, RigidBody } from '@react-three/rapier';
 import { useAsset } from '@/store/CanvasProvider';
+import { aspenModelPath } from '@/contants';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -59,4 +60,4 @@ export default function Aspen(props: JSX.IntrinsicElements['group']) {
   );
 }
 
-useGLTF.preload('/assets/models/aspen.glb');
+useGLTF.preload(aspenModelPath);

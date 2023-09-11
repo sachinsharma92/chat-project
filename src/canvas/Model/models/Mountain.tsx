@@ -7,6 +7,7 @@ import * as THREE from 'three';
 import { useGLTF } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { useAsset } from '@/store';
+import { mountainModelPath } from '@/contants';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -33,4 +34,4 @@ export default function Mountain(props: JSX.IntrinsicElements['group']) {
   );
 }
 
-useGLTF.preload('/assets/models/mountain.glb');
+useGLTF.preload(mountainModelPath);

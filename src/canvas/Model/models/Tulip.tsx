@@ -8,6 +8,7 @@ import React, { useMemo, useContext, createContext } from 'react';
 import { useGLTF, Merged } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { useAsset } from '@/store/CanvasProvider';
+import { tulipModelPath } from '@/contants';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -79,4 +80,4 @@ export default function Tulip(props: JSX.IntrinsicElements['group']) {
   );
 }
 
-useGLTF.preload('/assets/models/tulip.glb');
+useGLTF.preload(tulipModelPath);
