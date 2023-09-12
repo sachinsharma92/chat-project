@@ -1,8 +1,8 @@
-.links-layout {
+.apps {
   margin-top: 8px;
 }
 
-.links-wrapper {
+.app-item {
   flex-direction: row;
   margin-top: 4px;
   column-gap: 10px;
@@ -16,7 +16,7 @@
   height: 40px;
 }
 
-.link-label {
+.app-item > p {
   color: #44373c;
   font-size: 14px;
   font-style: normal;
@@ -25,10 +25,6 @@
   text-align: left;
 }
 
-.link-label > span {
-  font-weight: normal;
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 2px;
-  margin-left: 4px;
+.chat-icon > svg > path {
+  fill: var(--browns-grey-brown, #bab7a4);
 }

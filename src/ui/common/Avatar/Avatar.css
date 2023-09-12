@@ -1,17 +1,20 @@
 .avatar-layout {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  background: #eee9ca3d;
-  box-shadow: 0px 2px 4px 0px #0000001a;
-  padding: 6px;
+  height: 100%;
+  width: 100%;
+  padding: 0;
   box-sizing: border-box;
+  border-radius: 50%;
+  background: #eee9ca3d;
+  overflow: hidden;
 }
 
 .avatar-image {
-  border-radius: 6px;
+  height: 100%;
+  width: 100%;
   box-sizing: border-box;
   object-position: center;
+  object-fit: cover;
+  box-sizing: border-box;
 }
 
 .avatar-layout > p {

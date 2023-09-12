@@ -1,4 +1,4 @@
-.app-header {
+.app-nav {
   @apply flex space-x-4 w-full;
 
   background: transparent;
@@ -40,7 +40,7 @@
 }
 
 @media screen and (max-width: 720px) {
-  .app-header {
+  .app-nav {
     padding: 0 12px;
     gap: unset;
   }

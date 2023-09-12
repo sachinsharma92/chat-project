@@ -9,3 +9,8 @@ export { default as ExploreIcon } from './ExploreIcon';
 export { default as LinkIcon } from './LinkIcon';
 export { default as ChatIcon } from './ChatIcon';
 export { default as NotificationBellIcon } from './NotificationBellIcon';
+export { default as CrossIcon } from './CrossIcon';
+export { default as MeatballsIcon } from './MeatballsIcon';
+export { default as StoreIcon } from './StoreIcon';
+export { default as MembersIcon } from './MembersIcon';
+export { default as EllipseIcon } from './EllipseIcon';

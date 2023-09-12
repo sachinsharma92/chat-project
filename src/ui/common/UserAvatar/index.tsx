@@ -1,7 +1,7 @@
 import { isEmpty } from 'lodash';
 import Avatar from '../Avatar/Avatar';
-import './UserAvatar.css';
 import cx from 'classnames';
+import './UserAvatar.css';
 
 type UserAvatarProps = {
   className?: string;
@@ -12,9 +12,11 @@ const UserAvatar = (props: UserAvatarProps) => {
 
   return (
     <div
-      className={cx('user-avatar', { [`${className}`]: !isEmpty(className) })}
+      className={cx('user-avatar flex justify-center items-center', {
+        [`${className}`]: !isEmpty(className),
+      })}
     >
-      <Avatar src="/assets/avatarImage.svg" />
+      <Avatar src="/assets/camp-avatar.png" />
     </div>
   );
 };

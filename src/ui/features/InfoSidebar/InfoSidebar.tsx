@@ -1,9 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import './InfoSidebar.css';
 import Links, { SocialLink } from '../../common/Links/Links';
 import JoinCampButton from '../JoinCampButton/JoinCampButton';
+import Button from '@/ui/common/Button';
+import { CrossIcon, MeatballsIcon } from '@/icons';
+import './InfoSidebar.css';
+import SpaceStatistics from './SpaceStatistics';
+import Apps from './Apps';
+import UserAvatar from '@/ui/common/UserAvatar';
 
 interface CampUserInfoProps {
   campName: string;
@@ -22,7 +27,7 @@ interface featureFlagProps {
 }
 
 const CampUserInfo: CampUserInfoProps = {
-  campName: 'Base Camp',
+  campName: 'Basecamp',
   campHost: 'Jeremy Cai',
   campHostAvatar: '/assets/camp-avatar.png',
   campMessage:
@@ -30,10 +35,10 @@ const CampUserInfo: CampUserInfoProps = {
   location: 'Park City, USA',
   weather: 'Sunny 82° F',
   socials: [
-    { name: 'Substack ↗', link: '' },
-    { name: 'Twitter ↗', link: 'https://twitter.com/' },
-    { name: 'Instagram ↗', link: 'https://www.instagram.com/' },
-    { name: 'YouTube ↗', link: 'https://www.youtube.com/' },
+    { name: 'Substack', link: '' },
+    { name: 'Twitter', link: 'https://twitter.com/' },
+    { name: 'Instagram', link: 'https://www.instagram.com/' },
+    { name: 'YouTube', link: 'https://www.youtube.com/' },
   ],
 };
 
@@ -52,28 +57,34 @@ function InfoSidebar() {
         <div className="info-layout">
           <div className="main-content">
             <div className="header-container">
-              <div className="header-icon">
-                <img
-                  src={'/assets/cover-art.svg'}
-                  className="cover-art"
-                  alt="Cover Art"
-                />
-              </div>
-              <div
-                className="closebutton-container"
+              <div className="header-icon"></div>
+              <Button
+                className="close-button flex justify-center items-center"
+                type="button"
                 onClick={() => setOpen(!open)}
               >
-                <img
-                  src={'/assets/close-button.svg'}
-                  className="close-button"
-                  alt="Close icon"
-                />
-              </div>
+                <CrossIcon />
+              </Button>
             </div>
             <h1 className="info-header">{CampUserInfo.campName}</h1>
-            <div className="message-container">
+            <SpaceStatistics />
+
+            <div className="message-container flex-col">
               {featureFlags.joinCampFeature && <JoinCampButton />}
               <p className="info-message">{CampUserInfo.campMessage}</p>
+            </div>
+
+            <div className="info-host flex justify-start items-center">
+              <UserAvatar />
+              <p>
+                {CampUserInfo.campHost}
+                <span>Host</span>
+              </p>
+            </div>
+
+            <div className="apps-container">
+              <p className="info-label"> Apps </p>
+              <Apps />
             </div>
 
             <div className="links-container">
@@ -83,19 +94,25 @@ function InfoSidebar() {
           </div>
         </div>
       ) : (
-        <div
-          className="header-container-collapsed"
-          onClick={() => setOpen(!open)}
-        >
-          <div className="info-layout-collapsed">
-            <div className="pin-container">
-              <img
-                src={'/assets/Pin.svg'}
-                className="pin-collapsed"
-                alt="Pin Image"
-              />
-            </div>
-            <h1 className="info-header-collapsed">{CampUserInfo.campName}</h1>
+        <div className="info-layout-collapsed flex-col items-start justify-start">
+          <div className="header-container">
+            <div className="header-icon header-icon-collapsed"></div>
+            <Button
+              className="header-expand flex justify-center items-center"
+              onClick={() => setOpen(!open)}
+            >
+              <MeatballsIcon />
+            </Button>
+          </div>
+
+          <h1 className="info-header info-header-collapsed">
+            {CampUserInfo.campName}
+          </h1>
+          <SpaceStatistics collapsed />
+          <div className="cta-collapsed flex justify-start items-center">
+            <Button className="join-button flex justify-center items-center">
+              Join Space
+            </Button>
           </div>
         </div>
       )}

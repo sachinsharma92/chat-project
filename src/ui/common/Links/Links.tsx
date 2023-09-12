@@ -1,6 +1,6 @@
 import { map } from 'lodash';
-import './Links.css';
 import { LinkIcon } from '@/icons';
+import './Links.css';
 
 export interface SocialLink {
   name: string;
@@ -21,6 +21,7 @@ function Links({ socials }: { socials: SocialLink[] }) {
               rel="noreferrer"
             >
               {item.name}
+              <span>{'↗'}</span>
             </a>
           </div>
         );

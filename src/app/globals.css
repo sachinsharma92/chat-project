@@ -9,11 +9,6 @@
     local('Roboto-Light'), local('DroidSans'), local('Tahoma');
 }
 
-@font-face {
-  font-family: Hello-Goops;
-  src: url('/assets/fonts/Hello-Goops.otf') format('opentype');
-}
-
 * {
   margin: 0;
   padding: 0;

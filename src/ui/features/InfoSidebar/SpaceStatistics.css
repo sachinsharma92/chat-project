@@ -1,0 +1,30 @@
+.info-stats {
+  justify-content: flex-start;
+  box-sizing: border-box;
+  margin-top: 8px;
+}
+
+.info-members > p,
+.info-online > p {
+  margin-left: 8px;
+  color: #9a835a;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+}
+
+.info-online {
+  margin-left: 8px;
+}
+
+.info-members-collapsed > p,
+.info-online-collapsed > p {
+  color: var(--tans-off-white, #fffff7);
+  font-size: 10px;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.info-members-collapsed > svg > path {
+  fill: var(--tans-tan, #eee9ca);
+}

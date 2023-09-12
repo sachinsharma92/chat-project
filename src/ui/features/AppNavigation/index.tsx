@@ -7,13 +7,13 @@ import {
   NotificationBellIcon,
   SearchIcon,
 } from '@/icons';
-import './AppHeader.css';
+import './AppNavigation.css';
 import cx from 'classnames';
 import { InterTight } from '@/app/fonts';
 
-const AppHeader = () => {
+const AppNavigation = () => {
   return (
-    <div className={cx(InterTight.className, 'app-header')}>
+    <div className={cx(InterTight.className, 'app-nav')}>
       <div className="left flex">
         <Button className="logo flex justify-center">
           <BotnetIcon />
@@ -46,4 +46,4 @@ const AppHeader = () => {
   );
 };
 
-export default AppHeader;
+export default AppNavigation;
