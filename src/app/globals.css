@@ -28,6 +28,7 @@ body {
   margin: 0;
   box-sizing: border-box;
   font-family: var(--font-inter);
+  font-feature-settings: 'clig' off, 'liga' off;
 }
 
 div[data-testid='joystick-base'] {

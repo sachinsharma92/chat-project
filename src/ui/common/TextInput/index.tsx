@@ -37,6 +37,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputPropsType>(
         {...(!isEmpty(defaultValue) && { defaultValue })}
         style={{ ...style }}
         {...props}
+        autoComplete="off"
       />
     );
   },

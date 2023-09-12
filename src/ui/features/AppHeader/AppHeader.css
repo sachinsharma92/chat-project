@@ -22,6 +22,8 @@
 .sign-in > p,
 .login > p {
   font-size: 14px;
+  font-weight: 500;
+  color: var(--browns-dark-brown, #44373c);
 }
 
 .login {

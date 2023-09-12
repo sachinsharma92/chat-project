@@ -1,6 +1,6 @@
-import { Inter } from 'next/font/google';
+import { Inter_Tight } from 'next/font/google';
 
-export const inter = Inter({
+export const InterTight = Inter_Tight({
   style: ['normal'],
   subsets: ['latin'],
   display: 'swap',

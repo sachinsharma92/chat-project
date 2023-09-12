@@ -14,22 +14,42 @@ import { Perf } from 'r3f-perf';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Joystick } from 'react-joystick-component';
 import { useDirectionStore } from '@/store';
+import { Leva } from 'leva';
 
 const World = () => {
   useAssetLoader();
-  const [showThreeJsPerformance, setShowThreeJsPerformance] = useState(false);
+
+  const [adminPanelControls, setAdminPanelControls] = useState({
+    showLevaControls: false,
+    showThreeJsPerformance: false,
+  });
   const setDirection = useDirectionStore(state => state.setDirection);
 
   useHotkeys(
     'cmd+.,ctrl+.',
     () => {
-      setShowThreeJsPerformance(!showThreeJsPerformance);
+      setAdminPanelControls({
+        ...adminPanelControls,
+        showThreeJsPerformance: !adminPanelControls?.showThreeJsPerformance,
+      });
+    },
+    { enabled: true },
+  );
+
+  useHotkeys(
+    'cmd+/,ctrl+/',
+    () => {
+      setAdminPanelControls({
+        ...adminPanelControls,
+        showLevaControls: !adminPanelControls?.showLevaControls,
+      });
     },
     { enabled: true },
   );
 
   return (
     <>
+      <Leva collapsed hidden={!adminPanelControls?.showLevaControls} />
       <Canvas
         gl={{
           antialias: false,
@@ -37,7 +57,7 @@ const World = () => {
         shadows
         dpr={Math.min(window.devicePixelRatio, 2)}
       >
-        {showThreeJsPerformance && <Perf />}
+        {adminPanelControls?.showThreeJsPerformance && <Perf />}
         <Scene />
         <LoadingReveal />
         <EffectComposer multisampling={0} autoClear={false}>
