@@ -8,10 +8,12 @@ import {
   SearchIcon,
 } from '@/icons';
 import './AppHeader.css';
+import cx from 'classnames';
+import { InterTight } from '@/app/fonts';
 
 const AppHeader = () => {
   return (
-    <div className="app-header">
+    <div className={cx(InterTight.className, 'app-header')}>
       <div className="left flex">
         <Button className="logo flex justify-center">
           <BotnetIcon />

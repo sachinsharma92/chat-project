@@ -2,7 +2,7 @@ import './globals.css';
 import { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import Providers from './providers';
-import { InterTight } from './fonts';
+import { Inter } from './fonts';
 
 export const metadata: Metadata = {
   title: 'Camp',
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={InterTight.className}>
+    <html lang="en" className={Inter.className}>
       <head>
         <meta name="theme-color" content="#f8f4e8" />
         <meta
