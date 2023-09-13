@@ -14,3 +14,4 @@ export { default as MeatballsIcon } from './MeatballsIcon';
 export { default as StoreIcon } from './StoreIcon';
 export { default as MembersIcon } from './MembersIcon';
 export { default as EllipseIcon } from './EllipseIcon';
+export { default as AudioPlayingIcon } from './AudioPlayingIcon';

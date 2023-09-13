@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import './MainComponent.css';
 import AppNavigation from '../AppNavigation';
 import { useEffect } from 'react';
+import MediaPlayer from '../MediaPlayer';
 
 const World = dynamic(() => import('@/canvas/World'), { ssr: false });
 const InfoSidebar = dynamic(
@@ -34,6 +35,7 @@ function MainComponent() {
         <div className="world absolute h-full w-full top-0 left-0">
           <World />
         </div>
+        <MediaPlayer />
         <StickyChat />
         <InfoSidebar />
       </div>
