@@ -1,21 +1,24 @@
+'use client';
+
 import { isNumber } from 'lodash';
 import { useEffect, useState } from 'react';
-
-export const initialAvailableHeight =
-  window?.visualViewport?.height || window?.innerHeight;
-export const initialAvailableWidth =
-  window?.visualViewport?.width || window?.innerWidth;
 
 /**
  * Listen to window resize event and return available viewport height & width
  * @param props
  * @returns
  */
-const useWindowResize = <T extends unknown>(props: T) => {
+const useWindowResize = <T extends unknown>(props?: T) => {
   const [availableHeight, setAvailableHeight] = useState(
-    initialAvailableHeight,
+    typeof window !== 'undefined'
+      ? window?.visualViewport?.height || window?.innerHeight
+      : 0,
   );
-  const [availableWidth, setAvailableWidth] = useState(initialAvailableWidth);
+  const [availableWidth, setAvailableWidth] = useState(
+    typeof window !== 'undefined'
+      ? window?.visualViewport?.width || window?.innerWidth
+      : 0,
+  );
 
   useEffect(() => {
     const onResize = () => {

@@ -8,7 +8,7 @@ import React, { useMemo, useContext, createContext } from 'react';
 import { useGLTF, Merged } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { useAsset } from '@/store/CanvasProvider';
-import { tulipModelPath } from '@/contants';
+import { tulipModelPath } from '@/constants';
 
 type GLTFResult = GLTF & {
   nodes: {

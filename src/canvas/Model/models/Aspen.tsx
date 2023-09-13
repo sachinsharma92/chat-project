@@ -4,7 +4,7 @@ import { useGLTF, Merged } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { CuboidCollider, RigidBody } from '@react-three/rapier';
 import { useAsset } from '@/store/CanvasProvider';
-import { aspenModelPath } from '@/contants';
+import { aspenModelPath } from '@/constants';
 
 type GLTFResult = GLTF & {
   nodes: {

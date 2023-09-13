@@ -5,10 +5,14 @@ import Links, { SocialLink } from '../../common/Links/Links';
 import JoinCampButton from '../JoinCampButton/JoinCampButton';
 import Button from '@/ui/common/Button';
 import { CrossIcon, MeatballsIcon } from '@/icons';
-import './InfoSidebar.css';
 import SpaceStatistics from './SpaceStatistics';
 import Apps from './Apps';
 import UserAvatar from '@/ui/common/UserAvatar';
+import cx from 'classnames';
+import './InfoSidebar.css';
+import { Inter } from '@/app/fonts';
+import { useWindowResize } from '@/hooks';
+import { mobileWidthBreakpoint } from '@/constants';
 
 interface CampUserInfoProps {
   campName: string;
@@ -35,7 +39,6 @@ const CampUserInfo: CampUserInfoProps = {
   location: 'Park City, USA',
   weather: 'Sunny 82° F',
   socials: [
-    { name: 'Substack', link: '' },
     { name: 'Twitter', link: 'https://twitter.com/' },
     { name: 'Instagram', link: 'https://www.instagram.com/' },
     { name: 'YouTube', link: 'https://www.youtube.com/' },
@@ -44,17 +47,18 @@ const CampUserInfo: CampUserInfoProps = {
 
 const featureFlags: featureFlagProps = {
   subscribeFeature: false,
-  joinCampFeature: true,
+  joinCampFeature: false,
   copyLinkFeature: true,
 };
 
 function InfoSidebar() {
-  const [open, setOpen] = useState(false);
+  const { availableWidth } = useWindowResize();
+  const [open, setOpen] = useState(availableWidth > mobileWidthBreakpoint);
 
   return (
     <>
       {open ? (
-        <div className="info-layout">
+        <div className={cx(Inter.className, 'info-layout')}>
           <div className="main-content">
             <div className="header-container">
               <div className="header-icon"></div>
@@ -74,7 +78,7 @@ function InfoSidebar() {
               <p className="info-message">{CampUserInfo.campMessage}</p>
             </div>
 
-            <div className="info-host flex justify-start items-center">
+            <div className="info-host flex justify-start items-center hidden">
               <UserAvatar />
               <p>
                 {CampUserInfo.campHost}
@@ -82,7 +86,7 @@ function InfoSidebar() {
               </p>
             </div>
 
-            <div className="apps-container">
+            <div className="apps-container hidden">
               <p className="info-label"> Apps </p>
               <Apps />
             </div>
@@ -94,7 +98,12 @@ function InfoSidebar() {
           </div>
         </div>
       ) : (
-        <div className="info-layout-collapsed flex-col items-start justify-start">
+        <div
+          className={cx(
+            Inter.className,
+            'info-layout-collapsed flex-col items-start justify-start',
+          )}
+        >
           <div className="header-container">
             <div className="header-icon header-icon-collapsed"></div>
             <Button
@@ -109,7 +118,7 @@ function InfoSidebar() {
             {CampUserInfo.campName}
           </h1>
           <SpaceStatistics collapsed />
-          <div className="cta-collapsed flex justify-start items-center">
+          <div className="cta-collapsed flex justify-start items-center hidden">
             <Button className="join-button flex justify-center items-center">
               Join Space
             </Button>

@@ -3,7 +3,7 @@ import { useMemo, useContext, createContext } from 'react';
 import { useGLTF, Merged } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { useAsset } from '@/store/CanvasProvider';
-import { sunflowerModelPath } from '@/contants';
+import { sunflowerModelPath } from '@/constants';
 
 type GLTFResult = GLTF & {
   nodes: {

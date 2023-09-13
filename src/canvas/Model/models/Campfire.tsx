@@ -9,7 +9,7 @@ import { useGLTF, useAnimations } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { useAsset } from '@/store/CanvasProvider';
 import { CylinderCollider, RigidBody } from '@react-three/rapier';
-import { campfireModelPath } from '@/contants';
+import { campfireModelPath } from '@/constants';
 
 type GLTFResult = GLTF & {
   nodes: {

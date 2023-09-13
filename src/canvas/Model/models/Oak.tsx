@@ -9,7 +9,7 @@ import { useGLTF, Merged } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { CuboidCollider, RigidBody } from '@react-three/rapier';
 import { useAsset } from '@/store/CanvasProvider';
-import { oakModelPath } from '@/contants';
+import { oakModelPath } from '@/constants';
 
 type GLTFResult = GLTF & {
   nodes: {

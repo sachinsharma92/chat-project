@@ -21,7 +21,8 @@
   left: 16px;
   padding: 20px;
   box-sizing: border-box;
-  height: calc(100% - 32px);
+  min-height: 100px;
+  max-height: calc(100% - 32px);
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
@@ -34,7 +35,8 @@
 .info-layout-collapsed {
   position: absolute;
   align-self: stretch;
-  width: 166px;
+  max-width: 166px;
+  min-width: 50px;
   cursor: pointer;
   top: 16px;
   left: 16px;
@@ -70,7 +72,8 @@
 }
 
 .header-container {
-  display: flex;
+  @apply flex;
+
   margin: 0;
   align-items: flex-start;
   justify-content: space-between;
@@ -142,6 +145,7 @@
   font-feature-settings: 'clig' off, 'liga' off;
   text-overflow: ellipsis;
   font-size: 12px;
+  font-style: normal;
   font-weight: 600;
   line-height: 16px;
   max-width: 100%;

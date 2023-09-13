@@ -3,7 +3,7 @@ import { createWithEqualityFn } from 'zustand/traditional';
 import { shallow } from 'zustand/shallow';
 import { create } from 'zustand';
 import { iBoard, iDirection, iSkybox } from '@/types';
-import { assetsToLoad } from '@/contants';
+import { assetsToLoad } from '@/constants';
 
 const immer = (config: any) => (set: any, get: any, api: any) =>
   config((fn: any) => set(produce(fn)), get, api);

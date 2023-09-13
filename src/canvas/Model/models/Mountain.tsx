@@ -7,7 +7,7 @@ import * as THREE from 'three';
 import { useGLTF } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { useAsset } from '@/store';
-import { mountainModelPath } from '@/contants';
+import { mountainModelPath } from '@/constants';
 
 type GLTFResult = GLTF & {
   nodes: {

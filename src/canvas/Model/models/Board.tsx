@@ -3,7 +3,7 @@ import { useGLTF, meshBounds } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { RigidBody } from '@react-three/rapier';
 import { useAsset, useBoardStore } from '@/store/CanvasProvider';
-import { boardModelPath } from '@/contants';
+import { boardModelPath } from '@/constants';
 
 type GLTFResult = GLTF & {
   nodes: {

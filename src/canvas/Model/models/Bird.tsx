@@ -4,7 +4,7 @@ import { useGLTF, useAnimations } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { useFrame } from '@react-three/fiber';
 import { useAsset } from '@/store/CanvasProvider';
-import { birdModelPath } from '@/contants';
+import { birdModelPath } from '@/constants';
 
 type GLTFResult = GLTF & {
   nodes: {

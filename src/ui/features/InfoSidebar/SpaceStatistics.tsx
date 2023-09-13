@@ -8,8 +8,8 @@ const SpaceStatistics = (props: { collapsed?: boolean }) => {
   return (
     <div className={'info-stats flex justify-start items-center'}>
       <div
-        className={cx('info-members flex justify-start items-center', {
-          'info-members-collapsed': collapsed,
+        className={cx('info-members flex justify-start items-center hidden', {
+          'info-members-collapsed hidden': collapsed,
         })}
       >
         <MembersIcon /> <p>23 members</p>
