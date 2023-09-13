@@ -1,6 +1,5 @@
 'use client';
 
-import InfoSidebar from '../InfoSidebar/InfoSidebar';
 import StickyChat from '../Chat/StickyChat';
 import dynamic from 'next/dynamic';
 import './MainComponent.css';
@@ -8,6 +7,12 @@ import AppNavigation from '../AppNavigation';
 import { useEffect } from 'react';
 
 const World = dynamic(() => import('@/canvas/World'), { ssr: false });
+const InfoSidebar = dynamic(
+  () => import('@/ui/features/InfoSidebar/InfoSidebar'),
+  {
+    ssr: false,
+  },
+);
 
 function MainComponent() {
   /**

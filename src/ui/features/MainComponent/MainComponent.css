@@ -4,7 +4,7 @@
   left: 0;
   height: 100%;
   width: 100%;
-  padding: 12px 16px;
+  padding: 12px;
   box-sizing: border-box;
 }
 
@@ -21,8 +21,12 @@
 
 .game-screen {
   position: relative;
-  height: calc(100% - 12px);
-  margin-top: 12px;
+  /* Alpha release */
+  /* height: calc(100% - 12px); */
+  /* margin-top: 12px; */
+
+  height: 100%;
+  margin-top: 0;
   display: flex;
   justify-content: space-between;
   flex-direction: row;
@@ -40,14 +44,16 @@
 @media screen and (max-width: 720px) {
   .main-component {
     padding: 0;
-    padding-top: 16px;
+    /* Alpha release */
+    /* padding-top: 16px; */
   }
 
   .game-screen {
-    height: calc(100% - 16px);
-    margin-top: 16px;
+    /* Alpha release */
+    /* height: calc(100% - 16px); */
+    /* border-top-left-radius: 24px;
+    border-top-right-radius: 24px; */
+    /* margin-top: 16px; */
     border-radius: 0;
-    border-top-left-radius: 24px;
-    border-top-right-radius: 24px;
   }
 }

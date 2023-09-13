@@ -1,7 +1,21 @@
 'use client';
 
 import { isNumber } from 'lodash';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+
+const getWindowDimension = () => {
+  try {
+    return {
+      h: window?.visualViewport?.height || window?.innerHeight,
+      w: window?.visualViewport?.width || window?.innerWidth,
+    };
+  } catch {
+    return {
+      h: 0,
+      w: 0,
+    };
+  }
+};
 
 /**
  * Listen to window resize event and return available viewport height & width
@@ -10,23 +24,16 @@ import { useEffect, useState } from 'react';
  */
 const useWindowResize = <T extends unknown>(props?: T) => {
   const [availableHeight, setAvailableHeight] = useState(
-    typeof window !== 'undefined'
-      ? window?.visualViewport?.height || window?.innerHeight
-      : 0,
+    getWindowDimension()?.h,
   );
-  const [availableWidth, setAvailableWidth] = useState(
-    typeof window !== 'undefined'
-      ? window?.visualViewport?.width || window?.innerWidth
-      : 0,
-  );
+  const [availableWidth, setAvailableWidth] = useState(getWindowDimension()?.w);
 
   useEffect(() => {
     const onResize = () => {
       try {
-        const availableHeight =
-          window?.visualViewport?.height || window?.innerHeight;
-        const availableWidth =
-          window?.visualViewport?.width || window?.innerWidth;
+        const { h, w } = getWindowDimension();
+        const availableHeight = h;
+        const availableWidth = w;
 
         if (isNumber(availableHeight)) {
           setAvailableHeight(availableHeight);
@@ -57,9 +64,12 @@ const useWindowResize = <T extends unknown>(props?: T) => {
     };
   }, [props]);
 
+  const height = useMemo(() => availableHeight, [availableHeight]);
+  const width = useMemo(() => availableWidth, [availableWidth]);
+
   return {
-    availableWidth,
-    availableHeight,
+    availableWidth: width,
+    availableHeight: height,
   };
 };
 

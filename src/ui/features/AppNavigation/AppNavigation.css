@@ -1,5 +1,5 @@
 .app-nav {
-  @apply flex space-x-4 w-full;
+  @apply flex hidden overflow-hidden space-x-4 w-full; /* hidden for alpha */
 
   background: transparent;
   justify-content: space-between;

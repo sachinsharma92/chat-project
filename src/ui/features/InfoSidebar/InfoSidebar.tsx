@@ -11,8 +11,8 @@ import UserAvatar from '@/ui/common/UserAvatar';
 import cx from 'classnames';
 import './InfoSidebar.css';
 import { Inter } from '@/app/fonts';
-import { useWindowResize } from '@/hooks';
 import { mobileWidthBreakpoint } from '@/constants';
+import { useWindowResize } from '@/hooks';
 
 interface CampUserInfoProps {
   campName: string;
