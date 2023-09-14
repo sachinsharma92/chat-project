@@ -1,34 +1,28 @@
-import Pine, { Instances as Pines } from './models/Pine';
-import Oak, { Instances as Oaks } from './models/Oak';
-import Aspen, { Instances as Aspens } from './models/Aspen';
+import Aspen, { Instances as A } from './models/Aspen';
+import Oak, { Instances as O } from './models/Oak';
+import Pine, { Instances as P } from './models/Pine';
 
 const Tree = ({ tiltFactor }: any) => {
   return (
     <>
-      <Pines castShadow receiveShadow>
-        <Pine scale={1.2} position={[5.5, 0, 0]} />
-        <Pine
-          scale={1.2}
-          rotation={[tiltFactor, 0, 0]}
-          position={[-1.5, 0, 8.5]}
-        />
-        <Pine
-          scale={1.2}
-          rotation={[tiltFactor, 0, 0]}
-          position={[2.1, 0, 8.7]}
-        />
-        <Pine scale={1.2} position={[-7, 0, -1]} />
-        <Pine scale={1.2} position={[-5.5, 0, 3.5]} />
-      </Pines>
-      <Oaks castShadow receiveShadow>
-        <Oak scale={1.6} position={[-2.5, 0, 0]} />
-        <Oak scale={1.6} position={[-4, 0, 7]} />
-      </Oaks>
-      <Aspens castShadow receiveShadow>
-        <Aspen position={[-3, 1.9, 4]} />
-        <Aspen position={[4.8, 1.9, 6]} />
-        <Aspen position={[7, 1.9, 1]} />
-      </Aspens>
+      <P castShadow receiveShadow>
+        <Pine rotation-x={tiltFactor} position={[5.5, 0, -3]} />
+        <Pine rotation-x={tiltFactor} position={[-1.5, 0, 8.5]} />
+        <Pine rotation-x={tiltFactor} position={[2.1, 0, 8.7]} />
+        <Pine rotation-x={tiltFactor} position={[-7, 0, -1]} />
+        <Pine rotation-x={tiltFactor} position={[-5.5, 0, 3.5]} />
+        <Pine rotation-x={tiltFactor} position={[7, 0, 3]} />
+      </P>
+      <O castShadow receiveShadow>
+        <Oak rotation-x={tiltFactor} position={[-3, 0, -2]} />
+        <Oak rotation-x={tiltFactor} position={[-4, 0, 7]} />
+        <Oak rotation-x={tiltFactor} position={[10, 0, -2]} />
+      </O>
+      <A castShadow receiveShadow>
+        <Aspen rotation-x={tiltFactor} position={[-2.5, 0, 3]} />
+        <Aspen rotation-x={tiltFactor} position={[6, 0, 6]} />
+        <Aspen rotation-x={tiltFactor} position={[7, 0, 1]} />
+      </A>
     </>
   );
 };

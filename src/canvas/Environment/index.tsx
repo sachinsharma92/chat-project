@@ -3,11 +3,10 @@ import { Suspense, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import gsap from 'gsap';
 import Model from '../Model';
-import { useAsset } from '@/store/CanvasProvider';
 import { CloudShaderMaterial } from './CloudShader';
 import { ReactThreeFiber, useFrame } from '@react-three/fiber';
 import { useControls } from 'leva';
-import { GradientTexture } from '@react-three/drei';
+import { GradientTexture, useTexture } from '@react-three/drei';
 import {
   interpolateColor,
   interpolatedSunPosition,
@@ -15,6 +14,12 @@ import {
   night,
   tilt,
 } from '@/canvas/Utils';
+import {
+  bigCloudTexturePath,
+  grassTexturePath,
+  middleCloudTexturePath,
+  smallCloudTexturePath,
+} from '@/constants';
 
 declare global {
   namespace JSX {
@@ -31,11 +36,11 @@ const Environment = () => {
   // Refs
   const ref = useRef<THREE.DirectionalLight>(null);
   const $shader = useRef<THREE.ShaderMaterial>(null);
-  
+
   // Assets
-  const grass = useAsset('grass');
+  const grass = useTexture(grassTexturePath);
   grass.wrapS = grass.wrapT = THREE.RepeatWrapping;
-  grass.repeat.set(25, 15);
+  grass.repeat.set(10, 6);
 
   const { times } = useControls('time', {
     times: {
@@ -61,11 +66,11 @@ const Environment = () => {
     }
   }, [times]);
 
-  const bigCloud = useAsset('bigcloud');
+  const bigCloud = useTexture(bigCloudTexturePath);
   bigCloud.wrapS = bigCloud.wrapT = THREE.RepeatWrapping;
-  const mediumCloud = useAsset('mediumcloud');
+  const mediumCloud = useTexture(middleCloudTexturePath);
   mediumCloud.wrapS = mediumCloud.wrapT = THREE.RepeatWrapping;
-  const smallCloud = useAsset('smallcloud');
+  const smallCloud = useTexture(smallCloudTexturePath);
   smallCloud.wrapS = smallCloud.wrapT = THREE.RepeatWrapping;
 
   useFrame((_, delta) => {
@@ -132,32 +137,27 @@ const Environment = () => {
         shadow-camera-right={30}
         shadow-camera-left={-30}
         shadow-camera-bottom={-30}
-        shadow-mapSize-width={1024 * 3}
-        shadow-mapSize-height={1024 * 3}
+        shadow-mapSize-width={1024 * 2}
+        shadow-mapSize-height={1024 * 2}
         shadow-bias={-0.001}
         shadow-normalBias={0.01}
       />
-      <ambientLight intensity={interpolatedTime(times) === night ? 0.2 : 0.5} />
+      <ambientLight intensity={interpolatedTime(times) === night ? 0.2 : 0.6} />
 
       <RigidBody type="fixed" rotation={[tilt, 0, 0]} position={[0, -0.6, 0]}>
         <mesh name="floor" receiveShadow position={[0, -0.968, 0]}>
           <boxGeometry args={[50, 2, 30]} />
-          <meshStandardMaterial map={grass} />
+          <meshToonMaterial map={grass} />
         </mesh>
       </RigidBody>
 
       <mesh
-        scale={2.9}
+        scale={3.6}
         rotation={[-Math.PI / 2 + 0.1, 0, 0]}
-        position={[0.15, -0.4, -1.1]}
+        position={[0.15, -0.19, -3.7]}
       >
         <circleGeometry />
-        <meshStandardMaterial
-          // @ts-ignore
-          opacity="0.13"
-          transparent
-          color="#a0dcac"
-        />
+        <meshToonMaterial opacity={0.2} transparent color="#a0dcac" />
       </mesh>
       {/* cloud */}
       <mesh>
@@ -185,7 +185,7 @@ const Environment = () => {
       {/* skydome */}
       <mesh>
         <sphereGeometry args={[51, 16, 16]} />
-        <meshBasicMaterial side={THREE.BackSide}>
+        <meshBasicMaterial fog={false} side={THREE.BackSide}>
           <GradientTexture
             stops={[0.35, 0.4, 0.45, 0.5, 0.55]}
             colors={interpolatedTime(times)}

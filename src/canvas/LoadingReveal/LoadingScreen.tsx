@@ -3,10 +3,11 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import { useLoadingProgress, useWorldStore } from '@/store/CanvasProvider';
+import { useWorldStore } from '@/store/CanvasProvider';
+import { useProgress } from '@react-three/drei';
 
 function LoadingScreen() {
-  const progress = useLoadingProgress();
+  const { progress } = useProgress();
   const isLoading = progress < 100;
   const { isStarted } = useWorldStore();
 

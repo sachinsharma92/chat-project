@@ -3,17 +3,16 @@ import { useMemo, useContext, createContext } from 'react';
 import { useGLTF, Merged } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { CuboidCollider, RigidBody } from '@react-three/rapier';
-import { useAsset } from '@/store/CanvasProvider';
 import { pineModelPath } from '@/constants';
 
 type GLTFResult = GLTF & {
   nodes: {
-    pine_leef_Baked: THREE.Mesh;
-    pine_Baked: THREE.Mesh;
+    pine_leef: THREE.Mesh;
+    pine: THREE.Mesh;
   };
   materials: {
-    pine_leef_Baked: THREE.MeshStandardMaterial;
-    pine_Baked: THREE.MeshStandardMaterial;
+    pine_leef: THREE.MeshStandardMaterial;
+    pine: THREE.MeshStandardMaterial;
   };
 };
 
@@ -27,12 +26,11 @@ export function Instances({
   children,
   ...props
 }: JSX.IntrinsicElements['group']) {
-  const model = useAsset('pine');
-  const { nodes } = model as GLTFResult;
+  const { nodes } = useGLTF(pineModelPath) as GLTFResult;
   const instances = useMemo(
     () => ({
-      PineleefBaked: nodes.pine_leef_Baked,
-      PineBaked: nodes.pine_Baked,
+      Pineleef: nodes.pine_leef,
+      Pine: nodes.pine,
     }),
     [nodes],
   );
@@ -51,8 +49,8 @@ export default function Pine(props: JSX.IntrinsicElements['group']) {
     <group {...props} dispose={null}>
       <RigidBody type="fixed" colliders={false}>
         <CuboidCollider args={[0.2, 0.4, 0.2]} position={[0, 0.6, 0]} />
-        <instances.PineleefBaked />
-        <instances.PineBaked />
+        <instances.Pineleef />
+        <instances.Pine />
       </RigidBody>
     </group>
   );

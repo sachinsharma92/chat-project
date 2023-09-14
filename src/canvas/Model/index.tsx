@@ -1,13 +1,13 @@
 import React from 'react';
-import Soil from './models/Soil';
-import Board from './models/Board';
 import Bird from './models/Bird';
-import Cabin from './models/Cabin';
-import Campfire from './models/Campfire';
-import Log, { Instances as Logs } from './models/Log';
+import Log, { Instances as L } from './models/Log';
 import Flower from './Flower';
 import Tree from './Tree';
 import Mountain from './models/Mountain';
+import Cabina from './models/Cabin';
+import Board from './models/Board';
+import Campfire from './models/Campfire';
+import Soil from './models/Soil';
 
 const Model = () => {
   const tiltFactor: number = -0.1;
@@ -15,18 +15,16 @@ const Model = () => {
     <>
       <Flower tiltFactor={tiltFactor} />
       <Tree tiltFactor={tiltFactor} />
-      <Soil />
-      <Board position={[3.5, 0, 2.5]} rotation={[tiltFactor, 0, 0]} />
+      <Soil position={[0.5, 0.055, 2]} />
+      <Board position={[4, 0, 0.5]} rotation={[tiltFactor, 0, 0]} />
       <Bird position={[6, 2, 6]} rotation={[0, -Math.PI / 2, 0]} />
-      <Campfire position={[0, 0, -2.3]} />
-      <Cabin rotation={[tiltFactor, 0, 0]} position={[0.5, 0, 2]} />
-      {/* Log */}
-      <Logs castShadow receiveShadow>
-        <Log position={[2, 0.1, 4.3]} rotation={[0, Math.PI / 2, 0]} />
-        <Log position={[-1, 0.1, 4.3]} rotation={[0, Math.PI / 2, 0]} />
-      </Logs>
-      {/* mountain */}
-      <Mountain  />
+      <Campfire position={[0.5, 0, 2.5]} />
+      <Cabina rotation-x={tiltFactor} position={[0.5, 0, 0]} />
+      <L castShadow receiveShadow>
+        <Log position={[2.4, 0.1, 2.5]} rotation={[0, Math.PI / 2, 0]} />
+        <Log position={[-1.4, 0.1, 2.5]} rotation={[0, Math.PI / 2, 0]} />
+      </L>
+      <Mountain />
     </>
   );
 };

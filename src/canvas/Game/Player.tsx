@@ -3,13 +3,13 @@
 import { useEffect, useRef, useMemo, useState } from 'react';
 import { CuboidCollider, RigidBody } from '@react-three/rapier';
 import { Group, Object3D } from 'three';
-import { useAsset } from '@/store/CanvasProvider';
 import { ICampModel, RoomUser } from '@/types';
 import { cloneDeep, map } from 'lodash';
 import * as SkeletonUtils from 'three/examples/jsm/utils/SkeletonUtils.js';
-
 import useCharacterController from '@/hooks/useCharacterController';
 import PlayerAnimation from './PlayerAnimation';
+import { useGLTF } from '@react-three/drei';
+import { avatarModelPath } from '@/constants';
 
 export type PlayerProps = {
   player?: Partial<RoomUser>;
@@ -19,7 +19,7 @@ export type PlayerProps = {
 function Player(props: PlayerProps) {
   const { player, controlled } = props;
 
-  const avatarModel = useAsset('avatar');
+  const avatarModel = useGLTF(avatarModelPath);
   const playerRef = useRef<any>(null);
   const rigidBodyRef = useRef<any>(null);
   const playerGroupRef = useRef<Group | null>(null);
@@ -48,8 +48,9 @@ function Player(props: PlayerProps) {
           const clonedScenes = map(clonedModel.scenes, scene => {
             return SkeletonUtils.clone(scene);
           });
-
+          // @ts-ignore
           clonedModel.scene = clonedScene;
+          // @ts-ignore
           clonedModel.scenes = clonedScenes;
           clonedModel.scene.scale.set(0.6, 0.6, 0.6);
           clonedModel.scene.traverse((child: Object3D) => {
@@ -92,7 +93,7 @@ function Player(props: PlayerProps) {
         <RigidBody
           type="kinematicPosition"
           ref={rigidBodyRef}
-          position={[0, 2, 0.5]}
+          position={[0, 2, -1.5]}
         >
           <CuboidCollider args={[0.2, 0.6, 0.2]} position={[0, 0.6, 0]} />
         </RigidBody>
@@ -108,6 +109,7 @@ function Player(props: PlayerProps) {
           <primitive
             castShadow
             receiveShadow
+            scale={0.7}
             rotation={[0, -Math.PI, 0]}
             ref={playerRef}
             object={playerModel?.scene}

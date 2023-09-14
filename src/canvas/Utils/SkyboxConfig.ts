@@ -1,5 +1,7 @@
 //* this is the cycle of daytime
-export const morning = ['#35D6ED', '#65DDEF', '#7AE5F5', '#97EBF4', '#C9F6FF'];
+// export const morning = ['#35D6ED', '#65DDEF', '#7AE5F5', '#97EBF4', '#C9F6FF'];
+export const morning = ['#0A74A7', '#0E86B8', '#1797C9', '#1FA8DA', '#28B9EB'];
+
 export const morningLight = '#ffffff';
 export const evening = ['#fddbcf', '#7c70ad', '#fea06d', '#c697aa', '#4c508d'];
 export const eveningLight = '#FFE8C6';
@@ -29,11 +31,11 @@ export const interpolateColor = (timeOfDay: any) => {
 export const interpolatedSunPosition = (timeOfDay: any) => {
   switch (true) {
     case timeOfDay >= 0 && timeOfDay < 8:
-      return 6;
+      return 5;
     case timeOfDay >= 8 && timeOfDay < 16:
       return 0;
     default:
-      return -6;
+      return -5;
   }
 };
 //? This function is used to interpolate the color of sky

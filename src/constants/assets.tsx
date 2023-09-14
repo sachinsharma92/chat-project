@@ -1,65 +1,47 @@
 import { iAsset } from '@/types';
 
 // @todo custom domain
-export const cabinModelPath =
-  'https://fdutmyyqilwqjuhjgeth.supabase.co/storage/v1/object/public/botnet-assets/assets/models/cabin.glb';
+export const cabinModelPath = '/assets/model/cabin-transformed.glb';
 
-export const avatarModelPath =
-  'https://fdutmyyqilwqjuhjgeth.supabase.co/storage/v1/object/public/botnet-assets/assets/models/avatar.glb';
+export const avatarModelPath = '/assets/model/avatar.glb';
 
-export const campfireModelPath =
-  'https://fdutmyyqilwqjuhjgeth.supabase.co/storage/v1/object/public/botnet-assets/assets/models/campfire.glb';
+export const campfireModelPath = '/assets/model/campfire-transformed.glb';
 
-export const aspenModelPath =
-  'https://fdutmyyqilwqjuhjgeth.supabase.co/storage/v1/object/public/botnet-assets/assets/models/aspen.glb';
+export const aspenModelPath = '/assets/model/aspen-transformed.glb';
 
-export const birdModelPath =
-  'https://fdutmyyqilwqjuhjgeth.supabase.co/storage/v1/object/public/botnet-assets/assets/models/bird.glb';
+export const birdModelPath = '/assets/model/bird.glb';
 
-export const boardModelPath =
-  'https://fdutmyyqilwqjuhjgeth.supabase.co/storage/v1/object/public/botnet-assets/assets/models/board.glb';
+export const boardModelPath = '/assets/model/board-transformed.glb';
 
-export const pineModelPath =
-  'https://fdutmyyqilwqjuhjgeth.supabase.co/storage/v1/object/public/botnet-assets/assets/models/pine.glb';
+export const pineModelPath = '/assets/model/pine-transformed.glb';
 
-export const logModelPath =
-  'https://fdutmyyqilwqjuhjgeth.supabase.co/storage/v1/object/public/botnet-assets/assets/models/log.glb';
+export const logModelPath = '/assets/model/log-transformed.glb';
 
 export const villagerModelPath =
   'https://fdutmyyqilwqjuhjgeth.supabase.co/storage/v1/object/public/botnet-assets/assets/models/villager.glb';
 
-export const sunflowerModelPath =
-  'https://fdutmyyqilwqjuhjgeth.supabase.co/storage/v1/object/public/botnet-assets/assets/models/sunflower.glb';
+export const sunflowerModelPath = '/assets/model/sunflower-transformed.glb';
 
-export const oakModelPath =
-  'https://fdutmyyqilwqjuhjgeth.supabase.co/storage/v1/object/public/botnet-assets/assets/models/oak.glb';
+export const oakModelPath = '/assets/model/oak-transformed.glb';
 
-export const roseModelPath =
-  'https://fdutmyyqilwqjuhjgeth.supabase.co/storage/v1/object/public/botnet-assets/assets/models/rose.glb';
+export const roseModelPath = '/assets/model/rose-transformed.glb';
 
 export const tulipModelPath =
   'https://fdutmyyqilwqjuhjgeth.supabase.co/storage/v1/object/public/botnet-assets/assets/models/tulip.glb';
 
-export const whiteflowerModelPath =
-  'https://fdutmyyqilwqjuhjgeth.supabase.co/storage/v1/object/public/botnet-assets/assets/models/whiteflower.glb';
+export const whiteflowerModelPath = '/assets/model/whiteflower-transformed.glb';
 
-export const soilModelPath =
-  'https://fdutmyyqilwqjuhjgeth.supabase.co/storage/v1/object/public/botnet-assets/assets/models/soil.glb';
+export const soilModelPath = '/assets/model/soil.glb';
 
-export const mountainModelPath =
-  'https://fdutmyyqilwqjuhjgeth.supabase.co/storage/v1/object/public/botnet-assets/assets/models/mountain.glb';
+export const mountainModelPath = '/assets/model/mountain.glb';
 
-export const grassTexturePath =
-  'https://fdutmyyqilwqjuhjgeth.supabase.co/storage/v1/object/public/botnet-assets/assets/textures/grass.jpg';
+export const grassTexturePath = '/assets/textures/grass.jpg';
 
-export const bigCloudTexturePath =
-  'https://fdutmyyqilwqjuhjgeth.supabase.co/storage/v1/object/public/botnet-assets/assets/textures/bigCloud.png';
+export const bigCloudTexturePath = '/assets/textures/bigCloud.png';
 
-export const middleCloudTexturePath =
-  'https://fdutmyyqilwqjuhjgeth.supabase.co/storage/v1/object/public/botnet-assets/assets/textures/middleCloud.png';
+export const middleCloudTexturePath = '/assets/textures/middleCloud.png';
 
-export const smallCloudTexturePath =
-  'https://fdutmyyqilwqjuhjgeth.supabase.co/storage/v1/object/public/botnet-assets/assets/textures/smallCloud.jpg';
+export const smallCloudTexturePath = '/assets/textures/smallCloud.jpg';
 
 export const assetsToLoad: iAsset[] = [
   //* Models

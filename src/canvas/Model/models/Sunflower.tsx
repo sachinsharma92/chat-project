@@ -1,8 +1,7 @@
 import * as THREE from 'three';
-import { useMemo, useContext, createContext } from 'react';
+import React, { useMemo, useContext, createContext } from 'react';
 import { useGLTF, Merged } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
-import { useAsset } from '@/store/CanvasProvider';
 import { sunflowerModelPath } from '@/constants';
 
 type GLTFResult = GLTF & {
@@ -13,7 +12,6 @@ type GLTFResult = GLTF & {
     sunflower: THREE.MeshStandardMaterial;
   };
 };
-
 type ContextType = Record<
   string,
   React.ForwardRefExoticComponent<JSX.IntrinsicElements['mesh']>
@@ -24,9 +22,7 @@ export function Instances({
   children,
   ...props
 }: JSX.IntrinsicElements['group']) {
-  const model = useAsset('sunflower');
-  const { nodes } = model as GLTFResult;
-
+  const { nodes } = useGLTF(sunflowerModelPath) as GLTFResult;
   const instances = useMemo(
     () => ({
       Sunflower: nodes.sunflower,
@@ -45,7 +41,7 @@ export function Instances({
 export default function Sunflower(props: JSX.IntrinsicElements['group']) {
   const instances = useContext(context);
   return (
-    <group scale={1.4} {...props} dispose={null}>
+    <group {...props} dispose={null}>
       <instances.Sunflower />
     </group>
   );

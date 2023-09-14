@@ -52,7 +52,7 @@ const LoadingReveal = () => {
       if ($shader.current) {
         gsap.to($shader.current?.uniforms.uProgress, {
           value: 1,
-          duration: 0.9,
+          duration: 3,
           ease: 'ease.in',
         });
       }

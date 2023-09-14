@@ -15,6 +15,7 @@ const Scene = () => {
       // Landscape
       if (cameraRef.current) {
         cameraRef.current.fov = 50;
+        cameraRef.current.position.z = 4;
       }
     } else {
       // Portrait
@@ -29,13 +30,13 @@ const Scene = () => {
       <PerspectiveCamera
         ref={cameraRef}
         makeDefault
-        position={[0, 4, 6]}
+        position={[0, 3, 4]}
         fov={50}
-        rotation={[THREE.MathUtils.degToRad(-25), 0, 0]}
+        rotation={[THREE.MathUtils.degToRad(-20), 0, 0]}
       />
       <Physics>
         <InputProvider>
-          <group ref={groupRef} position={[0, -1, -1]}>
+          <group ref={groupRef} position={[0, -2, -2]}>
             <Environment />
           </group>
           <Multiplayer />

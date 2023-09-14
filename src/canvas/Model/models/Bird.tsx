@@ -3,7 +3,6 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { useFrame } from '@react-three/fiber';
-import { useAsset } from '@/store/CanvasProvider';
 import { birdModelPath } from '@/constants';
 
 type GLTFResult = GLTF & {
@@ -20,8 +19,7 @@ type GLTFResult = GLTF & {
 
 export default function Bird(props: JSX.IntrinsicElements['group']) {
   const group = useRef<THREE.Group>(null);
-  const model = useAsset('bird');
-  const { nodes, materials, animations } = model as GLTFResult;
+  const { nodes, materials, animations } = useGLTF(birdModelPath) as GLTFResult;
   const { actions } = useAnimations(animations, group);
 
   useEffect(() => {
@@ -51,14 +49,15 @@ export default function Bird(props: JSX.IntrinsicElements['group']) {
 
   useFrame((_, delta) => {
     if (group.current && curve) {
-      setBirdPosition(prevPosition => prevPosition + 0.05 * delta);
-      if (birdPosition > 1) {
-        setBirdPosition(0);
+      let newPosition = birdPosition + 0.05 * delta;
+      if (newPosition > 1) {
+        newPosition = 0;
       }
-      group.current.position.copy(curve.getPointAt(birdPosition));
+      setBirdPosition(newPosition);
+      group.current.position.copy(curve.getPointAt(newPosition));
       group.current.rotation.y = Math.atan2(
-        curve.getTangentAt(birdPosition).x,
-        curve.getTangentAt(birdPosition).z,
+        curve.getTangentAt(newPosition).x,
+        curve.getTangentAt(newPosition).z,
       );
     }
   });
@@ -66,11 +65,11 @@ export default function Bird(props: JSX.IntrinsicElements['group']) {
   return (
     <>
       <group ref={group} {...props} dispose={null}>
-        <group name="Scene">
+        <group>
           <mesh
+            name="bird"
             castShadow
             receiveShadow
-            name="bird"
             geometry={nodes.bird.geometry}
             material={materials.bird}
             morphTargetDictionary={nodes.bird.morphTargetDictionary}
@@ -79,9 +78,9 @@ export default function Bird(props: JSX.IntrinsicElements['group']) {
             scale={[0.04, 0.01, 0.04]}
           />
           <mesh
+            name="bird001"
             castShadow
             receiveShadow
-            name="bird001"
             geometry={nodes.bird001.geometry}
             material={materials.bird}
             morphTargetDictionary={nodes.bird001.morphTargetDictionary}
@@ -90,9 +89,9 @@ export default function Bird(props: JSX.IntrinsicElements['group']) {
             scale={[0.04, 0.01, 0.04]}
           />
           <mesh
+            name="bird002"
             castShadow
             receiveShadow
-            name="bird002"
             geometry={nodes.bird002.geometry}
             material={materials.bird}
             morphTargetDictionary={nodes.bird002.morphTargetDictionary}
@@ -101,9 +100,9 @@ export default function Bird(props: JSX.IntrinsicElements['group']) {
             scale={[0.04, 0.01, 0.04]}
           />
           <mesh
+            name="bird003"
             castShadow
             receiveShadow
-            name="bird003"
             geometry={nodes.bird003.geometry}
             material={materials.bird}
             morphTargetDictionary={nodes.bird003.morphTargetDictionary}
