@@ -7,7 +7,7 @@ import { createId } from '@paralleldrive/cuid2';
 import { includes, isEmpty, isFunction, pick, trim } from 'lodash';
 import { Client } from 'colyseus.js';
 import { CampRoom, RoomUser } from '@/types';
-import { findRivetConnection } from '@/lib/rivet';
+import { findRivetConnection, serverRoomReceiveQueue } from '@/lib/rivet';
 import { MapSchema } from '@colyseus/schema';
 
 const consumeUsers = (roomUsers: MapSchema<RoomUser>) => {
@@ -18,7 +18,7 @@ const consumeUsers = (roomUsers: MapSchema<RoomUser>) => {
   const updated: RoomUser[] = [];
 
   roomUsers.forEach((user: any) => {
-    if (user && !isEmpty(user)) {
+    if (user && !isEmpty(user) && !user?.removed) {
       updated.push(
         pick(user, [
           'posX',
@@ -57,6 +57,7 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
     setRoom,
     setClientConnection,
   } = useGameServer(state => ({
+    userId: state.userId,
     room: state.room,
     isConnecting: state.isConnecting,
     setPlayers: state.setPlayers,
@@ -128,8 +129,23 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
           setRoom(room);
           endConnecting();
 
-          if (room && room.state?.users) {
-            setPlayers(consumeUsers(room.state.users));
+          if (room) {
+            if (room.state?.users) {
+              serverRoomReceiveQueue.add(() => {
+                setPlayers(consumeUsers(room.state.users));
+              });
+            }
+
+            /**
+             * Listen to room state changes
+             */
+            room.onStateChange(state => {
+              if (state?.users && isFunction(setPlayers)) {
+                serverRoomReceiveQueue.add(() => {
+                  setPlayers(consumeUsers(state.users));
+                });
+              }
+            });
           }
         }
       } catch (err: any) {
@@ -164,7 +180,9 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
       if (roomState && roomState?.users?.onChange) {
         unsub = roomState.users.onChange((userUpdated: Partial<RoomUser>[]) => {
           if (userUpdated) {
-            setPlayers(consumeUsers(roomState.users));
+            serverRoomReceiveQueue.add(() => {
+              setPlayers(consumeUsers(roomState.users));
+            });
           }
         });
       }

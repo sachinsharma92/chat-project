@@ -27,8 +27,8 @@
 
 .link-label > span {
   font-weight: normal;
+  font-style: normal;
   font-size: 14px;
-  font-weight: 600;
   margin-bottom: 2px;
   margin-left: 4px;
 }

@@ -1,9 +1,13 @@
 import { EllipseIcon, MembersIcon } from '@/icons';
 import './SpaceStatistics.css';
 import cx from 'classnames';
+import { useGameServer } from '@/store';
+import { size } from 'lodash';
 
 const SpaceStatistics = (props: { collapsed?: boolean }) => {
   const { collapsed } = props;
+
+  const [players] = useGameServer(state => [state.players]);
 
   return (
     <div className={'info-stats flex justify-start items-center'}>
@@ -20,7 +24,7 @@ const SpaceStatistics = (props: { collapsed?: boolean }) => {
         })}
       >
         <EllipseIcon />
-        <p>2 online</p>
+        <p>{`${size(players)} online`}</p>
       </div>
     </div>
   );
