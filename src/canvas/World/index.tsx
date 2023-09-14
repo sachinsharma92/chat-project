@@ -44,7 +44,7 @@ const World = () => {
 
   return (
     <>
-      {adminPanelControls.showLevaControls && <Leva collapsed />}
+      <Leva collapsed hidden={!adminPanelControls.showLevaControls} />
       <Canvas
         shadows
         gl={{ antialias: false }}
