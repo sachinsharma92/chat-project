@@ -1,6 +1,7 @@
 import Button from '@/ui/common/Button';
 import { AudioPlayingIcon } from '@/icons';
 import './MediaPlayer.css';
+import '../../common/styles/Button.css';
 
 const MediaPlayer = () => {
   return (
@@ -12,7 +13,7 @@ const MediaPlayer = () => {
         <p>Levitating</p>
         <p>Dua Lipa</p>
       </div>
-      <Button className="play-toggle">
+      <Button className="play-toggle dark-button">
         <AudioPlayingIcon />
       </Button>
     </div>

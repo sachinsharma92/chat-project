@@ -1,5 +1,5 @@
 import { map } from 'lodash';
-import { LinkIcon } from '@/icons';
+import { ArrowTopRightIcon, LinkIcon } from '@/icons';
 import './Links.css';
 
 export interface SocialLink {
@@ -12,7 +12,10 @@ function Links({ socials }: { socials: SocialLink[] }) {
     <div className="links-layout">
       {map(socials, item => {
         return (
-          <div className="links-wrapper" key={item.name}>
+          <div
+            className="links-wrapper flex items-center justify-start"
+            key={item.name}
+          >
             <LinkIcon />
             <a
               href={item.link}
@@ -21,8 +24,10 @@ function Links({ socials }: { socials: SocialLink[] }) {
               rel="noreferrer"
             >
               {item.name}
-              <span>{'↗'}</span>
             </a>
+            <div className="arrow-icon flex justify-center items-centerP">
+              <ArrowTopRightIcon height={'14px'} width={'14px'} />
+            </div>
           </div>
         );
       })}

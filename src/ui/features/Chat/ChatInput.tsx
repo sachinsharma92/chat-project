@@ -7,6 +7,7 @@ import './ChatInput.scss';
 import { useForm } from 'react-hook-form';
 import { PaperPlane, EmojiSmileIcon, ExpandIcon, ChatIcon } from '@/icons';
 import { isEmpty, isString } from 'lodash';
+import '../../common/styles/Button.css';
 
 type ChatInputPropsType = {
   hideExpand?: boolean;
@@ -49,7 +50,10 @@ const ChatInput = (props: ChatInputPropsType) => {
     >
       <Button
         type="button"
-        className={cx('toggle-emojis', 'flex justify-center items-center')}
+        className={cx(
+          'toggle-emojis',
+          'flex justify-center items-center dark-button',
+        )}
       >
         <EmojiSmileIcon />
       </Button>
@@ -71,13 +75,19 @@ const ChatInput = (props: ChatInputPropsType) => {
         </Button>
       </form>
 
-      <Button type="button" className="chat flex justify-center items-center">
+      <Button
+        type="button"
+        className="chat flex justify-center items-center dark-button"
+      >
         <ChatIcon />
       </Button>
 
       {!hideExpand && (
         <Button
-          className={cx('expand-chat', 'flex justify-center items-center')}
+          className={cx(
+            'expand-chat',
+            'flex justify-center items-center dark-button',
+          )}
         >
           <ExpandIcon />
         </Button>

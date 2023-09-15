@@ -13,6 +13,7 @@ import './InfoSidebar.css';
 import { Inter } from '@/app/fonts';
 import { mobileWidthBreakpoint } from '@/constants';
 import { useWindowResize } from '@/hooks';
+import '../../common/styles/Button.css';
 
 interface CampUserInfoProps {
   campName: string;
@@ -107,7 +108,7 @@ function InfoSidebar() {
           <div className="header-container">
             <div className="header-icon header-icon-collapsed"></div>
             <Button
-              className="header-expand flex justify-center items-center"
+              className="header-expand flex justify-center items-center dark-button"
               onClick={() => setOpen(!open)}
             >
               <MeatballsIcon />
