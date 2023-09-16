@@ -1,1 +1,1 @@
-export const tilt = 0.1;
+export const tilt = 0.2;

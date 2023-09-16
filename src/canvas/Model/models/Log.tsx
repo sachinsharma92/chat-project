@@ -45,7 +45,7 @@ export default function Log(props: JSX.IntrinsicElements['group']) {
   return (
     <group {...props} dispose={null} scale={[1, 0.8, 0.8]}>
       <RigidBody type="fixed" colliders={false}>
-        <CuboidCollider args={[0.5, 0.2, 0.2]} />
+        <CuboidCollider args={[1.1, 0.18, 0.37]} position={[0, 0.2  , 0]} />
         <instances.Log />
       </RigidBody>
     </group>

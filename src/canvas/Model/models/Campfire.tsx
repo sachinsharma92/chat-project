@@ -36,7 +36,7 @@ export default function Campfire(props: JSX.IntrinsicElements['group']) {
     <group ref={group} {...props} dispose={null}>
       <group name="Scene">
         <RigidBody position={[0, 0.08, 0]} colliders={false} type="fixed">
-          <CylinderCollider args={[0.6, 0.7]} position={[0, 0.35, 0]} />
+          <CylinderCollider args={[0.5, 0.7]} position={[0, 0.5, 0]} />
           <mesh
             castShadow
             receiveShadow
@@ -53,7 +53,8 @@ export default function Campfire(props: JSX.IntrinsicElements['group']) {
             morphTargetInfluences={nodes.fire.morphTargetInfluences}
           >
             <meshToonMaterial
-              emissive={'yellow'}
+              emissive="yellow"
+              toneMapped={false}
               emissiveIntensity={0.2}
               transparent
               opacity={0.4}

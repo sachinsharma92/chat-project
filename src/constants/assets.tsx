@@ -1,35 +1,34 @@
 import { iAsset } from '@/types';
 
 // @todo custom domain
-export const cabinModelPath = '/assets/model/cabin-transformed.glb';
+export const cabinModelPath = '/assets/model/cabin.glb';
 
 export const avatarModelPath = '/assets/model/avatar.glb';
 
-export const campfireModelPath = '/assets/model/campfire-transformed.glb';
+export const campfireModelPath = '/assets/model/campfire.glb';
 
-export const aspenModelPath = '/assets/model/aspen-transformed.glb';
+export const aspenModelPath = '/assets/model/aspen.glb';
 
 export const birdModelPath = '/assets/model/bird.glb';
 
-export const boardModelPath = '/assets/model/board-transformed.glb';
+export const boardModelPath = '/assets/model/board.glb';
 
-export const pineModelPath = '/assets/model/pine-transformed.glb';
+export const pineModelPath = '/assets/model/pine.glb';
 
-export const logModelPath = '/assets/model/log-transformed.glb';
+export const logModelPath = '/assets/model/log.glb';
 
 export const villagerModelPath =
   'https://fdutmyyqilwqjuhjgeth.supabase.co/storage/v1/object/public/botnet-assets/assets/models/villager.glb';
 
-export const sunflowerModelPath = '/assets/model/sunflower-transformed.glb';
+export const sunflowerModelPath = '/assets/model/sunflower.glb';
 
-export const oakModelPath = '/assets/model/oak-transformed.glb';
+export const oakModelPath = '/assets/model/oak.glb';
 
-export const roseModelPath = '/assets/model/rose-transformed.glb';
+export const roseModelPath = '/assets/model/rose.glb';
 
-export const tulipModelPath =
-  'https://fdutmyyqilwqjuhjgeth.supabase.co/storage/v1/object/public/botnet-assets/assets/models/tulip.glb';
+export const tulipModelPath = '/assets/model/tulip.glb';
 
-export const whiteflowerModelPath = '/assets/model/whiteflower-transformed.glb';
+export const whiteflowerModelPath = '/assets/model/whiteflower.glb';
 
 export const soilModelPath = '/assets/model/soil.glb';
 

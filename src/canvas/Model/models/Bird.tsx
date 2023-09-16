@@ -49,7 +49,7 @@ export default function Bird(props: JSX.IntrinsicElements['group']) {
 
   useFrame((_, delta) => {
     if (group.current && curve) {
-      let newPosition = birdPosition + 0.05 * delta;
+      let newPosition = birdPosition + 0.02 * delta;
       if (newPosition > 1) {
         newPosition = 0;
       }

@@ -2,17 +2,14 @@ import * as THREE from 'three';
 import React, { useMemo, useContext, createContext } from 'react';
 import { useGLTF, Merged } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
-import { CuboidCollider, RigidBody } from '@react-three/rapier';
-import { aspenModelPath } from '@/constants';
+import { tulipModelPath } from '@/constants';
 
 type GLTFResult = GLTF & {
   nodes: {
-    aspen: THREE.Mesh;
-    aspen_leef: THREE.Mesh;
+    flower: THREE.Mesh;
   };
   materials: {
-    aspen: THREE.MeshStandardMaterial;
-    aspen_leef: THREE.MeshStandardMaterial;
+    flower: THREE.MeshStandardMaterial;
   };
 };
 
@@ -26,11 +23,10 @@ export function Instances({
   children,
   ...props
 }: JSX.IntrinsicElements['group']) {
-  const { nodes } = useGLTF(aspenModelPath) as GLTFResult;
+  const { nodes } = useGLTF(tulipModelPath) as GLTFResult;
   const instances = useMemo(
     () => ({
-      Aspen: nodes.aspen,
-      Aspenleef: nodes.aspen_leef,
+      Flower: nodes.flower,
     }),
     [nodes],
   );
@@ -43,17 +39,13 @@ export function Instances({
   );
 }
 
-export default function Aspen(props: JSX.IntrinsicElements['group']) {
+export default function Tulip(props: JSX.IntrinsicElements['group']) {
   const instances = useContext(context);
   return (
     <group {...props} dispose={null}>
-      <RigidBody type="fixed" colliders={false} scale={1.2}>
-        <CuboidCollider args={[0.15, 0.3, 0.15]} position={[0, 0.7, 0]} />
-        <instances.Aspen />
-        <instances.Aspenleef />
-      </RigidBody>
+      <instances.Flower />
     </group>
   );
 }
 
-useGLTF.preload(aspenModelPath);
+useGLTF.preload(tulipModelPath);

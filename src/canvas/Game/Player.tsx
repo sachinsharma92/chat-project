@@ -93,7 +93,7 @@ function Player(props: PlayerProps) {
         <RigidBody
           type="kinematicPosition"
           ref={rigidBodyRef}
-          position={[0, 2, -1.5]}
+          position={[0, 2, -3.6]}
         >
           <CuboidCollider args={[0.2, 0.6, 0.2]} position={[0, 0.6, 0]} />
         </RigidBody>
@@ -109,8 +109,7 @@ function Player(props: PlayerProps) {
           <primitive
             castShadow
             receiveShadow
-            scale={0.7}
-            rotation={[0, -Math.PI, 0]}
+            scale={0.8}
             ref={playerRef}
             object={playerModel?.scene}
           />

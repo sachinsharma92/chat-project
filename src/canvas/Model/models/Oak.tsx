@@ -48,7 +48,7 @@ export default function Oak(props: JSX.IntrinsicElements['group']) {
   return (
     <group {...props} dispose={null}>
       <RigidBody type={'fixed'} colliders={false}>
-        <CuboidCollider args={[0.3, 0.25, 0.3]} position={[0, 0.4, 0]} />
+        <CuboidCollider args={[0.5, 0.5, 0.5]} position={[0, 0.6, 0]} />
         <instances.Oakleef />
         <instances.Oak />
       </RigidBody>

@@ -3,36 +3,39 @@ import InputProvider from '../Game/InputProvider';
 import Environment from '../Environment';
 import Multiplayer from '../Multiplayer';
 import * as THREE from 'three';
-import { useFrame } from '@react-three/fiber';
 import { PerspectiveCamera } from '@react-three/drei';
 import { useRef } from 'react';
+import { useControls } from 'leva';
 
 const Scene = () => {
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
   const groupRef = useRef<THREE.Group>(null);
-  useFrame(() => {
-    if (window.innerWidth > window.innerHeight) {
-      // Landscape
-      if (cameraRef.current) {
-        cameraRef.current.fov = 50;
-        cameraRef.current.position.z = 4;
-      }
-    } else {
-      // Portrait
-      if (cameraRef.current) {
-        cameraRef.current.fov = 70;
-        cameraRef.current.position.z = 4;
-      }
-    }
+
+  const { position, rotation, fov } = useControls('Camera', {
+    position: {
+      value: [0, 4, 4],
+      step: 0.1,
+    },
+    rotation: {
+      value: [THREE.MathUtils.degToRad(-25), 0, 0],
+      step: 0.01,
+    },
+    fov: {
+      value: 50,
+      min: 0,
+      max: 100,
+      step: 1,
+    },
   });
+
   return (
     <>
       <PerspectiveCamera
         ref={cameraRef}
         makeDefault
-        position={[0, 3, 4]}
-        fov={50}
-        rotation={[THREE.MathUtils.degToRad(-20), 0, 0]}
+        position={position}
+        fov={fov}
+        rotation={rotation}
       />
       <Physics>
         <InputProvider>

@@ -39,8 +39,12 @@ const Environment = () => {
 
   // Assets
   const grass = useTexture(grassTexturePath);
+  grass.anisotropy = 10;
+  grass.colorSpace = THREE.SRGBColorSpace;
+  grass.minFilter = THREE.NearestFilter;
+  grass.magFilter = THREE.NearestFilter;
   grass.wrapS = grass.wrapT = THREE.RepeatWrapping;
-  grass.repeat.set(10, 6);
+  grass.repeat.set(7, 5);
 
   const { times } = useControls('time', {
     times: {
@@ -137,14 +141,14 @@ const Environment = () => {
         shadow-camera-right={30}
         shadow-camera-left={-30}
         shadow-camera-bottom={-30}
-        shadow-mapSize-width={1024 * 2}
-        shadow-mapSize-height={1024 * 2}
+        shadow-mapSize-width={1024 * 3}
+        shadow-mapSize-height={1024 * 3}
         shadow-bias={-0.001}
         shadow-normalBias={0.01}
       />
       <ambientLight intensity={interpolatedTime(times) === night ? 0.2 : 0.6} />
 
-      <RigidBody type="fixed" rotation={[tilt, 0, 0]} position={[0, -0.6, 0]}>
+      <RigidBody type="fixed" rotation={[tilt, 0, 0]} position={[0, -1.3, 0]}>
         <mesh name="floor" receiveShadow position={[0, -0.968, 0]}>
           <boxGeometry args={[50, 2, 30]} />
           <meshToonMaterial map={grass} />
@@ -152,12 +156,12 @@ const Environment = () => {
       </RigidBody>
 
       <mesh
-        scale={3.6}
-        rotation={[-Math.PI / 2 + 0.1, 0, 0]}
-        position={[0.15, -0.19, -3.7]}
+        scale={3.7}
+        rotation={[-Math.PI / 2 + 0.2, 0, 0]}
+        position={[0.15, -0.14, -5.3]}
       >
         <circleGeometry />
-        <meshToonMaterial opacity={0.2} transparent color="#a0dcac" />
+        <meshToonMaterial opacity={0.1} transparent color="#a0dcac" />
       </mesh>
       {/* cloud */}
       <mesh>

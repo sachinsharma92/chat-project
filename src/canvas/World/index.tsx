@@ -53,7 +53,7 @@ const World = () => {
         {adminPanelControls.showThreeJsPerformance && (
           <Perf position="bottom-right" />
         )}
-        {enableFog && <fog attach="fog" near={10} far={50} />}
+        {enableFog && <fog attach="fog" near={13} far={40} />}
         <Scene />
         <LoadingReveal />
         <Effects />

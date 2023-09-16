@@ -47,8 +47,8 @@ export default function Pine(props: JSX.IntrinsicElements['group']) {
   const instances = useContext(context);
   return (
     <group {...props} dispose={null}>
-      <RigidBody type="fixed" colliders={false}>
-        <CuboidCollider args={[0.2, 0.4, 0.2]} position={[0, 0.6, 0]} />
+      <RigidBody type="fixed" colliders={false} scale={0.95}>
+        <CuboidCollider args={[0.3, 0.4, 0.3]} position={[0, 0.6, 0]} />
         <instances.Pineleef />
         <instances.Pine />
       </RigidBody>

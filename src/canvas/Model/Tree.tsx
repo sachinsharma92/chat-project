@@ -6,22 +6,21 @@ const Tree = ({ tiltFactor }: any) => {
   return (
     <>
       <P castShadow receiveShadow>
-        <Pine rotation-x={tiltFactor} position={[5.5, 0, -3]} />
-        <Pine rotation-x={tiltFactor} position={[-1.5, 0, 8.5]} />
-        <Pine rotation-x={tiltFactor} position={[2.1, 0, 8.7]} />
-        <Pine rotation-x={tiltFactor} position={[-7, 0, -1]} />
-        <Pine rotation-x={tiltFactor} position={[-5.5, 0, 3.5]} />
-        <Pine rotation-x={tiltFactor} position={[7, 0, 3]} />
+        <Pine rotation-x={tiltFactor} position={[6, 0, -4]} />
+        <Pine rotation-x={tiltFactor} position={[-2.8, 0, 6.5]} />
+        <Pine rotation-x={tiltFactor} position={[3.3, 0, 6.5]} />
+        <Pine rotation-x={tiltFactor} position={[-9, 0, -5]} />
+        <Pine rotation-x={tiltFactor} position={[-8.6, 0, -1]} />
       </P>
       <O castShadow receiveShadow>
-        <Oak rotation-x={tiltFactor} position={[-3, 0, -2]} />
-        <Oak rotation-x={tiltFactor} position={[-4, 0, 7]} />
-        <Oak rotation-x={tiltFactor} position={[10, 0, -2]} />
+        <Oak rotation-x={tiltFactor} position={[-3.3, 0, -3]} />
+        <Oak rotation-x={tiltFactor} position={[-7, 0, 3]} />
+        <Oak rotation-x={tiltFactor} position={[-0.7, 0, 7.7]} />
       </O>
       <A castShadow receiveShadow>
-        <Aspen rotation-x={tiltFactor} position={[-2.5, 0, 3]} />
-        <Aspen rotation-x={tiltFactor} position={[6, 0, 6]} />
-        <Aspen rotation-x={tiltFactor} position={[7, 0, 1]} />
+        <Aspen rotation-x={tiltFactor} position={[-4, 0, 1]} />
+        <Aspen rotation-x={tiltFactor} position={[6, 0, 4.4]} />
+        <Aspen rotation-x={tiltFactor} rotation-y={-0.7} position={[9, 0, -1]} />
       </A>
     </>
   );
