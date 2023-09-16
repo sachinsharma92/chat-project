@@ -30,4 +30,6 @@ export type RoomUser = {
   y: number;
   z: number;
   displayName: string;
+  recentChatMessage?: string;
+  recentChatSentDate?: string;
 };

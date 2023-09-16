@@ -1,6 +1,6 @@
 'use client';
 
-import { filter, isEmpty, map } from 'lodash';
+import { filter, head, isEmpty, map } from 'lodash';
 import { useGameServer } from '@/store';
 import { shallow } from 'zustand/shallow';
 import { useMemo } from 'react';
@@ -26,6 +26,17 @@ const Multiplayer = () => {
     [userId, players],
   );
 
+  const controlledPlayer = useMemo(
+    () =>
+      head(
+        filter(
+          players,
+          player => !isEmpty(player?.userId) && player?.userId === userId,
+        ),
+      ) || {},
+    [userId, players],
+  );
+
   return (
     <>
       {room && !isEmpty(otherPlayers) && (
@@ -40,7 +51,7 @@ const Multiplayer = () => {
       )}
 
       <group name="ControlledGroup">
-        <Player player={{ userId }} controlled />
+        <Player player={{ ...controlledPlayer, userId }} controlled />
       </group>
     </>
   );

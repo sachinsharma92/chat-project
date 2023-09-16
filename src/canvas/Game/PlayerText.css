@@ -1,0 +1,27 @@
+.player-message {
+  @apply flex justify-center items-center;
+
+  padding: 12px 16px;
+  box-sizing: border-box;
+  border-radius: 16px;
+  background: var(--tans-off-white, #fffff7);
+}
+
+.player-message > p {
+  color: var(--browns-dark-brown, #44373c);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  max-width: 100px;
+}
+
+.player-message::before {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: calc(50% - 4px);
+  width: 0;
+  border-top: 4px solid #fffff7;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+}

@@ -6,7 +6,7 @@ import PQueue from 'p-queue';
 
 export const serverRoomSendQueue = new PQueue({ concurrency: 1 });
 
-export const serverRoomReceiveQueue = new PQueue({ concurrency: 1 });
+export const serverRoomReceiveQueue = new PQueue({ concurrency: 2 });
 
 export const RIVET = new RivetClient({
   token: process.env.NEXT_PUBLIC_RIVET_TOKEN,

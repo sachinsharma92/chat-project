@@ -27,8 +27,10 @@ const consumeUsers = (roomUsers: MapSchema<RoomUser>) => {
           'x',
           'y',
           'z',
-          'userId',
           'displayName',
+          'userId',
+          'recentChatSentDate',
+          'recentChatMessage',
         ]),
       );
     }

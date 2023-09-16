@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
-
 import { useFrame } from '@react-three/fiber';
-import { Quaternion, Vector3, MathUtils, Object3D } from 'three';
+import { Quaternion, Vector3, MathUtils, Object3D, Group } from 'three';
 import { RapierRigidBody, useRapier } from '@react-three/rapier';
 import { useInputs } from '@/canvas/Game/InputProvider';
 import { RoomUser } from '@/types';
@@ -15,6 +14,7 @@ const PLAYERSPEED = 4;
 function useCharacterController(
   character: Object3D,
   rigidBody: RapierRigidBody,
+  playerTextGroup?: Group | null,
   playerData?: Partial<RoomUser>,
 ) {
   const userInputs = useInputs();
@@ -59,6 +59,8 @@ function useCharacterController(
   useFrame((_, delta) => {
     const characterMesh = character;
     const characterRigidBody = rigidBody;
+    const characterText = playerTextGroup;
+
     if (!characterMesh || !characterController) {
       return;
     }
@@ -95,6 +97,16 @@ function useCharacterController(
       //@ts-ignore
       characterMesh.position.lerp(characterRigidBody.translation(), 0.1);
 
+      const textPosition = new Vector3(
+        newPosition.x,
+        newPosition.y + 1.5,
+        newPosition.z - 0.1,
+      );
+
+      if (characterText) {
+        characterText.position.lerp(textPosition, 0.1);
+      }
+
       if (room?.send) {
         serverRoomSendQueue.add(async () => {
           room.send('action', {
@@ -111,7 +123,13 @@ function useCharacterController(
       }
     } else if (isNumber(posX) && isNumber(posY) && isNumber(posZ)) {
       const newPosition = new Vector3(posX, posY, posZ);
+      const textPosition = new Vector3(posX + 0.1, posY + 1.3, posZ - 0.5);
+
       characterMesh.position.lerp(newPosition, 0.1);
+
+      if (characterText) {
+        characterText.position.lerp(textPosition, 0.1);
+      }
     }
   });
 }

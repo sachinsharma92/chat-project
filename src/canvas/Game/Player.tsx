@@ -10,6 +10,7 @@ import useCharacterController from '@/hooks/useCharacterController';
 import PlayerAnimation from './PlayerAnimation';
 import { useGLTF } from '@react-three/drei';
 import { avatarModelPath } from '@/constants';
+import PlayerText from './PlayerText';
 
 export type PlayerProps = {
   player?: Partial<RoomUser>;
@@ -23,6 +24,7 @@ function Player(props: PlayerProps) {
   const playerRef = useRef<any>(null);
   const rigidBodyRef = useRef<any>(null);
   const playerGroupRef = useRef<Group | null>(null);
+  const playerTextRef = useRef<Group | null>(null);
   const initPlayer = useRef(false);
 
   // private model copy
@@ -80,7 +82,13 @@ function Player(props: PlayerProps) {
   }, [controlled, avatarModel?.scene]);
 
   // player controller
-  useCharacterController(playerRef.current, rigidBodyRef.current, playerData);
+  // player text position
+  useCharacterController(
+    playerRef.current,
+    rigidBodyRef.current,
+    playerTextRef.current,
+    playerData,
+  );
 
   return (
     <>
@@ -112,6 +120,11 @@ function Player(props: PlayerProps) {
             scale={0.8}
             ref={playerRef}
             object={playerModel?.scene}
+          />
+          <PlayerText
+            character={playerRef.current}
+            message={player?.recentChatMessage}
+            ref={playerTextRef}
           />
         </group>
       )}

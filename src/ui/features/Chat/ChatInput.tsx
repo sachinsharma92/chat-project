@@ -6,7 +6,11 @@ import TextInput from '../../common/TextInput';
 import './ChatInput.scss';
 import { useForm } from 'react-hook-form';
 import { PaperPlane, EmojiSmileIcon, ExpandIcon, ChatIcon } from '@/icons';
-import { isEmpty, isString } from 'lodash';
+import { isEmpty, isFunction, isString, toString } from 'lodash';
+import { usePlayersChat } from './usePlayersChat';
+import { useHotkeys } from 'react-hotkeys-hook';
+import { useWindowResize } from '@/hooks';
+import { mobileWidthBreakpoint } from '@/constants';
 import '../../common/styles/Button.css';
 
 type ChatInputPropsType = {
@@ -28,19 +32,43 @@ const ChatInput = (props: ChatInputPropsType) => {
   const {
     register,
     handleSubmit,
+    setValue,
     // setError,
     // watch,
     // formState: { errors },
   } = useForm();
+  const { sendChatMessage } = usePlayersChat();
+  const { availableWidth } = useWindowResize();
   const { hideExpand, className } = props;
 
   const sendChat = (data: any) => {
     const { chatInput } = data;
 
     if (chatInput) {
-      // todo send chat
+      sendChatMessage(toString(chatInput));
+      setValue('chatInput', '');
     }
   };
+
+  /**
+   * Auto focus chat input on enter.
+   * For desktop devices only.
+   */
+  useHotkeys(
+    'enter',
+    () => {
+      if (!isChatFocused() && availableWidth > mobileWidthBreakpoint) {
+        const chatInput = document.querySelector(
+          '.chat-form-input',
+        ) as HTMLInputElement;
+
+        if (isFunction(chatInput?.focus)) {
+          chatInput.focus();
+        }
+      }
+    },
+    { enabled: true },
+  );
 
   return (
     <div
