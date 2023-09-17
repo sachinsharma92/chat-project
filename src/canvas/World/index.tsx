@@ -12,7 +12,7 @@ import JoystickController from '../Game/JoystickController';
 
 const World = () => {
   const [adminPanelControls, setAdminPanelControls] = useState({
-    showLevaControls: false,
+    showLevaControls: true,
     showThreeJsPerformance: false,
   });
 
