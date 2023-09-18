@@ -11,6 +11,7 @@ import PlayerAnimation from './PlayerAnimation';
 import { useGLTF } from '@react-three/drei';
 import { avatarModelPath } from '@/constants';
 import PlayerText from './PlayerText';
+import PlayerCamera from './PlayerCamera';
 
 export type PlayerProps = {
   player?: Partial<RoomUser>;
@@ -92,9 +93,13 @@ function Player(props: PlayerProps) {
 
   return (
     <>
-      {playerModel?.scene && (
+      {playerModel && (
         // player animation
         <PlayerAnimation model={playerModel} playerData={playerData} />
+      )}
+
+      {controlled && playerModel && (
+        <PlayerCamera character={playerRef.current} />
       )}
 
       {controlled && playerModel && (
@@ -119,7 +124,7 @@ function Player(props: PlayerProps) {
             receiveShadow
             scale={0.8}
             ref={playerRef}
-            object={playerModel?.scene}
+            object={playerModel.scene}
           />
           <PlayerText
             character={playerRef.current}

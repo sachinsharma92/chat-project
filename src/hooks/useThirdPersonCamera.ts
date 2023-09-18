@@ -1,10 +1,15 @@
 import { useFrame, useThree } from '@react-three/fiber';
-import { Vector3 } from 'three';
+import { Object3D, Vector3 } from 'three';
 
-function useThirdPersonCamera(character: any) {
+function useThirdPersonCamera(character: Object3D) {
   const { camera } = useThree();
   useFrame(() => {
-    const characterMesh = character.current;
+    const characterMesh = character;
+
+    if (!characterMesh) {
+      return;
+    }
+
     const characterPosition = characterMesh.position;
 
     const cameraOffset = new Vector3(0, 4, 6);
