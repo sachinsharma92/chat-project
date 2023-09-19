@@ -55,6 +55,10 @@ export const useAppStore = create<ICampAppState>()(set => ({
     typeof window !== 'undefined'
       ? window.innerWidth > mobileWidthBreakpoint
       : false,
+  expandBulletinSidebar: false,
+
+  setExpandBulletinSidebar: expandBulletinSidebar =>
+    set({ expandBulletinSidebar: Boolean(expandBulletinSidebar) }),
   setExpandInfoSidebar: expandInfoSidebar =>
     set({ expandInfoSidebar: Boolean(expandInfoSidebar) }),
 }));

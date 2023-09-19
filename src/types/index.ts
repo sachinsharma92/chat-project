@@ -20,6 +20,8 @@ export interface ICamp {
 
 export interface ICampAppState {
   expandInfoSidebar: boolean;
+  expandBulletinSidebar: boolean;
+  setExpandBulletinSidebar: (expandBulletinSidebar: boolean) => void;
   setExpandInfoSidebar: (expandInfoSidebar: boolean) => void;
 }
 

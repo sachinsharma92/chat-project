@@ -2,10 +2,13 @@
 
 import StickyChat from '../Chat/StickyChat';
 import dynamic from 'next/dynamic';
-import './MainComponent.css';
+import cx from 'classnames';
 import AppNavigation from '../AppNavigation';
 import { useEffect } from 'react';
 import MediaPlayer from '../MediaPlayer';
+import Bulletin from '../Bulletin';
+import { useAppStore } from '@/store';
+import './MainComponent.css';
 
 const World = dynamic(() => import('@/canvas/World'), { ssr: false });
 const InfoSidebar = dynamic(
@@ -16,6 +19,10 @@ const InfoSidebar = dynamic(
 );
 
 function MainComponent() {
+  const [expandBulletinSidebar] = useAppStore(state => [
+    state.expandBulletinSidebar,
+  ]);
+
   /**
    * Record entry time to check duration(in seconds)-
    *  it'll take to fully load 3D world
@@ -31,7 +38,11 @@ function MainComponent() {
   return (
     <div className="main-component flex w-full fix-screen-overflow">
       <AppNavigation />
-      <div className="game-screen">
+      <div
+        className={cx('game-screen', {
+          'game-screen-bulletin-expanded': expandBulletinSidebar,
+        })}
+      >
         <div className="world absolute h-full w-full top-0 left-0">
           <World />
         </div>
@@ -39,6 +50,7 @@ function MainComponent() {
         <StickyChat />
         <InfoSidebar />
       </div>
+      <Bulletin />
     </div>
   );
 }

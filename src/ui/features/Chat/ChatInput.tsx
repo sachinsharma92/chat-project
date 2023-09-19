@@ -12,6 +12,7 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { useWindowResize } from '@/hooks';
 import { mobileWidthBreakpoint } from '@/constants';
 import '../../common/styles/Button.css';
+import { useAppStore } from '@/store';
 
 type ChatInputPropsType = {
   hideExpand?: boolean;
@@ -39,6 +40,9 @@ const ChatInput = (props: ChatInputPropsType) => {
   } = useForm();
   const { sendChatMessage } = usePlayersChat();
   const { availableWidth } = useWindowResize();
+  const [expandBulletinSidebar, setExpandBulletinSidebar] = useAppStore(
+    state => [state.expandBulletinSidebar, state.setExpandBulletinSidebar],
+  );
   const { hideExpand, className } = props;
 
   const sendChat = (data: any) => {
@@ -116,6 +120,9 @@ const ChatInput = (props: ChatInputPropsType) => {
             'expand-chat',
             'flex justify-center items-center dark-button',
           )}
+          onClick={() => {
+            setExpandBulletinSidebar(!expandBulletinSidebar);
+          }}
         >
           <ExpandIcon />
         </Button>

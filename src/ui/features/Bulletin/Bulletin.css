@@ -1,0 +1,62 @@
+.bulletin {
+  @apply flex-col justify-start items-start;
+
+  height: 100%;
+  width: 300px;
+  background: var(--tans-off-white, #fffff7);
+  box-shadow: 0px 6px 20px 0px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0px 6px 20px 0px rgba(0, 0, 0, 0.15);
+  -webkit-box-shadow: 0px 6px 20px 0px rgba(0, 0, 0, 0.15);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.bulletin-hide {
+  width: 0;
+  display: none;
+}
+
+.bulletin-header {
+  @apply flex justify-between items-center;
+
+  height: 50px;
+  padding: 10px;
+  box-sizing: border-box;
+  background: var(--tans-light-off-white, #f8f4e8);
+  width: 100%;
+}
+
+.bulletin-label {
+  color: var(--browns-dark-brown, #44373c);
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 130%;
+  margin-left: 8px;
+}
+
+.bulletin-left {
+  @apply flex justify-center items-center;
+}
+
+.bulletin-left > svg > path {
+  fill: var(--browns-dark-brown, #44373c);
+}
+
+.bulletin-right {
+  @apply flex justify-center items-center;
+}
+
+.bulletin-close {
+  @apply flex justify-center items-center;
+
+  border-radius: 500px;
+  background: var(--tans-off-white, #fffff7);
+  height: 36px;
+  width: 36px;
+  padding: 4px;
+}
+
+.bulletin-close:hover {
+  background: #f5efdc;
+}

@@ -24,18 +24,13 @@
 
 .game-screen {
   position: relative;
-  /* Alpha release */
-  /* height: calc(100% - 12px); */
-  /* margin-top: 12px; */
-
-  height: 100%;
   margin-top: 0;
   height: 100%;
   display: flex;
   justify-content: space-between;
   flex-direction: row;
   width: 100vw;
-  max-width: calc(100% - 12px);
+  max-width: calc(100% - 12px - 40px);
   margin-left: 12px;
   min-height: 440px;
   padding: 12px 12px 12px 16px;
@@ -44,6 +39,13 @@
   overflow: hidden;
   background: transparent;
   box-shadow: 0px 6px 20px 0px rgba(0, 0, 0, 0.15);
+  transition: width 0.05s linear;
+}
+
+.game-screen-bulletin-expanded {
+  max-width: calc(100% - 12px - 12px - 48px - 300px);
+  width: calc(100% - 12px - 12px - 48px - 300px);
+  margin-right: 12px;
 }
 
 @media screen and (max-width: 720px) {
