@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import Links, { SocialLink } from '../../common/Links/Links';
 import JoinCampButton from '../JoinCampButton/JoinCampButton';
 import Button from '@/ui/common/Button';
@@ -9,10 +8,9 @@ import SpaceStatistics from './SpaceStatistics';
 import Apps from './Apps';
 import UserAvatar from '@/ui/common/UserAvatar';
 import cx from 'classnames';
-import './InfoSidebar.css';
 import { Inter } from '@/app/fonts';
-import { mobileWidthBreakpoint } from '@/constants';
-import { useWindowResize } from '@/hooks';
+import { useAppStore } from '@/store';
+import './InfoSidebar.css';
 import '../../common/styles/Button.css';
 
 interface CampUserInfoProps {
@@ -53,12 +51,14 @@ const featureFlags: featureFlagProps = {
 };
 
 function InfoSidebar() {
-  const { availableWidth } = useWindowResize();
-  const [open, setOpen] = useState(availableWidth > mobileWidthBreakpoint);
+  const [expandInfoSidebar, setExpandInfoSidebar] = useAppStore(state => [
+    state.expandInfoSidebar,
+    state.setExpandInfoSidebar,
+  ]);
 
   return (
     <>
-      {open ? (
+      {expandInfoSidebar ? (
         <div className={cx(Inter.className, 'info-layout')}>
           <div className="main-content">
             <div className="header-container">
@@ -66,7 +66,7 @@ function InfoSidebar() {
               <Button
                 className="close-button flex justify-center items-center"
                 type="button"
-                onClick={() => setOpen(!open)}
+                onClick={() => setExpandInfoSidebar(!expandInfoSidebar)}
               >
                 <CrossIcon />
               </Button>
@@ -109,7 +109,7 @@ function InfoSidebar() {
             <div className="header-icon header-icon-collapsed"></div>
             <Button
               className="header-expand flex justify-center items-center dark-button"
-              onClick={() => setOpen(!open)}
+              onClick={() => setExpandInfoSidebar(!expandInfoSidebar)}
             >
               <MeatballsIcon />
             </Button>

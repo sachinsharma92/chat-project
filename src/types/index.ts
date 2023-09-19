@@ -18,6 +18,11 @@ export interface ICamp {
   selected: boolean;
 }
 
+export interface ICampAppState {
+  expandInfoSidebar: boolean;
+  setExpandInfoSidebar: (expandInfoSidebar: boolean) => void;
+}
+
 export interface ICampStoreState {
   camps: ICamp[];
   campSelectedId: string;

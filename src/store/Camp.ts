@@ -1,8 +1,14 @@
 'use client';
 
-import { ICampStoreState, IGameServerState, RoomUser } from '@/types';
+import {
+  ICampAppState,
+  ICampStoreState,
+  IGameServerState,
+  RoomUser,
+} from '@/types';
 import { create } from 'zustand';
 import { Room, Client } from 'colyseus.js';
+import { mobileWidthBreakpoint } from '@/constants';
 
 // for demo purposes only
 const demoCamps = [
@@ -43,6 +49,15 @@ const demoCamps = [
     selected: false,
   },
 ];
+
+export const useAppStore = create<ICampAppState>()(set => ({
+  expandInfoSidebar:
+    typeof window !== 'undefined'
+      ? window.innerWidth > mobileWidthBreakpoint
+      : false,
+  setExpandInfoSidebar: expandInfoSidebar =>
+    set({ expandInfoSidebar: Boolean(expandInfoSidebar) }),
+}));
 
 export const useCampStore = create<ICampStoreState>()(set => ({
   camps: [...demoCamps],
