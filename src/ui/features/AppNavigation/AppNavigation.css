@@ -1,10 +1,14 @@
 .app-nav {
-  @apply flex hidden overflow-hidden space-x-4 w-full; /* hidden for alpha */
+  @apply flex;
 
+  flex-direction: column;
   background: transparent;
   justify-content: space-between;
-  height: 28px;
-  gap: 8px;
+  align-items: center;
+  height: 100%;
+  width: 46px;
+  box-sizing: border-box;
+  padding: 16px 8px;
 }
 
 .logo {
@@ -39,20 +43,70 @@
   display: none;
 }
 
+.right {
+  display: none;
+}
+
+.left,
+.top {
+  /* .left is .top for desktop screens */
+  position: relative;
+}
+
+.top {
+  border-bottom: 1px solid #d1c699;
+  box-sizing: border-box;
+  padding-bottom: 32px;
+}
+
+.bottom {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding-top: 24px;
+  border-top: 1px solid #d1c699;
+  box-sizing: border-box;
+  width: 30px;
+}
+
+.user-avatar {
+  height: 30px;
+  width: 30px;
+  box-sizing: border-box;
+}
+
 @media screen and (max-width: 720px) {
   .app-nav {
+    @apply flex-row space-x-4 w-full;
+
+    height: 30px;
+    width: 100%;
     padding: 0 12px;
     gap: unset;
+    box-sizing: border-box;
+  }
+
+  .top {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .right,
+  .center {
+    display: flex;
   }
 
   .center {
-    display: flex;
     width: 100%;
     max-width: calc(100% - 200px);
     justify-content: space-between;
   }
 
   .login {
+    display: none;
+  }
+
+  .bottom {
     display: none;
   }
 }

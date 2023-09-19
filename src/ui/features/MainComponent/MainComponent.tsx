@@ -29,9 +29,9 @@ function MainComponent() {
   }, []);
 
   return (
-    <div className="main-component flex flex-col w-full fix-screen-overflow">
+    <div className="main-component flex w-full fix-screen-overflow">
       <AppNavigation />
-      <div className="game-screen w-full">
+      <div className="game-screen">
         <div className="world absolute h-full w-full top-0 left-0">
           <World />
         </div>

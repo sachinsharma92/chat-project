@@ -99,7 +99,7 @@ function useCharacterController(
 
       const textPosition = new Vector3(
         newPosition.x,
-        newPosition.y + 1.5,
+        newPosition.y + 1.7,
         newPosition.z - 0.1,
       );
 
@@ -123,7 +123,7 @@ function useCharacterController(
       }
     } else if (isNumber(posX) && isNumber(posY) && isNumber(posZ)) {
       const newPosition = new Vector3(posX, posY, posZ);
-      const textPosition = new Vector3(posX + 0.1, posY + 1.3, posZ - 0.5);
+      const textPosition = new Vector3(posX + 0.1, posY + 1.5, posZ - 0.5);
 
       characterMesh.position.lerp(newPosition, 0.1);
 

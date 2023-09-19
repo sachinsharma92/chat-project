@@ -6,6 +6,9 @@
   width: 100%;
   padding: 12px;
   box-sizing: border-box;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
 .fix-screen-overflow {
@@ -27,11 +30,13 @@
 
   height: 100%;
   margin-top: 0;
+  height: 100%;
   display: flex;
   justify-content: space-between;
   flex-direction: row;
   width: 100vw;
-  max-width: 100%;
+  max-width: calc(100% - 12px);
+  margin-left: 12px;
   min-height: 440px;
   padding: 12px 12px 12px 16px;
   box-sizing: border-box;
@@ -44,16 +49,17 @@
 @media screen and (max-width: 720px) {
   .main-component {
     padding: 0;
-    /* Alpha release */
-    /* padding-top: 16px; */
+    padding-top: 16px;
+    flex-direction: column;
   }
 
   .game-screen {
-    /* Alpha release */
-    /* height: calc(100% - 16px); */
-    /* border-top-left-radius: 24px;
-    border-top-right-radius: 24px; */
-    /* margin-top: 16px; */
+    height: calc(100% - 16px);
+    margin: 0;
+    margin-top: 16px;
     border-radius: 0;
+    max-width: 100%;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
   }
 }
