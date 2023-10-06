@@ -175,6 +175,7 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
     const x = 0;
     const y = 0;
     const z = 0;
+    const hostFromEmail = getNameFromEmail(email);
 
     serverRoomSendQueue.add(async () => {
       console.log(`room.send('updateUser')`);
@@ -187,9 +188,7 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
         y,
         z,
         isGuest: false,
-        displayName: loggedInUserId
-          ? displayName || getNameFromEmail(email)
-          : '',
+        displayName: loggedInUserId ? displayName || hostFromEmail : '',
       });
     });
 
