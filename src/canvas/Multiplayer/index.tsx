@@ -1,11 +1,11 @@
 'use client';
 
 import { filter, head, isEmpty, map } from 'lodash';
-import { useGameServer } from '@/store';
 import { shallow } from 'zustand/shallow';
 import { useMemo } from 'react';
 
 import Player from '../Game/Player';
+import { useGameServer } from '@/store/Spaces';
 
 /**
  * Handle matchmaking online players

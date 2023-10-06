@@ -6,8 +6,8 @@ import { useInputs } from '@/canvas/Game/InputProvider';
 import { RoomUser } from '@/types';
 import { isEmpty, isNumber } from 'lodash';
 import { serverRoomSendQueue } from '@/lib/rivet';
-import { useAppStore, useGameServer } from '@/store';
 import { shallow } from 'zustand/shallow';
+import { useAppStore, useGameServer } from '@/store/Spaces';
 
 const PLAYERSPEED = 4;
 

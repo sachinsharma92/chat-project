@@ -1,3 +1,5 @@
+import { DialogEnums } from './dialog';
+
 export enum MusicPlayerMediaType {
   youtube = 'youtube',
   spotify = 'spotify',
@@ -9,7 +11,7 @@ export interface HostInfo {
   image: string;
 }
 
-export interface ICamp {
+export interface ISpace {
   id: string;
   name: string;
   image: string;
@@ -18,16 +20,19 @@ export interface ICamp {
   selected: boolean;
 }
 
-export interface ICampAppState {
+export interface IAppState {
+  showDialog: boolean;
+  showDialogType: DialogEnums;
   expandInfoSidebar: boolean;
   expandBulletinSidebar: boolean;
+  setShowDialog: (showDialog: boolean, showDialogType: DialogEnums) => void;
   setExpandBulletinSidebar: (expandBulletinSidebar: boolean) => void;
   setExpandInfoSidebar: (expandInfoSidebar: boolean) => void;
 }
 
-export interface ICampStoreState {
-  camps: ICamp[];
-  campSelectedId: string;
+export interface ISpaceStoreState {
+  spaces: ISpace[];
+  selectedSpaceId: string;
   clearCampsList: () => void;
 }
 
@@ -53,6 +58,11 @@ export interface iSkybox {
 export interface iDirection {
   direction: any;
   setDirection: (direction: any) => void;
+}
+
+export interface IPhaserGameState {
+  phaserGame: undefined | null | Phaser.Game;
+  setPhaserGame: (phaserGame: undefined | null | Phaser.Game) => void;
 }
 
 export * from './gameserver';

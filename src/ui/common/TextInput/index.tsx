@@ -1,7 +1,7 @@
 import { CSSProperties, InputHTMLAttributes, forwardRef } from 'react';
 import { isEmpty, isFunction, isString } from 'lodash';
 import cx from 'classnames';
-import './TextInput.scss';
+import './TextInput.css';
 
 type TextInputPropsType = {
   className?: string;

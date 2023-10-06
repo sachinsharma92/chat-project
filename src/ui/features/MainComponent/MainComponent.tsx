@@ -1,16 +1,15 @@
 'use client';
 
+import { useEffect } from 'react';
 import StickyChat from '../Chat/StickyChat';
 import dynamic from 'next/dynamic';
 import cx from 'classnames';
 import AppNavigation from '../AppNavigation';
-import { useEffect } from 'react';
 import MediaPlayer from '../MediaPlayer';
 import Bulletin from '../Bulletin';
-import { useAppStore } from '@/store';
+import { useAppStore } from '@/store/Spaces';
 import './MainComponent.css';
 
-const World = dynamic(() => import('@/canvas/World'), { ssr: false });
 const InfoSidebar = dynamic(
   () => import('@/ui/features/InfoSidebar/InfoSidebar'),
   {
@@ -18,7 +17,11 @@ const InfoSidebar = dynamic(
   },
 );
 
-function MainComponent() {
+const Game = dynamic(() => import('@/ui/game'), {
+  ssr: false,
+});
+
+const MainComponent = () => {
   const [expandBulletinSidebar] = useAppStore(state => [
     state.expandBulletinSidebar,
   ]);
@@ -43,16 +46,16 @@ function MainComponent() {
           'game-screen-bulletin-expanded': expandBulletinSidebar,
         })}
       >
-        <div className="world absolute h-full w-full top-0 left-0">
-          <World />
+        <div className="world">
+          <Game />
         </div>
         <MediaPlayer />
-        <StickyChat />
+        {!expandBulletinSidebar && <StickyChat />}
         <InfoSidebar />
       </div>
       <Bulletin />
     </div>
   );
-}
+};
 
 export default MainComponent;

@@ -1,17 +1,21 @@
 import cx from 'classnames';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { ChatIcon, CrossIcon } from '@/icons';
-import { useAppStore } from '@/store';
 import { useWindowResize } from '@/hooks';
 import { mobileWidthBreakpoint } from '@/constants';
-import Button from '@/ui/common/Button';
 import { InterTight } from '@/app/fonts';
+import { useAppStore, useGameServer } from '@/store/Spaces';
+import { filter, isEmpty, map } from 'lodash';
+import Message from '../Chat/Message';
+import Button from '@/ui/common/Button';
+import ChatInput from '../Chat/ChatInput';
 import './Bulletin.css';
 
 const Bulletin = () => {
   const [expandBulletinSidebar, setExpandBulletinSidebar] = useAppStore(
     state => [state.expandBulletinSidebar, state.setExpandBulletinSidebar],
   );
+  const [roomChatMessages] = useGameServer(state => [state.roomChatMessages]);
   const { availableWidth } = useWindowResize();
 
   /**
@@ -22,6 +26,11 @@ const Bulletin = () => {
       setExpandBulletinSidebar(false);
     }
   }, [availableWidth, expandBulletinSidebar, setExpandBulletinSidebar]);
+
+  const sanitizedChatMessages = useMemo(
+    () => filter(roomChatMessages, line => !isEmpty(line?.id)),
+    [roomChatMessages],
+  );
 
   return (
     <div
@@ -42,6 +51,28 @@ const Bulletin = () => {
             <CrossIcon />
           </Button>
         </div>
+      </div>
+      <div className="bulletin-chat-stream">
+        <ul>
+          {map(sanitizedChatMessages, line => {
+            const key = `BulletinChat${line.id}`;
+
+            return (
+              <li key={key}>
+                <Message
+                  id={line.id}
+                  authorId={line.authorId}
+                  authorInfo={line.authorInfo}
+                  role={line.role}
+                  message={line?.message}
+                />
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      <div className="bulletin-chat-input-wrap">
+        <ChatInput className="bulletin-chat" hideExpand />
       </div>
     </div>
   );

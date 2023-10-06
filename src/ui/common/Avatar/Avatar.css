@@ -3,18 +3,9 @@
   width: 100%;
   padding: 0;
   box-sizing: border-box;
-  border-radius: 50%;
-  background: #eee9ca3d;
+  border-radius: 100%;
+  background: #44373c;
   overflow: hidden;
-}
-
-.avatar-image {
-  height: 100%;
-  width: 100%;
-  box-sizing: border-box;
-  object-position: center;
-  object-fit: cover;
-  box-sizing: border-box;
 }
 
 .avatar-layout > p {
@@ -23,4 +14,21 @@
   text-align: center;
   color: #fff;
   background: transparent;
+}
+
+.avatar-image {
+  @apply flex justify-center items-center;
+
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  object-position: center;
+  object-fit: cover;
+  box-sizing: border-box;
+}
+
+.avatar-fallback {
+  @apply flex justify-center items-center;
+  color: #fff;
+  background: #44373c;
 }

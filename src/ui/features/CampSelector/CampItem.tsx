@@ -1,9 +1,9 @@
 import Avatar from '@/ui/common/Avatar/Avatar';
 import Button from '@/ui/common/Button';
-import { ICamp } from '@/types';
+import { ISpace } from '@/types';
 import './CampItem.scss';
 
-const CampItem = (props: { camp: ICamp }) => {
+const CampItem = (props: { camp: ISpace }) => {
   const { camp } = props;
 
   return (

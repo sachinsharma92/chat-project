@@ -1,0 +1,36 @@
+.chat-line-message {
+  @apply flex justify-start items-center;
+
+  width: 100%;
+  gap: 12px;
+}
+
+.chat-line-avatar {
+  @apply flex justify-center items-center;
+
+  position: relative;
+  height: 32px;
+  width: 32px;
+}
+
+.chat-line-content {
+  width: calc(100% - 32px - 24px - 4px);
+  box-sizing: border-box;
+}
+
+.chat-line-content > p {
+  position: relative;
+  max-width: 100%;
+  color: #725c4e;
+  font-size: 14px;
+  font-weight: 500;
+  padding-bottom: 4px;
+  box-sizing: border-box;
+}
+
+.chat-line-content > p > span {
+  margin-right: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #44373c;
+}

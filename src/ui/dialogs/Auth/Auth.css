@@ -1,0 +1,11 @@
+.app-auth-dialog {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  padding-top: 40px;
+}
+
+.dialog-close-button {
+  top: -4px;
+  right: -4px;
+}

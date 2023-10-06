@@ -1,13 +1,12 @@
-import { EllipseIcon, MembersIcon } from '@/icons';
-import './SpaceStatistics.css';
 import cx from 'classnames';
-import { useGameServer } from '@/store';
+import { EllipseIcon, MembersIcon } from '@/icons';
 import { size } from 'lodash';
+import { useGameServer } from '@/store/Spaces';
+import './SpaceStatistics.css';
 
 const SpaceStatistics = (props: { collapsed?: boolean }) => {
   const { collapsed } = props;
-
-  const [players] = useGameServer(state => [state.players]);
+  const [players] = useGameServer(state => [state.players, state.room]);
 
   return (
     <div className={'info-stats flex justify-start items-center'}>

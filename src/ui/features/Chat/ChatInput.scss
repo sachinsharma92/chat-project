@@ -60,15 +60,15 @@
       border: 1px solid rgba(255, 255, 255, 0.2);
     }
   }
+}
 
-  .send-button {
-    position: absolute;
-    height: 24px;
-    width: 24px;
-    right: 4px;
-    top: 6px;
-    box-sizing: border-box;
-  }
+.send-button {
+  position: absolute;
+  height: 24px;
+  width: 24px;
+  right: 4px;
+  top: 6px;
+  box-sizing: border-box;
 }
 
 @media screen and (max-width: 720px) {

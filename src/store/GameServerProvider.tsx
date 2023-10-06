@@ -2,42 +2,21 @@
 
 import { ReactNode, useEffect } from 'react';
 import { useWorldStore } from './CanvasProvider';
-import { useGameServer } from '.';
 import { createId } from '@paralleldrive/cuid2';
-import { includes, isEmpty, isFunction, pick, trim } from 'lodash';
+import { includes, isFunction, trim } from 'lodash';
 import { Client } from 'colyseus.js';
 import { CampRoom, RoomUser } from '@/types';
-import { findRivetConnection, serverRoomReceiveQueue } from '@/lib/rivet';
-import { MapSchema } from '@colyseus/schema';
+import {
+  findRivetConnection,
+  serverRoomReceiveQueue,
+  serverRoomSendQueue,
+} from '@/lib/rivet';
+import { useGameServer } from './Spaces';
+import { useBotnetAuth } from './Auth';
+import { getNameFromEmail, getUserIdFromSession } from '@/utils';
+import { consumeChatMessages, consumeUsers } from '@/utils/gameserver';
 
-const consumeUsers = (roomUsers: MapSchema<RoomUser>) => {
-  if (!roomUsers?.entries) {
-    return [];
-  }
-
-  const updated: RoomUser[] = [];
-
-  roomUsers.forEach((user: any) => {
-    if (user && !isEmpty(user) && !user?.removed) {
-      updated.push(
-        pick(user, [
-          'posX',
-          'posY',
-          'posZ',
-          'x',
-          'y',
-          'z',
-          'displayName',
-          'userId',
-          'recentChatSentDate',
-          'recentChatMessage',
-        ]),
-      );
-    }
-  });
-
-  return [...updated];
-};
+export const guestId = createId();
 
 /**
  *
@@ -48,6 +27,12 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
   const { isStarted } = useWorldStore(state => ({
     isStarted: state.isStarted,
   }));
+  const [session, sessionChecked, displayName, email] = useBotnetAuth(state => [
+    state.session,
+    state.sessionChecked,
+    state.displayName,
+    state.email,
+  ]);
 
   const {
     room,
@@ -58,6 +43,7 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
     endConnecting,
     setRoom,
     setClientConnection,
+    setRoomChatMessages,
   } = useGameServer(state => ({
     userId: state.userId,
     room: state.room,
@@ -68,6 +54,7 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
     endConnecting: state.endConnecting,
     setRoom: state.setRoom,
     setClientConnection: state.setClientConnection,
+    setRoomChatMessages: state.setRoomChatMessages,
   }));
 
   // Connect matchmaking using Rivet's API
@@ -78,18 +65,20 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
         if (isConnecting) {
           return;
         }
+        console.log('connectToGameServer()');
 
         startConnecting();
 
         const gameMode = 'default';
-        const res = await findRivetConnection(gameMode);
+        const res = await findRivetConnection(gameMode, false);
 
-        if (res) {
-          const port = res.ports[gameMode];
+        if (res?.lobby?.ports) {
+          const port = res.lobby.ports[gameMode] || res.lobby.ports?.default;
           const secure =
             port?.isTls || includes(window.location.protocol, 'https');
           const playerToken = res?.player?.token;
-          const userId = trim(createId());
+          const loggedInUserId = getUserIdFromSession(session);
+          const userId = loggedInUserId || trim(guestId);
           const colyseusConnection = new Client({
             secure,
             pathname: '',
@@ -97,16 +86,6 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
             hostname: port.hostname,
           });
 
-          console.log('userId', userId);
-          console.log(
-            'colyseusConnection',
-            'secure',
-            secure,
-            'playerToken',
-            playerToken,
-          );
-
-          const displayName = ''; // todo
           // default value from <Player/>
           const posX = 0;
           const posY = 0;
@@ -123,7 +102,7 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
             x,
             y,
             z,
-            displayName,
+            displayName: displayName || '',
           })) as CampRoom;
 
           setClientConnection(colyseusConnection);
@@ -147,6 +126,10 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
                   setPlayers(consumeUsers(state.users));
                 });
               }
+
+              if (state?.chatMessages && isFunction(setRoomChatMessages)) {
+                setRoomChatMessages(consumeChatMessages(state.chatMessages));
+              }
             });
           }
         }
@@ -155,19 +138,69 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
       }
     };
 
-    if (isStarted && !room) {
+    if (isStarted && !room && sessionChecked) {
       connectToGameServer();
     }
   }, [
     isStarted,
     isConnecting,
     room,
+    session,
+    sessionChecked,
+    displayName,
+    setRoomChatMessages,
     setPlayers,
     setUserId,
     startConnecting,
     endConnecting,
     setClientConnection,
     setRoom,
+  ]);
+
+  /**
+   * Update user profile in game server
+   */
+  useEffect(() => {
+    if (!isStarted || !sessionChecked || !room?.send) {
+      return;
+    }
+
+    // store user info in game server
+    const loggedInUserId = getUserIdFromSession(session);
+    const userId = loggedInUserId || guestId;
+    // @todo get pos data from player instance on Phaser
+    const posX = 0;
+    const posY = 0;
+    const posZ = 0;
+    const x = 0;
+    const y = 0;
+    const z = 0;
+
+    serverRoomSendQueue.add(async () => {
+      console.log(`room.send('updateUser')`);
+      room.send('updateUser', {
+        userId,
+        posX,
+        posY,
+        posZ,
+        x,
+        y,
+        z,
+        isGuest: false,
+        displayName: loggedInUserId
+          ? displayName || getNameFromEmail(email)
+          : '',
+      });
+    });
+
+    // eslint-disable-next-line
+  }, [
+    displayName,
+    room?.send,
+    email,
+    sessionChecked,
+    isStarted,
+    session?.user?.id,
   ]);
 
   /**

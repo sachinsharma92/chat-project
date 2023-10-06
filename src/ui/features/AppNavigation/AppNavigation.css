@@ -8,7 +8,7 @@
   height: 100%;
   width: 46px;
   box-sizing: border-box;
-  padding: 16px 8px;
+  padding: 16px 4px;
 }
 
 .logo {
@@ -17,15 +17,23 @@
 
 .sign-in,
 .login {
+  @apply flex justify-center items-center;
+
+  max-width: 100px;
+}
+
+.sign-in,
+.login {
   border-radius: 80px;
   background: var(--tans-off-white, #fffff7);
-  padding: 4px 8px;
+  padding: 4px 6px;
   box-sizing: border-box;
 }
 
 .sign-in > p,
 .login > p {
-  font-size: 14px;
+  max-width: 100%;
+  font-size: 13px;
   font-weight: 500;
   color: var(--browns-dark-brown, #44373c);
 }
@@ -73,6 +81,14 @@
   height: 30px;
   width: 30px;
   box-sizing: border-box;
+}
+
+.logout {
+  @apply flex mt-2;
+}
+
+.logout > svg > path {
+  fill: #44373c;
 }
 
 @media screen and (max-width: 720px) {

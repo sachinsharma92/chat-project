@@ -1,15 +1,15 @@
-import { useCampStore } from '@/store';
 import { map } from 'lodash';
 import { SearchIcon } from '@/icons';
 import CampItem from './CampItem';
 import Button from '@/ui/common/Button';
 import UserAvatar from '@/ui/common/UserAvatar';
 import './CampSelector.scss';
+import { useSpacesStore } from '@/store/Spaces';
 
 export const campSelectorElementId = 'campSelectorElementId';
 
 const CampSelector = () => {
-  const camps = useCampStore(state => state?.camps);
+  const camps = useSpacesStore(state => state?.spaces);
 
   return (
     <div id={campSelectorElementId} className="camp-selector flex flex-col">

@@ -1,7 +1,7 @@
 import { isEmpty, isFunction, isString } from 'lodash';
 import { CSSProperties, ReactNode, forwardRef } from 'react';
 import cx from 'classnames';
-import './Button.scss';
+import './Button.css';
 
 export type ButtonProps = CSSProperties & {
   type?: 'button' | 'submit' | 'reset' | undefined;
@@ -37,9 +37,12 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             onClick(e);
           }
         }}
-        className={cx('Button', {
-          [`${className}`]: isString(className) && !isEmpty(className),
-        })}
+        className={cx(
+          {
+            [`${className}`]: isString(className) && !isEmpty(className),
+          },
+          'button',
+        )}
       >
         {children || null} {text || null}
       </button>

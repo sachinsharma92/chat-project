@@ -6,7 +6,10 @@ import { iBoard, iDirection, iSkybox } from '@/types';
 const immer = (config: any) => (set: any, get: any, api: any) =>
   config((fn: any) => set(produce(fn)), get, api);
 
-export const useWorldStore = createWithEqualityFn(
+export const useWorldStore = createWithEqualityFn<{
+  isStarted: boolean;
+  start: () => void;
+}>(
   // immer function as createWithEqualityFn first argument or as initializer
   immer((set: boolean | any) => ({
     isStarted: false,

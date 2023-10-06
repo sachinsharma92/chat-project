@@ -1,0 +1,69 @@
+.onboard-display-name {
+  @apply flex-col justify-start items-start;
+
+  position: relative;
+  padding-top: 16px;
+  box-sizing: border-box;
+}
+
+.label {
+  @apply flex justify-start items-center mt-2 mb-2;
+
+  width: 100%;
+}
+
+.label > p {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.input-display-name {
+  @apply mt-2 mb-4;
+
+  width: 100%;
+  border-radius: 4px;
+  height: 36px;
+  padding: 4px 8px;
+  box-sizing: border-box;
+  font-size: 14px;
+  font-weight: 400;
+  background: transparent;
+  border: 1px solid #dededc;
+}
+
+.input-error {
+  @apply flex justify-center items-center mb-4;
+
+  width: 100%;
+}
+
+.input-error > p {
+  color: red;
+  font-size: 14px;
+}
+
+.input-display-name:hover,
+.input-display-name:focus {
+  border-color: #9f9f9d;
+}
+
+.submit-button {
+  @apply flex justify-start items-center mt-8;
+
+  height: 40px;
+  margin-top: 8px;
+  width: 100%;
+  border-radius: 8px;
+  background: #3fcf8e !important;
+  box-sizing: border-box;
+}
+
+.submit-button:hover {
+  background: #34b27b !important;
+}
+
+.submit-button > p {
+  font-size: 14px;
+  color: #fff;
+  font-weight: normal;
+}

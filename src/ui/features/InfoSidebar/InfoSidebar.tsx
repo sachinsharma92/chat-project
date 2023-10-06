@@ -1,15 +1,15 @@
 'use client';
 
+import { CrossIcon, MeatballsIcon } from '@/icons';
+import { Inter } from '@/app/fonts';
+import { useAppStore } from '@/store/Spaces';
 import Links, { SocialLink } from '../../common/Links/Links';
 import JoinCampButton from '../JoinCampButton/JoinCampButton';
 import Button from '@/ui/common/Button';
-import { CrossIcon, MeatballsIcon } from '@/icons';
 import SpaceStatistics from './SpaceStatistics';
 import Apps from './Apps';
 import UserAvatar from '@/ui/common/UserAvatar';
 import cx from 'classnames';
-import { Inter } from '@/app/fonts';
-import { useAppStore } from '@/store';
 import './InfoSidebar.css';
 import '../../common/styles/Button.css';
 

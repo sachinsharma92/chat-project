@@ -7,16 +7,17 @@ import './ChatInput.scss';
 import { useForm } from 'react-hook-form';
 import { PaperPlane, EmojiSmileIcon, ExpandIcon, ChatIcon } from '@/icons';
 import { isEmpty, isFunction, isString, toString } from 'lodash';
-import { usePlayersChat } from './usePlayersChat';
+import { usePlayersChat } from './hooks/usePlayersChat';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useWindowResize } from '@/hooks';
 import { mobileWidthBreakpoint } from '@/constants';
+import { useAppStore } from '@/store/Spaces';
 import '../../common/styles/Button.css';
-import { useAppStore } from '@/store';
 
 type ChatInputPropsType = {
   hideExpand?: boolean;
   className?: string;
+  classNameForChatFormInput?: string;
 };
 
 export const isChatFocused = () => {
@@ -43,7 +44,7 @@ const ChatInput = (props: ChatInputPropsType) => {
   const [expandBulletinSidebar, setExpandBulletinSidebar] = useAppStore(
     state => [state.expandBulletinSidebar, state.setExpandBulletinSidebar],
   );
-  const { hideExpand, className } = props;
+  const { hideExpand, className, classNameForChatFormInput } = props;
 
   const sendChat = (data: any) => {
     const { chatInput } = data;
@@ -95,7 +96,11 @@ const ChatInput = (props: ChatInputPropsType) => {
         className={cx('chat-form', 'flex justify-center items-center')}
       >
         <TextInput
-          className="chat-form-input"
+          className={cx('chat-form-input', {
+            [`${classNameForChatFormInput}`]: !isEmpty(
+              classNameForChatFormInput,
+            ),
+          })}
           placeholder={'Press ENTER to comment'}
           {...register('chatInput', { required: false })}
         />
