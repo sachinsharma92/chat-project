@@ -13,14 +13,16 @@ serve(async req => {
     Deno.env.get('CUSTOM_SUPABASE_PRIVATE_KEY') ?? '',
   );
 
-  const requestionJson = await req.json();
-  const userId = requestionJson?.record?.id || '';
+  const requestJson = await req.json();
+  const userId = requestJson?.record?.id || '';
+  const email = `${requestJson?.record?.email || ''}`.trim();
+  const displayName = email.split('@')[0] || '';
   const data = {
     message: `Created public profile for user with id: ${userId}`,
   };
 
   if (userId) {
-    console.log('sign-up-user-profile requestionJson', requestionJson);
+    console.log('sign-up-user-profile requestionJson', requestJson);
 
     const spaceId = globalThis.crypto.randomUUID();
     const createdAt = new Date().toISOString();
@@ -30,7 +32,7 @@ serve(async req => {
       updated_at: null,
       created_at: createdAt,
       image: '',
-      display_name: '',
+      display_name: displayName,
       handle: '',
       space_id: spaceId,
       user_id: userId,
@@ -43,6 +45,7 @@ serve(async req => {
       updated_at: null,
       created_at: createdAt,
       space_name: '',
+      description: '',
     };
 
     const { error: userProfileCreateError } = await supabaseClient
