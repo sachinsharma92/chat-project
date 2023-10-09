@@ -13,11 +13,12 @@ export interface HostInfo {
 
 export interface ISpace {
   id: string;
-  name: string;
-  image: string;
-  description: string;
-  host: HostInfo;
-  selected: boolean;
+  owner: string;
+  name?: string;
+  image?: string;
+  description?: string;
+  host?: HostInfo;
+  selected?: boolean;
 }
 
 export interface IAppState {
@@ -31,9 +32,11 @@ export interface IAppState {
 }
 
 export interface ISpaceStoreState {
-  spaces: ISpace[];
+  spaces: Partial<ISpace>[];
   selectedSpaceId: string;
   clearCampsList: () => void;
+  addSpace: (space: Partial<ISpace>) => void;
+  setSelectedSpaceId: (selectedSpaceId: string) => void;
 }
 
 export interface iAsset {

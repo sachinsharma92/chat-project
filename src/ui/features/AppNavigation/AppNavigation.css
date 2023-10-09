@@ -15,14 +15,12 @@
   background: transparent;
 }
 
-.sign-in,
 .login {
   @apply flex justify-center items-center;
 
   max-width: 100px;
 }
 
-.sign-in,
 .login {
   border-radius: 80px;
   background: var(--tans-off-white, #fffff7);
@@ -30,7 +28,6 @@
   box-sizing: border-box;
 }
 
-.sign-in > p,
 .login > p {
   max-width: 100%;
   font-size: 13px;

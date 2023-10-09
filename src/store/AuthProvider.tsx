@@ -8,12 +8,14 @@ import {
   createContext,
   useReducer,
   useCallback,
+  useMemo,
 } from 'react';
 import { useBotnetAuth } from './Auth';
-import { head, isEmpty, toString } from 'lodash';
+import { head, isEmpty, isFunction, toString } from 'lodash';
 import { Session } from '@supabase/supabase-js';
-import { useGameServer } from './Spaces';
+import { useGameServer, useSpacesStore } from './Spaces';
 import { getUserIdFromSession } from '@/utils';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { guestId } from './GameServerProvider';
 
 interface IAuthAppState {}
@@ -62,8 +64,18 @@ const AuthProvider = (props: { children?: ReactNode }) => {
     state.setHandle,
     state.setEmail,
   ]);
+  const [setSelectedSpaceId, addSpace] = useSpacesStore(state => [
+    state.setSelectedSpaceId,
+    state.addSpace,
+  ]);
   const [setGameServerUserId] = useGameServer(state => [state.setUserId]);
   const [state, dispatch] = useReducer(reducer, initialState);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const selectedSpaceId = useMemo(
+    () => searchParams.get('space'),
+    [searchParams],
+  );
 
   /**
    * Fetch logged in user data
@@ -72,23 +84,44 @@ const AuthProvider = (props: { children?: ReactNode }) => {
     async (session: Session) => {
       const userId = getUserIdFromSession(session);
 
-      if (userId) {
+      if (!isEmpty(userId)) {
         const res = await getUserProfileById(userId);
+        console.log('getUserProfile()');
 
         if (res?.data && !isEmpty(res?.data)) {
           const targetProfile = head(res.data);
           const displayName = toString(targetProfile?.display_name);
           const image = toString(targetProfile?.image);
           const handle = toString(targetProfile?.handle);
+          const spaceId = toString(targetProfile?.space_id);
 
           setImage(image);
           setHandle(handle);
           setDisplayName(displayName);
           setGameServerUserId(userId);
+
+          if (spaceId && isFunction(addSpace)) {
+            addSpace({ id: spaceId });
+          }
+
+          if (!isEmpty(spaceId) && !selectedSpaceId) {
+            setSelectedSpaceId(spaceId);
+            router.push(`/?space=${spaceId}`);
+          }
         }
       }
     },
-    [setImage, setHandle, setGameServerUserId, setDisplayName],
+    // eslint-disable-next-line
+    [
+      router?.push,
+      selectedSpaceId,
+      setImage,
+      addSpace,
+      setHandle,
+      setSelectedSpaceId,
+      setGameServerUserId,
+      setDisplayName,
+    ],
   );
 
   /**

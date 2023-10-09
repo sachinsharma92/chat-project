@@ -1,0 +1,40 @@
+.profile-menu {
+  font-weight: unset;
+}
+
+.profile-menu > ul {
+  list-style: none;
+  list-style-type: none;
+}
+
+.profile-menu > ul > li {
+  width: 100%;
+  max-width: 100%;
+}
+
+.sign-in {
+  @apply flex justify-center items-center;
+
+  max-width: 100px;
+}
+
+.sign-in {
+  border-radius: 80px;
+  background: var(--tans-off-white, #fffff7);
+  padding: 4px 6px;
+  box-sizing: border-box;
+}
+
+.sign-in > p {
+  max-width: 100%;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--browns-dark-brown, #44373c);
+}
+
+.sign-in {
+  border-radius: 50%;
+  padding: 4px;
+  height: 34px;
+  width: 34px;
+}

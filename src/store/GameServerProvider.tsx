@@ -161,7 +161,7 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
    * Update user profile in game server
    */
   useEffect(() => {
-    if (!isStarted || !sessionChecked || !room?.send) {
+    if (!isStarted || !room?.send) {
       return;
     }
 
@@ -193,14 +193,7 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
     });
 
     // eslint-disable-next-line
-  }, [
-    displayName,
-    room?.send,
-    email,
-    sessionChecked,
-    isStarted,
-    session?.user?.id,
-  ]);
+  }, [displayName, room?.send, email, isStarted, session?.user?.id]);
 
   /**
    * Listen to 'users' state changes and record new players

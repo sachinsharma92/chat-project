@@ -29,6 +29,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         type={type || 'button'}
         aria-label={ariaLabel}
+        autoFocus={false}
         style={{
           ...style,
         }}
