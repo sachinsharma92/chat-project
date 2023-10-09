@@ -22,24 +22,52 @@ serve(async req => {
   if (userId) {
     console.log('sign-up-user-profile requestionJson', requestionJson);
 
-    const payload = {
+    const spaceId = globalThis.crypto.randomUUID();
+    const createdAt = new Date().toISOString();
+    const userProfilePayload = {
       id: globalThis.crypto.randomUUID(),
       deleted_at: null,
       updated_at: null,
-      created_at: new Date().toISOString(),
+      created_at: createdAt,
       image: '',
       display_name: '',
       handle: '',
-      space_id: globalThis.crypto.randomUUID(),
+      space_id: spaceId,
       user_id: userId,
     };
+    const spaceProfilePayload = {
+      id: spaceId,
+      space_id: spaceId,
+      owner: userId,
+      deleted_at: null,
+      updated_at: null,
+      created_at: createdAt,
+      space_name: '',
+    };
 
-    const { error } = await supabaseClient.from('user_profiles').insert({
-      ...payload,
-    });
+    const { error: userProfileCreateError } = await supabaseClient
+      .from('user_profiles')
+      .insert({
+        ...userProfilePayload,
+      });
+    const { error: spacesProfileCreateError } = await supabaseClient
+      .from('spaces_profiles')
+      .insert({
+        ...spaceProfilePayload,
+      });
 
-    if (error?.message) {
-      console.log('sign-up-user-profile err:', error?.message);
+    if (userProfileCreateError?.message) {
+      console.log(
+        'sign-up-user-profile user_profiles err:',
+        userProfileCreateError?.message,
+      );
+    }
+
+    if (spacesProfileCreateError?.message) {
+      console.log(
+        'sign-up-user-profile spaces_profiles err:',
+        userProfileCreateError?.message,
+      );
     }
   }
 
