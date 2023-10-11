@@ -18,12 +18,12 @@ export interface IGameServerState {
   isConnecting: boolean;
   players: RoomUser[];
   botRoomIsResponding: boolean;
-  setBotRoomIsResponding: (botRoomIsResponding: boolean) => void; 
+  setBotRoomIsResponding: (botRoomIsResponding: boolean) => void;
   setRoomChatMessages: (roomChatMessages: ChatMessageProps[]) => void;
   setPlayers: (players: RoomUser[]) => void;
   startConnecting: () => void;
   endConnecting: () => void;
-  setBotRoom: (botRoom: BotRoom) => void;
+  setBotRoom: (botRoom: BotRoom | null) => void;
   setRoom: (gameRoom: CampRoom) => void;
   setClientConnection: (clientConnection: Client) => void;
 }

@@ -62,7 +62,7 @@ export const usePlayersChat = () => {
         return;
       }
 
-      if (botRoom && message) {
+      if (botRoom && message && spaceId) {
         const channel = `chat-${userId}-send`;
         const bot = camelcaseKeys(head(spaceInfo?.bots) || {});
 

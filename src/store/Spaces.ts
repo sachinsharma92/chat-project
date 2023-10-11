@@ -79,7 +79,7 @@ export const useGameServer = create<IGameServerState>()(set => ({
   botRoomIsResponding: false,
   setBotRoomIsResponding: (botRoomIsResponding: boolean) =>
     set(() => ({ botRoomIsResponding })),
-  setBotRoom: (botRoom: BotRoom) => set(() => ({ botRoom })),
+  setBotRoom: (botRoom: BotRoom | null) => set(() => ({ botRoom })),
   setRoomChatMessages: roomChatMessages => set(() => ({ roomChatMessages })),
   setPlayers: (players: RoomUser[]) => set(() => ({ players })),
   startConnecting: () => set(() => ({ isConnecting: true })),

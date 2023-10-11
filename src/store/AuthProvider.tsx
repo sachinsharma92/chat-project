@@ -13,7 +13,7 @@ import {
 import { useBotnetAuth } from './Auth';
 import { ceil, head, isEmpty } from 'lodash';
 import { Session } from '@supabase/supabase-js';
-import { useAppStore, useSpacesStore } from './Spaces';
+import { useAppStore, useGameServer, useSpacesStore } from './Spaces';
 import { getUserIdFromSession, timeout } from '@/utils';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { DialogEnums } from '@/types/dialog';
@@ -74,6 +74,10 @@ const AuthProvider = (props: { children?: ReactNode }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [setShowDialog] = useAppStore(state => [state.setShowDialog]);
   const [addSpace] = useSpacesStore(state => [state.addSpace]);
+  const [botRoom, setBotRoom] = useGameServer(state => [
+    state.botRoom,
+    state.setBotRoom,
+  ]);
   const router = useRouter();
   const searchParams = useSearchParams();
   const paramSpaceId = useMemo(() => searchParams.get('space'), [searchParams]);
@@ -233,6 +237,11 @@ const AuthProvider = (props: { children?: ReactNode }) => {
       setDisplayName('');
       setImage('');
       setIsLoading(false);
+      setBotRoom(null);
+
+      if (botRoom) {
+        botRoom.leave(true);
+      }
     }
   };
 

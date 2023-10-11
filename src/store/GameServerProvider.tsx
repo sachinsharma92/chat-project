@@ -267,6 +267,7 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
             if (message && isArray(message?.chats)) {
               setRoomChatMessages(
                 consumeChatMessages(
+                  // @todo types
                   // @ts-ignore
                   map(message?.chats, c => {
                     return {
@@ -287,7 +288,7 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
             if (state?.userBotChatInfo) {
               // @ts-ignore
               state?.userBotChatInfo.forEach(info => {
-                if (info?.userId === userId) {
+                if (info?.userId === userId && setBotRoomIsResponding) {
                   serverRoomReceiveQueue.add(() => {
                     setBotRoomIsResponding(
                       info?.isOpenAIChatCompletionProcessing as boolean,

@@ -11,7 +11,7 @@ import { usePlayersChat } from './hooks/usePlayersChat';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useWindowResize } from '@/hooks';
 import { mobileWidthBreakpoint } from '@/constants';
-import { useAppStore } from '@/store/Spaces';
+import { useAppStore, useGameServer } from '@/store/Spaces';
 import '../../common/styles/Button.css';
 
 type ChatInputPropsType = {
@@ -44,10 +44,17 @@ const ChatInput = (props: ChatInputPropsType) => {
   const [expandBulletinSidebar, setExpandBulletinSidebar] = useAppStore(
     state => [state.expandBulletinSidebar, state.setExpandBulletinSidebar],
   );
+  const [botRoomIsResponding] = useGameServer(state => [
+    state.botRoomIsResponding,
+  ]);
   const { hideExpand, className, classNameForChatFormInput } = props;
 
   const sendChat = (data: any) => {
     const { chatInput } = data;
+
+    if (botRoomIsResponding) {
+      return;
+    }
 
     if (chatInput) {
       sendBotChatMessage(toString(chatInput));
