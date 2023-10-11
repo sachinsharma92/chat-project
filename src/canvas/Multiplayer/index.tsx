@@ -6,16 +6,19 @@ import { useMemo } from 'react';
 
 import Player from '../Game/Player';
 import { useGameServer } from '@/store/Spaces';
+import { useBotnetAuth } from '@/store/Auth';
+import { guestId } from '@/store/GameServerProvider';
 
 /**
  * Handle matchmaking online players
  * @returns
  */
 const Multiplayer = () => {
-  const [room, userId, players] = useGameServer(
-    state => [state.room, state.userId, state.players],
+  const [gameRoom, players] = useGameServer(
+    state => [state.gameRoom, state.players],
     shallow,
   );
+  const [userId] = useBotnetAuth(state => [state.session?.user?.id || guestId]);
 
   const otherPlayers = useMemo(
     () =>
@@ -39,7 +42,7 @@ const Multiplayer = () => {
 
   return (
     <>
-      {room && !isEmpty(otherPlayers) && (
+      {gameRoom && !isEmpty(otherPlayers) && (
         <group name="OtherPlayers">
           {map(otherPlayers, player => {
             const playerId = player?.userId;

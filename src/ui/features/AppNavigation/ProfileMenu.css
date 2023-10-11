@@ -5,11 +5,23 @@
 .profile-menu > ul {
   list-style: none;
   list-style-type: none;
+  font-weight: 500;
 }
 
 .profile-menu > ul > li {
   width: 100%;
   max-width: 100%;
+  font-weight: 500;
+}
+
+.profile-menu > ul > li > button {
+  font-weight: unset;
+}
+
+.profile-menu > ul > li > button > p {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
 }
 
 .sign-in {

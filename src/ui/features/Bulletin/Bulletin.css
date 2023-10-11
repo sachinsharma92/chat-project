@@ -23,7 +23,7 @@
   height: 50px;
   padding: 10px;
   box-sizing: border-box;
-  background: var(--tans-light-off-white, #f8f4e8);
+  background: #f8f4e8;
   width: 100%;
 }
 

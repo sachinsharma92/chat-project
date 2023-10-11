@@ -10,12 +10,16 @@ import Message from '../Chat/Message';
 import Button from '@/ui/common/Button';
 import ChatInput from '../Chat/ChatInput';
 import './Bulletin.css';
+import BotResponding from '../Chat/BotResponding';
 
 const Bulletin = () => {
   const [expandBulletinSidebar, setExpandBulletinSidebar] = useAppStore(
     state => [state.expandBulletinSidebar, state.setExpandBulletinSidebar],
   );
-  const [roomChatMessages] = useGameServer(state => [state.roomChatMessages]);
+  const [roomChatMessages, botRoomIsResponding] = useGameServer(state => [
+    state.roomChatMessages,
+    state.botRoomIsResponding,
+  ]);
   const { availableWidth } = useWindowResize();
 
   /**
@@ -70,6 +74,7 @@ const Bulletin = () => {
             );
           })}
         </ul>
+        {botRoomIsResponding && <BotResponding />}
       </div>
       <div className="bulletin-chat-input-wrap">
         <ChatInput className="bulletin-chat" hideExpand />

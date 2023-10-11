@@ -1,3 +1,5 @@
+import { IUser } from './auth';
+import { IBot } from './bots';
 import { DialogEnums } from './dialog';
 
 export enum MusicPlayerMediaType {
@@ -6,19 +8,15 @@ export enum MusicPlayerMediaType {
   notFound = 'notFound',
 }
 
-export interface HostInfo {
-  name: string;
-  image: string;
-}
-
 export interface ISpace {
   id: string;
   owner: string;
   name?: string;
   image?: string;
   description?: string;
-  host?: HostInfo;
+  host?: Partial<IUser>;
   selected?: boolean;
+  bots?: Partial<IBot>[];
 }
 
 export interface IAppState {
@@ -33,10 +31,9 @@ export interface IAppState {
 
 export interface ISpaceStoreState {
   spaces: Partial<ISpace>[];
-  selectedSpaceId: string;
   clearCampsList: () => void;
+  setSpaceInfo: (spaceId: string, props: Partial<ISpace>) => void;
   addSpace: (space: Partial<ISpace>) => void;
-  setSelectedSpaceId: (selectedSpaceId: string) => void;
 }
 
 export interface iAsset {
@@ -70,3 +67,4 @@ export interface IPhaserGameState {
 
 export * from './gameserver';
 export * from './three';
+export * from './bots';

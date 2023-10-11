@@ -13,6 +13,10 @@
   width: 32px;
 }
 
+.avatar-fallback {
+  font-size: 14px;
+}
+
 .chat-line-content {
   width: calc(100% - 32px - 24px - 4px);
   box-sizing: border-box;

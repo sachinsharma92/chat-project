@@ -10,6 +10,7 @@ type TextInputPropsType = {
   style?: Partial<CSSProperties>;
   defaultValue?: string;
   placeholder?: string;
+  variant?: 'primary' | undefined;
 };
 
 const TextInput = forwardRef<HTMLInputElement, TextInputPropsType>(
@@ -21,6 +22,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputPropsType>(
       style,
       ariaLabel,
       defaultValue,
+      variant,
       ...props
     }: InputHTMLAttributes<HTMLInputElement> & TextInputPropsType,
     ref,
@@ -31,6 +33,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputPropsType>(
         type="text"
         aria-label={ariaLabel || 'TextInput'}
         className={cx('text-input', {
+          'primary-input': variant === 'primary',
           [`${className}`]: !isEmpty(className) && isString(className),
         })}
         {...(isFunction(onChange) && { onChange, value })}

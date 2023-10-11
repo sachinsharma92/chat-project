@@ -77,8 +77,13 @@ const OnboardDisplayName = () => {
         <div className="input-error">
           <p>{toString(errors?.displayName?.message)}</p>
         </div>
-        <Button className="submit-button" type="submit">
-          <p> {updating ? 'Submitting..' : 'Submit'}</p>
+        <Button
+          isLoading={updating}
+          className="submit-button"
+          variant="primary"
+          type="submit"
+        >
+          <p> {'Submit'}</p>
         </Button>
       </form>
 

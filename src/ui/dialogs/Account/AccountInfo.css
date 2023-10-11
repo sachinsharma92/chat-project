@@ -1,0 +1,53 @@
+.account-info {
+  position: relative;
+}
+
+.account-avatar {
+  @apply flex justify-center items-center;
+
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.account-display-name {
+  width: 100%;
+}
+
+.account-form {
+  @apply mt-2 mb-4;
+
+  width: 100%;
+}
+
+.label {
+  @apply mt-4 mb-2;
+
+  font-size: 13px;
+  line-height: 1;
+  display: block;
+}
+
+.input {
+  width: 100%;
+}
+
+.avatar-fallback {
+  font-size: 22px;
+}
+
+.update-button {
+  margin-top: 8px;
+}
+
+.upload-avatar {
+  @apply flex justify-center items-center;
+
+  border-radius: 50%;
+}
+
+.upload-avatar:hover,
+.upload-avatar:focus {
+  background: #f8f4e8;
+  opacity: 0.8;
+  border-radius: 50%;
+}

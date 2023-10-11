@@ -39,7 +39,7 @@ const ChatInput = (props: ChatInputPropsType) => {
     // watch,
     // formState: { errors },
   } = useForm();
-  const { sendChatMessage } = usePlayersChat();
+  const { sendBotChatMessage } = usePlayersChat();
   const { availableWidth } = useWindowResize();
   const [expandBulletinSidebar, setExpandBulletinSidebar] = useAppStore(
     state => [state.expandBulletinSidebar, state.setExpandBulletinSidebar],
@@ -50,7 +50,7 @@ const ChatInput = (props: ChatInputPropsType) => {
     const { chatInput } = data;
 
     if (chatInput) {
-      sendChatMessage(toString(chatInput));
+      sendBotChatMessage(toString(chatInput));
       setValue('chatInput', '');
     }
   };

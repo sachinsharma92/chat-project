@@ -28,3 +28,14 @@ export const updateDisplayName = async (
     })
     .eq('user_id', userId);
 };
+
+export const updateUserImageUrl = async (userId: string, image: string) => {
+  if (!image || !userId) {
+    return;
+  }
+
+  return await supabaseClient
+    .from('user_profiles')
+    .update({ image })
+    .eq('user_id', userId);
+};

@@ -1,0 +1,57 @@
+.clone-ai-settings {
+  position: relative;
+  width: 100%;
+}
+
+.greetings {
+  @apply mt-2 mb-2;
+
+  width: 100%;
+}
+
+.label {
+  @apply mb-4 mt-4;
+
+  font-size: 13px;
+  line-height: 1;
+  display: block;
+}
+
+.tip {
+  @apply mt-2 mb-2;
+
+  font-size: 12px;
+  line-height: 1;
+  opacity: 0.9;
+}
+
+.input {
+  width: 100%;
+}
+
+.textarea {
+  width: 100%;
+  border-radius: 4px;
+  padding: 8px 8px;
+  background: transparent;
+  outline: none;
+  box-shadow: none;
+  border: 1px solid #dededc;
+  font-size: 14px;
+  resize: none;
+}
+
+.textarea:hover {
+  border-color: #9f9f9d;
+}
+
+.input-error {
+  @apply flex justify-center items-center mb-4;
+
+  width: 100%;
+}
+
+.input-error > p {
+  color: red;
+  font-size: 14px;
+}

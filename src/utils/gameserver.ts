@@ -42,12 +42,11 @@ export const consumeUsers = (roomUsers: MapSchema<RoomUser>) => {
  * @returns
  */
 export const consumeChatMessages = (
-  // @todo use colyseus schemas
   chatMessages: ArraySchema<ChatMessageProps>,
 ) => {
   const messages: ChatMessageProps[] = [];
 
-  if (!chatMessages?.entries) {
+  if (!chatMessages) {
     return [];
   }
 

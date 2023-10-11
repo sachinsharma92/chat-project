@@ -3,6 +3,7 @@ import { isEmpty, toString } from 'lodash';
 import { useMemo } from 'react';
 import Avatar from '@/ui/common/Avatar/Avatar';
 import './Message.css';
+import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 
 export enum MessageRoles {
   'assistant' = 'assistant',
@@ -11,7 +12,7 @@ export enum MessageRoles {
 
 const Message = (props: ChatMessageProps) => {
   const { role, authorInfo, authorId, message } = props;
-
+  const { spaceInfo } = useSelectedSpace();
   const isAIAssistant = useMemo(() => role === MessageRoles.assistant, [role]);
 
   return (
@@ -28,7 +29,9 @@ const Message = (props: ChatMessageProps) => {
       </div>
       <div className="chat-line-content">
         <p>
-          {isAIAssistant && <span>{'NPC Bot'}</span>}
+          {isAIAssistant && (
+            <span>{spaceInfo?.host?.displayName || 'NPC Bot'}</span>
+          )}
           {!isEmpty(authorInfo?.displayName) && !isAIAssistant && (
             <span>{authorInfo?.displayName}</span>
           )}

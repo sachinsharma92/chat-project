@@ -4,6 +4,8 @@ export interface IUser {
   id: string;
   displayName: string;
   image: string;
+  email?: string;
+  handle?: string;
 }
 
 export interface IAppAuthState {
@@ -13,6 +15,8 @@ export interface IAppAuthState {
   handle: string;
   image: string;
   sessionChecked: boolean;
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
   setImage: (image: string) => void;
   setSessionChecked: (sessionChecked: boolean) => void;
   setHandle: (handle: string) => void;
