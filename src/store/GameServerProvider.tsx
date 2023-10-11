@@ -138,6 +138,7 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
              * Listen to gameRoom state changes
              */
             room.onStateChange(state => {
+              // @todo resub on spaceId change
               if (state?.users && isFunction(setPlayers) && spaceId) {
                 serverRoomReceiveQueue.add(() => {
                   setPlayers(consumeUsers(state.users));
