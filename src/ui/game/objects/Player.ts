@@ -2,6 +2,7 @@
 
 import { isChatFocused } from '@/ui/features/Chat/ChatInput';
 import Phaser from 'phaser';
+import { store } from '@/store/JoystickProvider';
 
 export class Player extends Phaser.GameObjects.Sprite {
   keys: Record<string | number, any> | undefined | null = null;
@@ -119,6 +120,8 @@ export class Player extends Phaser.GameObjects.Sprite {
     const anims = this.anims;
     const keys = this.keys;
     const speed = 70;
+    // @ts-ignore
+    const direction = store.direction.direction;
 
     if (this.body) {
       // @ts-ignore
@@ -130,15 +133,19 @@ export class Player extends Phaser.GameObjects.Sprite {
 
       // movements
 
-      if (keys.left.isDown || keys.a.isDown) {
+      if (keys.left.isDown || keys.a.isDown || direction === 'LEFT') {
         playerVelocity.x = -1;
-      } else if (keys.right.isDown || keys.d.isDown) {
+      } else if (keys.right.isDown || keys.d.isDown || direction === 'RIGHT') {
         playerVelocity.x = 1;
       }
 
-      if (keys.up.isDown || keys.w.isDown) {
+      if (keys.up.isDown || keys.w.isDown || direction === 'FORWARD') {
         playerVelocity.y = -1;
-      } else if (keys.down.isDown || keys.s.isDown) {
+      } else if (
+        keys.down.isDown ||
+        keys.s.isDown ||
+        direction === 'BACKWARD'
+      ) {
         playerVelocity.y = 1;
       }
 
@@ -151,13 +158,17 @@ export class Player extends Phaser.GameObjects.Sprite {
       }
 
       // animations
-      if (keys.left.isDown || keys.a.isDown) {
+      if (keys.left.isDown || keys.a.isDown || direction === 'LEFT') {
         anims.play('player-left', true);
-      } else if (keys.right.isDown || keys.d.isDown) {
+      } else if (keys.right.isDown || keys.d.isDown || direction === 'RIGHT') {
         anims.play('player-right', true);
-      } else if (keys.up.isDown || keys.w.isDown) {
+      } else if (keys.up.isDown || keys.w.isDown || direction === 'FORWARD') {
         anims.play('player-turn', true);
-      } else if (keys.down.isDown || keys.s.isDown) {
+      } else if (
+        keys.down.isDown ||
+        keys.s.isDown ||
+        direction === 'BACKWARD'
+      ) {
         anims.play('player-down', true);
       } else {
         anims.play('player-idle-down', true);
