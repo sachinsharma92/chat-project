@@ -15,9 +15,10 @@ import { ceil, head, isEmpty } from 'lodash';
 import { Session } from '@supabase/supabase-js';
 import { useAppStore, useGameServer, useSpacesStore } from './Spaces';
 import { getUserIdFromSession, timeout } from '@/utils';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { DialogEnums } from '@/types/dialog';
 import camelCaseKeys from 'camelcase-keys';
+import { useRouterQuery } from '@/hooks';
 
 interface IAuthAppState {}
 
@@ -79,7 +80,7 @@ const AuthProvider = (props: { children?: ReactNode }) => {
     state.setBotRoom,
   ]);
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const { searchParams, setQuery } = useRouterQuery();
   const paramSpaceId = useMemo(() => searchParams.get('space'), [searchParams]);
 
   /**
@@ -141,7 +142,7 @@ const AuthProvider = (props: { children?: ReactNode }) => {
               !isEmpty(spaceId) &&
               (!paramSpaceId || (recentlyCreated && spaceId !== paramSpaceId))
             ) {
-              router.push(`/?space=${spaceId}`);
+              setQuery('space', spaceId);
             }
           }
         }
@@ -153,6 +154,7 @@ const AuthProvider = (props: { children?: ReactNode }) => {
     [
       router?.push,
       paramSpaceId,
+      setQuery,
       addSpace,
       setShowDialog,
       setIsLoading,

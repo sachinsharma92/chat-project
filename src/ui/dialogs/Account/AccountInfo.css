@@ -31,8 +31,8 @@
   width: 100%;
 }
 
-.avatar-fallback {
-  font-size: 22px;
+.upload-avatar span {
+  font-size: 30px;
 }
 
 .update-button {

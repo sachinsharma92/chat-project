@@ -5,7 +5,6 @@ import { create } from 'zustand';
 import { ReactNode, useEffect, useRef } from 'react';
 import { isFunction } from 'lodash';
 import { IPhaserGameState } from '@/types';
-import { HomeScene } from '@/ui/game/scenes/HomeScene';
 import { MapScene } from '@/ui/game/scenes/MapScene';
 import { useWorldStore } from './CanvasProvider';
 
@@ -18,14 +17,6 @@ export const usePhaserStore = create<IPhaserGameState>(set => ({
   },
 }));
 
-export const getPhaserWidth = () => {
-  try {
-    return window.innerWidth < 720 ? window.innerWidth : window.innerWidth - 70;
-  } catch {
-    return 0;
-  }
-};
-
 const PhaserProvider = (props: { children?: ReactNode }) => {
   const { children } = props;
   const init = useRef(false);
@@ -34,15 +25,16 @@ const PhaserProvider = (props: { children?: ReactNode }) => {
 
   useEffect(() => {
     if (!init?.current && isFunction(setPhaserGame)) {
+      init.current = true;
       const phaserConfig: Phaser.Types.Core.GameConfig = {
-        height: window.innerHeight,
-        width: getPhaserWidth(),
+        width: '100%',
+        height: '100%',
         type: Phaser.AUTO,
         antialias: true,
         antialiasGL: true,
         backgroundColor: '#ede6d4', // || '#f3f3f3',
         scale: {
-          autoCenter: Phaser.Scale.CENTER_BOTH,
+          autoCenter: Phaser.Scale.MAX_ZOOM,
           parent: 'phaser-container',
         },
         physics: {
@@ -52,7 +44,7 @@ const PhaserProvider = (props: { children?: ReactNode }) => {
             gravity: { y: 0 },
           },
         },
-        scene: [MapScene, HomeScene],
+        scene: [MapScene],
       };
 
       const game = new Phaser.Game(phaserConfig);

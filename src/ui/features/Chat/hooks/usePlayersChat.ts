@@ -49,7 +49,9 @@ export const usePlayersChat = () => {
           hideLastChat();
         }
       }
-    } catch {}
+    } catch (err: any) {
+      console.log('sendChatMessage() err:', err?.message);
+    }
   };
 
   /**
@@ -75,7 +77,9 @@ export const usePlayersChat = () => {
           });
         });
       }
-    } catch {}
+    } catch (err: any) {
+      console.log('sendBotChatMessage() err:', err?.message);
+    }
   };
 
   return { sendChatMessage, sendBotChatMessage };

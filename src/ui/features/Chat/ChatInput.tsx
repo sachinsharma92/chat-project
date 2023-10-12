@@ -108,7 +108,7 @@ const ChatInput = (props: ChatInputPropsType) => {
               classNameForChatFormInput,
             ),
           })}
-          placeholder={'Press ENTER to comment'}
+          placeholder={`"Enter" to chat`}
           {...register('chatInput', { required: false })}
         />
         <Button

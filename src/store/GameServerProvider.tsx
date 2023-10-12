@@ -152,7 +152,7 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
       }
     };
 
-    if (isStarted && !gameRoom && sessionChecked) {
+    if (isStarted && !gameRoom && spaceId && sessionChecked) {
       connectToGameServer();
     }
   }, [
@@ -176,7 +176,7 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
    * Update user profile in game server
    */
   useEffect(() => {
-    if (!isStarted || !gameRoom?.send) {
+    if (!isStarted || !gameRoom?.send || !spaceId) {
       return;
     }
 
@@ -205,7 +205,15 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
     });
 
     // eslint-disable-next-line
-  }, [userId, displayName, loggedInUserId, gameRoom?.send, email, isStarted]);
+  }, [
+    userId,
+    spaceId,
+    displayName,
+    loggedInUserId,
+    gameRoom?.send,
+    email,
+    isStarted,
+  ]);
 
   /**
    * Listen to 'users' state changes and record new players

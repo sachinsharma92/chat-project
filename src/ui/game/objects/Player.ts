@@ -59,7 +59,7 @@ export class Player extends Phaser.GameObjects.Sprite {
       },
       false,
     );
-    this.setDisplaySize(12, 12);
+    this.setDisplaySize(16, 16);
 
     if (this.body) {
       // @ts-ignore

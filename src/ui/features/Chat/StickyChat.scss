@@ -8,18 +8,20 @@
 
 @media screen and (max-width: 720px) {
   .sticky-chat {
-    & > div {
-      padding: 8px;
+    display: none;
 
-      & > form {
-        display: none;
-      }
-    }
+    // & > div {
+    //   padding: 8px;
+
+    //   & > form {
+    //     display: none;
+    //   }
+    // }
   }
 
   .chat {
     display: flex;
-    margin-left: 8px;
+    // margin-left: 8px;
   }
 
   .expand-chat {
