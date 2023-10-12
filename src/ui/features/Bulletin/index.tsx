@@ -1,5 +1,5 @@
 import cx from 'classnames';
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { ChatIcon, CrossIcon } from '@/icons';
 import { useWindowResize } from '@/hooks';
 import { mobileWidthBreakpoint } from '@/constants';
@@ -11,6 +11,7 @@ import Button from '@/ui/common/Button';
 import ChatInput from '../Chat/ChatInput';
 import './Bulletin.css';
 import BotResponding from '../Chat/BotResponding';
+import Pinned from '../Chat/Pinned';
 
 const Bulletin = () => {
   const [expandBulletinSidebar, setExpandBulletinSidebar] = useAppStore(
@@ -36,6 +37,31 @@ const Bulletin = () => {
     [roomChatMessages],
   );
 
+  /** Scroll stream chat down bottom  */
+  const scrollChatToBottom = useCallback(() => {
+    const chatStreamDom = document.querySelector('.bulletin-chat-stream > ul');
+
+    if (chatStreamDom?.scroll) {
+      const timeoutId = setTimeout(() => {
+        chatStreamDom.scroll({
+          top: chatStreamDom.scrollHeight,
+          behavior: 'smooth',
+        });
+
+        clearTimeout(timeoutId);
+      }, 200);
+    }
+
+    // eslint-disable-next-line
+  }, [botRoomIsResponding]);
+
+  /** Scroll on new chat */
+  useEffect(() => {
+    if (botRoomIsResponding && !isEmpty(sanitizedChatMessages)) {
+      scrollChatToBottom();
+    }
+  }, [botRoomIsResponding, sanitizedChatMessages, scrollChatToBottom]);
+
   return (
     <div
       className={cx('bulletin', { 'bulletin-hide': !expandBulletinSidebar })}
@@ -57,6 +83,7 @@ const Bulletin = () => {
         </div>
       </div>
       <div className="bulletin-chat-stream">
+        <Pinned className="bulletin-pinned" />
         <ul>
           {map(sanitizedChatMessages, line => {
             const key = `BulletinChat${line.id}`;
@@ -73,8 +100,9 @@ const Bulletin = () => {
               </li>
             );
           })}
+
+          {botRoomIsResponding && <BotResponding />}
         </ul>
-        {botRoomIsResponding && <BotResponding />}
       </div>
       <div className="bulletin-chat-input-wrap">
         <ChatInput className="bulletin-chat" hideExpand />

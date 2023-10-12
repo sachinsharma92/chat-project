@@ -16,6 +16,16 @@ export const getSpaceBots = async (spaceId: string) => {
     .eq('space_id', trim(spaceId));
 };
 
+export const updateSpaceBotProfileProperties = async (
+  formId: string,
+  props: { greeting: string },
+) => {
+  return await supabaseClient
+    .from('spaces_bots')
+    .update({ ...props })
+    .eq('form_id', trim(formId));
+};
+
 export const createSpaceBotProfile = async (params: {
   id: string;
   spaceId: string;

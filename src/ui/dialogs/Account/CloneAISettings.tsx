@@ -10,6 +10,7 @@ import {
   createSpaceBotProfile,
   getAICloneCompletedForms,
   updateOrCreateAICloneFormProperties,
+  updateSpaceBotProfileProperties,
 } from '@/lib/supabase';
 import { IBotFormAnswers } from '@/types';
 import { v4 as uuid } from 'uuid';
@@ -109,6 +110,8 @@ const CloneAISettings = () => {
           spaceInfo.bots.push(newSpaceBotProps);
           setSpaceInfo(spaceId, spaceInfo);
         }
+      } else if (!creatingNew) {
+        await updateSpaceBotProfileProperties(formId, { greeting });
       }
     } catch (err: any) {
       console.log('onSave() err:', err?.message);

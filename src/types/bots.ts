@@ -6,6 +6,8 @@ export interface IBot {
   owner: string;
   spaceId?: string;
   formId?: string;
+  greeting?: string;
+  description?: string;
 }
 
 export interface IBotFormAnswers {
