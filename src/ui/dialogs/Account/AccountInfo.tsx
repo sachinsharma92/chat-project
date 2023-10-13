@@ -79,6 +79,7 @@ const AccountInfo = () => {
 
           <TextInput
             className="input"
+            variant="primary"
             // @ts-ignore
             readOnly
             defaultValue={email}

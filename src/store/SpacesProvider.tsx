@@ -10,6 +10,7 @@ import {
 } from '@/lib/supabase';
 import { head, isEmpty } from 'lodash';
 import camelCaseKeys from 'camelcase-keys';
+import { useRouter } from 'next/navigation';
 
 const SpacesProvider = (props: { children?: ReactNode }) => {
   const { children } = props;
@@ -18,6 +19,7 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
     state.setSpaceInfo,
   ]);
   const { spaceId } = useSelectedSpace();
+  const router = useRouter();
 
   /**
    * Store space id
@@ -52,12 +54,15 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
           setSpaceInfo(spaceId, { ...props });
         } else if (error) {
           // redirect user to 404 page
+          router.push('/not-found');
         }
       }
     };
 
     getSpaceInfo();
-  }, [spaceId, setSpaceInfo]);
+
+    // eslint-disable-next-line
+  }, [spaceId, router?.push, setSpaceInfo]);
 
   return <>{children}</>;
 };

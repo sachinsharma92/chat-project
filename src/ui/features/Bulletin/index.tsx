@@ -1,36 +1,23 @@
 import cx from 'classnames';
 import { useCallback, useEffect, useMemo } from 'react';
-import { ChatIcon, CrossIcon } from '@/icons';
-import { useWindowResize } from '@/hooks';
-import { mobileWidthBreakpoint } from '@/constants';
+import { ChatIcon } from '@/icons';
 import { InterTight } from '@/app/fonts';
 import { useAppStore, useGameServer } from '@/store/Spaces';
 import { filter, isEmpty, map } from 'lodash';
 import Message from '../Chat/Message';
-import Button from '@/ui/common/Button';
 import ChatInput from '../Chat/ChatInput';
 import './Bulletin.css';
 import BotResponding from '../Chat/BotResponding';
 import Pinned from '../Chat/Pinned';
 
 const Bulletin = () => {
-  const [expandBulletinSidebar, setExpandBulletinSidebar] = useAppStore(
-    state => [state.expandBulletinSidebar, state.setExpandBulletinSidebar],
-  );
+  const [expandBulletinSidebar] = useAppStore(state => [
+    state.expandBulletinSidebar,
+  ]);
   const [roomChatMessages, botRoomIsResponding] = useGameServer(state => [
     state.roomChatMessages,
     state.botRoomIsResponding,
   ]);
-  const { availableWidth } = useWindowResize();
-
-  /**
-   * Hide bulletin on resize and hits mobile screen expected breakpoint
-   */
-  useEffect(() => {
-    if (availableWidth < mobileWidthBreakpoint && expandBulletinSidebar) {
-      setExpandBulletinSidebar(false);
-    }
-  }, [availableWidth, expandBulletinSidebar, setExpandBulletinSidebar]);
 
   const sanitizedChatMessages = useMemo(
     () => filter(roomChatMessages, line => !isEmpty(line?.id)),
@@ -73,14 +60,7 @@ const Bulletin = () => {
             Bulletin
           </h1>
         </div>
-        <div className="bulletin-right">
-          <Button
-            className="bulletin-close"
-            onClick={() => setExpandBulletinSidebar(false)}
-          >
-            <CrossIcon />
-          </Button>
-        </div>
+        <div className="bulletin-right"></div>
       </div>
       <div className="bulletin-chat-stream">
         <Pinned className="bulletin-pinned" />

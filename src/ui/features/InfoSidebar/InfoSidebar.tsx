@@ -1,8 +1,9 @@
 'use client';
 
-import { CrossIcon, MeatballsIcon } from '@/icons';
+import { MeatballsIcon } from '@/icons';
 import { Inter } from '@/app/fonts';
 import { useAppStore } from '@/store/Spaces';
+import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import Links, { SocialLink } from '../../common/Links/Links';
 import JoinCampButton from '../JoinCampButton/JoinCampButton';
 import Button from '@/ui/common/Button';
@@ -30,7 +31,7 @@ interface featureFlagProps {
 }
 
 const CampUserInfo: CampUserInfoProps = {
-  campName: 'Basecamp',
+  campName: 'Botnet',
   campHost: 'Jeremy Cai',
   campHostAvatar: '/assets/camp-avatar.png',
   campMessage:
@@ -50,25 +51,27 @@ const featureFlags: featureFlagProps = {
   copyLinkFeature: true,
 };
 
-function InfoSidebar() {
+const InfoSidebar = () => {
   const [expandInfoSidebar, setExpandInfoSidebar] = useAppStore(state => [
     state.expandInfoSidebar,
     state.setExpandInfoSidebar,
   ]);
 
+  const showMore = () => {};
+
   return (
     <>
-      {expandInfoSidebar ? (
+      {expandInfoSidebar && (
         <div className={cx(Inter.className, 'info-layout')}>
           <div className="main-content">
             <div className="header-container">
               <div className="header-icon"></div>
               <Button
-                className="close-button flex justify-center items-center"
+                className="more-button"
                 type="button"
-                onClick={() => setExpandInfoSidebar(!expandInfoSidebar)}
+                onClick={() => showMore()}
               >
-                <CrossIcon />
+                <DotsHorizontalIcon />
               </Button>
             </div>
             <h1 className="info-header">{CampUserInfo.campName}</h1>
@@ -98,7 +101,9 @@ function InfoSidebar() {
             </div>
           </div>
         </div>
-      ) : (
+      )}
+
+      {!expandInfoSidebar && (
         <div
           className={cx(
             Inter.className,
@@ -128,6 +133,6 @@ function InfoSidebar() {
       )}
     </>
   );
-}
+};
 
 export default InfoSidebar;

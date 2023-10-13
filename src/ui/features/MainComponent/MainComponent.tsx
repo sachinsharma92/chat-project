@@ -1,9 +1,7 @@
 'use client';
 
-import { useEffect } from 'react';
 import StickyChat from '../Chat/StickyChat';
 import dynamic from 'next/dynamic';
-import cx from 'classnames';
 import AppNavigation from '../AppNavigation';
 import MediaPlayer from '../MediaPlayer';
 import Bulletin from '../Bulletin';
@@ -26,34 +24,25 @@ const MainComponent = () => {
     state.expandBulletinSidebar,
   ]);
 
-  /**
-   * Record entry time to check duration(in seconds)-
-   *  it'll take to fully load 3D world
-   */
-  useEffect(() => {
-    // @ts-ignore
-    if (!window?.entryTimestamp) {
-      // @ts-ignore
-      window.entryTimestamp = Date.now();
-    }
-  }, []);
-
   return (
     <div className="main-component flex w-full fix-screen-overflow">
       <AppNavigation />
-      <div
-        className={cx('game-screen', {
-          'game-screen-bulletin-expanded': expandBulletinSidebar,
-        })}
-      >
+
+      <div className="info-side-bar-container">
+        <InfoSidebar />
+      </div>
+
+      <div className="game-screen">
         <div className="world">
           <Game />
         </div>
         <MediaPlayer />
         {!expandBulletinSidebar && <StickyChat />}
-        <InfoSidebar />
       </div>
-      <Bulletin />
+
+      <div className="bulletin-container">
+        <Bulletin />
+      </div>
     </div>
   );
 };

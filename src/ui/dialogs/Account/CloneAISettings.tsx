@@ -129,6 +129,8 @@ const CloneAISettings = () => {
         const { data, error } = await getAICloneCompletedForms(spaceId);
 
         if (data && !error) {
+          // we only pick the first bot data-
+          // since we only support 1 space == 1 bot for now
           setBotFormAnswers(head(data));
           setFetchingFormData(false);
         }

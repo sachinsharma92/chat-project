@@ -3,7 +3,7 @@
 
   position: relative;
   height: 100%;
-  width: 300px;
+  width: 100%;
   background: var(--tans-off-white, #fffff7);
   box-shadow: 0px 6px 20px 0px rgba(0, 0, 0, 0.15);
   -moz-box-shadow: 0px 6px 20px 0px rgba(0, 0, 0, 0.15);
@@ -46,20 +46,6 @@
 
 .bulletin-right {
   @apply flex justify-center items-center;
-}
-
-.bulletin-close {
-  @apply flex justify-center items-center;
-
-  border-radius: 500px;
-  background: var(--tans-off-white, #fffff7);
-  height: 36px;
-  width: 36px;
-  padding: 4px;
-}
-
-.bulletin-close:hover {
-  background: #f5efdc;
 }
 
 .bulletin-chat-input-wrap {

@@ -155,7 +155,7 @@ export class MapScene extends Phaser.Scene {
 
     // @ts-ignore
     this.mainPlayer.body.setCollideWorldBounds(true);
-    this.cameras.main.setZoom(3, 3);
+    this.cameras.main.setZoom(2, 2);
     this.cameras.main.setBounds(0, 0, 1088, 1088, true);
     this.cameras.main.startFollow(this.mainPlayer, true, 2, 2);
 
