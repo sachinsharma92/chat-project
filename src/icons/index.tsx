@@ -16,3 +16,4 @@ export { default as MembersIcon } from './MembersIcon';
 export { default as EllipseIcon } from './EllipseIcon';
 export { default as AudioPlayingIcon } from './AudioPlayingIcon';
 export { default as ArrowTopRightIcon } from './ArrowTopRightIcon';
+export { default as HeartIcon } from './HeartIcon';

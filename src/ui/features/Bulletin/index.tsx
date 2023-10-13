@@ -20,9 +20,9 @@ const Bulletin = () => {
   ]);
 
   const sanitizedChatMessages = useMemo(
-    () => filter(roomChatMessages, line => !isEmpty(line?.id)),
-    [roomChatMessages],
-  );
+      () => filter(roomChatMessages, line => !isEmpty(line?.id)),
+      [roomChatMessages],
+    );  
 
   /** Scroll stream chat down bottom  */
   const scrollChatToBottom = useCallback(() => {
@@ -57,7 +57,7 @@ const Bulletin = () => {
         <div className="bulletin-left">
           <ChatIcon height={'16px'} width={'16px'} />
           <h1 className={cx(InterTight.className, 'bulletin-label')}>
-            Bulletin
+            Chat
           </h1>
         </div>
         <div className="bulletin-right"></div>
@@ -67,7 +67,11 @@ const Bulletin = () => {
         <ul>
           {map(sanitizedChatMessages, line => {
             const key = `BulletinChat${line.id}`;
-
+            const shortTime = new Intl.DateTimeFormat("en", {
+              timeStyle: "short",
+              });
+            
+            const timestamp = shortTime.format(Date.now());
             return (
               <li key={key}>
                 <Message
@@ -75,6 +79,7 @@ const Bulletin = () => {
                   authorId={line.authorId}
                   authorInfo={line.authorInfo}
                   role={line.role}
+                  time={timestamp}
                   message={line?.message}
                 />
               </li>

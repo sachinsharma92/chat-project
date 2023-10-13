@@ -47,4 +47,5 @@ export type ChatMessageProps = {
   role: MessageRoles;
   authorId: string;
   authorInfo?: Partial<IUser>;
+  time?: string;
 };
