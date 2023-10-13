@@ -1,4 +1,4 @@
-import Button from '@/ui/common/Button';
+import Button from '@/components/common/Button';
 import Popover from '@/ui/common/Popover';
 import { useAppStore } from '@/store/Spaces';
 import { PersonIcon } from '@radix-ui/react-icons';

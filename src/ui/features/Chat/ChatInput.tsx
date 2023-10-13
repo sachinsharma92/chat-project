@@ -1,8 +1,8 @@
 'use client';
 
 import cx from 'classnames';
-import Button from '../../common/Button';
-import TextInput from '../../common/TextInput';
+import Button from '../../../components/common/Button';
+import TextInput from '../../../components/common/TextInput';
 import './ChatInput.scss';
 import { useForm } from 'react-hook-form';
 import { PaperPlane, EmojiSmileIcon, ExpandIcon, ChatIcon } from '@/icons';
@@ -12,7 +12,7 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { useWindowResize } from '@/hooks';
 import { mobileWidthBreakpoint } from '@/constants';
 import { useAppStore, useGameServer } from '@/store/Spaces';
-import '../../common/styles/Button.css';
+import '../../../components/common/styles/Button.css';
 
 type ChatInputPropsType = {
   hideExpand?: boolean;

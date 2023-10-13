@@ -1,4 +1,4 @@
-import Avatar from '@/ui/common/Avatar/Avatar';
+import Avatar from '@/components/common/Avatar/Avatar';
 import './BotResponding.css';
 
 const BotResponding = () => {

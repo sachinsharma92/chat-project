@@ -6,7 +6,7 @@ import { useAppStore } from './Spaces';
 import { useBotnetAuth } from './Auth';
 import { DialogEnums } from '@/types/dialog';
 import Auth from '@/ui/dialogs/Auth';
-import '../ui/common/styles/Dialog.css';
+import '../components/common/styles/Dialog.css';
 import OnboardDisplayName from '@/ui/dialogs/OnboardDisplayName';
 import Account from '@/ui/dialogs/Account';
 import AuthLoadingScreen from '@/ui/dialogs/AuthLoadingScreen';

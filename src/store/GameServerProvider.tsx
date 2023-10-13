@@ -13,8 +13,8 @@ import {
 } from '@/lib/rivet';
 import { useGameServer } from './Spaces';
 import { useBotnetAuth } from './Auth';
-import { getNameFromEmail, getUserIdFromSession } from '@/utils';
-import { consumeChatMessages, consumeUsers } from '@/utils/gameserver';
+import { getNameFromEmail, getUserIdFromSession } from '@/lib/utils';
+import { consumeChatMessages, consumeUsers } from '@/lib/utils/gameserver';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 
 export const guestId = createId();

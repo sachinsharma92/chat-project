@@ -1,22 +1,25 @@
 import { useBotnetAuth } from '@/store/Auth';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import Avatar from '@/ui/common/Avatar/Avatar';
+import { updateDisplayName, updateUserImageUrl } from '@/lib/supabase';
+import { uploadImageAvatarFile } from '@/lib/utils/upload';
+import { isEmpty } from 'lodash';
+import { useToast } from '@/components/ui/use-toast';
+import Avatar from '@/components/common/Avatar/Avatar';
+import TextInput from '@/components/common/TextInput';
+import Button from '@/components/common/Button';
 import './AccountInfo.css';
-import TextInput from '@/ui/common/TextInput';
-import Button from '@/ui/common/Button';
-import { updateDisplayName } from '@/lib/supabase';
 
 const AccountInfo = () => {
-  const [userId, image, email, displayName, setDisplayName] = useBotnetAuth(
-    state => [
+  const [userId, image, email, displayName, setDisplayName, setImage] =
+    useBotnetAuth(state => [
       state?.session?.user?.id || '',
       state.image,
       state.email,
       state.displayName,
       state.setDisplayName,
-    ],
-  );
+      state.setImage,
+    ]);
   const {
     register,
     handleSubmit,
@@ -24,7 +27,9 @@ const AccountInfo = () => {
     watch,
     // formState: { errors },
   } = useForm();
+  const { toast } = useToast();
   const [updating, setUpdating] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   const onUpdate = async (data: any = {}) => {
     try {
@@ -50,10 +55,42 @@ const AccountInfo = () => {
   const showUpdatebutton =
     watch('displayName') && watch('displayName') !== displayName;
 
+  /**
+   * Trigger file input and upload selected image
+   * @returns
+   */
+  const onAccountAvatarUpdate = async () => {
+    if (uploading) {
+      return;
+    }
+
+    try {
+      const url = await uploadImageAvatarFile(
+        () => setUploading(true),
+        () => setUploading(false),
+      );
+
+      if (!isEmpty(url) && url) {
+        // store url on supabase db
+        setImage(url);
+        await updateUserImageUrl(userId, url);
+      }
+    } catch (err) {
+      toast({
+        variant: 'destructive',
+        title: 'Failed to upload.',
+      });
+    }
+  };
+
   return (
     <div className="account-info">
       <div className="account-avatar">
-        <Button className="upload-avatar">
+        <Button
+          isLoading={uploading}
+          className="upload-avatar"
+          onClick={onAccountAvatarUpdate}
+        >
           <Avatar height={80} width={80} src={image} name={displayName} />
         </Button>
       </div>

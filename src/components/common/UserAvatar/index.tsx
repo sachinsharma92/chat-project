@@ -1,6 +1,7 @@
 import { isEmpty } from 'lodash';
 import Avatar from '../Avatar/Avatar';
 import cx from 'classnames';
+import { useBotnetAuth } from '@/store/Auth';
 import './UserAvatar.css';
 
 type UserAvatarProps = {
@@ -9,6 +10,10 @@ type UserAvatarProps = {
 
 const UserAvatar = (props: UserAvatarProps) => {
   const { className } = props;
+  const [image, displayName] = useBotnetAuth(state => [
+    state.image,
+    state.displayName,
+  ]);
 
   return (
     <div
@@ -16,7 +21,7 @@ const UserAvatar = (props: UserAvatarProps) => {
         [`${className}`]: !isEmpty(className),
       })}
     >
-      <Avatar src="/assets/camp-avatar.png" />
+      <Avatar src={image} name={displayName} />
     </div>
   );
 };

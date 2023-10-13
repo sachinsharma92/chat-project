@@ -1,7 +1,7 @@
 'use client';
 
-import Button from '@/ui/common/Button';
-import UserAvatar from '@/ui/common/UserAvatar';
+import Button from '@/components/common/Button';
+import UserAvatar from '@/components/common/UserAvatar';
 import {
   BotnetIcon,
   ExploreIcon,

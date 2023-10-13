@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import Providers from './providers';
 import { Inter } from './fonts';
+import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
   title: 'Botnet',
@@ -26,7 +27,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body>
         <div id="root">
-          <Providers>{children}</Providers>
+          <Providers>
+            {children}
+            <Toaster />
+          </Providers>
         </div>
       </body>
     </html>

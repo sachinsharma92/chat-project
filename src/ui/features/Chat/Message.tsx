@@ -1,7 +1,7 @@
 import { ChatMessageProps } from '@/types';
 import { isEmpty, toString } from 'lodash';
 import { useMemo } from 'react';
-import Avatar from '@/ui/common/Avatar/Avatar';
+import Avatar from '@/components/common/Avatar/Avatar';
 import './Message.css';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import { HeartIcon } from '@/icons';

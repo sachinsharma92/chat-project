@@ -1,9 +1,9 @@
-import TextInput from '@/ui/common/TextInput';
-import Button from '@/ui/common/Button';
+import TextInput from '@/components/common/TextInput';
+import Button from '@/components/common/Button';
 import TextareaAutosize from 'react-textarea-autosize';
 import { useForm } from 'react-hook-form';
 import { useBotnetAuth } from '@/store/Auth';
-import { defaultCloneAIGreetingPhrase } from '@/utils/bot';
+import { defaultCloneAIGreetingPhrase } from '@/lib/utils/bot';
 import { useEffect, useMemo, useState } from 'react';
 import { filter, head, isEmpty, toString } from 'lodash';
 import {
@@ -15,7 +15,7 @@ import {
 import { IBotFormAnswers } from '@/types';
 import { v4 as uuid } from 'uuid';
 import { useSpacesStore } from '@/store/Spaces';
-import LoadingSpinner from '@/ui/common/LoadingSpinner';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 import './CloneAISettings.css';
 
 const CloneAISettings = () => {
@@ -72,7 +72,7 @@ const CloneAISettings = () => {
       }
 
       setUpdating(true);
-      const formId = botFormAnswers?.id as string;
+      let formId = botFormAnswers?.id as string;
       const { greeting, backstory, description, characteristics } = data;
       const meta = {
         ...(botFormAnswers?.meta || {}),
@@ -95,12 +95,12 @@ const CloneAISettings = () => {
       );
 
       if (!isEmpty(resUpdateOrCreate?.id) && creatingNew) {
-        const newFormId = resUpdateOrCreate?.id;
+        formId = resUpdateOrCreate?.id;
         const newSpaceBotProps = {
           spaceId,
+          formId,
           id: uuid(),
           owner: userId,
-          formId: newFormId,
         };
 
         setBotFormAnswers({ ...cloneFormProps, id: resUpdateOrCreate?.id });
@@ -110,7 +110,9 @@ const CloneAISettings = () => {
           spaceInfo.bots.push(newSpaceBotProps);
           setSpaceInfo(spaceId, spaceInfo);
         }
-      } else if (!creatingNew) {
+      }
+
+      if (formId) {
         await updateSpaceBotProfileProperties(formId, { greeting });
       }
     } catch (err: any) {

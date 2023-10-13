@@ -1,6 +1,6 @@
 import * as Tabs from '@radix-ui/react-tabs';
-import DialogCloseButton from '@/ui/common/DialogCloseButton';
-import '../../common/styles/Tabs.css';
+import DialogCloseButton from '@/components/common/DialogCloseButton';
+import '../../../components/common/styles/Tabs.css';
 import './Account.css';
 import AccountInfo from './AccountInfo';
 import CloneAISettings from './CloneAISettings';

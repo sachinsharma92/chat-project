@@ -1,3 +1,6 @@
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
 export function timeout(ms: number) {
   return new Promise(resolve => {
     const _timeout = setTimeout(
@@ -11,3 +14,7 @@ export function timeout(ms: number) {
 }
 
 export * from './user';
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}

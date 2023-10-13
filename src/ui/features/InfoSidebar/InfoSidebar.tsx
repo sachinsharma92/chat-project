@@ -4,15 +4,15 @@ import { MeatballsIcon } from '@/icons';
 import { Inter } from '@/app/fonts';
 import { useAppStore } from '@/store/Spaces';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
-import Links, { SocialLink } from '../../common/Links/Links';
+import Links, { SocialLink } from '../../../components/common/Links/Links';
 import JoinCampButton from '../JoinCampButton/JoinCampButton';
-import Button from '@/ui/common/Button';
+import Button from '@/components/common/Button';
 import SpaceStatistics from './SpaceStatistics';
 import Apps from './Apps';
-import UserAvatar from '@/ui/common/UserAvatar';
+import UserAvatar from '@/components/common/UserAvatar';
 import cx from 'classnames';
 import './InfoSidebar.css';
-import '../../common/styles/Button.css';
+import '../../../components/common/styles/Button.css';
 
 interface CampUserInfoProps {
   campName: string;
