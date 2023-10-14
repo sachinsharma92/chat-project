@@ -1,4 +1,4 @@
-import App from './app-ui/App';
+import App from '../app-ui/App';
 import './page.css';
 
 function Page() {

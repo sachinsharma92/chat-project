@@ -5,7 +5,7 @@ import LoadingReveal from '../LoadingReveal';
 import Scene from '../Scene';
 import { useState } from 'react';
 import { Perf } from 'r3f-perf';
-import { useHotkeys } from 'react-hotkeys-hook';
+import { isHotkeyPressed, useHotkeys } from 'react-hotkeys-hook';
 import { Leva, useControls } from 'leva';
 import Effects from '../Effects';
 import JoystickController from '../Game/JoystickController';
@@ -17,23 +17,19 @@ const World = () => {
   });
 
   useHotkeys(
-    'cmd+.,ctrl+.',
+    'cmd+.,ctrl+.,cmd+/,ctrl+/',
     () => {
-      setAdminPanelControls({
-        ...adminPanelControls,
-        showThreeJsPerformance: !adminPanelControls?.showThreeJsPerformance,
-      });
-    },
-    { enabled: true },
-  );
-
-  useHotkeys(
-    'cmd+/,ctrl+/',
-    () => {
-      setAdminPanelControls({
-        ...adminPanelControls,
-        showLevaControls: !adminPanelControls?.showLevaControls,
-      });
+      if (isHotkeyPressed('cmd+.') || isHotkeyPressed('ctrl+.')) {
+        setAdminPanelControls({
+          ...adminPanelControls,
+          showThreeJsPerformance: !adminPanelControls?.showThreeJsPerformance,
+        });
+      } else if (isHotkeyPressed('cmd+/') || isHotkeyPressed('ctrl+/')) {
+        setAdminPanelControls({
+          ...adminPanelControls,
+          showLevaControls: !adminPanelControls?.showLevaControls,
+        });
+      }
     },
     { enabled: true },
   );

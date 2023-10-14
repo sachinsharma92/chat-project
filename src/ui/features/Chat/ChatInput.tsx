@@ -3,16 +3,15 @@
 import cx from 'classnames';
 import Button from '../../../components/common/Button';
 import TextInput from '../../../components/common/TextInput';
-import './ChatInput.scss';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { PaperPlane, EmojiSmileIcon, ExpandIcon, ChatIcon } from '@/icons';
-import { isEmpty, isFunction, isString, toString } from 'lodash';
+import { isEmpty, isString, toLower, toString } from 'lodash';
 import { usePlayersChat } from './hooks/usePlayersChat';
-import { useHotkeys } from 'react-hotkeys-hook';
 import { useWindowResize } from '@/hooks';
-import { mobileWidthBreakpoint } from '@/constants';
 import { useAppStore, useGameServer } from '@/store/Spaces';
 import '../../../components/common/styles/Button.css';
+import './ChatInput.scss';
 
 type ChatInputPropsType = {
   hideExpand?: boolean;
@@ -63,24 +62,34 @@ const ChatInput = (props: ChatInputPropsType) => {
   };
 
   /**
-   * Auto focus chat input on enter.
+   * Auto focus chat input on 'enter'.
+   * Blur input on 'esc'
    * For desktop devices only.
    */
-  useHotkeys(
-    'enter',
-    () => {
-      if (!isChatFocused() && availableWidth > mobileWidthBreakpoint) {
-        const chatInput = document.querySelector(
-          '.chat-form-input',
-        ) as HTMLInputElement;
+  useEffect(() => {
+    const onKeyDown = (evt: any) => {
+      const k = evt?.key || evt?.keyCode;
+      const chatInput = document.querySelector(
+        '.chat-form-input',
+      ) as HTMLInputElement;
 
-        if (isFunction(chatInput?.focus)) {
+      if (toLower(k) === 'escape' || k === 27) {
+        if (chatInput?.blur) {
+          chatInput.blur();
+        }
+      } else if (toLower(k) === 'enter' || k === 13) {
+        if (chatInput?.focus) {
           chatInput.focus();
         }
       }
-    },
-    { enabled: true },
-  );
+    };
+
+    window.addEventListener('keydown', onKeyDown, false);
+
+    return () => {
+      window.removeEventListener('keydown', onKeyDown, false);
+    };
+  }, [availableWidth]);
 
   return (
     <div
@@ -100,7 +109,9 @@ const ChatInput = (props: ChatInputPropsType) => {
 
       <form
         onSubmit={handleSubmit(sendChat)}
-        className={cx('chat-form', 'flex justify-center items-center')}
+        className={cx('chat-form', 'flex justify-center items-center', {
+          ['chat-form-expand']: hideExpand,
+        })}
       >
         <TextInput
           className={cx('chat-form-input', {

@@ -28,7 +28,6 @@ const Popover = (props: {
             [`${className}`]: !isEmpty(className) && isString(className),
           })}
           sideOffset={5}
-          autoFocus={false}
           {...(side && { side })}
         >
           {children}
