@@ -168,15 +168,16 @@
 .header-icon-collapsed {
   height: 36px;
   width: 36px;
-  background-position-y: -10px;
-  background-repeat: no-repeat;
-  background-size: 60px 60px;
   border-radius: 8px;
   overflow: hidden;
 }
 
 .header-icon span {
   font-size: 40px;
+}
+
+.header-icon-collapsed span {
+  font-size: 16px;
 }
 
 .info-header-collapsed {

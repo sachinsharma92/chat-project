@@ -2,6 +2,7 @@
 
 import Phaser from 'phaser';
 import { Player } from '../objects/Player';
+import { mobileWidthBreakpoint } from '@/constants';
 
 export class MapScene extends Phaser.Scene {
   mainPlayer: Player | null = null;
@@ -152,10 +153,13 @@ export class MapScene extends Phaser.Scene {
       textureKey: 'Basic Charakter Spritesheet',
     }).setOrigin(0, 0);
     this.mainPlayer.create();
+    const isMobileBreakPoint = mobileWidthBreakpoint > window.innerWidth;
+    const zoomX = isMobileBreakPoint ? 1.5 : 2;
+    const zoomY = zoomX;
 
     // @ts-ignore
     this.mainPlayer.body.setCollideWorldBounds(true);
-    this.cameras.main.setZoom(2, 2);
+    this.cameras.main.setZoom(zoomY, zoomY);
     this.cameras.main.setBounds(0, 0, 1088, 1088, true);
     this.cameras.main.startFollow(this.mainPlayer, true, 2, 2);
 

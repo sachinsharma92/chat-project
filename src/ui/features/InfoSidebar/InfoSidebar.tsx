@@ -15,7 +15,9 @@ import './InfoSidebar.css';
 import '../../../components/common/styles/Button.css';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import Avatar from '@/components/common/Avatar/Avatar';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
+import { useWindowResize } from '@/hooks';
+import { mobileWidthBreakpoint } from '@/constants';
 
 interface CampUserInfoProps {
   campName: string;
@@ -60,6 +62,7 @@ const InfoSidebar = () => {
     state.setExpandInfoSidebar,
   ]);
   const { spaceInfo } = useSelectedSpace();
+  const { availableWidth } = useWindowResize();
 
   const showMore = () => {
     // todo
@@ -69,6 +72,17 @@ const InfoSidebar = () => {
     () => spaceInfo?.spaceName || spaceInfo?.host?.displayName || 'Botnet',
     [spaceInfo],
   );
+
+  /**
+   * Expand/shrink space info depending on screen size
+   */
+  useEffect(() => {
+    if (availableWidth < mobileWidthBreakpoint) {
+      setExpandInfoSidebar(false);
+    } else {
+      setExpandInfoSidebar(true);
+    }
+  }, [availableWidth, setExpandInfoSidebar]);
 
   return (
     <>
@@ -139,7 +153,7 @@ const InfoSidebar = () => {
 
             <Button
               className="header-expand flex justify-center items-center dark-button"
-              onClick={() => setExpandInfoSidebar(!expandInfoSidebar)}
+              onClick={() => showMore()}
             >
               <MeatballsIcon />
             </Button>
