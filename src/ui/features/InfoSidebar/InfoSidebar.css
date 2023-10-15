@@ -163,11 +163,6 @@
   box-sizing: border-box;
   height: 56px;
   width: 56px;
-  background: url('/assets/cover-art.svg');
-  background-position: center;
-  background-position-y: -10px;
-  background-repeat: no-repeat;
-  background-size: 90px 90px;
 }
 
 .header-icon-collapsed {
@@ -178,6 +173,10 @@
   background-size: 60px 60px;
   border-radius: 8px;
   overflow: hidden;
+}
+
+.header-icon span {
+  font-size: 40px;
 }
 
 .info-header-collapsed {

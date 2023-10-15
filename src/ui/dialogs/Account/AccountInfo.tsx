@@ -1,14 +1,15 @@
 import { useBotnetAuth } from '@/store/Auth';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { updateDisplayName, updateUserImageUrl } from '@/lib/supabase';
 import { uploadImageAvatarFile } from '@/lib/utils/upload';
-import { isEmpty } from 'lodash';
+import { isEmpty, toString } from 'lodash';
 import { useToast } from '@/components/ui/use-toast';
 import Avatar from '@/components/common/Avatar/Avatar';
 import TextInput from '@/components/common/TextInput';
 import Button from '@/components/common/Button';
 import './AccountInfo.css';
+import { UploadIcon } from '@radix-ui/react-icons';
 
 const AccountInfo = () => {
   const [userId, image, email, displayName, setDisplayName, setImage] =
@@ -25,7 +26,7 @@ const AccountInfo = () => {
     handleSubmit,
     // setValue,
     watch,
-    // formState: { errors },
+    formState: { errors },
   } = useForm();
   const { toast } = useToast();
   const [updating, setUpdating] = useState(false);
@@ -83,6 +84,11 @@ const AccountInfo = () => {
     }
   };
 
+  /** Form error message */
+  const errorMessage = useMemo(() => {
+    return errors?.displayName?.message || '';
+  }, [errors]);
+
   return (
     <div className="account-info">
       <div className="account-avatar">
@@ -93,6 +99,17 @@ const AccountInfo = () => {
         >
           <Avatar height={80} width={80} src={image} name={displayName} />
         </Button>
+
+        {!uploading && (
+          <Button
+            onClick={onAccountAvatarUpdate}
+            variant="primary"
+            className="upload-avatar-button"
+          >
+            <UploadIcon />
+            <p>Upload image</p>
+          </Button>
+        )}
       </div>
       <form onSubmit={handleSubmit(onUpdate)} className="account-form">
         <div className="account-display-name">
@@ -122,6 +139,12 @@ const AccountInfo = () => {
             defaultValue={email}
           />
         </div>
+
+        {!isEmpty(errorMessage) && (
+          <div className="input-error">
+            <p>{toString(errorMessage)}</p>
+          </div>
+        )}
 
         {showUpdatebutton && (
           <Button

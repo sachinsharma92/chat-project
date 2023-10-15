@@ -1,11 +1,24 @@
-import { pick, trim } from 'lodash';
+import { omit, pick, trim } from 'lodash';
 import { supabaseClient } from '.';
 import snakecaseKeys from 'snakecase-keys';
+import { ISpace } from '@/types';
 
 export const getSpaceProfile = async (spaceId: string) => {
   return await supabaseClient
     .from('spaces_profiles')
     .select('*')
+    .eq('id', trim(spaceId));
+};
+
+export const updateSpaceProfileProperties = async (
+  spaceId: string,
+  props: Partial<ISpace>,
+) => {
+  const sanitizedProps = snakecaseKeys(omit(props, ['id']));
+
+  return await supabaseClient
+    .from('spaces_profiles')
+    .update({ ...sanitizedProps })
     .eq('id', trim(spaceId));
 };
 

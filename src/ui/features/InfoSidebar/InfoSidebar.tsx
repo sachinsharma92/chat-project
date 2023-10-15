@@ -13,6 +13,9 @@ import UserAvatar from '@/components/common/UserAvatar';
 import cx from 'classnames';
 import './InfoSidebar.css';
 import '../../../components/common/styles/Button.css';
+import { useSelectedSpace } from '@/hooks/useSelectedSpace';
+import Avatar from '@/components/common/Avatar/Avatar';
+import { useMemo } from 'react';
 
 interface CampUserInfoProps {
   campName: string;
@@ -56,8 +59,16 @@ const InfoSidebar = () => {
     state.expandInfoSidebar,
     state.setExpandInfoSidebar,
   ]);
+  const { spaceInfo } = useSelectedSpace();
 
-  const showMore = () => {};
+  const showMore = () => {
+    // todo
+  };
+
+  const spaceName = useMemo(
+    () => spaceInfo?.spaceName || spaceInfo?.host?.displayName || 'Botnet',
+    [spaceInfo],
+  );
 
   return (
     <>
@@ -65,7 +76,13 @@ const InfoSidebar = () => {
         <div className={cx(Inter.className, 'info-layout')}>
           <div className="main-content">
             <div className="header-container">
-              <div className="header-icon"></div>
+              <Avatar
+                className="header-icon"
+                name={spaceName}
+                src={spaceInfo?.image}
+                height={80}
+                width={80}
+              />
               <Button
                 className="more-button"
                 type="button"
@@ -74,7 +91,8 @@ const InfoSidebar = () => {
                 <DotsHorizontalIcon />
               </Button>
             </div>
-            <h1 className="info-header">{CampUserInfo.campName}</h1>
+
+            <h1 className="info-header">{spaceInfo?.spaceName || 'Botnet'}</h1>
             <SpaceStatistics />
 
             <div className="message-container flex-col">
@@ -111,7 +129,14 @@ const InfoSidebar = () => {
           )}
         >
           <div className="header-container">
-            <div className="header-icon header-icon-collapsed"></div>
+            <Avatar
+              className="header-icon header-icon-collapsed"
+              name={spaceName}
+              src={spaceInfo?.image}
+              height={40}
+              width={40}
+            />
+
             <Button
               className="header-expand flex justify-center items-center dark-button"
               onClick={() => setExpandInfoSidebar(!expandInfoSidebar)}

@@ -11,6 +11,7 @@ export enum MusicPlayerMediaType {
 export interface ISpace {
   id: string;
   owner: string;
+  spaceName?: string;
   name?: string;
   image?: string;
   description?: string;
