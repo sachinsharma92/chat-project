@@ -1,0 +1,60 @@
+.space-settings {
+  width: 100%;
+}
+
+.space-avatar {
+  @apply flex justify-center items-center;
+
+  width: 100%;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.space-avatar-upload {
+  @apply flex justify-center items-center;
+
+  border-radius: 50%;
+}
+
+.space-avatar-upload span {
+  font-size: 30px;
+}
+
+.space-avatar-upload-button {
+  @apply flex justify-center items-center mt-4 mb-4;
+
+  max-width: 200px;
+  font-size: 14px;
+}
+
+.space-avatar-upload-button > p {
+  font-weight: normal;
+  margin-left: 8px;
+}
+
+.space-name,
+.space-description {
+  width: 100%;
+}
+
+.space-settings-form {
+  @apply mt-2 mb-4;
+
+  width: 100%;
+}
+
+.label {
+  @apply mt-4 mb-2;
+
+  font-size: 13px;
+  line-height: 1;
+  display: block;
+}
+
+.input {
+  width: 100%;
+}
+
+.update-button {
+  margin-top: 8px;
+}

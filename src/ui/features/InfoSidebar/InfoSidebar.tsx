@@ -1,17 +1,23 @@
 'use client';
 
-import { CrossIcon, MeatballsIcon } from '@/icons';
+import { MeatballsIcon } from '@/icons';
 import { Inter } from '@/app/fonts';
 import { useAppStore } from '@/store/Spaces';
-import Links, { SocialLink } from '../../common/Links/Links';
+import { DotsHorizontalIcon } from '@radix-ui/react-icons';
+import Links, { SocialLink } from '../../../components/common/Links/Links';
 import JoinCampButton from '../JoinCampButton/JoinCampButton';
-import Button from '@/ui/common/Button';
+import Button from '@/components/common/Button';
 import SpaceStatistics from './SpaceStatistics';
 import Apps from './Apps';
-import UserAvatar from '@/ui/common/UserAvatar';
+import UserAvatar from '@/components/common/UserAvatar';
 import cx from 'classnames';
 import './InfoSidebar.css';
-import '../../common/styles/Button.css';
+import '../../../components/common/styles/Button.css';
+import { useSelectedSpace } from '@/hooks/useSelectedSpace';
+import Avatar from '@/components/common/Avatar/Avatar';
+import { useEffect, useMemo } from 'react';
+import { useWindowResize } from '@/hooks';
+import { mobileWidthBreakpoint } from '@/constants';
 
 interface CampUserInfoProps {
   campName: string;
@@ -30,7 +36,7 @@ interface featureFlagProps {
 }
 
 const CampUserInfo: CampUserInfoProps = {
-  campName: 'Basecamp',
+  campName: 'Botnet',
   campHost: 'Jeremy Cai',
   campHostAvatar: '/assets/camp-avatar.png',
   campMessage:
@@ -50,28 +56,57 @@ const featureFlags: featureFlagProps = {
   copyLinkFeature: true,
 };
 
-function InfoSidebar() {
+const InfoSidebar = () => {
   const [expandInfoSidebar, setExpandInfoSidebar] = useAppStore(state => [
     state.expandInfoSidebar,
     state.setExpandInfoSidebar,
   ]);
+  const { spaceInfo } = useSelectedSpace();
+  const { availableWidth } = useWindowResize();
+
+  const showMore = () => {
+    // todo
+  };
+
+  const spaceName = useMemo(
+    () => spaceInfo?.spaceName || spaceInfo?.host?.displayName || 'Botnet',
+    [spaceInfo],
+  );
+
+  /**
+   * Expand/shrink space info depending on screen size
+   */
+  useEffect(() => {
+    if (availableWidth < mobileWidthBreakpoint) {
+      setExpandInfoSidebar(false);
+    } else {
+      setExpandInfoSidebar(true);
+    }
+  }, [availableWidth, setExpandInfoSidebar]);
 
   return (
     <>
-      {expandInfoSidebar ? (
+      {expandInfoSidebar && (
         <div className={cx(Inter.className, 'info-layout')}>
           <div className="main-content">
             <div className="header-container">
-              <div className="header-icon"></div>
+              <Avatar
+                className="header-icon"
+                name={spaceName}
+                src={spaceInfo?.image}
+                height={80}
+                width={80}
+              />
               <Button
-                className="close-button flex justify-center items-center"
+                className="more-button"
                 type="button"
-                onClick={() => setExpandInfoSidebar(!expandInfoSidebar)}
+                onClick={() => showMore()}
               >
-                <CrossIcon />
+                <DotsHorizontalIcon />
               </Button>
             </div>
-            <h1 className="info-header">{CampUserInfo.campName}</h1>
+
+            <h1 className="info-header">{spaceInfo?.spaceName || 'Botnet'}</h1>
             <SpaceStatistics />
 
             <div className="message-container flex-col">
@@ -98,7 +133,9 @@ function InfoSidebar() {
             </div>
           </div>
         </div>
-      ) : (
+      )}
+
+      {!expandInfoSidebar && (
         <div
           className={cx(
             Inter.className,
@@ -106,10 +143,17 @@ function InfoSidebar() {
           )}
         >
           <div className="header-container">
-            <div className="header-icon header-icon-collapsed"></div>
+            <Avatar
+              className="header-icon header-icon-collapsed"
+              name={spaceName}
+              src={spaceInfo?.image}
+              height={40}
+              width={40}
+            />
+
             <Button
               className="header-expand flex justify-center items-center dark-button"
-              onClick={() => setExpandInfoSidebar(!expandInfoSidebar)}
+              onClick={() => showMore()}
             >
               <MeatballsIcon />
             </Button>
@@ -128,6 +172,6 @@ function InfoSidebar() {
       )}
     </>
   );
-}
+};
 
 export default InfoSidebar;

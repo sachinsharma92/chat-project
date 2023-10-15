@@ -7,7 +7,7 @@
   padding: 12px;
   box-sizing: border-box;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: flex-start;
 }
 
@@ -24,14 +24,11 @@
 
 .game-screen {
   position: relative;
-  margin-top: 0;
   height: 100%;
   display: flex;
   justify-content: space-between;
   flex-direction: row;
   width: 100vw;
-  max-width: calc(100% - 12px - 40px);
-  margin-left: 12px;
   min-height: 440px;
   padding: 12px 12px 12px 16px;
   box-sizing: border-box;
@@ -40,16 +37,44 @@
   background: transparent;
   box-shadow: 0px 6px 20px 0px rgba(0, 0, 0, 0.15);
   transition: width 0.05s linear;
-}
+  margin: 0 12px;
 
-.game-screen-bulletin-expanded {
-  max-width: calc(100% - 12px - 12px - 48px - 300px);
-  width: calc(100% - 12px - 12px - 48px - 300px);
-  margin-right: 12px;
+  max-width: calc(100% - 12px - 12px - 48px - 320px - 8px - 320px);
+  width: calc(100% - 12px - 12px - 48px - 320px - 8px - 320px);
 }
 
 .world {
-  @apply absolute h-full w-full top-0 left-0;
+  @apply absolute top-0 left-0;
+
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.info-side-bar-container {
+  position: relative;
+  width: 320px;
+  height: 100%;
+}
+
+.bulletin-container {
+  height: 100%;
+  width: 320px;
+}
+
+@media screen and (max-width: 1124px) {
+  .game-screen {
+    max-width: calc(100% - 12px - 12px - 48px - 270px - 12px - 270px);
+    width: calc(100% - 12px - 12px - 48px - 270px - 12px - 270px);
+  }
+
+  .info-side-bar-container {
+    width: 270px;
+  }
+
+  .bulletin-container {
+    width: 270px;
+  }
 }
 
 @media screen and (max-width: 720px) {
@@ -59,13 +84,29 @@
     flex-direction: column;
   }
 
+  .info-side-bar-container {
+    position: absolute;
+    height: unset;
+    max-height: calc(100% - 78px);
+    max-width: calc(100% - 32px);
+    top: 78px;
+    left: 16px;
+    z-index: 1;
+  }
+
   .game-screen {
     height: calc(100% - 16px);
     margin: 0;
     margin-top: 16px;
     border-radius: 0;
-    max-width: 100%;
     border-top-left-radius: 24px;
     border-top-right-radius: 24px;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .bulletin-container {
+    display: none;
+    overflow: hidden;
   }
 }

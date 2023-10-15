@@ -1,11 +1,11 @@
 'use client';
 
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useWorldStore } from './CanvasProvider';
 import { createId } from '@paralleldrive/cuid2';
-import { includes, isFunction, trim } from 'lodash';
+import { includes, isArray, isFunction, map } from 'lodash';
 import { Client } from 'colyseus.js';
-import { CampRoom, RoomUser } from '@/types';
+import { BotRoom, CampRoom, RoomUser } from '@/types';
 import {
   findRivetConnection,
   serverRoomReceiveQueue,
@@ -13,13 +13,14 @@ import {
 } from '@/lib/rivet';
 import { useGameServer } from './Spaces';
 import { useBotnetAuth } from './Auth';
-import { getNameFromEmail, getUserIdFromSession } from '@/utils';
-import { consumeChatMessages, consumeUsers } from '@/utils/gameserver';
+import { getNameFromEmail, getUserIdFromSession } from '@/lib/utils';
+import { consumeChatMessages, consumeUsers } from '@/lib/utils/gameserver';
+import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 
 export const guestId = createId();
 
 /**
- *
+ * Game server handler, make sure to instatiate this once
  * @param param0
  * @returns
  */
@@ -27,35 +28,52 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
   const { isStarted } = useWorldStore(state => ({
     isStarted: state.isStarted,
   }));
-  const [session, sessionChecked, displayName, email] = useBotnetAuth(state => [
-    state.session,
-    state.sessionChecked,
-    state.displayName,
-    state.email,
-  ]);
+  const [session, sessionChecked, displayName, email, image, authIsLoading] =
+    useBotnetAuth(state => [
+      state.session,
+      state.sessionChecked,
+      state.displayName,
+      state.email,
+      state.image,
+      state.isLoading,
+    ]);
 
   const {
-    room,
+    botRoom,
+    gameRoom,
     isConnecting,
+    setBotRoomIsResponding,
     setPlayers,
-    setUserId,
     startConnecting,
     endConnecting,
     setRoom,
     setClientConnection,
     setRoomChatMessages,
+    setBotRoom,
   } = useGameServer(state => ({
-    userId: state.userId,
-    room: state.room,
+    botRoom: state.botRoom,
+    gameRoom: state.gameRoom,
     isConnecting: state.isConnecting,
+    setBotRoomIsResponding: state.setBotRoomIsResponding,
     setPlayers: state.setPlayers,
-    setUserId: state.setUserId,
     startConnecting: state.startConnecting,
     endConnecting: state.endConnecting,
     setRoom: state.setRoom,
     setClientConnection: state.setClientConnection,
     setRoomChatMessages: state.setRoomChatMessages,
+    setBotRoom: state.setBotRoom,
   }));
+
+  const { spaceId, spaceInfo } = useSelectedSpace();
+  const [colyseusConnection, setColyseusConnection] = useState<Client | null>(
+    null,
+  );
+  const loggedInUserId = useMemo(
+    () => getUserIdFromSession(session),
+    [session],
+  );
+  // present user id
+  const userId = useMemo(() => loggedInUserId || guestId, [loggedInUserId]);
 
   // Connect matchmaking using Rivet's API
   // check camp-gameserver repo for full implementation
@@ -77,12 +95,11 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
           const secure =
             port?.isTls || includes(window.location.protocol, 'https');
           const playerToken = res?.player?.token;
-          const loggedInUserId = getUserIdFromSession(session);
-          const userId = loggedInUserId || trim(guestId);
+
           const colyseusConnection = new Client({
             secure,
             pathname: '',
-            port: port.port,
+            port: port.port as number,
             hostname: port.hostname,
           });
 
@@ -105,30 +122,27 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
             displayName: displayName || '',
           })) as CampRoom;
 
+          setColyseusConnection(colyseusConnection);
           setClientConnection(colyseusConnection);
-          setUserId(userId);
           setRoom(room);
           endConnecting();
 
-          if (room) {
-            if (room.state?.users) {
-              serverRoomReceiveQueue.add(() => {
-                setPlayers(consumeUsers(room.state.users));
-              });
-            }
+          if (room.state?.users) {
+            serverRoomReceiveQueue.add(() => {
+              setPlayers(consumeUsers(room.state.users));
+            });
+          }
 
+          if (room) {
             /**
-             * Listen to room state changes
+             * Listen to gameRoom state changes
              */
             room.onStateChange(state => {
-              if (state?.users && isFunction(setPlayers)) {
+              // @todo resub on spaceId change
+              if (state?.users && isFunction(setPlayers) && spaceId) {
                 serverRoomReceiveQueue.add(() => {
                   setPlayers(consumeUsers(state.users));
                 });
-              }
-
-              if (state?.chatMessages && isFunction(setRoomChatMessages)) {
-                setRoomChatMessages(consumeChatMessages(state.chatMessages));
               }
             });
           }
@@ -138,19 +152,20 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
       }
     };
 
-    if (isStarted && !room && sessionChecked) {
+    if (isStarted && !gameRoom && spaceId && sessionChecked) {
       connectToGameServer();
     }
   }, [
+    userId,
+    loggedInUserId,
     isStarted,
     isConnecting,
-    room,
+    gameRoom,
     session,
     sessionChecked,
     displayName,
-    setRoomChatMessages,
+    spaceId,
     setPlayers,
-    setUserId,
     startConnecting,
     endConnecting,
     setClientConnection,
@@ -161,13 +176,10 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
    * Update user profile in game server
    */
   useEffect(() => {
-    if (!isStarted || !room?.send) {
+    if (!isStarted || !gameRoom?.send || !spaceId) {
       return;
     }
 
-    // store user info in game server
-    const loggedInUserId = getUserIdFromSession(session);
-    const userId = loggedInUserId || guestId;
     // @todo get pos data from player instance on Phaser
     const posX = 0;
     const posY = 0;
@@ -178,8 +190,8 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
     const hostFromEmail = getNameFromEmail(email);
 
     serverRoomSendQueue.add(async () => {
-      console.log(`room.send('updateUser')`);
-      room.send('updateUser', {
+      console.log(`gameRoom.send('updateUser')`);
+      gameRoom.send('updateUser', {
         userId,
         posX,
         posY,
@@ -187,13 +199,21 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
         x,
         y,
         z,
-        isGuest: false,
+        isGuest: !loggedInUserId,
         displayName: loggedInUserId ? displayName || hostFromEmail : '',
       });
     });
 
     // eslint-disable-next-line
-  }, [displayName, room?.send, email, isStarted, session?.user?.id]);
+  }, [
+    userId,
+    spaceId,
+    displayName,
+    loggedInUserId,
+    gameRoom?.send,
+    email,
+    isStarted,
+  ]);
 
   /**
    * Listen to 'users' state changes and record new players
@@ -202,10 +222,10 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
     let unsub: null | Function = null;
 
     if (!isConnecting) {
-      const roomState = room?.state;
+      const roomState = gameRoom?.state;
 
       if (roomState && roomState?.users?.onChange) {
-        unsub = roomState.users.onChange((userUpdated: Partial<RoomUser>[]) => {
+        unsub = roomState.users.onChange((userUpdated: RoomUser) => {
           if (userUpdated) {
             serverRoomReceiveQueue.add(() => {
               setPlayers(consumeUsers(roomState.users));
@@ -220,7 +240,98 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
         unsub();
       }
     };
-  }, [room, isConnecting, room?.state, setPlayers]);
+  }, [gameRoom, isConnecting, gameRoom?.state, setPlayers]);
+
+  // connect to bot chat room 1:1
+  // we can only connect to chat room if we've established connection with game room
+  useEffect(() => {
+    const connectBotChatServer = async () => {
+      if (
+        !colyseusConnection ||
+        !spaceId ||
+        !gameRoom ||
+        authIsLoading ||
+        botRoom ||
+        isConnecting ||
+        !spaceInfo
+      ) {
+        return;
+      }
+
+      try {
+        startConnecting();
+        console.log('connectBotChatServer()');
+
+        const userId = loggedInUserId || guestId;
+        const room = (await colyseusConnection.joinOrCreate('botChat', {
+          userId,
+          spaceId,
+        })) as BotRoom;
+        const channel = `chat-${userId}-receive`;
+        setBotRoom(room);
+
+        if (room) {
+          // Listen to chat messages stream from bot room
+          room.onMessage(channel, message => {
+            if (message && isArray(message?.chats)) {
+              setRoomChatMessages(
+                consumeChatMessages(
+                  // @todo types
+                  // @ts-ignore
+                  map(message?.chats, c => {
+                    return {
+                      ...c,
+                      isGuest: !loggedInUserId,
+                      authorInfo: { image, displayName: 'You' },
+                    };
+                  }),
+                ),
+              );
+            }
+          });
+        }
+
+        if (room?.onStateChange) {
+          room.onStateChange(state => {
+            // @ts-ignore
+            if (state?.userBotChatInfo) {
+              // @ts-ignore
+              state?.userBotChatInfo.forEach(info => {
+                if (info?.userId === userId && setBotRoomIsResponding) {
+                  serverRoomReceiveQueue.add(() => {
+                    setBotRoomIsResponding(
+                      info?.isOpenAIChatCompletionProcessing as boolean,
+                    );
+                  });
+                }
+              });
+            }
+          });
+        }
+      } catch (err: any) {
+        console.log('connectBotChatServer() err:', err?.message);
+      } finally {
+        endConnecting();
+      }
+    };
+
+    connectBotChatServer();
+  }, [
+    spaceInfo,
+    botRoom,
+    loggedInUserId,
+    spaceId,
+    colyseusConnection,
+    gameRoom,
+    authIsLoading,
+    isConnecting,
+    image,
+    setBotRoomIsResponding,
+    setRoomChatMessages,
+    startConnecting,
+    endConnecting,
+    setBotRoom,
+  ]);
 
   return <>{children}</>;
 };

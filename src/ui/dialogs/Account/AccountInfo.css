@@ -1,0 +1,77 @@
+.account-info {
+  position: relative;
+}
+
+.account-avatar {
+  @apply flex justify-center items-center;
+
+  width: 100%;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.upload-avatar {
+  @apply flex justify-center items-center;
+
+  border-radius: 50%;
+}
+
+.upload-avatar-button {
+  @apply flex justify-center items-center mt-4 mb-4;
+
+  max-width: 200px;
+  font-size: 14px;
+}
+
+.upload-avatar-button > p {
+  font-weight: normal;
+  margin-left: 8px;
+}
+
+.account-display-name {
+  width: 100%;
+}
+
+.account-form {
+  @apply mt-2 mb-4;
+
+  width: 100%;
+}
+
+.label {
+  @apply mt-4 mb-2;
+
+  font-size: 13px;
+  line-height: 1;
+  display: block;
+}
+
+.input {
+  width: 100%;
+}
+
+.input-error {
+  @apply flex justify-center items-center mb-4;
+
+  width: 100%;
+}
+
+.input-error > p {
+  color: red;
+  font-size: 14px;
+}
+
+.upload-avatar span {
+  font-size: 30px;
+}
+
+.update-button {
+  margin-top: 8px;
+}
+
+.upload-avatar:hover,
+.upload-avatar:focus {
+  background: #f8f4e8;
+  opacity: 0.8;
+  border-radius: 50%;
+}

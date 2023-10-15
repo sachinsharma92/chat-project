@@ -1,0 +1,12 @@
+.account-dialog {
+  @apply flex-col items-start justify-start;
+
+  position: relative;
+  width: 100%;
+  padding-top: 40px;
+  box-sizing: border-box;
+}
+
+.dialog-close-button {
+  box-sizing: border-box;
+}

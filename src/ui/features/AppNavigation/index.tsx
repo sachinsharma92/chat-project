@@ -1,7 +1,7 @@
 'use client';
 
-import Button from '@/ui/common/Button';
-import UserAvatar from '@/ui/common/UserAvatar';
+import Button from '@/components/common/Button';
+import UserAvatar from '@/components/common/UserAvatar';
 import {
   BotnetIcon,
   ExploreIcon,
@@ -20,12 +20,19 @@ import ProfileMenu from './ProfileMenu';
 import './AppNavigation.css';
 
 const AppNavigation = () => {
-  const [session] = useBotnetAuth(state => [state.session]);
+  const [session, authIsLoading] = useBotnetAuth(state => [
+    state.session,
+    state.isLoading,
+  ]);
   const [setShowDialog] = useAppStore(state => [state.setShowDialog]);
   const { signOutUser } = useContext(AuthStateContext);
 
-  const showPromptUpdateDisplayName = () => {
-    setShowDialog(true, DialogEnums.onboardDisplayName);
+  const showAccount = () => {
+    if (authIsLoading) {
+      return;
+    }
+
+    setShowDialog(true, DialogEnums.account);
   };
 
   const onSignOut = () => {
@@ -61,7 +68,7 @@ const AppNavigation = () => {
           <>
             <Button
               className="flex justify-center items-center"
-              onClick={showPromptUpdateDisplayName}
+              onClick={showAccount}
             >
               <UserAvatar />
             </Button>
@@ -79,7 +86,7 @@ const AppNavigation = () => {
           <>
             <Button
               className="flex justify-center items-center"
-              onClick={showPromptUpdateDisplayName}
+              onClick={showAccount}
             >
               <UserAvatar />
             </Button>

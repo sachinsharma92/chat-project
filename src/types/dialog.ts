@@ -3,5 +3,6 @@ export enum DialogEnums {
   'login' = 'login',
   'signup' = 'signup',
   'none' = 'none',
+  'account' = 'account',
   'onboardDisplayName' = 'onboardDisplayName',
 }

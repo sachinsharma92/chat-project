@@ -2,9 +2,9 @@ import { useForm } from 'react-hook-form';
 import { Inter, InterTight } from '@/app/fonts';
 import { useBotnetAuth } from '@/store/Auth';
 import cx from 'classnames';
-import TextInput from '@/ui/common/TextInput';
-import Button from '@/ui/common/Button';
-import DialogCloseButton from '@/ui/common/DialogCloseButton';
+import TextInput from '@/components/common/TextInput';
+import Button from '@/components/common/Button';
+import DialogCloseButton from '@/components/common/DialogCloseButton';
 
 import './OnboardDisplayName.css';
 import { updateDisplayName } from '@/lib/supabase';
@@ -77,8 +77,13 @@ const OnboardDisplayName = () => {
         <div className="input-error">
           <p>{toString(errors?.displayName?.message)}</p>
         </div>
-        <Button className="submit-button" type="submit">
-          <p> {updating ? 'Submitting..' : 'Submit'}</p>
+        <Button
+          isLoading={updating}
+          className="submit-button"
+          variant="primary"
+          type="submit"
+        >
+          <p> {'Submit'}</p>
         </Button>
       </form>
 

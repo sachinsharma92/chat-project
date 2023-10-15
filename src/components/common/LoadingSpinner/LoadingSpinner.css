@@ -1,0 +1,6 @@
+.loading-spinner {
+  @apply flex justify-center items-center;
+  
+  padding: 4px 8px;
+  box-sizing: border-box;
+}

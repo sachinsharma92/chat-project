@@ -13,8 +13,8 @@
 }
 
 .label > p {
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .input-display-name {
@@ -31,6 +31,11 @@
   border: 1px solid #dededc;
 }
 
+.input-display-name:hover,
+.input-display-name:focus {
+  border-color: #9f9f9d;
+}
+
 .input-error {
   @apply flex justify-center items-center mb-4;
 
@@ -42,28 +47,9 @@
   font-size: 14px;
 }
 
-.input-display-name:hover,
-.input-display-name:focus {
-  border-color: #9f9f9d;
-}
-
 .submit-button {
   @apply flex justify-start items-center mt-8;
 
-  height: 40px;
   margin-top: 8px;
   width: 100%;
-  border-radius: 8px;
-  background: #3fcf8e !important;
-  box-sizing: border-box;
-}
-
-.submit-button:hover {
-  background: #34b27b !important;
-}
-
-.submit-button > p {
-  font-size: 14px;
-  color: #fff;
-  font-weight: normal;
 }

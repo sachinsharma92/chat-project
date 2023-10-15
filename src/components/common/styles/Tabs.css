@@ -1,0 +1,52 @@
+@import '@radix-ui/colors/black-alpha.css';
+@import '@radix-ui/colors/green.css';
+@import '@radix-ui/colors/mauve.css';
+@import '@radix-ui/colors/violet.css';
+
+.tabs-root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0 4px;
+  box-sizing: border-box;
+}
+
+.tabs-list {
+  flex-shrink: 0;
+  display: flex;
+  border-bottom: 1px solid var(--mauve-6);
+}
+
+.tabs-trigger {
+  font-family: inherit;
+  background-color: white;
+  padding: 0 20px;
+  height: 45px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  line-height: 160%;
+  color: var(--mauve-11);
+  user-select: none;
+}
+
+.tabs-trigger:hover {
+  color: var(--violet-11);
+}
+
+.tabs-trigger[data-state='active'] {
+  color: var(--violet-11);
+  border-bottom: 1px solid var(--violet-11);
+}
+
+.tabs-trigger:focus {
+  position: relative;
+}
+
+.tabs-content {
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 16px;
+}

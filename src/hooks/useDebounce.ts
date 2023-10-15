@@ -6,6 +6,12 @@ type UseDebounceCallbackReturnType<T extends unknown[]> = (
 
 type CallBackFunc<T extends unknown[]> = (...args: T) => Promise<any> | void;
 
+/**
+ * Debounce callback function to delay triggers
+ * @param cb
+ * @param delay
+ * @returns
+ */
 const useDebounce = <T extends unknown[]>(
   cb: CallBackFunc<T>,
   delay: number,

@@ -1,0 +1,41 @@
+.button {
+  position: relative;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.primary-button {
+  @apply flex items-center justify-center mt-4 mb-2;
+
+  height: 40px;
+  width: 100%;
+  border-radius: 4px;
+  background: #3fcf8e !important;
+  box-sizing: border-box;
+  color: #fff;
+  font-size: 14px;
+}
+
+.primary-button:hover {
+  background: #34b27b !important;
+}
+
+.primary-button > p {
+  font-size: 14px;
+  color: #fff;
+  font-weight: normal;
+}
+
+.button-loading {
+  @apply flex justify-center items-center;
+
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  background: rgba(255, 255, 255, 0.6);
+}

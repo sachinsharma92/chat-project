@@ -1,9 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { isEmpty, isFunction, isString } from 'lodash';
 import { MusicPlayerMediaType } from '@/types';
-import Button from '../../common/Button';
+import Button from '../../../components/common/Button';
 import './MediaForm.scss';
-import TextInput from '../../common/TextInput';
+import TextInput from '../../../components/common/TextInput';
 
 export type MediaFormProps = {
   onMediaChange: (mediaType: MusicPlayerMediaType, url: string) => void;

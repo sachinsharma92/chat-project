@@ -8,7 +8,7 @@ import { useBotnetAuth } from '@/store/Auth';
 import { useAppStore } from '@/store/Spaces';
 import { DialogEnums } from '@/types/dialog';
 import { isFunction } from 'lodash';
-import DialogCloseButton from '@/ui/common/DialogCloseButton';
+import DialogCloseButton from '@/components/common/DialogCloseButton';
 import './Auth.css';
 
 /**

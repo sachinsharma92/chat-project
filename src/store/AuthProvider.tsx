@@ -11,12 +11,14 @@ import {
   useMemo,
 } from 'react';
 import { useBotnetAuth } from './Auth';
-import { head, isEmpty, isFunction, toString } from 'lodash';
+import { ceil, head, isEmpty } from 'lodash';
 import { Session } from '@supabase/supabase-js';
-import { useGameServer, useSpacesStore } from './Spaces';
-import { getUserIdFromSession } from '@/utils';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { guestId } from './GameServerProvider';
+import { useAppStore, useGameServer, useSpacesStore } from './Spaces';
+import { getUserIdFromSession, timeout } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
+import { DialogEnums } from '@/types/dialog';
+import camelCaseKeys from 'camelcase-keys';
+import { useRouterQuery } from '@/hooks';
 
 interface IAuthAppState {}
 
@@ -50,76 +52,114 @@ const reducer = (state: IAuthAppState, action: Action) => {
 const AuthProvider = (props: { children?: ReactNode }) => {
   const { children } = props;
   const [
+    session,
+    sessionChecked,
     setSession,
     setSessionChecked,
     setImage,
     setDisplayName,
     setHandle,
     setEmail,
+    setIsLoading,
   ] = useBotnetAuth(state => [
+    state.session,
+    state.sessionChecked,
     state.setSession,
     state.setSessionChecked,
     state.setImage,
     state.setDisplayName,
     state.setHandle,
     state.setEmail,
+    state.setIsLoading,
   ]);
-  const [setSelectedSpaceId, addSpace] = useSpacesStore(state => [
-    state.setSelectedSpaceId,
-    state.addSpace,
-  ]);
-  const [setGameServerUserId] = useGameServer(state => [state.setUserId]);
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [setShowDialog] = useAppStore(state => [state.setShowDialog]);
+  const [addSpace] = useSpacesStore(state => [state.addSpace]);
+  const [botRoom, setBotRoom] = useGameServer(state => [
+    state.botRoom,
+    state.setBotRoom,
+  ]);
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const selectedSpaceId = useMemo(
-    () => searchParams.get('space'),
-    [searchParams],
-  );
+  const { searchParams, setQuery } = useRouterQuery();
+  const paramSpaceId = useMemo(() => searchParams.get('space'), [searchParams]);
 
   /**
    * Fetch logged in user data
    */
   const getUserProfile = useCallback(
     async (session: Session) => {
-      const userId = getUserIdFromSession(session);
+      try {
+        if (!session) {
+          return;
+        }
 
-      if (!isEmpty(userId)) {
-        const res = await getUserProfileById(userId);
-        console.log('getUserProfile()');
+        const dateNowInSeconds = ceil(Date.now() / 1000);
+        const createdDate = new Date(session?.user?.created_at);
+        const createdDateInSeconds = ceil(createdDate?.getTime() / 1000);
+        const recentlyCreated = dateNowInSeconds - createdDateInSeconds < 10;
 
-        if (res?.data && !isEmpty(res?.data)) {
-          const targetProfile = head(res.data);
-          const displayName = toString(targetProfile?.display_name);
-          const image = toString(targetProfile?.image);
-          const handle = toString(targetProfile?.handle);
-          const spaceId = toString(targetProfile?.space_id);
+        if (recentlyCreated) {
+          // 1. Wait for edge function to fill new user data if account's recently created
+          // 2. We could've listen to supabase changes but that's expensive
+          // 3. Since we know edge function timeout is 4.5 seconds, so we wait for that exact duration
+          // 4. Otherwise, if we don't wait we'd end up with an empty/null response from 'getUserProfileById'
+          await timeout(4_500);
+        }
 
-          setImage(image);
-          setHandle(handle);
-          setDisplayName(displayName);
-          setGameServerUserId(userId);
+        const userId = getUserIdFromSession(session);
 
-          if (spaceId && isFunction(addSpace)) {
-            addSpace({ id: spaceId });
-          }
+        if (!isEmpty(userId)) {
+          const res = await getUserProfileById(userId);
 
-          if (!isEmpty(spaceId) && !selectedSpaceId) {
-            setSelectedSpaceId(spaceId);
-            router.push(`/?space=${spaceId}`);
+          if (res?.data && !isEmpty(res?.data)) {
+            console.log('getUserProfile()');
+
+            const targetProfile = head(res.data);
+            const props = camelCaseKeys(targetProfile);
+            const {
+              displayName = '',
+              handle = '',
+              image = '',
+              spaceId = '',
+            } = props;
+
+            setImage(image);
+            setHandle(handle);
+            setDisplayName(displayName);
+            setIsLoading(false);
+
+            console.log('getUserProfile() spaceId:', spaceId);
+
+            if (recentlyCreated) {
+              setShowDialog(true, DialogEnums.onboardDisplayName);
+            }
+
+            if (!isEmpty(spaceId)) {
+              addSpace({ id: spaceId, owner: userId });
+            }
+
+            if (
+              !isEmpty(spaceId) &&
+              (!paramSpaceId || (recentlyCreated && spaceId !== paramSpaceId))
+            ) {
+              setQuery('space', spaceId);
+            }
           }
         }
+      } catch (err: any) {
+        console.log('getUserProfile() err:', err?.message);
       }
     },
     // eslint-disable-next-line
     [
       router?.push,
-      selectedSpaceId,
-      setImage,
+      paramSpaceId,
+      setQuery,
       addSpace,
+      setShowDialog,
+      setIsLoading,
+      setImage,
       setHandle,
-      setSelectedSpaceId,
-      setGameServerUserId,
       setDisplayName,
     ],
   );
@@ -130,24 +170,27 @@ const AuthProvider = (props: { children?: ReactNode }) => {
   useEffect(() => {
     supabaseClient.auth
       .getSession()
-      .then(({ data: { session } }) => {
-        console.log('init session:', session);
-
-        if (setSession) {
-          setSession(session);
+      .then(({ data: { session: newSession } }) => {
+        if (sessionChecked) {
+          return;
         }
 
-        if (session && !isEmpty(session?.user)) {
-          getUserProfile(session);
-        }
+        if (newSession && !isEmpty(newSession?.user)) {
+          console.log('init session:', newSession);
+          setIsLoading(true);
+          setSession(newSession);
+          getUserProfile(newSession);
 
-        setEmail(session?.user?.email || '');
-        setSessionChecked(true);
+          setEmail(newSession?.user?.email || '');
+        }
       })
-      .catch(() => {
+      .catch(console.log)
+      .finally(() => {
         setSessionChecked(true);
       });
   }, [
+    sessionChecked,
+    setIsLoading,
     getUserProfile,
     setSession,
     setSessionChecked,
@@ -163,26 +206,28 @@ const AuthProvider = (props: { children?: ReactNode }) => {
   useEffect(() => {
     const {
       data: { subscription },
-    } = supabaseClient.auth.onAuthStateChange((_event, session) => {
-      if (setSession) {
-        setSession(session);
-      }
-
-      if (session) {
-        setEmail(session?.user?.email || '');
-        getUserProfile(session);
+    } = supabaseClient.auth.onAuthStateChange((_event, newSession) => {
+      if (
+        newSession &&
+        // only interrupt present session when needed
+        (newSession?.user?.id !== session?.user?.id ||
+          newSession?.access_token !== session?.access_token)
+      ) {
+        setIsLoading(true);
+        setSession(newSession);
+        setEmail(newSession?.user?.email || '');
+        getUserProfile(newSession);
       }
     });
 
     return () => subscription.unsubscribe();
-  }, [getUserProfile, setEmail, setSession]);
+  }, [session, setIsLoading, getUserProfile, setEmail, setSession]);
 
   /**
    * Sign out user session from supabase auth
    */
   const signOutUser = async () => {
     setSession(null);
-    setGameServerUserId(guestId);
 
     const { error } = await supabaseClient.auth.signOut();
 
@@ -192,6 +237,13 @@ const AuthProvider = (props: { children?: ReactNode }) => {
       setEmail('');
       setHandle('');
       setDisplayName('');
+      setImage('');
+      setIsLoading(false);
+      setBotRoom(null);
+
+      if (botRoom) {
+        botRoom.leave(true);
+      }
     }
   };
 

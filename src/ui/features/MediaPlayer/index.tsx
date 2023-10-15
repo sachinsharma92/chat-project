@@ -1,7 +1,7 @@
-import Button from '@/ui/common/Button';
+import Button from '@/components/common/Button';
 import { AudioPlayingIcon } from '@/icons';
 import './MediaPlayer.css';
-import '../../common/styles/Button.css';
+import '../../../components/common/styles/Button.css';
 
 const MediaPlayer = () => {
   return (

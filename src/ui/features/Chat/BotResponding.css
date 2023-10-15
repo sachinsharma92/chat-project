@@ -1,0 +1,39 @@
+.bot-responding {
+  @apply flex justify-start items-center mt-4 mb-2;
+
+  width: 100%;
+}
+
+.chat-line-avatar {
+  @apply flex justify-center items-center;
+
+  position: relative;
+  height: 32px;
+  width: 32px;
+}
+
+.bubble {
+  @apply flex justify-center items-center;
+
+  padding: 4px;
+  border-radius: 16px;
+  background: #f8f4e8;
+  margin-left: 8px;
+}
+
+.bubble > ul {
+  @apply flex justify-center items-center;
+
+  position: relative;
+  list-style: none;
+  list-style-type: none;
+}
+
+.bubble > ul > li {
+  height: 8px;
+  width: 8px;
+  margin: 4px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  background: gray;
+}

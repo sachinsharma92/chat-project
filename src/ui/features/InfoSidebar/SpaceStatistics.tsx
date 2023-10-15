@@ -6,7 +6,7 @@ import './SpaceStatistics.css';
 
 const SpaceStatistics = (props: { collapsed?: boolean }) => {
   const { collapsed } = props;
-  const [players] = useGameServer(state => [state.players, state.room]);
+  const [players] = useGameServer(state => [state.players, state.gameRoom]);
 
   return (
     <div className={'info-stats flex justify-start items-center'}>

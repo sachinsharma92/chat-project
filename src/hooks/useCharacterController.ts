@@ -8,6 +8,8 @@ import { isEmpty, isNumber } from 'lodash';
 import { serverRoomSendQueue } from '@/lib/rivet';
 import { shallow } from 'zustand/shallow';
 import { useAppStore, useGameServer } from '@/store/Spaces';
+import { useBotnetAuth } from '@/store/Auth';
+import { guestId } from '@/store/GameServerProvider';
 
 const PLAYERSPEED = 4;
 
@@ -27,10 +29,8 @@ function useCharacterController(
     state.setExpandInfoSidebar,
   ]);
 
-  const [room, userId] = useGameServer(
-    state => [state.room, state.userId],
-    shallow,
-  );
+  const [gameRoom] = useGameServer(state => [state.gameRoom], shallow);
+  const [userId] = useBotnetAuth(state => [state.session?.user?.id || guestId]);
 
   /**
    * Use x,y player data from gameserver if not user controlled
@@ -127,9 +127,9 @@ function useCharacterController(
         characterText.position.lerp(textPosition, 0.1);
       }
 
-      if (room?.send) {
+      if (gameRoom?.send) {
         serverRoomSendQueue.add(async () => {
-          room.send('action', {
+          gameRoom.send('action', {
             userId,
             x,
             y,

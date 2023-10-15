@@ -1,0 +1,36 @@
+.not-found {
+  @apply flex justify-center items-start;
+
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
+.not-found-content {
+  @apply flex-col items-center justify-center;
+
+  width: 90vw;
+  max-width: 400px;
+  margin-top: 120px;
+}
+
+.app-logo {
+  @apply flex justify-center items-center mt-4 mb-4;
+}
+
+.not-found-text {
+  @apply flex-col items-center justify-center mt-4;
+  max-width: 100%;
+}
+
+.not-found-text > h1 {
+  text-align: center;
+  font-weight: 500;
+}
+
+.not-found-text > p {
+  font-size: 20px;
+  text-align: center;
+  max-width: 100%;
+}
