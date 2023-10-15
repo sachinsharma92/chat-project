@@ -15,15 +15,18 @@ const Message = (props: ChatMessageProps) => {
   const { role, authorInfo, authorId, message, time } = props;
   const { spaceInfo } = useSelectedSpace();
   const isAIAssistant = useMemo(() => role === MessageRoles.assistant, [role]);
+  const assistantDisplayImage = useMemo(
+    () =>
+      spaceInfo?.image || spaceInfo?.host?.image || '/assets/aibotavatar.png',
+    [spaceInfo],
+  );
 
   return (
     <div className="chat-line-message">
       <div className="chat-line-avatar">
         <Avatar
           src={
-            isAIAssistant
-              ? '/assets/aibotavatar.png'
-              : toString(authorInfo?.image)
+            isAIAssistant ? assistantDisplayImage : toString(authorInfo?.image)
           }
           name={authorInfo?.displayName || authorId || ''}
         />
@@ -39,7 +42,10 @@ const Message = (props: ChatMessageProps) => {
           {toString(message)}
           {time && <div className="chat-timestamp"> {time} </div>}
         </p>
-        <div className="heart-icon"> <HeartIcon /> </div>
+        <div className="heart-icon">
+          {' '}
+          <HeartIcon />{' '}
+        </div>
       </div>
     </div>
   );
