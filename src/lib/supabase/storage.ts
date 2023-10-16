@@ -5,7 +5,7 @@ export const publicBucketName = 'botnet-assets';
 export const publicFolderForAvatarImages = 'public-avatars';
 
 export const uploadAvatarIamge = async (
-  file: File,
+  file: File | Blob,
   id: string,
   name: string,
 ) => {
