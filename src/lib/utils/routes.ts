@@ -21,3 +21,14 @@ export const returnCommonStatusError = (message?: string) => {
     },
   );
 };
+
+export const returnRateLimitError = () => {
+  return NextResponse.json(
+    {
+      message: 'Rate limited',
+    },
+    {
+      status: 429,
+    },
+  );
+};

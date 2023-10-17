@@ -100,19 +100,21 @@ const InfoSidebar = () => {
               <p className="info-message">{spaceDescription}</p>
             </div>
 
-            <div className="info-host">
-              <Avatar
-                height={24}
-                width={24}
-                name={spaceInfo?.host?.displayName}
-                src={spaceInfo?.host?.image}
-              />
-              <p>
-                {spaceInfo?.host?.displayName}
+            {!isEmpty(spaceInfo) && (
+              <div className="info-host">
+                <Avatar
+                  height={24}
+                  width={24}
+                  name={spaceInfo?.host?.displayName}
+                  src={spaceInfo?.host?.image}
+                />
+                <p>
+                  {spaceInfo?.host?.displayName}
 
-                <span>Host</span>
-              </p>
-            </div>
+                  <span>Host</span>
+                </p>
+              </div>
+            )}
 
             <div className="apps-container hidden">
               <p className="info-label"> Apps </p>

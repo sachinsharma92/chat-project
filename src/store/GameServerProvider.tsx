@@ -2,7 +2,6 @@
 
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useWorldStore } from './CanvasProvider';
-import { createId } from '@paralleldrive/cuid2';
 import { includes, isArray, isFunction, map } from 'lodash';
 import { Client } from 'colyseus.js';
 import { BotRoom, CampRoom, RoomUser } from '@/types';
@@ -11,13 +10,14 @@ import {
   serverRoomReceiveQueue,
   serverRoomSendQueue,
 } from '@/lib/rivet';
+import { v4 as uuid } from 'uuid';
 import { useGameServer } from './Spaces';
 import { useBotnetAuth } from './Auth';
 import { getNameFromEmail, getUserIdFromSession } from '@/lib/utils';
 import { consumeChatMessages, consumeUsers } from '@/lib/utils/gameserver';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 
-export const guestId = createId();
+export const guestId = uuid();
 
 /**
  * Game server handler, make sure to instatiate this once
