@@ -7,6 +7,7 @@ import MediaPlayer from '../MediaPlayer';
 import Bulletin from '../Bulletin';
 import { useAppStore } from '@/store/Spaces';
 import './MainComponent.css';
+import Configurator from '@/ui/avatar/Configurator';
 
 const InfoSidebar = dynamic(
   () => import('@/ui/features/InfoSidebar/InfoSidebar'),
@@ -15,7 +16,11 @@ const InfoSidebar = dynamic(
   },
 );
 
-const Game = dynamic(() => import('@/ui/game'), {
+// const Game = dynamic(() => import('@/ui/game'), {
+//   ssr: false,
+// });
+
+const Avatar = dynamic(() => import('@/ui/avatar'), {
   ssr: false,
 });
 
@@ -33,8 +38,10 @@ const MainComponent = () => {
       </div>
 
       <div className="game-screen">
+          <Configurator />
         <div className="world">
-          <Game />
+          {/* <Game /> */}
+          <Avatar />
         </div>
         <MediaPlayer />
         {!expandBulletinSidebar && <StickyChat />}
