@@ -7,13 +7,13 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { PaperPlane, EmojiSmileIcon, ExpandIcon, ChatIcon } from '@/icons';
 import { isEmpty, isString, toLower, toString } from 'lodash';
-import { usePlayersChat } from './hooks/usePlayersChat';
+import { useBotChat } from './hooks/useBotChat';
 import { useWindowResize } from '@/hooks';
-import { useAppStore, useGameServer } from '@/store/Spaces';
+import { useAppStore, useBotData } from '@/store/Spaces';
 import '../../../components/common/styles/Button.css';
-import './ChatInput.scss';
+import './ChatInput.css';
 
-type ChatInputPropsType = {
+export type ChatInputPropsType = {
   hideExpand?: boolean;
   className?: string;
   classNameForChatFormInput?: string;
@@ -30,20 +30,13 @@ export const isChatFocused = () => {
 };
 
 const ChatInput = (props: ChatInputPropsType) => {
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    // setError,
-    // watch,
-    // formState: { errors },
-  } = useForm();
-  const { sendBotChatMessage } = usePlayersChat();
+  const { register, handleSubmit, setValue } = useForm();
+  const { sendBotChatMessage } = useBotChat();
   const { availableWidth } = useWindowResize();
   const [expandBulletinSidebar, setExpandBulletinSidebar] = useAppStore(
     state => [state.expandBulletinSidebar, state.setExpandBulletinSidebar],
   );
-  const [botRoomIsResponding] = useGameServer(state => [
+  const [botRoomIsResponding] = useBotData(state => [
     state.botRoomIsResponding,
   ]);
   const { hideExpand, className, classNameForChatFormInput } = props;

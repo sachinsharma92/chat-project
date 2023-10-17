@@ -1,5 +1,3 @@
-'use client';
-
 import { supabaseClient } from '.';
 
 export const getUserProfileById = async (userId: string) => {

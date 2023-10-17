@@ -1,9 +1,10 @@
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import { useMemo } from 'react';
 import { head, isEmpty, isString } from 'lodash';
-import Message, { MessageRoles } from './Message';
+import Message from './Message';
 import cx from 'classnames';
 import './Pinned.css';
+import { OpenAIRoles } from '@/types';
 
 const Pinned = (props: { className?: string }) => {
   const { spaceInfo } = useSelectedSpace();
@@ -34,7 +35,7 @@ const Pinned = (props: { className?: string }) => {
 
       <Message
         id="pinned-message-id"
-        role={MessageRoles.user}
+        role={OpenAIRoles.user}
         message={message}
         authorId={host?.id as string}
         authorInfo={host}

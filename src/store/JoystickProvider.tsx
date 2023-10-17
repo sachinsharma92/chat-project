@@ -10,7 +10,7 @@ export const useDirectionStore = create<iDirection>(set => ({
   setDirection: direction => set({ direction }),
 }));
 
-export const store = {
+export const joystickProviderStoreRef = {
   direction: '',
   setDirection: function (direction: string) {
     this.direction = direction;

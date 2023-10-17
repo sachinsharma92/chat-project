@@ -26,6 +26,11 @@ export interface IBotFormAnswers {
   meta: Record<string, any>;
 }
 
+export interface IBotMessage {
+  message: string;
+  role: OpenAIRoles;
+}
+
 export enum OpenAIRoles {
   'assistant' = 'assistant',
   'user' = 'user',

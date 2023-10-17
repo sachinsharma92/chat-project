@@ -4,8 +4,6 @@ import { serverRoomSendQueue } from '@/lib/rivet';
 import { useBotnetAuth } from '@/store/Auth';
 import { guestId } from '@/store/GameServerProvider';
 import { useGameServer } from '@/store/Spaces';
-import { head } from 'lodash';
-import camelcaseKeys from 'camelcase-keys';
 
 /**
  * Hook for space chats.
@@ -13,14 +11,13 @@ import camelcaseKeys from 'camelcase-keys';
  * @returns
  */
 export const usePlayersChat = () => {
-  const [gameRoom, botRoom, botRoomIsResponding] = useGameServer(state => [
-    state.gameRoom,
-    state.botRoom,
-    state.botRoomIsResponding,
-  ]);
+  const [gameRoom] = useGameServer(state => [state.gameRoom]);
   const [userId] = useBotnetAuth(state => [state.session?.user?.id || guestId]);
-  const { spaceId, spaceInfo } = useSelectedSpace();
+  const { spaceId } = useSelectedSpace();
 
+  /**
+   * Hide most recent chat from player bubble
+   */
   const hideLastChat = useDebounce(() => {
     if (gameRoom) {
       serverRoomSendQueue.add(async () => {
@@ -54,33 +51,5 @@ export const usePlayersChat = () => {
     }
   };
 
-  /**
-   * Send a chat message for 1:1 bot chat
-   * @param message
-   */
-  const sendBotChatMessage = async (message: string) => {
-    try {
-      if (botRoomIsResponding) {
-        return;
-      }
-
-      if (botRoom && message && spaceId) {
-        const channel = `chat-${userId}-send`;
-        const bot = camelcaseKeys(head(spaceInfo?.bots) || {});
-
-        await serverRoomSendQueue.add(async () => {
-          botRoom.send(channel, {
-            message,
-            spaceId,
-            botFormId: bot?.formId,
-            authorId: userId,
-          });
-        });
-      }
-    } catch (err: any) {
-      console.log('sendBotChatMessage() err:', err?.message);
-    }
-  };
-
-  return { sendChatMessage, sendBotChatMessage };
+  return { sendChatMessage };
 };

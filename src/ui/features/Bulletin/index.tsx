@@ -2,7 +2,7 @@ import cx from 'classnames';
 import { useCallback, useEffect, useMemo } from 'react';
 import { ChatIcon } from '@/icons';
 import { InterTight } from '@/app/fonts';
-import { useAppStore, useGameServer } from '@/store/Spaces';
+import { useAppStore, useBotData } from '@/store/Spaces';
 import { filter, isEmpty, map } from 'lodash';
 import Message from '../Chat/Message';
 import ChatInput from '../Chat/ChatInput';
@@ -14,15 +14,15 @@ const Bulletin = () => {
   const [expandBulletinSidebar] = useAppStore(state => [
     state.expandBulletinSidebar,
   ]);
-  const [roomChatMessages, botRoomIsResponding] = useGameServer(state => [
-    state.roomChatMessages,
+  const [botRoomIsResponding, chatMessages] = useBotData(state => [
     state.botRoomIsResponding,
+    state.chatMessages,
   ]);
 
   const sanitizedChatMessages = useMemo(
-      () => filter(roomChatMessages, line => !isEmpty(line?.id)),
-      [roomChatMessages],
-    );  
+    () => filter(chatMessages, line => !isEmpty(line?.id)),
+    [chatMessages],
+  );
 
   /** Scroll stream chat down bottom  */
   const scrollChatToBottom = useCallback(() => {
@@ -56,9 +56,7 @@ const Bulletin = () => {
       <div className="bulletin-header">
         <div className="bulletin-left">
           <ChatIcon height={'16px'} width={'16px'} />
-          <h1 className={cx(InterTight.className, 'bulletin-label')}>
-            Chat
-          </h1>
+          <h1 className={cx(InterTight.className, 'bulletin-label')}>Chat</h1>
         </div>
         <div className="bulletin-right"></div>
       </div>
@@ -67,11 +65,14 @@ const Bulletin = () => {
         <ul>
           {map(sanitizedChatMessages, line => {
             const key = `BulletinChat${line.id}`;
-            const shortTime = new Intl.DateTimeFormat("en", {
-              timeStyle: "short",
-              });
-            
-            const timestamp = shortTime.format(Date.now());
+            const shortTime = new Intl.DateTimeFormat('en', {
+              timeStyle: 'short',
+            });
+            const createdAt = line?.createdAt;
+            const timestamp = shortTime.format(
+              createdAt ? new Date(createdAt) : Date.now(),
+            );
+
             return (
               <li key={key}>
                 <Message

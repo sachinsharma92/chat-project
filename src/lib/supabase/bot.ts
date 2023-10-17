@@ -50,3 +50,15 @@ export const getAICloneCompletedForms = async (spaceId: string) => {
     .eq('space_id', spaceId)
     .limit(10);
 };
+
+export const getBotFormAnswerById = async (formId: string, spaceId: string) => {
+  try {
+    return await supabaseClient
+      .from('user_bot_form_answers')
+      .select('*')
+      .eq('id', formId)
+      .eq('space_id', spaceId);
+  } catch {
+    return null;
+  }
+};

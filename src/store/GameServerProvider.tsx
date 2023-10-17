@@ -42,7 +42,6 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
     botRoom,
     gameRoom,
     isConnecting,
-    setBotRoomIsResponding,
     setPlayers,
     startConnecting,
     endConnecting,
@@ -54,7 +53,6 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
     botRoom: state.botRoom,
     gameRoom: state.gameRoom,
     isConnecting: state.isConnecting,
-    setBotRoomIsResponding: state.setBotRoomIsResponding,
     setPlayers: state.setPlayers,
     startConnecting: state.startConnecting,
     endConnecting: state.endConnecting,
@@ -290,24 +288,6 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
             }
           });
         }
-
-        if (room?.onStateChange) {
-          room.onStateChange(state => {
-            // @ts-ignore
-            if (state?.userBotChatInfo) {
-              // @ts-ignore
-              state?.userBotChatInfo.forEach(info => {
-                if (info?.userId === userId && setBotRoomIsResponding) {
-                  serverRoomReceiveQueue.add(() => {
-                    setBotRoomIsResponding(
-                      info?.isOpenAIChatCompletionProcessing as boolean,
-                    );
-                  });
-                }
-              });
-            }
-          });
-        }
       } catch (err: any) {
         console.log('connectBotChatServer() err:', err?.message);
       } finally {
@@ -326,7 +306,6 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
     authIsLoading,
     isConnecting,
     image,
-    setBotRoomIsResponding,
     setRoomChatMessages,
     startConnecting,
     endConnecting,
