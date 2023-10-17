@@ -1,13 +1,9 @@
 import { map } from 'lodash';
 import { ArrowTopRightIcon, LinkIcon } from '@/icons';
 import './Links.css';
+import { ISpaceLink } from '@/types';
 
-export interface SocialLink {
-  name: string;
-  link: string;
-}
-
-function Links({ socials }: { socials: SocialLink[] }) {
+function Links({ socials }: { socials: ISpaceLink[] }) {
   return (
     <div className="links-layout">
       {map(socials, item => {
