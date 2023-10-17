@@ -154,6 +154,9 @@ const SpaceSettings = () => {
         </div>
 
         <div className="space-description">
+          <label className="label" htmlFor="description">
+            Description
+          </label>
           <TextareaAutosize
             className="textarea"
             placeholder="A short description about your space."

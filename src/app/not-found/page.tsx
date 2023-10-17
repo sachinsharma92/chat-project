@@ -1,5 +1,11 @@
+import { Metadata } from 'next';
 import { BotnetIcon } from '@/icons';
 import './page.css';
+
+export const metadata: Metadata = {
+  title: 'Botnet - Page not found',
+  description: 'Page not found',
+};
 
 const NotFound = () => {
   return (
