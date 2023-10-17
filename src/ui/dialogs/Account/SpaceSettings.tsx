@@ -1,16 +1,18 @@
 import Button from '@/components/common/Button';
 import TextInput from '@/components/common/TextInput';
 import Avatar from '@/components/common/Avatar/Avatar';
+import TextareaAutosize from 'react-textarea-autosize';
 import { UploadIcon } from '@radix-ui/react-icons';
 import { useSpacesStore } from '@/store/Spaces';
 import { useMemo, useState } from 'react';
-import { filter, head, isEmpty } from 'lodash';
+import { filter, head, isEmpty, pick } from 'lodash';
 import { useBotnetAuth } from '@/store/Auth';
 import { useForm } from 'react-hook-form';
 import { uploadImageAvatarFile } from '@/lib/utils/upload';
 import { useToast } from '@/components/ui/use-toast';
 import { updateSpaceProfileProperties } from '@/lib/supabase';
 import './SpaceSettings.css';
+import '@/components/common/styles/Textarea.css';
 
 const SpaceSettings = () => {
   const {
@@ -72,21 +74,25 @@ const SpaceSettings = () => {
 
   const onSpaceSettingsUpdate = async (data: any) => {
     try {
-      const { spaceName: updatedSpaceName } = data;
+      const updatedProps = pick(data, ['spaceName', 'description']);
 
-      if (updating || updatedSpaceName === spaceInfo?.spaceName) {
+      if (
+        updating ||
+        (updatedProps?.spaceName === spaceInfo?.spaceName &&
+          updatedProps?.description === spaceInfo?.description)
+      ) {
         return;
       }
 
       setUpdating(true);
 
-      if (updatedSpaceName) {
+      if (!isEmpty(updatedProps) && updatedProps) {
         const { error } = await updateSpaceProfileProperties(spaceId, {
-          spaceName: updatedSpaceName,
+          ...updatedProps,
         });
 
         if (!error) {
-          setSpaceInfo(spaceId, { spaceName: updatedSpaceName });
+          setSpaceInfo(spaceId, { ...updatedProps });
         }
       }
     } catch (err: any) {
@@ -97,7 +103,8 @@ const SpaceSettings = () => {
   };
 
   const showUpdatebutton =
-    watch('spaceName') && watch('spaceName') !== spaceInfo?.spaceName;
+    (watch('description') && watch('description') !== spaceInfo?.description) ||
+    (watch('spaceName') && watch('spaceName') !== spaceInfo?.spaceName);
 
   return (
     <div className="space-settings">
@@ -145,7 +152,20 @@ const SpaceSettings = () => {
             })}
           />
         </div>
-        <div className="space-description"></div>
+
+        <div className="space-description">
+          <TextareaAutosize
+            className="textarea"
+            placeholder="A short description about your space."
+            maxLength={100}
+            maxRows={6}
+            minRows={2}
+            {...register('description', {
+              required: false,
+              value: spaceInfo?.description,
+            })}
+          />
+        </div>
 
         {showUpdatebutton && (
           <Button

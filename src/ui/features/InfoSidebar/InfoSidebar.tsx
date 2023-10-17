@@ -4,51 +4,27 @@ import { MeatballsIcon } from '@/icons';
 import { Inter } from '@/app/fonts';
 import { useAppStore } from '@/store/Spaces';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
-import Links, { SocialLink } from '../../../components/common/Links/Links';
 import JoinCampButton from '../JoinCampButton/JoinCampButton';
 import Button from '@/components/common/Button';
 import SpaceStatistics from './SpaceStatistics';
 import Apps from './Apps';
-import UserAvatar from '@/components/common/UserAvatar';
-import cx from 'classnames';
-import './InfoSidebar.css';
-import '../../../components/common/styles/Button.css';
-import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import Avatar from '@/components/common/Avatar/Avatar';
+import cx from 'classnames';
+import Links from '@/components/common/Links/Links';
+import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import { useEffect, useMemo } from 'react';
 import { useWindowResize } from '@/hooks';
 import { mobileWidthBreakpoint } from '@/constants';
+import { head, isEmpty } from 'lodash';
 
-interface CampUserInfoProps {
-  campName: string;
-  campHost: string;
-  campHostAvatar: string;
-  campMessage: string;
-  location: string;
-  weather: string;
-  socials: SocialLink[];
-}
+import './InfoSidebar.css';
+import '@/components/common/styles/Button.css';
 
 interface featureFlagProps {
   subscribeFeature: boolean;
   joinCampFeature: boolean;
   copyLinkFeature: boolean;
 }
-
-const CampUserInfo: CampUserInfoProps = {
-  campName: 'Botnet',
-  campHost: 'Jeremy Cai',
-  campHostAvatar: '/assets/camp-avatar.png',
-  campMessage:
-    'Welcome to my little internet campground! Enjoy the tunes and leave a message on the bulletin.',
-  location: 'Park City, USA',
-  weather: 'Sunny 82° F',
-  socials: [
-    { name: 'Twitter', link: 'https://twitter.com/' },
-    { name: 'Instagram', link: 'https://www.instagram.com/' },
-    { name: 'YouTube', link: 'https://www.youtube.com/' },
-  ],
-};
 
 const featureFlags: featureFlagProps = {
   subscribeFeature: false,
@@ -72,6 +48,16 @@ const InfoSidebar = () => {
     () => spaceInfo?.spaceName || spaceInfo?.host?.displayName || 'Botnet',
     [spaceInfo],
   );
+
+  const spaceDescription = useMemo(() => {
+    const spaceBotInfo = head(spaceInfo?.bots);
+
+    return (
+      spaceBotInfo?.description ||
+      spaceInfo?.description ||
+      'Welcome to Botnet!'
+    );
+  }, [spaceInfo]);
 
   /**
    * Expand/shrink space info depending on screen size
@@ -111,13 +97,19 @@ const InfoSidebar = () => {
 
             <div className="message-container flex-col">
               {featureFlags.joinCampFeature && <JoinCampButton />}
-              <p className="info-message">{CampUserInfo.campMessage}</p>
+              <p className="info-message">{spaceDescription}</p>
             </div>
 
-            <div className="info-host flex justify-start items-center hidden">
-              <UserAvatar />
+            <div className="info-host">
+              <Avatar
+                height={24}
+                width={24}
+                name={spaceInfo?.host?.displayName}
+                src={spaceInfo?.host?.image}
+              />
               <p>
-                {CampUserInfo.campHost}
+                {spaceInfo?.host?.displayName}
+
                 <span>Host</span>
               </p>
             </div>
@@ -127,10 +119,12 @@ const InfoSidebar = () => {
               <Apps />
             </div>
 
-            <div className="links-container">
-              <p className="info-label"> Links </p>
-              <Links socials={CampUserInfo.socials} />
-            </div>
+            {!isEmpty(spaceInfo?.links) && (
+              <div className="links-container">
+                <p className="info-label"> Links </p>
+                <Links socials={spaceInfo?.links || []} />
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -159,15 +153,8 @@ const InfoSidebar = () => {
             </Button>
           </div>
 
-          <h1 className="info-header info-header-collapsed">
-            {CampUserInfo.campName}
-          </h1>
+          <h1 className="info-header info-header-collapsed">{spaceName}</h1>
           <SpaceStatistics collapsed />
-          <div className="cta-collapsed flex justify-start items-center hidden">
-            <Button className="join-button flex justify-center items-center">
-              Join Space
-            </Button>
-          </div>
         </div>
       )}
     </>
