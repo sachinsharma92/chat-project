@@ -18,6 +18,7 @@ export async function generateMetadata(props: any) {
     return {
       title: `${meta.title} - Botnet`,
       description: meta.description,
+      image: meta?.image || '',
     };
   }
 

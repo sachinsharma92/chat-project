@@ -66,30 +66,35 @@
   box-shadow: none;
   -webkit-box-shadow: none;
   outline: none;
+  width: 100%;
 }
 
 .bulletin-chat > .toggle-emojis,
 .bulletin-chat > .bulletin-chat,
 .bulletin-chat > .expand-chat,
-.bulletin-chat > .chat {
+.bulletin-chat > .chat,
+.bulletin-chat > .microphone {
   background: #fffff7;
 }
 
 .bulletin-chat > .toggle-emojis:hover,
 .bulletin-chat > .bulletin-chat:hover,
 .bulletin-chat > .expand-chat:hover,
-.bulletin-chat > .chat:hover {
+.bulletin-chat > .chat:hover,
+.bulletin-chat > .microphone:hover {
   background: #f5efdc;
 }
 
 .bulletin-chat > .toggle-emojis > svg > path,
 .bulletin-chat > .expand-chat > svg > path,
-.bulletin-chat > .chat > svg > path {
+.bulletin-chat > .chat > svg > path,
+.bulletin-chat > .microphone > svg > path {
   fill: #bab7a4;
 }
 
 .bulletin-chat > .chat-form {
-  width: 240px;
+  max-width: 240px;
+  min-width: 220px;
 }
 
 .bulletin-chat > .chat-form > input[type='text'] {
@@ -148,4 +153,23 @@
 .bulletin-chat-stream > ul > li:last-child {
   padding-bottom: 8px;
   box-sizing: border-box;
+}
+
+.close-button {
+  @apply hidden justify-center items-center;
+
+  height: 36px;
+  width: 36px;
+  background: #fffff7;
+  border-radius: 50%;
+}
+
+.close-button:hover {
+  background: #f5efdc;
+}
+
+@media screen and (max-width: 720px) {
+  .close-button {
+    display: flex;
+  }
 }

@@ -1,4 +1,4 @@
-import { DialogEnums } from './dialog';
+import { DialogEnums, MobileDrawerEnums } from './dialog';
 
 export enum MusicPlayerMediaType {
   youtube = 'youtube',
@@ -11,6 +11,12 @@ export interface IAppState {
   showDialogType: DialogEnums;
   expandInfoSidebar: boolean;
   expandBulletinSidebar: boolean;
+  showMobileDrawer: boolean;
+  showMobileDrawerType: MobileDrawerEnums;
+  setShowMobileDrawer: (
+    showMobileDrawer: boolean,
+    showMobileDrawerType: MobileDrawerEnums,
+  ) => void;
   setShowDialog: (showDialog: boolean, showDialogType: DialogEnums) => void;
   setExpandBulletinSidebar: (expandBulletinSidebar: boolean) => void;
   setExpandInfoSidebar: (expandInfoSidebar: boolean) => void;

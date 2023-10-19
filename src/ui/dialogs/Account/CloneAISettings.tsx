@@ -170,7 +170,7 @@ const CloneAISettings = () => {
           onSubmit={handleSubmit(onSave)}
           className="clone-ai-settings-form"
         >
-          <div className="greetings">
+          <div className="greeting">
             <label className="label" htmlFor="displayName">
               Greeting
             </label>

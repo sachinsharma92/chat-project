@@ -11,6 +11,7 @@
     "test": "jest --watch"
   },
   "dependencies": {
+    "@autoblocks/client": "^0.0.13",
     "@colyseus/schema": "^2.0.15",
     "@next/font": "^13.5.4",
     "@paralleldrive/cuid2": "^2.2.2",
@@ -33,6 +34,7 @@
     "@types/three": "^0.155.1",
     "@upstash/ratelimit": "^0.4.4",
     "@upstash/redis": "^1.23.4",
+    "@vercel/og": "^0.5.19",
     "axios": "^1.5.1",
     "bufferutil": "^4.0.7",
     "camelcase-keys": "^9.1.0",

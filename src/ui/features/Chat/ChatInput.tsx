@@ -5,7 +5,7 @@ import Button from '../../../components/common/Button';
 import TextInput from '../../../components/common/TextInput';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { PaperPlane, EmojiSmileIcon, ExpandIcon, ChatIcon } from '@/icons';
+import { PaperPlane, ExpandIcon, Microphone, CameraIcon } from '@/icons';
 import { isEmpty, isString, toLower, toString } from 'lodash';
 import { useBotChat } from './hooks/useBotChat';
 import { useWindowResize } from '@/hooks';
@@ -61,16 +61,19 @@ const ChatInput = (props: ChatInputPropsType) => {
    */
   useEffect(() => {
     const onKeyDown = (evt: any) => {
-      const k = evt?.key || evt?.keyCode;
+      const k = evt?.key;
+      const keyCode = evt?.keyCode;
       const chatInput = document.querySelector(
         '.chat-form-input',
       ) as HTMLInputElement;
 
-      if (toLower(k) === 'escape' || k === 27) {
+      if (toLower(k) === 'escape' || keyCode === 27) {
         if (chatInput?.blur) {
           chatInput.blur();
         }
-      } else if (toLower(k) === 'enter' || k === 13) {
+      }
+
+      if (toLower(k) === 'enter' || keyCode === 13) {
         if (chatInput?.focus) {
           chatInput.focus();
         }
@@ -90,14 +93,8 @@ const ChatInput = (props: ChatInputPropsType) => {
         [`${className}`]: isString(className) && !isEmpty(className),
       })}
     >
-      <Button
-        type="button"
-        className={cx(
-          'toggle-emojis',
-          'flex justify-center items-center dark-button',
-        )}
-      >
-        <EmojiSmileIcon />
+      <Button type="button" className="toggle-emojis dark-button">
+        <CameraIcon />
       </Button>
 
       <form
@@ -123,19 +120,13 @@ const ChatInput = (props: ChatInputPropsType) => {
         </Button>
       </form>
 
-      <Button
-        type="button"
-        className="chat flex justify-center items-center dark-button"
-      >
-        <ChatIcon />
+      <Button type="button" className="microphone dark-button">
+        <Microphone />
       </Button>
 
       {!hideExpand && (
         <Button
-          className={cx(
-            'expand-chat',
-            'flex justify-center items-center dark-button',
-          )}
+          className={'expand-chat'}
           onClick={() => {
             setExpandBulletinSidebar(!expandBulletinSidebar);
           }}

@@ -24,12 +24,13 @@
 }
 
 .chat-message {
-  width: 90%;
+  width: calc(100% - 18px);
 }
 
 .heart-icon {
-  width: 10%;
-  margin: 2px 0px;
+  @apply flex justify-center;
+
+  margin-left: 2px;
 }
 
 .chat-timestamp {

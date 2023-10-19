@@ -3,7 +3,7 @@
   width: 100%;
 }
 
-.greetings {
+.greeting {
   @apply mt-2 mb-2;
 
   width: 100%;

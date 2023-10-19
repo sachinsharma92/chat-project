@@ -30,20 +30,31 @@ export const getSpacePageMetadata = async (
 
         let title = spaceName;
         let description = spaceDescription;
+        let image = spaceInfo?.image;
 
-        if (!title && owner) {
+        if ((!title || !image) && owner) {
           const res = await getUserProfileById(owner);
           const userProfile: IUser =
             res?.data && !isEmpty(res?.data) ? head(res?.data) : null;
 
-          title = userProfile?.displayName || '';
+          if (!title) {
+            title = userProfile?.displayName || '';
+          }
+
+          if (!image) {
+            image = userProfile?.image;
+          }
+        }
+
+        if (image) {
+          image = `/api/og?avatar=${encodeURIComponent(image)}`;
         }
 
         if (!description && title) {
           description = `${title} Space`;
         }
 
-        return { title, description };
+        return { title, image, description };
       }
     }
 

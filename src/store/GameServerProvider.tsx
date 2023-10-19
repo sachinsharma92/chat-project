@@ -150,7 +150,7 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
       }
     };
 
-    if (isStarted && !gameRoom && spaceId && sessionChecked) {
+    if (!gameRoom && spaceId && sessionChecked) {
       connectToGameServer();
     }
   }, [

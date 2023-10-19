@@ -17,7 +17,7 @@ export const getOpenAI = () => {
 
 export const getOpenAIChatCompletion = async (
   messages: { role: OpenAIError; message: string }[],
-  model?: string,
+  params?: Partial<OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming>,
 ): Promise<OpenAI.Chat.ChatCompletion.Choice | undefined> => {
   const openai = getOpenAI();
   const formattedMessages = map(messages, p => ({
@@ -27,7 +27,8 @@ export const getOpenAIChatCompletion = async (
   const completion = await openai.chat.completions.create({
     messages: formattedMessages,
     max_tokens: 150,
-    model: model || 'gpt-3.5-turbo',
+    model: 'gpt-3.5-turbo',
+    ...(params || {}),
   });
 
   return head(completion?.choices);

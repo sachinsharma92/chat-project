@@ -100,9 +100,10 @@ const InfoSidebar = () => {
               <p className="info-message">{spaceDescription}</p>
             </div>
 
-            {!isEmpty(spaceInfo) && (
+            {!isEmpty(spaceInfo?.host) && (
               <div className="info-host">
                 <Avatar
+                  className="info-host-avatar"
                   height={24}
                   width={24}
                   name={spaceInfo?.host?.displayName}
@@ -110,8 +111,7 @@ const InfoSidebar = () => {
                 />
                 <p>
                   {spaceInfo?.host?.displayName}
-
-                  <span>Host</span>
+                  <span>Creator</span>
                 </p>
               </div>
             )}

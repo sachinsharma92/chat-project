@@ -34,6 +34,7 @@ const Pinned = (props: { className?: string }) => {
       </div>
 
       <Message
+        pinned
         id="pinned-message-id"
         role={OpenAIRoles.user}
         message={message}

@@ -1,13 +1,13 @@
 import { ChatMessageProps, OpenAIRoles } from '@/types';
 import { isEmpty, toString } from 'lodash';
 import { useMemo } from 'react';
-import Avatar from '@/components/common/Avatar/Avatar';
-import './Message.css';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import { HeartIcon } from '@/icons';
+import Avatar from '@/components/common/Avatar/Avatar';
+import './Message.css';
 
-const Message = (props: ChatMessageProps) => {
-  const { role, authorInfo, authorId, message, time } = props;
+const Message = (props: ChatMessageProps & { pinned?: boolean }) => {
+  const { role, authorInfo, authorId, message, time, pinned } = props;
   const { spaceInfo } = useSelectedSpace();
   const isAIAssistant = useMemo(() => role === OpenAIRoles.assistant, [role]);
   const assistantDisplayImage = useMemo(
@@ -37,9 +37,11 @@ const Message = (props: ChatMessageProps) => {
           {toString(message)}
           {time && <p className="chat-timestamp"> {time} </p>}
         </h5>
-        <div className="heart-icon">
-          <HeartIcon />
-        </div>
+        {!pinned && (
+          <div className="heart-icon">
+            <HeartIcon />
+          </div>
+        )}
       </div>
     </div>
   );

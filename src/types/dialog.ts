@@ -6,3 +6,8 @@ export enum DialogEnums {
   'account' = 'account',
   'onboardDisplayName' = 'onboardDisplayName',
 }
+
+export enum MobileDrawerEnums {
+  'none' = 'none',
+  'chat' = 'chat',
+}

@@ -112,6 +112,7 @@ const SpaceSettings = () => {
         <Button
           className="space-avatar-upload"
           isLoading={uploading || updating}
+          onClick={onSpaceAvatarUpload}
         >
           <Avatar
             height={80}

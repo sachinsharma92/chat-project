@@ -1,0 +1,11 @@
+.chat-mobile {
+  height: 92vh;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.chat-mobile .bulletin-chat > .chat-form {
+  box-sizing: border-box;
+  max-width: unset;
+  width: calc(100% - 100px);
+}
