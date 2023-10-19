@@ -12,13 +12,36 @@ import {
  * @returns
  */
 export async function generateMetadata(props: any) {
+  const spaceId = props?.searchParams?.space;
   const meta = await getSpacePageMetadata(props);
 
   if (meta?.title) {
+    const { title, description, image } = meta;
+
     return {
       title: `${meta.title} - Botnet`,
       description: meta.description,
-      image: meta?.image || '',
+      viewport:
+        'width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1, maximum-scale=1, viewport-fit=cover',
+      twitter: {
+        card: 'summary_large_image',
+        description,
+        title,
+        images: [image],
+      },
+      openGraph: {
+        title,
+        description,
+        type: 'website',
+        url: `https://botnet.com${spaceId ? `?space=${spaceId}` : ''}`,
+        images: [
+          {
+            url: image,
+            width: 1200,
+            height: 675,
+          },
+        ],
+      },
     };
   }
 
