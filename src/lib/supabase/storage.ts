@@ -4,11 +4,18 @@ export const publicBucketName = 'botnet-assets';
 
 export const publicFolderForAvatarImages = 'public-avatars';
 
+/**
+ * Upload image file for profile avatar
+ * @param file
+ * @param id
+ * @param name
+ * @returns
+ */
 export const uploadAvatarIamge = async (
   file: File | Blob,
   id: string,
   name: string,
-) => {
+): Promise<string> => {
   const filePath = `${publicFolderForAvatarImages}/${id}-${name}`;
   const { data: uploadData, error } = await supabaseClient.storage
     .from(publicBucketName)

@@ -1,7 +1,7 @@
 import { useBotnetAuth } from '@/store/Auth';
 import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { updateDisplayName, updateUserImageUrl } from '@/lib/supabase';
+import { updateUserProfileProps } from '@/lib/supabase';
 import { uploadImageAvatarFile } from '@/lib/utils/upload';
 import { isEmpty, toString } from 'lodash';
 import { useToast } from '@/components/ui/use-toast';
@@ -43,7 +43,9 @@ const AccountInfo = () => {
       setUpdating(true);
 
       if (updatedDisplayName) {
-        await updateDisplayName(userId, updatedDisplayName);
+        await updateUserProfileProps(userId, {
+          displayName: updatedDisplayName,
+        });
         setDisplayName(updatedDisplayName);
       }
     } catch (err: any) {
@@ -74,7 +76,7 @@ const AccountInfo = () => {
       if (!isEmpty(url) && url) {
         // store url on supabase db
         setImage(url);
-        await updateUserImageUrl(userId, url);
+        await updateUserProfileProps(userId, { image: url });
       }
     } catch (err) {
       toast({

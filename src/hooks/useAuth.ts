@@ -1,4 +1,5 @@
 import { useBotnetAuth } from '@/store/Auth';
+import { useMemo } from 'react';
 
 /**
  * Use supabase auth token format for other requests
@@ -16,8 +17,10 @@ const useAuth = () => {
       'X-RefreshToken': `${session?.refresh_token}`,
     };
   };
+  const userId = useMemo(() => session?.user?.id || '', [session]);
 
   return {
+    userId,
     getSupabaseAuthHeaders,
   };
 };

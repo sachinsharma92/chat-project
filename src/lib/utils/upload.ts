@@ -119,6 +119,8 @@ export const uploadImageAvatarFile = <T extends unknown[]>(
       if (onEnd) {
         onEnd();
       }
+
+      input?.remove();
     };
     input.setAttribute('id', imageAvatarUploadFileInputId);
     input.setAttribute('multiple', 'false');

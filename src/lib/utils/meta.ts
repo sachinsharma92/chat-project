@@ -1,7 +1,6 @@
-import camelcaseKeys from 'camelcase-keys';
 import { getSpaceProfile, getUserProfileById } from '../supabase';
 import { ISpace } from '@/types';
-import { head, isEmpty } from 'lodash';
+import { head } from 'lodash';
 import { IUser } from '@/types/auth';
 
 export const defaultTitle = 'Botnet';
@@ -23,7 +22,7 @@ export const getSpacePageMetadata = async (
       const { data, error } = await getSpaceProfile(spaceId);
 
       if (data && data?.length > 0 && !error) {
-        const spaceInfo = camelcaseKeys(data[0]) as ISpace;
+        const spaceInfo = data[0] as ISpace;
         const spaceDescription = spaceInfo?.description as string;
         const spaceName = spaceInfo?.spaceName as string;
         const owner = spaceInfo?.owner as string;
@@ -34,8 +33,7 @@ export const getSpacePageMetadata = async (
 
         if ((!title || !image) && owner) {
           const res = await getUserProfileById(owner);
-          const userProfile: IUser =
-            res?.data && !isEmpty(res?.data) ? head(res?.data) : null;
+          const userProfile = head(res?.data) as IUser;
 
           if (!title) {
             title = userProfile?.displayName || '';

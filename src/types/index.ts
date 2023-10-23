@@ -55,3 +55,4 @@ export * from './gameserver';
 export * from './three';
 export * from './bots';
 export * from './spaces';
+export * from './embeddings';

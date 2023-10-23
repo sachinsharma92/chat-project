@@ -17,8 +17,8 @@ import { useAppStore, useGameServer, useSpacesStore } from './Spaces';
 import { getUserIdFromSession, timeout } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { DialogEnums } from '@/types/dialog';
-import camelCaseKeys from 'camelcase-keys';
 import { useRouterQuery } from '@/hooks';
+import { IUser } from '@/types/auth';
 
 interface IAuthAppState {}
 
@@ -148,7 +148,7 @@ const AuthProvider = (props: { children?: ReactNode }) => {
             console.log('getUserProfile()');
 
             const targetProfile = head(res.data);
-            const props = camelCaseKeys(targetProfile);
+            const props = targetProfile as IUser;
             const {
               displayName = '',
               handle = '',

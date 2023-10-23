@@ -7,7 +7,7 @@ import Button from '@/components/common/Button';
 import DialogCloseButton from '@/components/common/DialogCloseButton';
 
 import './OnboardDisplayName.css';
-import { updateDisplayName } from '@/lib/supabase';
+import { updateUserProfileProps } from '@/lib/supabase';
 import { toString } from 'lodash';
 import { useState } from 'react';
 import { useAppStore } from '@/store/Spaces';
@@ -49,7 +49,7 @@ const OnboardDisplayName = () => {
       }
 
       setUpdating(true);
-      await updateDisplayName(userId, updatedDisplayName);
+      await updateUserProfileProps(userId, { displayName: updatedDisplayName });
       setDisplayName(updatedDisplayName);
       setShowDialog(false, DialogEnums.none);
     } catch (err: any) {

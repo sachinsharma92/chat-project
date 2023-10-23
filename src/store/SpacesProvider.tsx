@@ -9,8 +9,9 @@ import {
   getUserProfileById,
 } from '@/lib/supabase';
 import { head, isEmpty } from 'lodash';
-import camelCaseKeys from 'camelcase-keys';
 import { useRouter } from 'next/navigation';
+import { IUser } from '@/types/auth';
+import { ISpace } from '@/types';
 
 const SpacesProvider = (props: { children?: ReactNode }) => {
   const { children } = props;
@@ -39,12 +40,12 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
         const { data: spaceData, error } = await getSpaceProfile(spaceId);
 
         if (!isEmpty(spaceData) && !error) {
-          const spaceInfo = camelCaseKeys(head(spaceData));
+          const spaceInfo = head(spaceData) as ISpace;
           const res = await getUserProfileById(spaceInfo?.owner);
           const resBots = await getSpaceBots(spaceId);
           const spaceBotsData = resBots?.data;
           const spaceOwnerData = res?.data;
-          const spaceOwnerProfile = camelCaseKeys(head(spaceOwnerData));
+          const spaceOwnerProfile = head(spaceOwnerData) as IUser;
 
           const props = {
             ...spaceInfo,

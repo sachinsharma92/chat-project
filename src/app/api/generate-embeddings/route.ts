@@ -1,20 +1,38 @@
-import axios from 'axios';
 import dotenv from 'dotenv';
-import { NextResponse } from 'next/server';
-import { getOpenAIConfiguration } from '@/lib/openai';
-import { head, last, toString } from 'lodash';
-import { isResponseStatusSuccess } from '@/lib/utils';
-import { returnCommonStatusError } from '@/lib/utils/routes';
-import { applyApiRoutesAuth } from '../botchat/route';
 
 dotenv.config({ path: `.env.local` });
 
-export type GenerateEmbeddingsBodyRequest = {
-  message: string;
-  model: string;
-  userId: string;
-};
+import { getSpaceBotById } from '@/lib/supabase';
+import { NextResponse } from 'next/server';
+import { getOpenAI } from '@/lib/openai';
+import { head, isEmpty, isUndefined, omit, last, size, toString } from 'lodash';
+import {
+  returnApiUnauthorizedError,
+  returnCommonStatusError,
+} from '@/lib/utils/routes';
+import { applyApiRoutesAuth } from '../botchat/route';
+import {
+  getUserContextById,
+  insertNewUserCloneContext,
+  insertNewUserCloneContextWithEmbeddings,
+  updateUserCloneContext,
+} from '@/lib/supabase/embeddings';
+import { IUserContextType } from '@/types';
 
+export type GenerateEmbeddingsBodyRequest = {
+  context: string;
+  userId: string;
+  useContextId?: string;
+  botId?: string;
+  type?: IUserContextType;
+};
+export const openAIEmbeddingModel = 'text-embedding-ada-002';
+
+/**
+ * Generate new / update existing context embedding vector values
+ * @param request
+ * @returns
+ */
 export async function POST(request: Request) {
   try {
     const headers = request.headers;
@@ -24,49 +42,116 @@ export async function POST(request: Request) {
       toString(authorization).split('BEARER '),
     ) as string;
     // @todo eval model
-    const { message = '', model = 'gpt' }: GenerateEmbeddingsBodyRequest =
-      await request.json();
+
+    const {
+      context,
+      botId,
+      userId,
+      useContextId,
+      type,
+    }: GenerateEmbeddingsBodyRequest = await request.json();
     const authRes = await applyApiRoutesAuth(accessToken, refreshToken);
-    const openAIConfig = getOpenAIConfiguration();
-    const response = await axios({
-      method: 'POST',
-      url: '/v1/embeddings',
-      baseURL: 'https://api.openai.com',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `BEARER ${openAIConfig?.apiKey}`,
-      },
-      data: {
-        model: 'text-embedding-ada-002',
-        input: toString(message),
-      },
+
+    if (!context || size(context) < 3) {
+      return returnCommonStatusError('Context should not be empty');
+    }
+
+    if (!authRes || authRes?.error || !userId) {
+      return returnApiUnauthorizedError();
+    }
+
+    const spaceBotRes = await getSpaceBotById(botId as string);
+
+    if (spaceBotRes?.error) {
+      // verify bot id
+      return returnCommonStatusError('Invalid space bot');
+    }
+
+    if (useContextId && !isEmpty(useContextId)) {
+      const userContextRes = await getUserContextById(useContextId);
+
+      if (userContextRes?.error) {
+        return returnCommonStatusError('Existing record does not exist');
+      }
+    }
+
+    const openai = getOpenAI();
+    const response = await openai.embeddings.create({
+      model: openAIEmbeddingModel,
+      input: toString(context),
     });
 
-    if (!model) {
-      return returnCommonStatusError();
-    }
+    if (response?.data) {
+      const embeddingsArray = response?.data;
+      const embedding = head(embeddingsArray)?.embedding;
 
-    if (isResponseStatusSuccess(response) && response?.data) {
-      const embeddingsArray = response.data?.data;
-      const embeddings = head(embeddingsArray);
+      if (!isUndefined(embedding)) {
+        // update
+        if (useContextId) {
+          const updateRes = await updateUserCloneContext(useContextId, {
+            context,
+            embedding,
+            updatedAt: new Date().toISOString(),
+          });
 
-      if (authRes && !authRes?.error) {
-        // save embeddings
-        console.log('embeddings', embeddings);
+          if (updateRes?.error) {
+            return returnCommonStatusError(updateRes?.error?.message);
+          }
+
+          return NextResponse.json(
+            {
+              success: true,
+            },
+            {
+              status: 200,
+            },
+          );
+        } else {
+          // create new record
+          const ctxProps = {
+            type,
+            context,
+            botId,
+            owner: userId,
+          };
+          const contextPayload = await insertNewUserCloneContext({
+            ...ctxProps,
+          });
+
+          // @ts-ignore
+          if (contextPayload?.id && !contextPayload?.error) {
+            await insertNewUserCloneContextWithEmbeddings({
+              embedding,
+              // @ts-ignore
+              id: contextPayload.id,
+              ...omit(ctxProps, ['type']),
+            });
+
+            return NextResponse.json(
+              {
+                success: true,
+                payload: contextPayload,
+              },
+              {
+                status: 200,
+              },
+            );
+          } else {
+            // @ts-ignore
+            return returnCommonStatusError(contextPayload.error);
+          }
+        }
+      } else {
+        return returnCommonStatusError('embedding undefined');
       }
-
-      return NextResponse.json(
-        {
-          success: true,
-        },
-        {
-          status: 200,
-        },
-      );
     } else {
-      return returnCommonStatusError(response.data.message || '');
+      return returnCommonStatusError('Failed openai.embeddings.create');
     }
-  } catch (err: any) {
-    return returnCommonStatusError(err?.message || '');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('/api/generate-embeddings err:', error?.message);
+    }
+
+    return returnCommonStatusError(error?.message || '');
   }
 }

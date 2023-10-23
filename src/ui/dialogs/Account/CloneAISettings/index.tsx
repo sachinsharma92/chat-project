@@ -15,9 +15,11 @@ import {
 import { IBotFormAnswers } from '@/types';
 import { v4 as uuid } from 'uuid';
 import { useSpacesStore } from '@/store/Spaces';
+import camelcaseKeys from 'camelcase-keys';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import './CloneAISettings.css';
 import '@/components/common/styles/Textarea.css';
+import CloneAIFacts from './CloneAIFacts';
 
 const CloneAISettings = () => {
   const [displayName, userId] = useBotnetAuth(state => [
@@ -123,10 +125,14 @@ const CloneAISettings = () => {
         // update description state copy
         if (spaceInfo?.bots && !isEmpty(description)) {
           spaceInfo.bots = map(spaceInfo.bots, bot => {
-            return {
-              ...bot,
-              description,
-            };
+            if (bot?.formId === formId) {
+              return {
+                ...bot,
+                description,
+              };
+            }
+
+            return bot;
           });
         }
 
@@ -153,7 +159,9 @@ const CloneAISettings = () => {
         if (data && !error) {
           // we only pick the first bot data-
           // since we only support 1 space == 1 bot for now
-          setBotFormAnswers(head(data));
+          setBotFormAnswers(
+            camelcaseKeys(head(data) as Record<string, any>) as IBotFormAnswers,
+          );
           setFetchingFormData(false);
         }
       }
@@ -249,6 +257,7 @@ const CloneAISettings = () => {
           </Button>
         </form>
       )}
+      {!fetchingFormData && <CloneAIFacts />}
     </div>
   );
 };

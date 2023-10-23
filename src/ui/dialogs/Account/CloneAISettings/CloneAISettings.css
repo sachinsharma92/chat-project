@@ -3,6 +3,10 @@
   width: 100%;
 }
 
+.clone-ai-settings-form {
+  width: 100%;
+}
+
 .greeting {
   @apply mt-2 mb-2;
 

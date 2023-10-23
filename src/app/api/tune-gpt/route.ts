@@ -13,7 +13,7 @@ import { head, last, toString } from 'lodash';
 import { applyApiRoutesAuth } from '../botchat/route';
 // import axios from 'axios';
 
-export type GenerateEmbeddingsBodyRequest = {
+export type TuneGPTBodyRequest = {
   action: 'fine-tune' | 'check-status' | 'get-model-id';
   modelName: string;
   jobId?: string;
@@ -21,7 +21,7 @@ export type GenerateEmbeddingsBodyRequest = {
 };
 
 export async function POST(request: Request) {
-  const payload: GenerateEmbeddingsBodyRequest = await request.json();
+  const payload: TuneGPTBodyRequest = await request.json();
   const { action, modelName, jobId } = payload;
   const openai = getOpenAI();
 

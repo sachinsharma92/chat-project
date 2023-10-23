@@ -26,4 +26,18 @@ npm run dev
 
 ## Contribution
 
-Make sure to create a PR for every new feature/commit. All new features must be merged with the stage branch, which is available at [**stage.botnet.com**](https://stage.botnet.com)
+Make sure to create a PR for every new feature/commit. All new features must be merged with the `stage` branch, which is available at [**stage.botnet.com**](https://stage.botnet.com)
+
+For every feature ideal branch name would be `feat/feat-name-here`.
+
+```ts
+git checkout -b feat/chat
+```
+
+## Tech stack
+
+- NextJs
+- Tailwind css
+- `zustand` for state management
+- Supabase for client-facing database
+- Open AI's GPT for LLM
