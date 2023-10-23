@@ -1,3 +1,5 @@
+import { IUserContext } from '.';
+
 export interface IBot {
   id: string;
   createdAt: string;
@@ -23,7 +25,15 @@ export interface IBotFormAnswers {
   greeting: string;
   backstory: string;
   description: string;
-  meta: Record<string, any>;
+  meta: {
+    characteristics?: string;
+    facts?: Partial<IUserContext>[];
+  } & Record<string, any>;
+}
+
+export interface IBotMessage {
+  message: string;
+  role: OpenAIRoles;
 }
 
 export enum OpenAIRoles {

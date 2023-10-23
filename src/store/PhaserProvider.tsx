@@ -34,7 +34,8 @@ const PhaserProvider = (props: { children?: ReactNode }) => {
         antialiasGL: true,
         backgroundColor: '#ede6d4', // || '#f3f3f3',
         scale: {
-          autoCenter: Phaser.Scale.RESIZE,
+          mode: Phaser.Scale.FIT,
+          autoCenter: Phaser.Scale.CENTER_BOTH,
           parent: 'phaser-container',
         },
         physics: {

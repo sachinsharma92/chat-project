@@ -1,32 +1,50 @@
-'use client';
-
+import { SupabaseResult } from '@/types/supbase';
 import { supabaseClient } from '.';
+import { IUser } from '@/types/auth';
+import { map, omit } from 'lodash';
+import snakecaseKeys from 'snakecase-keys';
+import camelcaseKeys from 'camelcase-keys';
 
-export const getUserProfileById = async (userId: string) => {
-  if (!userId) {
-    return null;
-  }
+const userProfilesTable = 'user_profiles';
 
-  return await supabaseClient
-    .from('user_profiles')
+/**
+ * Fetch user profile by id
+ * @param userId
+ * @returns
+ */
+export const getUserProfileById = async (
+  userId: string,
+): Promise<SupabaseResult<IUser[]>> => {
+  const response = await supabaseClient
+    .from<'user_profiles', IUser>(userProfilesTable)
     .select('*')
     .eq('user_id', userId);
-};
 
-export const updateDisplayName = async (
-  userId: string,
-  displayName: string,
-) => {
-  if (!displayName || !userId) {
-    return;
+  if (response.error) {
+    return { error: response.error };
   }
 
-  return await supabaseClient
+  return {
+    data: map(response.data, d => camelcaseKeys(d)) as IUser[],
+  };
+};
+
+/**
+ * Update user profile properties
+ * @param userId
+ * @param props
+ * @returns
+ */
+export const updateUserProfileProps = async (
+  userId: string,
+  props: Partial<IUser>,
+) => {
+  const response = await supabaseClient
     .from('user_profiles')
-    .update({
-      display_name: displayName,
-    })
+    .update(snakecaseKeys(omit(props, ['id', 'createdAt', 'deletedAt'])))
     .eq('user_id', userId);
+
+  return response;
 };
 
 export const updateUserImageUrl = async (userId: string, image: string) => {

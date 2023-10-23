@@ -33,6 +33,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       ariaLabel,
       style,
       isLoading,
+      isDisabled,
     } = props;
 
     return (
@@ -52,13 +53,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           {
             [`${className}`]: isString(className) && !isEmpty(className),
           },
-          'button',
-          {
-            'primary-button': variant === 'primary',
-          },
+          `button ${variant === 'primary' ? 'primary-button' : ''}`,
         )}
       >
         {children || null} {text || null}
+        {isDisabled && <div className="button-disabled"></div>}
         {isLoading && (
           <div className="button-loading">
             <RotatingLines

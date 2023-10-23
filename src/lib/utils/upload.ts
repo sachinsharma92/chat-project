@@ -1,6 +1,7 @@
 import { uploadAvatarIamge } from '@/lib/supabase/storage';
 import { createId } from '@paralleldrive/cuid2';
 import { head } from 'lodash';
+import { base64ToBlob, getImageBase64, scaleImageToJpeg } from './image';
 
 // @ts-ignore
 type CallBackFunc<T extends unknown[]> = (...args: any) => Promise<any> | void;
@@ -26,7 +27,7 @@ export const uploadImageAvatarFile = <T extends unknown[]>(
       onStart();
     }
 
-    const onImageSelectHandler = function () {
+    const onImageSelectHandler = async function () {
       // @ts-ignore
       const files = this.files as File[];
       const file = head(files);
@@ -34,11 +35,13 @@ export const uploadImageAvatarFile = <T extends unknown[]>(
       const fileSize = file?.size as number;
       const fileName = file?.name as string;
       const fileSizeLimitErr =
-        fileSize < 0 || (fileSize && fileSize > 5_240_000);
+        fileSize < 0 || (fileSize && fileSize > 6_240_000);
 
       if (onEnd && (fileSizeLimitErr || !file || !fileType)) {
         onEnd();
       }
+
+      let sanitizedFile: File | Blob | null | undefined = file;
 
       if (fileSizeLimitErr) {
         // 5MB limit for now
@@ -49,21 +52,49 @@ export const uploadImageAvatarFile = <T extends unknown[]>(
         return;
       }
 
-      uploadAvatarIamge(file, createId(), fileName)
-        .then(url => {
-          resolve(url);
-        })
-        .catch(err => reject(err))
-        .finally(() => {
-          try {
-            input?.remove();
-          } catch {
-          } finally {
-            if (onEnd) {
-              onEnd();
+      // for all png and image files
+      // we scale down profile avatars to jpeg file types at 0.9 quality
+      // why? to save storage costs since we could potentially hit thousands of user records-
+      // with at least 2 MB images
+      if (
+        fileType.includes('image/jpeg') ||
+        fileType.includes('image/jpg') ||
+        fileType.includes('image/png')
+      ) {
+        const b64 = await getImageBase64(file);
+        const { value: updatedB64, err: scaleError } = await scaleImageToJpeg(
+          b64 as string,
+          'image/jpeg',
+          0.9,
+        );
+
+        if (!scaleError && updatedB64) {
+          sanitizedFile = base64ToBlob(updatedB64, 'image/jpeg');
+
+          console.log('image downscale');
+        } else {
+          reject(new Error('Invalid file type'));
+          return;
+        }
+      }
+
+      if (sanitizedFile) {
+        uploadAvatarIamge(sanitizedFile, createId(), fileName)
+          .then(url => {
+            resolve(url);
+          })
+          .catch(err => reject(err))
+          .finally(() => {
+            try {
+              input?.remove();
+            } catch {
+            } finally {
+              if (onEnd) {
+                onEnd();
+              }
             }
-          }
-        });
+          });
+      }
     };
 
     const onImageError = function (err: any) {
@@ -88,6 +119,8 @@ export const uploadImageAvatarFile = <T extends unknown[]>(
       if (onEnd) {
         onEnd();
       }
+
+      input?.remove();
     };
     input.setAttribute('id', imageAvatarUploadFileInputId);
     input.setAttribute('multiple', 'false');

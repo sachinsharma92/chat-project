@@ -6,6 +6,7 @@
   align-items: center;
   padding: 4px;
   border-radius: 4px;
+  overflow: hidden;
 }
 
 .primary-button {
@@ -14,14 +15,14 @@
   height: 40px;
   width: 100%;
   border-radius: 4px;
-  background: #3fcf8e !important;
+  background: #3fcf8e;
   box-sizing: border-box;
   color: #fff;
   font-size: 14px;
 }
 
 .primary-button:hover {
-  background: #34b27b !important;
+  background: #34b27b;
 }
 
 .primary-button > p {
@@ -38,4 +39,15 @@
   width: 100%;
   top: 0;
   background: rgba(255, 255, 255, 0.6);
+}
+
+.button-disabled {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: #fff;
+  opacity: 0.5;
+  cursor: not-allowed;
 }

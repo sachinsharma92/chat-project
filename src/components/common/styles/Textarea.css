@@ -1,0 +1,21 @@
+.textarea {
+  width: 100%;
+  border-radius: 4px;
+  padding: 8px 8px;
+  background: transparent;
+  outline: none;
+  box-shadow: none;
+  border: 1px solid #dededc;
+  font-size: 14px;
+  resize: none;
+  scrollbar-width: none;
+}
+
+.textarea:hover {
+  border-color: #9f9f9d;
+}
+
+.textarea::-webkit-scrollbar {
+  opacity: 0;
+  width: 0;
+}

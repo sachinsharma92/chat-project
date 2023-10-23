@@ -1,0 +1,41 @@
+.clone-facts {
+  position: relative;
+  width: 100%;
+  margin-top: 24px;
+}
+
+.clone-facts > ul {
+  @apply mt-4 mb-4;
+
+  box-sizing: border-box;
+  width: 100%;
+  list-style-type: none;
+  list-style: none;
+}
+
+.clone-facts > ul > li {
+  @apply mt-2;
+}
+
+.clone-facts-label {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.create-new {
+  @apply flex-col justify-center items-start mt-4 mb-4;
+
+  width: 100%;
+}
+
+.create-new-actions {
+  @apply flex justify-end items-center;
+
+  width: 100%;
+}
+
+.create-new-button {
+  max-width: 120px;
+  min-width: 100px;
+}

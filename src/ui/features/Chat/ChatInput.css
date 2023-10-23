@@ -14,52 +14,51 @@
 
 .toggle-emojis,
 .expand-chat,
-.chat {
+.microphone {
+  @apply flex justify-center items-center;
+
   position: relative;
   height: 36px;
   width: 36px;
   border-radius: 500px;
   margin: 0;
-  background: var(--transparent-light, rgba(0, 0, 0, 0.16));
-}
-
-.chat {
-  display: none;
+  background: rgba(0, 0, 0, 0.16);
 }
 
 .chat-form {
   position: relative;
   margin: 0 8px;
-  width: 240px;
+  max-width: 220px;
+  min-width: 180px;
   box-sizing: border-box;
   height: 36px;
+}
 
-  & > input[type='text'] {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    font-size: 14px;
-    font-weight: 500;
-    font-style: normal;
-    color: #fff;
-    padding: 16px 12px;
-    padding-right: 30px;
-    border: 1px solid transparent;
-    box-sizing: border-box;
-    border-radius: 16px;
-    background: var(--transparent-light, rgba(0, 0, 0, 0.16));
+.chat-form > input[type='text'] {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  font-size: 14px;
+  font-weight: 500;
+  font-style: normal;
+  color: #fff;
+  padding: 16px 12px;
+  padding-right: 30px;
+  border: 1px solid transparent;
+  box-sizing: border-box;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.16);
+}
 
-    &::placeholder {
-      color: var(--tans-off-white, #fffff7);
-      font-size: 14px;
-      font-weight: 500;
-      font-style: normal;
-    }
+.chat-form > input[type='text']::placeholder {
+  color: var(--tans-off-white, #fffff7);
+  font-size: 14px;
+  font-weight: 500;
+  font-style: normal;
+}
 
-    &:focus {
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-  }
+.chat-form > input[type='text']:focus {
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .send-button {

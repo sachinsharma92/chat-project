@@ -1,6 +1,16 @@
-# camp-ui
+# Botnet
 
-The main UI for Camp on our web platform.
+The Botnet project provides UI at [**botnet.com**](https://botnet.com)
+
+## Setup
+
+Install a node versiom manager, if you're on `Windows` machine please [**see**](https://github.com/coreybutler/nvm-windows). Mac version [**here**](https://github.com/nvm-sh/nvm)
+
+This project requires node version `>=v18.16.1`
+
+## Environment variables
+
+Create a file inside the root directory named `.env.local`. Ask the code owners for the key-values.
 
 ## Install dependencies
 
@@ -14,37 +24,20 @@ npm install
 npm run dev
 ```
 
-## Project File Structure
+## Contribution
 
-```
-\node_modules
-\public
-  \assets
-\src
-  \assets
-  \hooks
-  \store
-  \types
-  \ui
-    \common
-      \Avatar
-      ...
-    \features
-      \MusicPlayer
-      ...
-  \game
-  App.css
-  App.jsx
-  index.css
-  main.jsx
-.eslintrc.cjs
-.gitignore
-index.html
-package-lock.json
-package.json
-README.md
-tsconfig.json
-tsconfig.node.json
-vite.config.js
+Make sure to create a PR for every new feature/commit. All new features must be merged with the `stage` branch, which is available at [**stage.botnet.com**](https://stage.botnet.com)
 
+For every feature ideal branch name would be `feat/feat-name-here`.
+
+```ts
+git checkout -b feat/chat
 ```
+
+## Tech stack
+
+- NextJs
+- Tailwind css
+- `zustand` for state management
+- Supabase for client-facing database
+- Open AI's GPT for LLM

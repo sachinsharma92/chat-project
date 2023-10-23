@@ -1,28 +1,33 @@
 import cx from 'classnames';
 import { useCallback, useEffect, useMemo } from 'react';
-import { ChatIcon } from '@/icons';
+import { ChatIcon, CrossIcon } from '@/icons';
 import { InterTight } from '@/app/fonts';
-import { useAppStore, useGameServer } from '@/store/Spaces';
-import { filter, isEmpty, map } from 'lodash';
+import { useAppStore, useBotData } from '@/store/Spaces';
+import { filter, isEmpty, isString, map } from 'lodash';
 import Message from '../Chat/Message';
 import ChatInput from '../Chat/ChatInput';
 import './Bulletin.css';
 import BotResponding from '../Chat/BotResponding';
 import Pinned from '../Chat/Pinned';
+import Button from '@/components/common/Button';
+import { MobileDrawerEnums } from '@/types/dialog';
 
-const Bulletin = () => {
-  const [expandBulletinSidebar] = useAppStore(state => [
+const Bulletin = (props: { className?: string }) => {
+  const { className } = props;
+  const [expandBulletinSidebar, setShowMobileDrawer] = useAppStore(state => [
     state.expandBulletinSidebar,
+    state.setShowMobileDrawer,
   ]);
-  const [roomChatMessages, botRoomIsResponding] = useGameServer(state => [
-    state.roomChatMessages,
+
+  const [botRoomIsResponding, chatMessages] = useBotData(state => [
     state.botRoomIsResponding,
+    state.chatMessages,
   ]);
 
   const sanitizedChatMessages = useMemo(
-      () => filter(roomChatMessages, line => !isEmpty(line?.id)),
-      [roomChatMessages],
-    );  
+    () => filter(chatMessages, line => !isEmpty(line?.id)),
+    [chatMessages],
+  );
 
   /** Scroll stream chat down bottom  */
   const scrollChatToBottom = useCallback(() => {
@@ -44,34 +49,46 @@ const Bulletin = () => {
 
   /** Scroll on new chat */
   useEffect(() => {
-    if (botRoomIsResponding && !isEmpty(sanitizedChatMessages)) {
+    if (!isEmpty(sanitizedChatMessages)) {
       scrollChatToBottom();
     }
   }, [botRoomIsResponding, sanitizedChatMessages, scrollChatToBottom]);
 
+  const hideMobileChat = () => {
+    setShowMobileDrawer(false, MobileDrawerEnums.none);
+  };
+
   return (
     <div
-      className={cx('bulletin', { 'bulletin-hide': !expandBulletinSidebar })}
+      className={cx('bulletin', {
+        'bulletin-hide': !expandBulletinSidebar,
+        [`${className}`]: !isEmpty(className) && isString(className),
+      })}
     >
       <div className="bulletin-header">
         <div className="bulletin-left">
           <ChatIcon height={'16px'} width={'16px'} />
-          <h1 className={cx(InterTight.className, 'bulletin-label')}>
-            Chat
-          </h1>
+          <h1 className={cx(InterTight.className, 'bulletin-label')}>Chat</h1>
         </div>
-        <div className="bulletin-right"></div>
+        <div className="bulletin-right">
+          <Button onClick={hideMobileChat} className="close-button">
+            <CrossIcon />
+          </Button>
+        </div>
       </div>
       <div className="bulletin-chat-stream">
         <Pinned className="bulletin-pinned" />
         <ul>
           {map(sanitizedChatMessages, line => {
             const key = `BulletinChat${line.id}`;
-            const shortTime = new Intl.DateTimeFormat("en", {
-              timeStyle: "short",
-              });
-            
-            const timestamp = shortTime.format(Date.now());
+            const shortTime = new Intl.DateTimeFormat('en', {
+              timeStyle: 'short',
+            });
+            const createdAt = line?.createdAt;
+            const timestamp = shortTime.format(
+              createdAt ? new Date(createdAt) : Date.now(),
+            );
+
             return (
               <li key={key}>
                 <Message

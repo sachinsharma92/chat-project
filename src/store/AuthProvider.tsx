@@ -17,8 +17,8 @@ import { useAppStore, useGameServer, useSpacesStore } from './Spaces';
 import { getUserIdFromSession, timeout } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { DialogEnums } from '@/types/dialog';
-import camelCaseKeys from 'camelcase-keys';
 import { useRouterQuery } from '@/hooks';
+import { IUser } from '@/types/auth';
 
 interface IAuthAppState {}
 
@@ -84,6 +84,39 @@ const AuthProvider = (props: { children?: ReactNode }) => {
   const paramSpaceId = useMemo(() => searchParams.get('space'), [searchParams]);
 
   /**
+   * Sign out user session from supabase auth
+   */
+  const signOutUser = useCallback(async () => {
+    setSession(null);
+
+    const { error } = await supabaseClient.auth.signOut();
+
+    if (error?.message) {
+      console.log('supabaseClient.auth.signOut() err:', error?.message);
+    } else {
+      setEmail('');
+      setHandle('');
+      setDisplayName('');
+      setImage('');
+      setIsLoading(false);
+      setBotRoom(null);
+
+      if (botRoom) {
+        botRoom.leave(true);
+      }
+    }
+  }, [
+    botRoom,
+    setEmail,
+    setSession,
+    setHandle,
+    setDisplayName,
+    setImage,
+    setIsLoading,
+    setBotRoom,
+  ]);
+
+  /**
    * Fetch logged in user data
    */
   const getUserProfile = useCallback(
@@ -115,7 +148,7 @@ const AuthProvider = (props: { children?: ReactNode }) => {
             console.log('getUserProfile()');
 
             const targetProfile = head(res.data);
-            const props = camelCaseKeys(targetProfile);
+            const props = targetProfile as IUser;
             const {
               displayName = '',
               handle = '',
@@ -144,6 +177,9 @@ const AuthProvider = (props: { children?: ReactNode }) => {
             ) {
               setQuery('space', spaceId);
             }
+          } else if (res?.data && !res?.error) {
+            // force sign out can't find user in db and not network error
+            signOutUser();
           }
         }
       } catch (err: any) {
@@ -154,6 +190,7 @@ const AuthProvider = (props: { children?: ReactNode }) => {
     [
       router?.push,
       paramSpaceId,
+      signOutUser,
       setQuery,
       addSpace,
       setShowDialog,
@@ -176,7 +213,6 @@ const AuthProvider = (props: { children?: ReactNode }) => {
         }
 
         if (newSession && !isEmpty(newSession?.user)) {
-          console.log('init session:', newSession);
           setIsLoading(true);
           setSession(newSession);
           getUserProfile(newSession);
@@ -222,30 +258,6 @@ const AuthProvider = (props: { children?: ReactNode }) => {
 
     return () => subscription.unsubscribe();
   }, [session, setIsLoading, getUserProfile, setEmail, setSession]);
-
-  /**
-   * Sign out user session from supabase auth
-   */
-  const signOutUser = async () => {
-    setSession(null);
-
-    const { error } = await supabaseClient.auth.signOut();
-
-    if (error?.message) {
-      console.log('supabaseClient.auth.signOut() err:', error?.message);
-    } else {
-      setEmail('');
-      setHandle('');
-      setDisplayName('');
-      setImage('');
-      setIsLoading(false);
-      setBotRoom(null);
-
-      if (botRoom) {
-        botRoom.leave(true);
-      }
-    }
-  };
 
   return (
     <AuthStateContext.Provider value={{ state, dispatch, signOutUser }}>

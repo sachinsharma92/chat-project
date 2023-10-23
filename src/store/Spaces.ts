@@ -8,20 +8,34 @@ import {
   ISpace,
   CampRoom,
   BotRoom,
+  IBotData,
 } from '@/types';
 import { create } from 'zustand';
 import { Client } from 'colyseus.js';
-import { DialogEnums } from '@/types/dialog';
+import { DialogEnums, MobileDrawerEnums } from '@/types/dialog';
 import { includes, isUndefined, map } from 'lodash';
 import { mobileWidthBreakpoint } from '@/constants';
 
+/**
+ * In-app related states
+ */
 export const useAppStore = create<IAppState>()(set => ({
   expandInfoSidebar:
     !isUndefined(window) && window?.innerWidth > mobileWidthBreakpoint,
   expandBulletinSidebar: true,
   showDialog: false,
   showDialogType: DialogEnums.none,
+  showMobileDrawer: false,
+  showMobileDrawerType: MobileDrawerEnums.none,
 
+  setShowMobileDrawer: (
+    showMobileDrawer: boolean,
+    showMobileDrawerType: MobileDrawerEnums,
+  ) =>
+    set(() => ({
+      showMobileDrawer,
+      showMobileDrawerType,
+    })),
   setShowDialog: (showDialog: boolean, showDialogType: DialogEnums) =>
     set(() => ({ showDialog, showDialogType })),
   setExpandBulletinSidebar: expandBulletinSidebar =>
@@ -30,6 +44,9 @@ export const useAppStore = create<IAppState>()(set => ({
     set(() => ({ expandInfoSidebar: Boolean(expandInfoSidebar) })),
 }));
 
+/**
+ * Stores active space info
+ */
 export const useSpacesStore = create<ISpaceStoreState>()(set => ({
   spaces: [],
   /** Insert or update existing space */
@@ -71,6 +88,9 @@ export const useSpacesStore = create<ISpaceStoreState>()(set => ({
     set(state => ({ ...state, selectedSpaceId: '', spaces: [] })),
 }));
 
+/**
+ * For gameserver multiplayer states
+ */
 export const useGameServer = create<IGameServerState>()(set => ({
   clientConnection: null,
   gameRoom: null,
@@ -78,9 +98,6 @@ export const useGameServer = create<IGameServerState>()(set => ({
   roomChatMessages: [],
   isConnecting: false,
   players: [],
-  botRoomIsResponding: false,
-  setBotRoomIsResponding: (botRoomIsResponding: boolean) =>
-    set(() => ({ botRoomIsResponding })),
   setBotRoom: (botRoom: BotRoom | null) => set(() => ({ botRoom })),
   setRoomChatMessages: roomChatMessages => set(() => ({ roomChatMessages })),
   setPlayers: (players: RoomUser[]) => set(() => ({ players })),
@@ -92,4 +109,15 @@ export const useGameServer = create<IGameServerState>()(set => ({
   setClientConnection: (clientConnection: Client) => {
     set(() => ({ clientConnection }));
   },
+}));
+
+/**
+ * For bot 1:1 chat related states
+ */
+export const useBotData = create<IBotData>()(set => ({
+  chatMessages: [],
+  botRoomIsResponding: false,
+  setChatMessages: chatMessages => set(() => ({ chatMessages })),
+  setBotRoomIsResponding: (botRoomIsResponding: boolean) =>
+    set(() => ({ botRoomIsResponding })),
 }));

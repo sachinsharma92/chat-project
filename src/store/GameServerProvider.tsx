@@ -2,7 +2,6 @@
 
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useWorldStore } from './CanvasProvider';
-import { createId } from '@paralleldrive/cuid2';
 import { includes, isArray, isFunction, map } from 'lodash';
 import { Client } from 'colyseus.js';
 import { BotRoom, CampRoom, RoomUser } from '@/types';
@@ -11,13 +10,14 @@ import {
   serverRoomReceiveQueue,
   serverRoomSendQueue,
 } from '@/lib/rivet';
+import { v4 as uuid } from 'uuid';
 import { useGameServer } from './Spaces';
 import { useBotnetAuth } from './Auth';
 import { getNameFromEmail, getUserIdFromSession } from '@/lib/utils';
 import { consumeChatMessages, consumeUsers } from '@/lib/utils/gameserver';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 
-export const guestId = createId();
+export const guestId = uuid();
 
 /**
  * Game server handler, make sure to instatiate this once
@@ -42,7 +42,6 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
     botRoom,
     gameRoom,
     isConnecting,
-    setBotRoomIsResponding,
     setPlayers,
     startConnecting,
     endConnecting,
@@ -54,7 +53,6 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
     botRoom: state.botRoom,
     gameRoom: state.gameRoom,
     isConnecting: state.isConnecting,
-    setBotRoomIsResponding: state.setBotRoomIsResponding,
     setPlayers: state.setPlayers,
     startConnecting: state.startConnecting,
     endConnecting: state.endConnecting,
@@ -152,7 +150,7 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
       }
     };
 
-    if (isStarted && !gameRoom && spaceId && sessionChecked) {
+    if (!gameRoom && spaceId && sessionChecked) {
       connectToGameServer();
     }
   }, [
@@ -290,24 +288,6 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
             }
           });
         }
-
-        if (room?.onStateChange) {
-          room.onStateChange(state => {
-            // @ts-ignore
-            if (state?.userBotChatInfo) {
-              // @ts-ignore
-              state?.userBotChatInfo.forEach(info => {
-                if (info?.userId === userId && setBotRoomIsResponding) {
-                  serverRoomReceiveQueue.add(() => {
-                    setBotRoomIsResponding(
-                      info?.isOpenAIChatCompletionProcessing as boolean,
-                    );
-                  });
-                }
-              });
-            }
-          });
-        }
       } catch (err: any) {
         console.log('connectBotChatServer() err:', err?.message);
       } finally {
@@ -326,7 +306,6 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
     authIsLoading,
     isConnecting,
     image,
-    setBotRoomIsResponding,
     setRoomChatMessages,
     startConnecting,
     endConnecting,

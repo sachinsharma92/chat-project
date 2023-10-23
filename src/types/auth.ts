@@ -6,6 +6,10 @@ export interface IUser {
   image: string;
   email?: string;
   handle?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  deletedAt?: string;
+  spaceId?: string;
 }
 
 export interface IAppAuthState {

@@ -105,26 +105,32 @@
 }
 
 .info-host {
+  @apply flex justify-start items-center;
+
   margin-top: 16px;
 }
 
 .info-host > p {
   margin-left: 4px;
-  color: var(--browns-brown, #725c4e);
-  font-feature-settings: 'clig' off, 'liga' off;
-  font-style: normal;
-  font-weight: 500;
+  color: #44373c;
   font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
   line-height: 140%;
 }
 
 .info-host > p > span {
-  color: #9a835a;
+  color: #725c4e;
   font-size: 12px;
   font-style: normal;
   font-weight: 600;
   line-height: 16px;
-  margin-left: 4px;
+  margin-left: 8px;
+}
+
+.info-host-avatar span {
+  font-size: 12px;
+  margin-top: 1px;
 }
 
 .apps-container,
@@ -225,10 +231,6 @@
   border-radius: 500px;
   background: #f8f4e8;
   cursor: pointer;
-}
-
-.cta-collapsed {
-  margin-top: 8px;
 }
 
 .join-button {

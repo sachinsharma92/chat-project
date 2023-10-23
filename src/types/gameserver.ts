@@ -1,7 +1,7 @@
-import { MessageRoles } from '@/ui/features/Chat/Message';
 import { ArraySchema, MapSchema } from '@colyseus/schema';
 import { Client, Room } from 'colyseus.js';
 import { IUser } from './auth';
+import { OpenAIRoles } from '.';
 
 export interface CampRoom
   extends Room<{
@@ -17,8 +17,6 @@ export interface IGameServerState {
   clientConnection: Client | null;
   isConnecting: boolean;
   players: RoomUser[];
-  botRoomIsResponding: boolean;
-  setBotRoomIsResponding: (botRoomIsResponding: boolean) => void;
   setRoomChatMessages: (roomChatMessages: ChatMessageProps[]) => void;
   setPlayers: (players: RoomUser[]) => void;
   startConnecting: () => void;
@@ -26,6 +24,13 @@ export interface IGameServerState {
   setBotRoom: (botRoom: BotRoom | null) => void;
   setRoom: (gameRoom: CampRoom) => void;
   setClientConnection: (clientConnection: Client) => void;
+}
+
+export interface IBotData {
+  chatMessages: ChatMessageProps[];
+  botRoomIsResponding: boolean;
+  setChatMessages: (roomChatMessages: ChatMessageProps[]) => void;
+  setBotRoomIsResponding: (botRoomIsResponding: boolean) => void;
 }
 
 export type RoomUser = {
@@ -42,10 +47,12 @@ export type RoomUser = {
 };
 
 export type ChatMessageProps = {
-  id: string;
+  id?: string;
   message: string;
-  role: MessageRoles;
+  role: OpenAIRoles;
   authorId: string;
+  spaceId?: string;
   authorInfo?: Partial<IUser>;
   time?: string;
+  createdAt?: string;
 };

@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useBotnetAuth } from '@/store/Auth';
 import { defaultCloneAIGreetingPhrase } from '@/lib/utils/bot';
 import { useEffect, useMemo, useState } from 'react';
-import { filter, head, isEmpty, toString } from 'lodash';
+import { filter, head, isEmpty, map, toString } from 'lodash';
 import {
   createSpaceBotProfile,
   getAICloneCompletedForms,
@@ -15,8 +15,11 @@ import {
 import { IBotFormAnswers } from '@/types';
 import { v4 as uuid } from 'uuid';
 import { useSpacesStore } from '@/store/Spaces';
+import camelcaseKeys from 'camelcase-keys';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import './CloneAISettings.css';
+import '@/components/common/styles/Textarea.css';
+import CloneAIFacts from './CloneAIFacts';
 
 const CloneAISettings = () => {
   const [displayName, userId] = useBotnetAuth(state => [
@@ -99,6 +102,7 @@ const CloneAISettings = () => {
         const newSpaceBotProps = {
           spaceId,
           formId,
+          description,
           id: uuid(),
           owner: userId,
         };
@@ -113,7 +117,29 @@ const CloneAISettings = () => {
       }
 
       if (formId) {
-        await updateSpaceBotProfileProperties(formId, { greeting });
+        await updateSpaceBotProfileProperties(formId, {
+          description,
+          greeting,
+        });
+
+        // update description state copy
+        if (spaceInfo?.bots && !isEmpty(description)) {
+          spaceInfo.bots = map(spaceInfo.bots, bot => {
+            if (bot?.formId === formId) {
+              return {
+                ...bot,
+                description,
+              };
+            }
+
+            return bot;
+          });
+        }
+
+        // update state info state copy
+        if (spaceInfo) {
+          setSpaceInfo(spaceId, spaceInfo);
+        }
       }
     } catch (err: any) {
       console.log('onSave() err:', err?.message);
@@ -133,7 +159,9 @@ const CloneAISettings = () => {
         if (data && !error) {
           // we only pick the first bot data-
           // since we only support 1 space == 1 bot for now
-          setBotFormAnswers(head(data));
+          setBotFormAnswers(
+            camelcaseKeys(head(data) as Record<string, any>) as IBotFormAnswers,
+          );
           setFetchingFormData(false);
         }
       }
@@ -150,7 +178,7 @@ const CloneAISettings = () => {
           onSubmit={handleSubmit(onSave)}
           className="clone-ai-settings-form"
         >
-          <div className="greetings">
+          <div className="greeting">
             <label className="label" htmlFor="displayName">
               Greeting
             </label>
@@ -172,13 +200,13 @@ const CloneAISettings = () => {
             <TextInput
               className="input"
               variant={'primary'}
-              placeholder="Let's talk about movies!"
+              placeholder="An extremely timid and introverted first-year student in high school."
               {...register('description', {
                 required: 'Please provide a description.',
                 value: toString(botFormAnswers?.description),
               })}
             />
-            <p className="tip">A short details about your space and AI clone</p>
+            <p className="tip">A short details about your space or AI clone</p>
 
             <label className="label" htmlFor="backstory">
               Backstory
@@ -229,6 +257,7 @@ const CloneAISettings = () => {
           </Button>
         </form>
       )}
+      {!fetchingFormData && <CloneAIFacts />}
     </div>
   );
 };

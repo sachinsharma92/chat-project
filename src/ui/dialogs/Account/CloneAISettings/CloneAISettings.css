@@ -3,7 +3,11 @@
   width: 100%;
 }
 
-.greetings {
+.clone-ai-settings-form {
+  width: 100%;
+}
+
+.greeting {
   @apply mt-2 mb-2;
 
   width: 100%;
@@ -27,22 +31,6 @@
 
 .input {
   width: 100%;
-}
-
-.textarea {
-  width: 100%;
-  border-radius: 4px;
-  padding: 8px 8px;
-  background: transparent;
-  outline: none;
-  box-shadow: none;
-  border: 1px solid #dededc;
-  font-size: 14px;
-  resize: none;
-}
-
-.textarea:hover {
-  border-color: #9f9f9d;
 }
 
 .input-error {

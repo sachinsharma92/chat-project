@@ -1,0 +1,52 @@
+.clone-ai-fact {
+  @apply flex-col items-start justify-start;
+
+  width: 100%;
+}
+
+.clone-ai-fact-input-container {
+  @apply flex justify-start items-center;
+
+  width: 100%;
+}
+
+.clone-ai-fact-input-container > input {
+  max-width: 100%;
+  min-width: 120px;
+}
+
+.clone-ai-fact-delete {
+  @apply flex justify-center items-center;
+
+  box-sizing: border-box;
+  margin-left: 8px;
+}
+
+.clone-ai-fact-delete > svg > path {
+  fill: #44373c;
+}
+
+.clone-ai-fact-actions {
+  @apply flex justify-end items-center;
+
+  margin: 0;
+  width: 100%;
+}
+
+.clone-ai-fact-actions-save {
+  @apply flex justify-center items-center;
+
+  max-width: 80px;
+  margin-left: 8px;
+}
+
+.clone-ai-fact-actions-discard {
+  @apply flex justify-center items-center;
+
+  max-width: 90px;
+  background: gray !important;
+}
+
+.clone-ai-fact-actions-discard:hover {
+  background: lightgray !important;
+}

@@ -24,24 +24,26 @@
 }
 
 .chat-message {
-  width: 90%;
+  width: calc(100% - 18px);
 }
 
 .heart-icon {
-  width: 10%;
-  margin: 2px 0px;
+  @apply flex justify-center;
+
+  margin-left: 2px;
 }
 
 .chat-timestamp {
-  color: #8A7B66;
+  color: #8a7b66;
   font-size: 10px;
   font-weight: 500;
   line-height: 12px;
   letter-spacing: 0px;
-  text-align: left; 
+  text-align: left;
+  margin-top: 4px;
 }
 
-.chat-line-content > p {
+.chat-line-content > h5 {
   position: relative;
   max-width: 100%;
   color: #725c4e;
@@ -51,7 +53,7 @@
   box-sizing: border-box;
 }
 
-.chat-line-content > p > span {
+.chat-line-content > h5 > span {
   margin-right: 4px;
   font-size: 14px;
   font-weight: 600;
