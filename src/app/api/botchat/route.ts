@@ -177,17 +177,21 @@ export async function POST(request: Request) {
   const userDisplayName = userProfile?.displayName;
   const characterLimit = 500;
   const cloneDisplayName = ownerProfile?.displayName || '';
+  const cloneAndUserWithSameName =
+    userDisplayName && userDisplayName === cloneDisplayName;
+  const userDisplayNameForChat =
+    `${userDisplayName}${cloneAndUserWithSameName ? '(User)' : ''}` || 'User';
   const recentChatHistory = `${filter(
     map(conversationHistory, conv => {
       if (conv?.role === OpenAIRoles.user) {
-        return `${userDisplayName || 'User'}: ${conv?.message}`;
+        return `${userDisplayNameForChat}: ${conv?.message}`;
       } else {
         return `${cloneDisplayName}: ${conv?.message}`;
       }
     }),
   ).join('\n')}
   \n
-  ${userDisplayName || 'User'}: ${message}`;
+  ${userDisplayNameForChat}: ${message}`;
 
   let characterFacts = '';
 
@@ -227,7 +231,7 @@ export async function POST(request: Request) {
     }
   }
 
-  const botLimits  = `
+  const botLimits = `
   You must reply within ${characterLimit} characters. 
   You must reply with answers that range from one sentence to two sentences. 
   You must avoid any NSFW content or context in your response.
