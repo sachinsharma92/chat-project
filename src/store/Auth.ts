@@ -8,7 +8,7 @@ export const useBotnetAuth = create<IAppAuthState>(set => ({
   handle: '',
   image: '',
   session: null,
-  isLoading: false,
+  isLoading: true,
   sessionChecked: false,
   setIsLoading: (isLoading: boolean) => set(() => ({ isLoading })),
   setImage: (image: string) => set(() => ({ image })),

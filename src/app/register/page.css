@@ -1,0 +1,11 @@
+.signup-page {
+  @apply flex items-center justify-center h-full w-full;
+
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 720px) {
+  .signup-page {
+    overflow: hidden;
+  }
+}

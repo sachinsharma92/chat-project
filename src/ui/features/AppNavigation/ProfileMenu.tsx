@@ -3,15 +3,19 @@ import Popover from '@/components/common/Popover';
 import { useAppStore } from '@/store/Spaces';
 import { PersonIcon } from '@radix-ui/react-icons';
 import { isFunction } from 'lodash';
-import { DialogEnums } from '@/types/dialog';
+import { useRouter } from 'next/navigation';
 import './ProfileMenu.css';
 
 const ProfileMenu = () => {
   const [setShowDialog] = useAppStore(state => [state.setShowDialog]);
+  const router = useRouter();
 
+  /**
+   * Navigate to auth page on click
+   */
   const showSignInDialog = () => {
     if (isFunction(setShowDialog)) {
-      setShowDialog(true, DialogEnums.auth);
+      router.push('/auth');
     }
   };
 

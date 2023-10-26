@@ -15,7 +15,7 @@ import { ceil, head, isEmpty } from 'lodash';
 import { Session } from '@supabase/supabase-js';
 import { useAppStore, useGameServer, useSpacesStore } from './Spaces';
 import { getUserIdFromSession, timeout } from '@/lib/utils';
-import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { DialogEnums } from '@/types/dialog';
 import { useRouterQuery } from '@/hooks';
 import { IUser } from '@/types/auth';
@@ -79,10 +79,17 @@ const AuthProvider = (props: { children?: ReactNode }) => {
     state.botRoom,
     state.setBotRoom,
   ]);
-  const router = useRouter();
-  const { searchParams, setQuery } = useRouterQuery();
+  const pathname = usePathname();
+  const { searchParams, navigate, setQuery } = useRouterQuery();
   const paramSpaceId = useMemo(() => searchParams.get('space'), [searchParams]);
 
+  const fromAuthPage = useMemo(
+    () =>
+      pathname?.startsWith('/login') ||
+      pathname?.startsWith('/register') ||
+      pathname?.startsWith('/auth'),
+    [pathname],
+  );
   /**
    * Sign out user session from supabase auth
    */
@@ -175,7 +182,9 @@ const AuthProvider = (props: { children?: ReactNode }) => {
               !isEmpty(spaceId) &&
               (!paramSpaceId || (recentlyCreated && spaceId !== paramSpaceId))
             ) {
-              setQuery('space', spaceId);
+              setQuery('space', spaceId, fromAuthPage ? '/' : '');
+            } else if (fromAuthPage) {
+              navigate('/');
             }
           } else if (res?.data && !res?.error) {
             // force sign out can't find user in db and not network error
@@ -186,10 +195,10 @@ const AuthProvider = (props: { children?: ReactNode }) => {
         console.log('getUserProfile() err:', err?.message);
       }
     },
-    // eslint-disable-next-line
     [
-      router?.push,
       paramSpaceId,
+      fromAuthPage,
+      navigate,
       signOutUser,
       setQuery,
       addSpace,
@@ -212,12 +221,24 @@ const AuthProvider = (props: { children?: ReactNode }) => {
           return;
         }
 
+        console.log('init session check');
+
+        const fromAuthPage =
+          pathname?.startsWith('/login') ||
+          pathname?.startsWith('/register') ||
+          pathname?.startsWith('/auth');
+
         if (newSession && !isEmpty(newSession?.user)) {
+          if (fromAuthPage) {
+            navigate('/');
+          }
+
           setIsLoading(true);
           setSession(newSession);
           getUserProfile(newSession);
-
           setEmail(newSession?.user?.email || '');
+        } else {
+          setIsLoading(false);
         }
       })
       .catch(console.log)
@@ -225,7 +246,9 @@ const AuthProvider = (props: { children?: ReactNode }) => {
         setSessionChecked(true);
       });
   }, [
+    pathname,
     sessionChecked,
+    navigate,
     setIsLoading,
     getUserProfile,
     setSession,

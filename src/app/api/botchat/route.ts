@@ -128,20 +128,6 @@ export async function POST(request: Request) {
       'gpt-3.5-turbo-instruct' ||
       'ft:gpt-3.5-turbo-0613:botnet::8BMExOLn',
   };
-  const model = new OpenAI({
-    modelName: openAIParams.model,
-    openAIApiKey: openAIConfig?.apiKey,
-    configuration: {
-      basePath: portkeyApiUrl,
-      baseOptions: {
-        headers: {
-          'x-portkey-api-key': portkeyApi,
-          'x-portkey-mode': 'proxy openai',
-          'x-portkey-trace-id': portkeyTraceId,
-        },
-      },
-    },
-  });
   const openai = getOpenAI();
   const form = head(botFormRes?.data || []);
   const owner = form?.owner as string;
@@ -152,6 +138,28 @@ export async function POST(request: Request) {
   const ownerProfile = camelCaseKeys(
     head(ownerRes?.data) as Record<string, any>,
   ) as IUser;
+  const cloneDisplayName = ownerProfile?.displayName || '';
+  const userDisplayName = userProfile?.displayName;
+  const customPortkeyPromptName = 'complete_chat_with_bot_clone';
+  const model = new OpenAI({
+    modelName: openAIParams.model,
+    openAIApiKey: openAIConfig?.apiKey,
+    configuration: {
+      basePath: portkeyApiUrl,
+      baseOptions: {
+        headers: {
+          'x-portkey-api-key': portkeyApi,
+          'x-portkey-mode': 'proxy openai',
+          'x-portkey-trace-id': portkeyTraceId,
+          'x-portkey-prompt': customPortkeyPromptName,
+          'x-portkey-metadata': JSON.stringify({
+            characterName: cloneDisplayName,
+            displayName: userDisplayName,
+          }),
+        },
+      },
+    },
+  });
 
   if (!form || !ownerProfile) {
     return NextResponse.json(
@@ -174,9 +182,7 @@ export async function POST(request: Request) {
     ),
     m => pick(m, ['message', 'role']),
   );
-  const userDisplayName = userProfile?.displayName;
   const characterLimit = 500;
-  const cloneDisplayName = ownerProfile?.displayName || '';
   const cloneAndUserWithSameName =
     userDisplayName && userDisplayName === cloneDisplayName;
   const userDisplayNameForChat =

@@ -10,6 +10,7 @@ type TextInputPropsType = {
   style?: Partial<CSSProperties>;
   defaultValue?: string;
   placeholder?: string;
+  type?: 'password' | 'text' | 'email';
   variant?: 'primary' | undefined;
 };
 
@@ -23,6 +24,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputPropsType>(
       ariaLabel,
       defaultValue,
       variant,
+      type,
       ...props
     }: InputHTMLAttributes<HTMLInputElement> & TextInputPropsType,
     ref,
@@ -30,7 +32,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputPropsType>(
     return (
       <input
         ref={ref}
-        type="text"
+        type={type || 'text'}
         aria-label={ariaLabel || 'TextInput'}
         className={cx('text-input', {
           'primary-input': variant === 'primary',
@@ -41,6 +43,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputPropsType>(
         style={{ ...style }}
         {...props}
         autoComplete="off"
+        autoCorrect="off"
       />
     );
   },

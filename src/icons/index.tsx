@@ -18,3 +18,4 @@ export { default as AudioPlayingIcon } from './AudioPlayingIcon';
 export { default as ArrowTopRightIcon } from './ArrowTopRightIcon';
 export { default as HeartIcon } from './HeartIcon';
 export { default as CameraIcon } from './CameraIcon';
+export { default as GithubLogoIcon } from './GithubLogoIcon';
