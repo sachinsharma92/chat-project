@@ -66,6 +66,7 @@ const SpaceSettings = () => {
       }
     } catch (err) {
       toast({
+        duration: 2_000,
         variant: 'destructive',
         title: 'Failed to upload.',
       });

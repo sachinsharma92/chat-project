@@ -80,6 +80,7 @@ const AccountInfo = () => {
       }
     } catch (err) {
       toast({
+        duration: 1_500,
         variant: 'destructive',
         title: 'Failed to upload.',
       });

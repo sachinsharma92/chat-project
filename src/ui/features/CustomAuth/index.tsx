@@ -7,6 +7,7 @@ import Button from '@/components/common/Button';
 import Image from 'next/image';
 import Avatar from '@/components/common/Avatar/Avatar';
 import Link from 'next/link';
+import * as EmailValidator from 'email-validator';
 import './CustomAuth.css';
 
 import { useEffect, useMemo, useState } from 'react';
@@ -78,6 +79,11 @@ const CustomAuth = (props: { defaultSection?: AuthSection }) => {
     const { email, password } = data;
 
     try {
+      if (!EmailValidator.validate(email)) {
+        setError('Invalid email address.');
+        return;
+      }
+
       setSubmitted(true);
 
       if (authSectionPick === AuthSection.login) {
