@@ -1,7 +1,7 @@
 {
   "name": "camp-ui",
   "private": true,
-  "version": "1.0.1023.1501",
+  "version": "0.0.102723",
   "type": "module",
   "scripts": {
     "dev": "next dev",
@@ -43,6 +43,7 @@
     "clsx": "^2.0.0",
     "colyseus.js": "^0.15.13",
     "dotenv": "^16.3.1",
+    "email-validator": "^2.0.4",
     "encoding": "^0.1.13",
     "framer-motion": "^10.16.2",
     "gsap": "^3.12.2",

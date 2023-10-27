@@ -4,6 +4,11 @@ import { MeatballsIcon } from '@/icons';
 import { Inter } from '@/app/fonts';
 import { useAppStore } from '@/store/Spaces';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
+import { useSelectedSpace } from '@/hooks/useSelectedSpace';
+import { useEffect, useMemo } from 'react';
+import { useWindowResize } from '@/hooks';
+import { mobileWidthBreakpoint } from '@/constants';
+import { head, isEmpty } from 'lodash';
 import JoinCampButton from '../JoinCampButton/JoinCampButton';
 import Button from '@/components/common/Button';
 import SpaceStatistics from './SpaceStatistics';
@@ -11,14 +16,10 @@ import Apps from './Apps';
 import Avatar from '@/components/common/Avatar/Avatar';
 import cx from 'classnames';
 import Links from '@/components/common/Links/Links';
-import { useSelectedSpace } from '@/hooks/useSelectedSpace';
-import { useEffect, useMemo } from 'react';
-import { useWindowResize } from '@/hooks';
-import { mobileWidthBreakpoint } from '@/constants';
-import { head, isEmpty } from 'lodash';
 
 import './InfoSidebar.css';
 import '@/components/common/styles/Button.css';
+import SubscribeSpace from './SubscribeSpace';
 
 interface featureFlagProps {
   subscribeFeature: boolean;
@@ -102,6 +103,7 @@ const InfoSidebar = () => {
 
             {!isEmpty(spaceInfo?.host) && (
               <div className="info-host">
+                <p>Made by</p>
                 <Avatar
                   className="info-host-avatar"
                   height={24}
@@ -109,12 +111,11 @@ const InfoSidebar = () => {
                   name={spaceInfo?.host?.displayName}
                   src={spaceInfo?.host?.image}
                 />
-                <p>
-                  {spaceInfo?.host?.displayName}
-                  <span>Creator</span>
-                </p>
+                <p>{spaceInfo?.host?.displayName}</p>
               </div>
             )}
+
+            {!isEmpty(spaceInfo) && <SubscribeSpace />}
 
             <div className="apps-container hidden">
               <p className="info-label"> Apps </p>

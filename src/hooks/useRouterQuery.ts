@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useCallback } from 'react';
 
@@ -19,7 +20,7 @@ const useRouterQuery = () => {
       if (op === 'add') {
         params.set(name, value);
       } else if (op === 'remove') {
-        params.delete(name, value);
+        params.delete(name);
       }
 
       return params.toString();
@@ -33,8 +34,12 @@ const useRouterQuery = () => {
    * @param value
    */
   const setQuery = useCallback(
-    (key: string, value: string) => {
-      router.push(pathname + '?' + createQueryString(key, value, 'add'));
+    (key: string, value: string, targetPathname?: string) => {
+      router.push(
+        (targetPathname ? targetPathname : pathname) +
+          '?' +
+          createQueryString(key, value, 'add'),
+      );
     },
     [pathname, router, createQueryString],
   );
@@ -45,13 +50,36 @@ const useRouterQuery = () => {
    * @param value
    */
   const removeQuery = useCallback(
-    (key: string, value: string) => {
-      router.push(pathname + '?' + createQueryString(key, value, 'remove'));
+    (key: string, value: string, targetPathname?: string) => {
+      const newQuery = createQueryString(key, value, 'remove');
+
+      router.push(
+        (targetPathname ? targetPathname : pathname) +
+          (!isEmpty(newQuery) ? '?' : '') +
+          newQuery,
+      );
     },
     [pathname, router, createQueryString],
   );
 
-  return { searchParams, removeQuery, setQuery };
+  /**
+   * Navigate to new pathname and retains current search parameters
+   */
+  const navigate = useCallback(
+    (targetPathname: string) => {
+      const params = new URLSearchParams(searchParams);
+      const paramsInString = params.toString();
+
+      router.push(
+        targetPathname +
+          (!isEmpty(paramsInString) ? ' ?' : '') +
+          paramsInString,
+      );
+    },
+    [router, searchParams],
+  );
+
+  return { searchParams, navigate, removeQuery, setQuery };
 };
 
 export default useRouterQuery;

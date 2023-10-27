@@ -9,7 +9,7 @@ import {
   getUserProfileById,
 } from '@/lib/supabase';
 import { head, isEmpty } from 'lodash';
-import { useRouter } from 'next/navigation';
+import { useRouter, notFound } from 'next/navigation';
 import { IUser } from '@/types/auth';
 import { ISpace } from '@/types';
 
@@ -55,7 +55,11 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
           setSpaceInfo(spaceId, { ...props });
         } else if (error) {
           // redirect user to 404 page
-          router.push('/not-found');
+          if (notFound) {
+            notFound();
+          } else {
+            router.push('/not-found');
+          }
         }
       }
     };
@@ -63,7 +67,7 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
     getSpaceInfo();
 
     // eslint-disable-next-line
-  }, [spaceId, router?.push, setSpaceInfo]);
+  }, [spaceId, router?.push, notFound, setSpaceInfo]);
 
   return <>{children}</>;
 };

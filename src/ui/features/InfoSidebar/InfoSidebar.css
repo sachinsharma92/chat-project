@@ -110,22 +110,22 @@
   margin-top: 16px;
 }
 
-.info-host > p {
-  margin-left: 4px;
-  color: #44373c;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 140%;
-}
-
-.info-host > p > span {
-  color: #725c4e;
+.info-host > p:first-child {
+  color: #8a7b66;
   font-size: 12px;
   font-style: normal;
   font-weight: 600;
-  line-height: 16px;
-  margin-left: 8px;
+  line-height: 133%;
+  margin-right: 4px;
+}
+
+.info-host > p:last-child {
+  margin-left: 4px;
+  color: #44373c;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 140%;
 }
 
 .info-host-avatar span {

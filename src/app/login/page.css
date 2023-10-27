@@ -1,0 +1,11 @@
+.login-page {
+  @apply flex items-center justify-center h-full w-full;
+
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 720px) {
+  .login-page {
+    overflow: hidden;
+  }
+}

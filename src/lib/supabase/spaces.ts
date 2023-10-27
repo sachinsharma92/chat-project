@@ -7,6 +7,7 @@ import camelcaseKeys from 'camelcase-keys';
 
 const spacesProfilesTable = 'spaces_profiles';
 const spacesBotsTable = 'spaces_bots';
+const spaceEmailSubscribersTable = 'space_email_subscribers';
 
 /**
  * Get space profile by id
@@ -125,4 +126,16 @@ export const createSpaceBotProfile = async (params: {
   );
 
   return await supabaseClient.from(spacesBotsTable).insert({ ...props });
+};
+
+/**
+ * Subscribe to space with email address
+ * @param email
+ * @param spaceId
+ * @returns
+ */
+export const subscribeEmailToSpace = async (email: string, spaceId: string) => {
+  return await supabaseClient
+    .from(spaceEmailSubscribersTable)
+    .insert({ email, space_id: spaceId, created_at: new Date().toISOString() });
 };

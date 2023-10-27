@@ -96,16 +96,6 @@
     z-index: 1;
   }
 
-  .info-side-bar-container {
-    position: absolute;
-    height: unset;
-    max-height: calc(100% - 78px);
-    max-width: calc(100% - 32px);
-    top: 78px;
-    left: 16px;
-    z-index: 1;
-  }
-
   .game-screen {
     height: calc(100% - 16px - 92px);
     margin: 0;
