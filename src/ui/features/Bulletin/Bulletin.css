@@ -99,7 +99,7 @@
 
 .bulletin-chat > .chat-form > input[type='text'] {
   background: #fffff7;
-  color: #725c4e;
+  color: #725c4e !important;
 }
 
 .bulletin-chat > .chat-form > input[type='text']::placeholder {

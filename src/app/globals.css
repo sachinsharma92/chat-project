@@ -372,3 +372,12 @@ template {
 [hidden] {
   display: none;
 }
+
+@media screen and (max-width: 720px) {
+  #root {
+    @apply h-full w-full bottom-0 left-0 right-0;
+
+    position: fixed;
+    box-sizing: border-box;
+  }
+}

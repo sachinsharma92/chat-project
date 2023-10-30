@@ -29,6 +29,26 @@ export const isChatFocused = () => {
   return false;
 };
 
+export const focusChatInput = () => {
+  const chatInput = document.querySelector(
+    '.chat-form-input',
+  ) as HTMLInputElement;
+
+  if (chatInput?.focus) {
+    chatInput.focus();
+  }
+};
+
+export const blurChatInput = () => {
+  const chatInput = document.querySelector(
+    '.chat-form-input',
+  ) as HTMLInputElement;
+
+  if (chatInput?.blur) {
+    chatInput.blur();
+  }
+};
+
 const ChatInput = (props: ChatInputPropsType) => {
   const { register, handleSubmit, setValue } = useForm();
   const { sendBotChatMessage } = useBotChat();
@@ -63,20 +83,13 @@ const ChatInput = (props: ChatInputPropsType) => {
     const onKeyDown = (evt: any) => {
       const k = evt?.key;
       const keyCode = evt?.keyCode;
-      const chatInput = document.querySelector(
-        '.chat-form-input',
-      ) as HTMLInputElement;
 
       if (toLower(k) === 'escape' || keyCode === 27) {
-        if (chatInput?.blur) {
-          chatInput.blur();
-        }
+        blurChatInput();
       }
 
       if (toLower(k) === 'enter' || keyCode === 13) {
-        if (chatInput?.focus) {
-          chatInput.focus();
-        }
+        focusChatInput();
       }
     };
 

@@ -10,6 +10,7 @@ type TextInputPropsType = {
   style?: Partial<CSSProperties>;
   defaultValue?: string;
   placeholder?: string;
+  autoFocus?: boolean;
   type?: 'password' | 'text' | 'email';
   variant?: 'primary' | undefined;
 };
@@ -25,6 +26,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputPropsType>(
       defaultValue,
       variant,
       type,
+      autoFocus,
       ...props
     }: InputHTMLAttributes<HTMLInputElement> & TextInputPropsType,
     ref,
@@ -44,6 +46,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputPropsType>(
         {...props}
         autoComplete="off"
         autoCorrect="off"
+        autoFocus={autoFocus}
       />
     );
   },

@@ -12,8 +12,11 @@ import Pinned from '../Chat/Pinned';
 import Button from '@/components/common/Button';
 import { MobileDrawerEnums } from '@/types/dialog';
 
-const Bulletin = (props: { className?: string }) => {
-  const { className } = props;
+const Bulletin = (props: {
+  className?: string;
+  classNameForChatFormInput?: string;
+}) => {
+  const { className, classNameForChatFormInput } = props;
   const [expandBulletinSidebar, setShowMobileDrawer] = useAppStore(state => [
     state.expandBulletinSidebar,
     state.setShowMobileDrawer,
@@ -107,7 +110,11 @@ const Bulletin = (props: { className?: string }) => {
         </ul>
       </div>
       <div className="bulletin-chat-input-wrap">
-        <ChatInput className="bulletin-chat" hideExpand />
+        <ChatInput
+          className="bulletin-chat"
+          classNameForChatFormInput={classNameForChatFormInput}
+          hideExpand
+        />
       </div>
     </div>
   );
