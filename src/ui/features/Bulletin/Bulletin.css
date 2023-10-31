@@ -156,12 +156,12 @@
 }
 
 .close-button {
-  @apply hidden justify-center items-center;
-
   height: 36px;
   width: 36px;
   background: #fffff7;
   border-radius: 50%;
+  display: none;
+  overflow: hidden;
 }
 
 .close-button:hover {
@@ -170,6 +170,6 @@
 
 @media screen and (max-width: 720px) {
   .close-button {
-    display: flex;
+    @apply flex justify-center items-center;
   }
 }

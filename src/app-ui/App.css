@@ -1,13 +1,9 @@
 .root-container {
-  @apply h-full w-full;
+  @apply absolute flex items-start w-full h-full top-0 left-0;
 
-  position: relative;
-  display: flex;
-  flex-direction: row;
   justify-content: space-between;
-  align-items: flex-start;
   box-sizing: border-box;
-  background: var(--tans-light-off-white, #f8f4e8);
+  background: #f8f6f0;
 }
 
 @media screen and (max-width: 720px) {
