@@ -4,11 +4,10 @@ import StickyChat from '../Chat/StickyChat';
 import dynamic from 'next/dynamic';
 import AppNavigation from '../AppNavigation';
 import Bulletin from '../Bulletin';
-import Configurator from '@/ui/avatar/Configurator';
 
-import './MainComponent.css';
 import { useWindowResize } from '@/hooks';
 import { mobileWidthBreakpoint } from '@/constants';
+import './MainComponent.css';
 
 const InfoSidebar = dynamic(
   () => import('@/ui/features/InfoSidebar/InfoSidebar'),
@@ -17,7 +16,7 @@ const InfoSidebar = dynamic(
   },
 );
 
-const Avatar = dynamic(() => import('@/ui/avatar'), {
+const ThreeJSComponent = dynamic(() => import('@/ui/three'), {
   ssr: false,
 });
 
@@ -27,6 +26,7 @@ const Avatar = dynamic(() => import('@/ui/avatar'), {
 
 const MainComponent = () => {
   const { availableWidth } = useWindowResize();
+
   return (
     <div className="main-component flex w-full fix-screen-overflow">
       <AppNavigation />
@@ -36,9 +36,10 @@ const MainComponent = () => {
       </div>
 
       <div className="game-screen">
-        <Configurator />
         <div className="world">
-          <Avatar />
+          <canvas className="game-canvas">
+            <ThreeJSComponent />
+          </canvas>
         </div>
       </div>
 

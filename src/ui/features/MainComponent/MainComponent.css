@@ -41,11 +41,14 @@
 
   max-width: calc(100% - 12px - 12px - 48px - 320px - 8px - 320px);
   width: calc(100% - 12px - 12px - 48px - 320px - 8px - 320px);
+  padding: 0;
 }
 
-.world {
+.world,
+.game-canvas {
   @apply absolute top-0 left-0;
 
+  position: relative;
   height: 100%;
   width: 100%;
   box-sizing: border-box;

@@ -24,5 +24,4 @@ const Experience = () => {
   );
 };
 
-
 export default Avatar;

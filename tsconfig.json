@@ -25,9 +25,14 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@pixiv/three-vrm": ["./public/scripts/three-vrm.module.min.js"]
     },
-    "typeRoots": ["./node_modules/@types", "./node_modules/phaser/types"]
+    "typeRoots": [
+      "./node_modules/@types",
+      "./node_modules/phaser/types",
+      "./src/types"
+    ]
   },
   "include": [
     "./src",
