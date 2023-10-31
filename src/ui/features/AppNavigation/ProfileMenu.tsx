@@ -1,6 +1,6 @@
 import Button from '@/components/common/Button';
 import Popover from '@/components/common/Popover';
-import { useAppStore } from '@/store/Spaces';
+import { useAppStore } from '@/store/App';
 import { PersonIcon } from '@radix-ui/react-icons';
 import { isFunction } from 'lodash';
 import { useRouter } from 'next/navigation';

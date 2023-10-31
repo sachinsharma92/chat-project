@@ -4,7 +4,7 @@ import { useProgress, useTexture } from '@react-three/drei';
 import { ReactThreeFiber, useFrame } from '@react-three/fiber';
 import { gsap } from 'gsap';
 import * as THREE from 'three';
-import { useWorldStore } from '@/store/CanvasProvider';
+import { useWorldStore } from '@/store/Canvas';
 
 declare global {
   namespace JSX {

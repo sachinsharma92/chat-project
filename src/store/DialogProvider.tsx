@@ -2,7 +2,7 @@
 
 import * as Dialog from '@radix-ui/react-dialog';
 import { ReactNode } from 'react';
-import { useAppStore } from './Spaces';
+import { useAppStore } from './App';
 import { useBotnetAuth } from './Auth';
 import { DialogEnums, MobileDrawerEnums } from '@/types/dialog';
 import Auth from '@/ui/dialogs/Auth';

@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import { useWorldStore } from '@/store/CanvasProvider';
+import { useWorldStore } from '@/store/Canvas';
 import { useProgress } from '@react-three/drei';
 
 function LoadingScreen() {

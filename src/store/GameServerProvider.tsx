@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode, useEffect, useMemo, useState } from 'react';
-import { useWorldStore } from './CanvasProvider';
+import { useWorldStore } from './Canvas';
 import { includes, isArray, isFunction, map } from 'lodash';
 import { Client } from 'colyseus.js';
 import { BotRoom, CampRoom, RoomUser } from '@/types';
@@ -11,7 +11,7 @@ import {
   serverRoomSendQueue,
 } from '@/lib/rivet';
 import { v4 as uuid } from 'uuid';
-import { useGameServer } from './Spaces';
+import { useGameServer } from './App';
 import { useBotnetAuth } from './Auth';
 import { getNameFromEmail, getUserIdFromSession } from '@/lib/utils';
 import { consumeChatMessages, consumeUsers } from '@/lib/utils/gameserver';

@@ -1,4 +1,4 @@
-import { useDirectionStore } from '@/store/JoystickProvider';
+import { useDirectionStore } from '@/store/Joystick';
 import { Joystick } from 'react-joystick-component';
 
 const JoystickController = () => {

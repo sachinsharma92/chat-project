@@ -1,6 +1,6 @@
 'use client';
 
-import { useDirectionStore } from '@/store/CanvasProvider';
+import { useDirectionStore } from '@/store/Canvas';
 import { isChatFocused } from '@/ui/features/Chat/ChatInput';
 import React, {
   createContext,

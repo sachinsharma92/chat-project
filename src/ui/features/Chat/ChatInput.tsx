@@ -9,7 +9,7 @@ import { PaperPlane, ExpandIcon, Microphone, CameraIcon } from '@/icons';
 import { isEmpty, isString, toLower, toString } from 'lodash';
 import { useBotChat } from './hooks/useBotChat';
 import { useWindowResize } from '@/hooks';
-import { useAppStore, useBotData } from '@/store/Spaces';
+import { useAppStore, useBotData } from '@/store/App';
 import '../../../components/common/styles/Button.css';
 import './ChatInput.css';
 

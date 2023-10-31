@@ -2,7 +2,7 @@
 
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import { ReactNode, useEffect } from 'react';
-import { useSpacesStore } from './Spaces';
+import { useSpacesStore } from './App';
 import {
   getSpaceBots,
   getSpaceProfile,

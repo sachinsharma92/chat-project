@@ -14,7 +14,7 @@ import {
 } from '@/lib/supabase';
 import { IBotFormAnswers } from '@/types';
 import { v4 as uuid } from 'uuid';
-import { useSpacesStore } from '@/store/Spaces';
+import { useSpacesStore } from '@/store/App';
 import camelcaseKeys from 'camelcase-keys';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import './CloneAISettings.css';

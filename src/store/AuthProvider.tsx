@@ -13,7 +13,7 @@ import {
 import { useBotnetAuth } from './Auth';
 import { ceil, head, isEmpty } from 'lodash';
 import { Session } from '@supabase/supabase-js';
-import { useAppStore, useGameServer, useSpacesStore } from './Spaces';
+import { useAppStore, useGameServer, useSpacesStore } from './App';
 import { getUserIdFromSession, timeout } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
 import { DialogEnums } from '@/types/dialog';

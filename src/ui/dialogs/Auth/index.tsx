@@ -5,7 +5,7 @@ import { Auth as SupabaseAuthUI } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { Inter } from '@/app/fonts';
 import { useBotnetAuth } from '@/store/Auth';
-import { useAppStore } from '@/store/Spaces';
+import { useAppStore } from '@/store/App';
 import { DialogEnums } from '@/types/dialog';
 import { isFunction } from 'lodash';
 import DialogCloseButton from '@/components/common/DialogCloseButton';

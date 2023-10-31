@@ -1,7 +1,7 @@
 import axios from 'axios';
 import camelcaseKeys from 'camelcase-keys';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
-import { useBotData } from '@/store/Spaces';
+import { useBotData } from '@/store/App';
 import { head, isEmpty, map, pick } from 'lodash';
 import { isResponseStatusSuccess } from '@/lib/utils';
 import { ChatMessageProps, OpenAIRoles } from '@/types';

@@ -2,7 +2,7 @@ import cx from 'classnames';
 import { useCallback, useEffect, useMemo } from 'react';
 import { ChatIcon, CrossIcon } from '@/icons';
 import { InterTight } from '@/app/fonts';
-import { useAppStore, useBotData } from '@/store/Spaces';
+import { useAppStore, useBotData } from '@/store/App';
 import { filter, isEmpty, isString, map } from 'lodash';
 import Message from '../Chat/Message';
 import ChatInput from '../Chat/ChatInput';

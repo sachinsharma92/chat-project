@@ -10,7 +10,7 @@ import {
 } from '@/icons';
 import cx from 'classnames';
 import { InterTight } from '@/app/fonts';
-import { useAppStore } from '@/store/Spaces';
+import { useAppStore } from '@/store/App';
 import { DialogEnums } from '@/types/dialog';
 import { useBotnetAuth } from '@/store/Auth';
 import { ExitIcon } from '@radix-ui/react-icons';

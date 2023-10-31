@@ -3,7 +3,7 @@ import TextInput from '@/components/common/TextInput';
 import Avatar from '@/components/common/Avatar/Avatar';
 import TextareaAutosize from 'react-textarea-autosize';
 import { UploadIcon } from '@radix-ui/react-icons';
-import { useSpacesStore } from '@/store/Spaces';
+import { useSpacesStore } from '@/store/App';
 import { useMemo, useState } from 'react';
 import { filter, head, isEmpty, pick } from 'lodash';
 import { useBotnetAuth } from '@/store/Auth';

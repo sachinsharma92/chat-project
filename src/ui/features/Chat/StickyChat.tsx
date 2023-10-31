@@ -1,4 +1,4 @@
-import { useAppStore } from '@/store/Spaces';
+import { useAppStore } from '@/store/App';
 import { DialogEnums, MobileDrawerEnums } from '@/types/dialog';
 import { useBotnetAuth } from '@/store/Auth';
 import ChatInput from './ChatInput';

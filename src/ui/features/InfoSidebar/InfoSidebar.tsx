@@ -2,7 +2,7 @@
 
 import { MeatballsIcon } from '@/icons';
 import { Inter } from '@/app/fonts';
-import { useAppStore } from '@/store/Spaces';
+import { useAppStore } from '@/store/App';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import { useEffect, useMemo } from 'react';

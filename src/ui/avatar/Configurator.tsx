@@ -1,4 +1,4 @@
-import { colorStore, hairStyleStore } from '@/store/AvatarStore';
+import { colorStore, hairStyleStore } from '@/store/Avatar';
 import React, { useState } from 'react';
 import { motion as m } from 'framer-motion';
 
