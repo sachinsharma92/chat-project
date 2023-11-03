@@ -1,4 +1,3 @@
-import axios from 'axios';
 import camelcaseKeys from 'camelcase-keys';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import { useBotData } from '@/store/App';
@@ -9,6 +8,8 @@ import { useBotnetAuth } from '@/store/Auth';
 import { guestId } from '@/store/GameServerProvider';
 import { v4 as uuid } from 'uuid';
 import { useAuth } from '@/hooks';
+import { APIClient } from '@/lib/api';
+import { BotChatPostResponse } from '@/app/api/botchat/route';
 
 /**
  * Call function to send message to bot
@@ -66,21 +67,22 @@ export const useBotChat = () => {
         setChatMessages([...chatMessages, chatMessage]);
         const bot = camelcaseKeys(head(spaceInfo?.bots) || {});
         const authHeaders = getSupabaseAuthHeaders();
-        const res = await axios({
-          method: 'POST',
-          baseURL: '/',
-          url: '/api/botchat',
-          headers: {
-            ...authHeaders,
-          },
-          data: {
+
+        const res = await APIClient.post<BotChatPostResponse>(
+          '/api/botchat',
+          {
             message,
             spaceId,
             messageHistory,
             botFormId: bot?.formId,
             authorId: userId,
           },
-        });
+          {
+            headers: {
+              ...authHeaders,
+            },
+          },
+        );
         const resData = res?.data;
 
         if (isResponseStatusSuccess(res) && !isEmpty(resData?.messages)) {

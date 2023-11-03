@@ -1,20 +1,10 @@
 .button {
-  position: relative;
-  outline: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 4px;
-  border-radius: 4px;
-  overflow: hidden;
+  @apply relative flex items-center justify-center p-[4px] overflow-hidden outline-none;
 }
 
 .primary-button {
-  @apply flex items-center justify-center mt-4 mb-2;
+  @apply flex items-center justify-center mt-4 mb-2 h-[40px] w-full rounded-[4px];
 
-  height: 40px;
-  width: 100%;
-  border-radius: 4px;
   background: #3fcf8e;
   box-sizing: border-box;
   color: #fff;

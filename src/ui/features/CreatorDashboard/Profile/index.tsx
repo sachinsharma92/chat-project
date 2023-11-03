@@ -1,17 +1,27 @@
-import { useBotnetAuth } from '@/store/Auth';
 import { useMemo, useState } from 'react';
+import { useBotnetAuth } from '@/store/Auth';
+import { isEmpty, isString, toString } from 'lodash';
+import { UploadIcon } from 'lucide-react';
+
+import Avatar from '@/components/common/Avatar/Avatar';
+import Button from '@/components/common/Button';
+import TextInput from '@/components/common/TextInput';
+
 import { useForm } from 'react-hook-form';
 import { updateUserProfileProps } from '@/lib/supabase';
 import { uploadImageAvatarFile } from '@/lib/utils/upload';
-import { isEmpty, toString } from 'lodash';
 import { useToast } from '@/components/ui/use-toast';
-import Avatar from '@/components/common/Avatar/Avatar';
-import TextInput from '@/components/common/TextInput';
-import Button from '@/components/common/Button';
-import './AccountInfo.css';
-import { UploadIcon } from '@radix-ui/react-icons';
 
-const AccountInfo = () => {
+import './Profile.css';
+
+const Profile = (props: {
+  className?: string;
+  avatarHeight?: number;
+  avatarWidth?: number;
+}) => {
+  // edit mode by default
+  const { className, avatarHeight, avatarWidth } = props;
+
   const [userId, image, email, displayName, setDisplayName, setImage] =
     useBotnetAuth(state => [
       state?.session?.user?.id || '',
@@ -21,6 +31,10 @@ const AccountInfo = () => {
       state.setDisplayName,
       state.setImage,
     ]);
+
+  const [updating, setUpdating] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -29,10 +43,8 @@ const AccountInfo = () => {
     formState: { errors },
   } = useForm();
   const { toast } = useToast();
-  const [updating, setUpdating] = useState(false);
-  const [uploading, setUploading] = useState(false);
 
-  const onUpdate = async (data: any = {}) => {
+  const onUpdate = async (data: any) => {
     try {
       const { displayName: updatedDisplayName } = data;
 
@@ -55,22 +67,15 @@ const AccountInfo = () => {
     }
   };
 
-  const showUpdatebutton =
-    watch('displayName') && watch('displayName') !== displayName;
-
-  /**
-   * Trigger file input and upload selected image
-   * @returns
-   */
   const onAccountAvatarUpdate = async () => {
-    if (uploading) {
+    if (uploadingAvatar) {
       return;
     }
 
     try {
       const url = await uploadImageAvatarFile(
-        () => setUploading(true),
-        () => setUploading(false),
+        () => setUploadingAvatar(true),
+        () => setUploadingAvatar(false),
       );
 
       if (!isEmpty(url) && url) {
@@ -87,35 +92,47 @@ const AccountInfo = () => {
     }
   };
 
+  const showUpdatebutton =
+    watch('displayName') && watch('displayName') !== displayName;
+
   /** Form error message */
   const errorMessage = useMemo(() => {
-    return errors?.displayName?.message || '';
+    return errors?.displayName?.message?.toString() || '';
   }, [errors]);
 
   return (
-    <div className="account-info">
-      <div className="account-avatar">
+    <div
+      className={`profile${
+        isString(className) && !isEmpty(className) ? ` ${className}` : ''
+      }`}
+    >
+      <div className="profile-avatar">
         <Button
-          isLoading={uploading}
+          isLoading={uploadingAvatar}
           className="upload-avatar"
           onClick={onAccountAvatarUpdate}
         >
-          <Avatar height={80} width={80} src={image} name={displayName} />
+          <Avatar
+            height={avatarHeight || 80}
+            width={avatarWidth || 80}
+            src={image}
+            name={displayName}
+          />
         </Button>
 
-        {!uploading && (
+        {!uploadingAvatar && (
           <Button
             onClick={onAccountAvatarUpdate}
             variant="primary"
             className="upload-avatar-button"
           >
-            <UploadIcon />
+            <UploadIcon height={16} width={16} />
             <p>Upload image</p>
           </Button>
         )}
       </div>
-      <form onSubmit={handleSubmit(onUpdate)} className="account-form">
-        <div className="account-display-name">
+      <form onSubmit={handleSubmit(onUpdate)} className="profile-form">
+        <div className="profile-display-name">
           <label className="label" htmlFor="displayName">
             Display name
           </label>
@@ -129,7 +146,8 @@ const AccountInfo = () => {
             })}
           />
         </div>
-        <div className="account-email">
+
+        <div className="profile-email">
           <label className="label" htmlFor="email">
             Email
           </label>
@@ -144,7 +162,7 @@ const AccountInfo = () => {
         </div>
 
         {!isEmpty(errorMessage) && (
-          <div className="input-error">
+          <div className="profile-input-error">
             <p>{toString(errorMessage)}</p>
           </div>
         )}
@@ -152,7 +170,7 @@ const AccountInfo = () => {
         {showUpdatebutton && (
           <Button
             isLoading={updating}
-            className="update-button"
+            className="profile-update-button"
             variant={'primary'}
             type="submit"
           >
@@ -164,4 +182,4 @@ const AccountInfo = () => {
   );
 };
 
-export default AccountInfo;
+export default Profile;

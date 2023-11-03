@@ -1,13 +1,9 @@
 .clone-ai-fact {
-  @apply flex-col items-start justify-start;
-
-  width: 100%;
+  @apply flex-col items-start justify-start w-full;
 }
 
 .clone-ai-fact-input-container {
-  @apply flex justify-start items-center;
-
-  width: 100%;
+  @apply flex justify-start items-center w-full;
 }
 
 .clone-ai-fact-input-container > input {

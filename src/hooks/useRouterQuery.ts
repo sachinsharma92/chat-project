@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash';
+import { isEmpty, isUndefined } from 'lodash';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useCallback } from 'react';
 
@@ -14,12 +14,12 @@ const useRouterQuery = () => {
   // Get a new searchParams string by merging the current
   // searchParams with a provided key/value pair and op code
   const createQueryString = useCallback(
-    (name: string, value: string, op: 'add' | 'remove') => {
+    (name?: string, value?: string, op?: 'add' | 'remove') => {
       const params = new URLSearchParams(searchParams);
 
-      if (op === 'add') {
+      if (op === 'add' && name && !isUndefined(value)) {
         params.set(name, value);
-      } else if (op === 'remove') {
+      } else if (op === 'remove' && name && !isUndefined(value)) {
         params.delete(name);
       }
 
@@ -67,16 +67,10 @@ const useRouterQuery = () => {
    */
   const navigate = useCallback(
     (targetPathname: string) => {
-      const params = new URLSearchParams(searchParams);
-      const paramsInString = params.toString();
-
-      router.push(
-        targetPathname +
-          (!isEmpty(paramsInString) ? ' ?' : '') +
-          paramsInString,
-      );
+      const newQuery = createQueryString();
+      router.push(targetPathname + (!isEmpty(newQuery) ? '?' : '') + newQuery);
     },
-    [router, searchParams],
+    [router, createQueryString],
   );
 
   return { searchParams, navigate, removeQuery, setQuery };

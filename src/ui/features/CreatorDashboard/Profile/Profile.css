@@ -1,0 +1,70 @@
+.profile {
+  @apply relative flex-col justify-center items-center w-full;
+}
+
+.profile-avatar {
+  @apply flex justify-center items-center;
+
+  width: 100%;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.upload-avatar {
+  @apply flex justify-center items-center;
+
+  border-radius: 50%;
+}
+
+.upload-avatar-button {
+  @apply flex justify-center items-center mt-4 mb-4;
+
+  max-width: 200px;
+  font-size: 14px;
+}
+
+.upload-avatar-button > p {
+  font-weight: normal;
+  margin-left: 8px;
+}
+
+.upload-avatar span {
+  font-size: 30px;
+}
+
+.upload-avatar:hover,
+.upload-avatar:focus {
+  background: #f8f4e8;
+  opacity: 0.8;
+  border-radius: 50%;
+}
+
+.profile-form {
+  @apply relative flex items-center justify-start mt-2 mb-4 w-full;
+
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.profile-display-name,
+.profile-email {
+  @apply w-full;
+}
+
+.profile-input-error {
+  @apply flex justify-center items-center mb-4;
+
+  width: 100%;
+}
+
+.profile-input-error > p {
+  color: red;
+  font-size: 14px;
+}
+
+.profile-update-button {
+  @apply mt-6;
+
+  min-width: 120px;
+  max-width: 200px;
+}

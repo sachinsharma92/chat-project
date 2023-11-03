@@ -5,12 +5,13 @@ import TextareaAutosize from 'react-textarea-autosize';
 import { UploadIcon } from '@radix-ui/react-icons';
 import { useSpacesStore } from '@/store/App';
 import { useMemo, useState } from 'react';
-import { filter, head, isEmpty, pick } from 'lodash';
+import { isEmpty, pick } from 'lodash';
 import { useBotnetAuth } from '@/store/Auth';
 import { useForm } from 'react-hook-form';
 import { uploadImageAvatarFile } from '@/lib/utils/upload';
 import { useToast } from '@/components/ui/use-toast';
 import { updateSpaceProfileProperties } from '@/lib/supabase';
+import { useCreatorSpace } from '@/hooks';
 import './SpaceSettings.css';
 import '@/components/common/styles/Textarea.css';
 
@@ -25,22 +26,10 @@ const SpaceSettings = () => {
 
   const [updating, setUpdating] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [userId, displayName] = useBotnetAuth(state => [
-    state?.session?.user?.id || '',
-    state.displayName,
-  ]);
-  const [spaces, setSpaceInfo] = useSpacesStore(state => [
-    state.spaces,
-    state.setSpaceInfo,
-  ]);
-  // owned space, not necessarily active/selected
-  const spaceInfo = useMemo(() => {
-    const find = filter(
-      spaces,
-      space => !isEmpty(space?.id) && space?.owner === userId,
-    );
-    return head(find);
-  }, [spaces, userId]);
+  const [displayName] = useBotnetAuth(state => [state.displayName]);
+  const [setSpaceInfo] = useSpacesStore(state => [state.setSpaceInfo]);
+  const { spaceInfo } = useCreatorSpace();
+
   // owned space id
   const spaceId = useMemo(() => {
     return spaceInfo?.id as string;

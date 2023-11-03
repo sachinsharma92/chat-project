@@ -1,18 +1,21 @@
 import Button from '@/components/common/Button';
 import TextInput from '@/components/common/TextInput';
-import axios from 'axios';
 import { ReactNode, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { TrashIcon } from '@radix-ui/react-icons';
 import { deleteUserContextEmbedding } from '@/lib/supabase/embeddings';
-import { head, isFunction } from 'lodash';
+import { filter, head, isEmpty, isFunction } from 'lodash';
 import { useAuth } from '@/hooks';
-import { GenerateEmbeddingsBodyRequest } from '@/app/api/generate-embeddings/route';
-import { useSelectedSpace } from '@/hooks/useSelectedSpace';
+import {
+  GenerateEmbeddingsBodyRequest,
+  GenerateEmbeddingsResponse,
+} from '@/app/api/generate-embeddings/route';
 import { isResponseStatusSuccess } from '@/lib/utils';
 import { IUserContext } from '@/types';
 
 import './CloneAIFact.css';
+import { APIClient } from '@/lib/api';
+import { useSpacesStore } from '@/store/App';
 
 /**
  * Character fact item component
@@ -32,7 +35,16 @@ const CloneAIFact = (props: {
   const [deleting, setDeleting] = useState(false);
   const { userId, getSupabaseAuthHeaders } = useAuth();
 
-  const { spaceInfo } = useSelectedSpace();
+  const [spaces] = useSpacesStore(state => [state.spaces]);
+
+  // owned space, not necessarily active/selected
+  const spaceInfo = useMemo(() => {
+    const find = filter(
+      spaces,
+      space => !isEmpty(space?.id) && space?.owner === userId,
+    );
+    return head(find);
+  }, [spaces, userId]);
   const spaceBotInfo = useMemo(() => head(spaceInfo?.bots), [spaceInfo]);
   const botId = useMemo(() => spaceBotInfo?.id, [spaceBotInfo]);
 
@@ -63,15 +75,16 @@ const CloneAIFact = (props: {
         type: 'clone.facts',
       };
       const authHeaders = getSupabaseAuthHeaders();
-      const res = await axios({
-        method: 'POST',
-        baseURL: '/',
-        url: '/api/generate-embeddings',
-        headers: {
-          ...authHeaders,
+
+      const res = await APIClient.post<GenerateEmbeddingsResponse>(
+        '/api/generate-embeddings',
+        dataBody,
+        {
+          headers: {
+            ...authHeaders,
+          },
         },
-        data: dataBody,
-      });
+      );
       const resData = res?.data;
 
       if (isResponseStatusSuccess(res) && resData?.success) {

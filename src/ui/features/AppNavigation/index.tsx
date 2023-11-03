@@ -10,12 +10,12 @@ import {
 } from '@/icons';
 import cx from 'classnames';
 import { InterTight } from '@/app/fonts';
-import { useAppStore } from '@/store/App';
-import { DialogEnums } from '@/types/dialog';
 import { useBotnetAuth } from '@/store/Auth';
 import { ExitIcon } from '@radix-ui/react-icons';
 import { useContext } from 'react';
 import { AuthStateContext } from '@/store/AuthProvider';
+import { useRouter } from 'next/navigation';
+
 import ProfileMenu from './ProfileMenu';
 import './AppNavigation.css';
 
@@ -24,15 +24,16 @@ const AppNavigation = () => {
     state.session,
     state.isLoading,
   ]);
-  const [setShowDialog] = useAppStore(state => [state.setShowDialog]);
   const { signOutUser } = useContext(AuthStateContext);
+
+  const router = useRouter();
 
   const showAccount = () => {
     if (authIsLoading) {
       return;
     }
 
-    setShowDialog(true, DialogEnums.account);
+    router.push('/dashboard');
   };
 
   const onSignOut = () => {

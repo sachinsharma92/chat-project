@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useBotnetAuth } from '@/store/Auth';
 import { defaultCloneAIGreetingPhrase } from '@/lib/utils/bot';
 import { useEffect, useMemo, useState } from 'react';
-import { filter, head, isEmpty, map, toString } from 'lodash';
+import { head, isEmpty, map, toString } from 'lodash';
 import {
   createSpaceBotProfile,
   getAICloneCompletedForms,
@@ -17,6 +17,8 @@ import { v4 as uuid } from 'uuid';
 import { useSpacesStore } from '@/store/App';
 import camelcaseKeys from 'camelcase-keys';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
+import { useCreatorSpace } from '@/hooks';
+
 import './CloneAISettings.css';
 import '@/components/common/styles/Textarea.css';
 import CloneAIFacts from './CloneAIFacts';
@@ -30,18 +32,11 @@ const CloneAISettings = () => {
   const [fetchingFormData, setFetchingFormData] = useState(true);
   const [botFormAnswers, setBotFormAnswers] =
     useState<Partial<IBotFormAnswers> | null>(null);
-  const [spaces, setSpaceInfo] = useSpacesStore(state => [
-    state.spaces,
-    state.setSpaceInfo,
-  ]);
+  const [setSpaceInfo] = useSpacesStore(state => [state.setSpaceInfo]);
+
   // owned space, not necessarily active/selected
-  const spaceInfo = useMemo(() => {
-    const find = filter(
-      spaces,
-      space => !isEmpty(space?.id) && space?.owner === userId,
-    );
-    return head(find);
-  }, [spaces, userId]);
+  const { spaceInfo } = useCreatorSpace();
+
   // owned space id
   const spaceId = useMemo(() => {
     return spaceInfo?.id as string;

@@ -1,6 +1,11 @@
 'use client';
 
-import { getUserProfileById, supabaseClient } from '@/lib/supabase';
+import {
+  getSpaceBots,
+  getSpaceProfile,
+  getUserProfileById,
+  supabaseClient,
+} from '@/lib/supabase';
 import {
   Dispatch,
   ReactNode,
@@ -74,13 +79,16 @@ const AuthProvider = (props: { children?: ReactNode }) => {
   ]);
   const [state, dispatch] = useReducer(reducer, initialState);
   const [setShowDialog] = useAppStore(state => [state.setShowDialog]);
-  const [addSpace] = useSpacesStore(state => [state.addSpace]);
+  const [addSpace, setSpaceInfo] = useSpacesStore(state => [
+    state.addSpace,
+    state.setSpaceInfo,
+  ]);
   const [botRoom, setBotRoom] = useGameServer(state => [
     state.botRoom,
     state.setBotRoom,
   ]);
   const pathname = usePathname();
-  const { searchParams, navigate, setQuery } = useRouterQuery();
+  const { searchParams, navigate } = useRouterQuery();
   const paramSpaceId = useMemo(() => searchParams.get('space'), [searchParams]);
 
   const fromAuthPage = useMemo(
@@ -166,7 +174,6 @@ const AuthProvider = (props: { children?: ReactNode }) => {
             setImage(image);
             setHandle(handle);
             setDisplayName(displayName);
-            setIsLoading(false);
 
             console.log('getUserProfile() spaceId:', spaceId);
 
@@ -176,16 +183,48 @@ const AuthProvider = (props: { children?: ReactNode }) => {
 
             if (!isEmpty(spaceId)) {
               addSpace({ id: spaceId, owner: userId });
+
+              /**
+               * Fetch user space profile
+               */
+              getSpaceProfile(spaceId)
+                .then(async params => {
+                  const { data, error } = params;
+
+                  if (!error && !isEmpty(data)) {
+                    /**
+                     * If space info exist, fetch bot clone data
+                     */
+                    getSpaceBots(spaceId)
+                      .then(resBots => {
+                        const spaceInfo = head(data);
+                        const spaceBotsData = resBots?.data;
+                        const props = {
+                          ...spaceInfo,
+                          bots: spaceBotsData || [],
+                        };
+
+                        if (spaceInfo) {
+                          setSpaceInfo(spaceId, props);
+                        }
+                      })
+                      .catch(console.log);
+                  }
+                })
+                .catch(console.log);
             }
 
             if (
-              !isEmpty(spaceId) &&
-              (!paramSpaceId || (recentlyCreated && spaceId !== paramSpaceId))
+              (!isEmpty(spaceId) &&
+                (!paramSpaceId ||
+                  (recentlyCreated && spaceId !== paramSpaceId))) ||
+              fromAuthPage
             ) {
-              setQuery('space', spaceId, fromAuthPage ? '/' : '');
-            } else if (fromAuthPage) {
-              navigate('/');
+              // navigate host to dashboard page
+              navigate('/dashboard');
             }
+
+            setIsLoading(false);
           } else if (res?.data && !res?.error) {
             // force sign out can't find user in db and not network error
             signOutUser();
@@ -198,9 +237,9 @@ const AuthProvider = (props: { children?: ReactNode }) => {
     [
       paramSpaceId,
       fromAuthPage,
+      setSpaceInfo,
       navigate,
       signOutUser,
-      setQuery,
       addSpace,
       setShowDialog,
       setIsLoading,
@@ -230,7 +269,7 @@ const AuthProvider = (props: { children?: ReactNode }) => {
 
         if (newSession && !isEmpty(newSession?.user)) {
           if (fromAuthPage) {
-            navigate('/');
+            navigate('/dashboard');
           }
 
           setIsLoading(true);
@@ -238,6 +277,10 @@ const AuthProvider = (props: { children?: ReactNode }) => {
           getUserProfile(newSession);
           setEmail(newSession?.user?.email || '');
         } else {
+          if (pathname?.startsWith('/dashboard')) {
+            navigate('/');
+          }
+
           setIsLoading(false);
         }
       })

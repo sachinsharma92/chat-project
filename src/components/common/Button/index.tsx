@@ -1,7 +1,6 @@
 import { isEmpty, isFunction, isString } from 'lodash';
 import { CSSProperties, ReactNode, forwardRef } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
-import cx from 'classnames';
 import './Button.css';
 
 export type ButtonProps = CSSProperties & {
@@ -49,12 +48,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             onClick(e);
           }
         }}
-        className={cx(
-          {
-            [`${className}`]: isString(className) && !isEmpty(className),
-          },
-          `button ${variant === 'primary' ? 'primary-button' : ''}`,
-        )}
+        className={`button${variant === 'primary' ? ' primary-button' : ''}${
+          isString(className) && !isEmpty(className) ? ` ${className}` : ''
+        }`}
       >
         {children || null} {text || null}
         {isDisabled && <div className="button-disabled"></div>}

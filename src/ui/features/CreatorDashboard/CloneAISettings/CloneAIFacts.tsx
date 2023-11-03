@@ -1,4 +1,3 @@
-import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import { filter, head, isEmpty, map, size, omit } from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
 import { getUserContextListByPage } from '@/lib/supabase/embeddings';
@@ -7,22 +6,38 @@ import { useForm } from 'react-hook-form';
 
 import Button from '@/components/common/Button';
 import TextInput from '@/components/common/TextInput';
-import axios from 'axios';
+import CloneAIFact from './CloneAIFact';
 import { useAuth } from '@/hooks';
-import { GenerateEmbeddingsBodyRequest } from '@/app/api/generate-embeddings/route';
+import {
+  GenerateEmbeddingsBodyRequest,
+  GenerateEmbeddingsResponse,
+} from '@/app/api/generate-embeddings/route';
 import { isResponseStatusSuccess } from '@/lib/utils';
 
+import { APIClient } from '@/lib/api';
+import { useSpacesStore } from '@/store/App';
+
 import './CloneAIFacts.css';
-import CloneAIFact from './CloneAIFact';
 
 /**
  * Component that accepts facts about the character to clone
  * @returns
  */
 const CloneAIFacts = () => {
-  const { spaceInfo } = useSelectedSpace();
+  const [spaces] = useSpacesStore(state => [state.spaces]);
+
+  const { getSupabaseAuthHeaders, userId } = useAuth();
+
+  // owned space, not necessarily active/selected
+  const spaceInfo = useMemo(() => {
+    const find = filter(
+      spaces,
+      space => !isEmpty(space?.id) && space?.owner === userId,
+    );
+    return head(find);
+  }, [spaces, userId]);
   const spaceBotInfo = useMemo(() => head(spaceInfo?.bots), [spaceInfo]);
-  const botId = useMemo(() => spaceBotInfo?.id, [spaceBotInfo]);
+  const botId = useMemo(() => spaceBotInfo?.id || '', [spaceBotInfo]);
   const [facts, setFacts] = useState<IUserContext[]>([]);
 
   /**
@@ -53,8 +68,6 @@ const CloneAIFacts = () => {
 
   const [isCreating, setIsCreating] = useState(false);
 
-  const { getSupabaseAuthHeaders, userId } = useAuth();
-
   const maxFactsLimitReached = useMemo(() => size(facts) >= 5, [facts]);
 
   /**
@@ -78,20 +91,21 @@ const CloneAIFacts = () => {
         type: 'clone.facts',
       };
       const authHeaders = getSupabaseAuthHeaders();
-      const res = await axios({
-        method: 'POST',
-        baseURL: '/',
-        url: '/api/generate-embeddings',
-        headers: {
-          ...authHeaders,
+      const res = await APIClient.post<GenerateEmbeddingsResponse>(
+        '/api/generate-embeddings',
+        dataBody,
+        {
+          headers: {
+            ...authHeaders,
+          },
         },
-        data: dataBody,
-      });
+      );
       const resData = res?.data;
 
       if (
         isResponseStatusSuccess(res) &&
         resData?.success &&
+        resData?.payload &&
         !isEmpty(resData?.payload)
       ) {
         setFacts([resData?.payload, ...facts]);

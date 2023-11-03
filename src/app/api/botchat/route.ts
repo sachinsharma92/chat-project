@@ -59,6 +59,18 @@ export const applyApiRoutesAuth = async (
   }
 };
 
+export interface BotChatPostBodyRequest {
+  message: string;
+  spaceId: string;
+  botFormId: string;
+  authorId: string;
+  messageHistory?: IBotMessage[];
+}
+
+export interface BotChatPostResponse {
+  messages: Partial<IBotMessage>[];
+}
+
 export async function POST(request: Request) {
   const headers = request.headers;
   const authorization = headers.get('Authorization');
@@ -69,13 +81,7 @@ export async function POST(request: Request) {
     botFormId,
     authorId,
     messageHistory,
-  }: {
-    message: string;
-    spaceId: string;
-    botFormId: string;
-    authorId: string;
-    messageHistory?: IBotMessage[];
-  } = await request.json();
+  }: BotChatPostBodyRequest = await request.json();
   const accessToken = last(toString(authorization).split('BEARER ')) as string;
   const { success } = await rateLimit(authorId || 'anon');
   const notConfigured = {

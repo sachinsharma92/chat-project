@@ -12,6 +12,9 @@ import { head, isEmpty } from 'lodash';
 import { useRouter, notFound } from 'next/navigation';
 import { IUser } from '@/types/auth';
 import { ISpace } from '@/types';
+import PQueue from 'p-queue';
+
+export const saveSpacePropertiesQueue = new PQueue({ concurrency: 1 });
 
 const SpacesProvider = (props: { children?: ReactNode }) => {
   const { children } = props;

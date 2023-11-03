@@ -17,15 +17,21 @@ import {
   insertNewUserCloneContextWithEmbeddings,
   updateUserCloneContext,
 } from '@/lib/supabase/embeddings';
-import { IUserContextType } from '@/types';
+import { IUserContext, IUserContextType } from '@/types';
 
-export type GenerateEmbeddingsBodyRequest = {
+export interface GenerateEmbeddingsBodyRequest {
   context: string;
   userId: string;
   useContextId?: string;
   botId?: string;
   type?: IUserContextType;
-};
+}
+
+export interface GenerateEmbeddingsResponse {
+  success?: boolean;
+  payload?: IUserContext;
+}
+
 export const openAIEmbeddingModel = 'text-embedding-ada-002';
 
 /**
