@@ -15,6 +15,7 @@ import SpaceSettings from './SpaceSettings';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import Profile from './Profile';
 import Links from './Links';
+import CloneAudio from './CloneAudio';
 
 import './CreatorDashboard.css';
 import { AuthStateContext } from '@/store/AuthProvider';
@@ -177,6 +178,9 @@ const CreatorDashboard = () => {
                 </TabsContent>
                 <TabsContent value="clone" className="mt-6 w-full">
                   <CloneAISettings />
+                </TabsContent>
+                <TabsContent value="audio" className="mt-6 w-full">
+                  <CloneAudio />
                 </TabsContent>
               </Tabs>
             </div>

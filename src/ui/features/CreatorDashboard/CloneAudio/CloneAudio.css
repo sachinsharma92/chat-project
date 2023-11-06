@@ -1,0 +1,5 @@
+.clone-audio {
+  @appy relative flex justify-center items-center w-full mt-4;
+
+  flex-direction: column;
+}

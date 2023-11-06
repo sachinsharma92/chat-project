@@ -16,10 +16,12 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { isEmpty, toString } from 'lodash';
 import { AuthSection } from '@/app/auth/page';
-import { supabaseClient } from '@/lib/supabase';
+import { postEmailWaitlist, supabaseClient } from '@/lib/supabase';
 import { RedirectTo } from '@supabase/auth-ui-shared';
 import { useBotnetAuth } from '@/store/Auth';
 import { useRouterQuery } from '@/hooks';
+import { isProduction } from '@/lib/environment';
+import { CheckCircledIcon } from '@radix-ui/react-icons';
 
 /**
  * Custom auth page
@@ -39,10 +41,12 @@ const CustomAuth = (props: { defaultSection?: AuthSection }) => {
   const pathname = usePathname();
   const { navigate, searchParams, removeQuery } = useRouterQuery();
   const [submitted, setSubmitted] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
   const {
     register,
     handleSubmit,
     getValues,
+    setValue,
     formState: { errors },
   } = useForm();
   const [error, setError] = useState('');
@@ -101,12 +105,22 @@ const CustomAuth = (props: { defaultSection?: AuthSection }) => {
           // let AuthProvider.tsx handle auth changes
           setIsLoading(true);
         }
+      } else if (isProduction && authSectionPick === AuthSection['sign-up']) {
+        // waitlist for prod env
+        const { error: waitlistError } = await postEmailWaitlist(email);
+
+        if (!waitlistError?.message) {
+          // success
+          setValue('email', '');
+          setSuccessMessage("You're on the waitlist!");
+        } else {
+          setError(waitlistError?.message?.toString());
+        }
       } else if (authSectionPick === AuthSection['sign-up']) {
         const options: { emailRedirectTo: RedirectTo; data?: object } = {
           emailRedirectTo: '',
         };
         options.data = {};
-
         const {
           data: { session: signUpSession },
           error: signUpError,
@@ -202,7 +216,12 @@ const CustomAuth = (props: { defaultSection?: AuthSection }) => {
           <div className={cx('get-started-label', Inter.className)}>
             {authSectionPick === AuthSection.entry && <h1> Get Started </h1>}
             {authSectionPick === AuthSection.login && <h1> Log In </h1>}
-            {authSectionPick === AuthSection['sign-up'] && <h1> Sign Up </h1>}
+            {authSectionPick === AuthSection['sign-up'] && !isProduction && (
+              <h1> Sign Up </h1>
+            )}
+            {authSectionPick === AuthSection['sign-up'] && isProduction && (
+              <h1> Join the Waitlist </h1>
+            )}
           </div>
           <form onSubmit={handleSubmit(submitAuth)}>
             <TextInput
@@ -211,10 +230,15 @@ const CustomAuth = (props: { defaultSection?: AuthSection }) => {
               defaultValue={`${searchParams.get('email') || ''}`}
               {...register('email', {
                 required: 'Email is required',
+                onChange() {
+                  setSuccessMessage('');
+                },
               })}
             />
             {(authSectionPick === AuthSection.login ||
-              authSectionPick === AuthSection['sign-up']) && (
+              // waitlist on prod for now
+              (authSectionPick === AuthSection['sign-up'] &&
+                !isProduction)) && (
               <TextInput
                 placeholder={'Your password'}
                 className="auth-input auth-password"
@@ -228,6 +252,13 @@ const CustomAuth = (props: { defaultSection?: AuthSection }) => {
             {!isEmpty(errorMessage) && (
               <div className="error-message">
                 <p>{errorMessage}</p>
+              </div>
+            )}
+
+            {!isEmpty(successMessage) && (
+              <div className="success-message">
+                <CheckCircledIcon height={20} width={20} />
+                <p> {successMessage}</p>
               </div>
             )}
 
