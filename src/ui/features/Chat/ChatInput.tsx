@@ -9,7 +9,7 @@ import { PaperPlane, ExpandIcon, Microphone, CameraIcon } from '@/icons';
 import { isEmpty, isString, toLower, toString } from 'lodash';
 import { useBotChat } from './hooks/useBotChat';
 import { useWindowResize } from '@/hooks';
-import { useAppStore, useBotData } from '@/store/Spaces';
+import { useAppStore, useBotData } from '@/store/App';
 import '../../../components/common/styles/Button.css';
 import './ChatInput.css';
 
@@ -27,6 +27,26 @@ export const isChatFocused = () => {
   }
 
   return false;
+};
+
+export const focusChatInput = () => {
+  const chatInput = document.querySelector(
+    '.chat-form-input',
+  ) as HTMLInputElement;
+
+  if (chatInput?.focus) {
+    chatInput.focus();
+  }
+};
+
+export const blurChatInput = () => {
+  const chatInput = document.querySelector(
+    '.chat-form-input',
+  ) as HTMLInputElement;
+
+  if (chatInput?.blur) {
+    chatInput.blur();
+  }
 };
 
 const ChatInput = (props: ChatInputPropsType) => {
@@ -63,20 +83,13 @@ const ChatInput = (props: ChatInputPropsType) => {
     const onKeyDown = (evt: any) => {
       const k = evt?.key;
       const keyCode = evt?.keyCode;
-      const chatInput = document.querySelector(
-        '.chat-form-input',
-      ) as HTMLInputElement;
 
       if (toLower(k) === 'escape' || keyCode === 27) {
-        if (chatInput?.blur) {
-          chatInput.blur();
-        }
+        blurChatInput();
       }
 
       if (toLower(k) === 'enter' || keyCode === 13) {
-        if (chatInput?.focus) {
-          chatInput.focus();
-        }
+        focusChatInput();
       }
     };
 
@@ -112,10 +125,7 @@ const ChatInput = (props: ChatInputPropsType) => {
           placeholder={`"Enter" to chat`}
           {...register('chatInput', { required: false })}
         />
-        <Button
-          type="submit"
-          className={cx('send-button', 'flex justify-center items-center')}
-        >
+        <Button type="submit" className="send-button">
           <PaperPlane height={'20px'} width={'20px'} />
         </Button>
       </form>

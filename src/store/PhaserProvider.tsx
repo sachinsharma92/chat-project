@@ -6,7 +6,7 @@ import { ReactNode, useEffect, useRef } from 'react';
 import { isFunction } from 'lodash';
 import { IPhaserGameState } from '@/types';
 import { MapScene } from '@/ui/game/scenes/MapScene';
-import { useWorldStore } from './CanvasProvider';
+import { useWorldStore } from './Canvas';
 
 export const usePhaserStore = create<IPhaserGameState>(set => ({
   phaserGame: null,

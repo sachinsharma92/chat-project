@@ -2,13 +2,13 @@
 
 import { MeatballsIcon } from '@/icons';
 import { Inter } from '@/app/fonts';
-import { useAppStore } from '@/store/Spaces';
+import { useAppStore } from '@/store/App';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import { useEffect, useMemo } from 'react';
 import { useWindowResize } from '@/hooks';
 import { mobileWidthBreakpoint } from '@/constants';
-import { head, isEmpty } from 'lodash';
+import { filter, head, isEmpty } from 'lodash';
 import JoinCampButton from '../JoinCampButton/JoinCampButton';
 import Button from '@/components/common/Button';
 import SpaceStatistics from './SpaceStatistics';
@@ -20,6 +20,7 @@ import Links from '@/components/common/Links/Links';
 import './InfoSidebar.css';
 import '@/components/common/styles/Button.css';
 import SubscribeSpace from './SubscribeSpace';
+import { ISpaceLink } from '@/types';
 
 interface featureFlagProps {
   subscribeFeature: boolean;
@@ -70,6 +71,23 @@ const InfoSidebar = () => {
       setExpandInfoSidebar(true);
     }
   }, [availableWidth, setExpandInfoSidebar]);
+
+  /**
+   * Sanitized space links
+   */
+  const spaceLinks: ISpaceLink[] = useMemo(
+    () =>
+      filter(
+        spaceInfo?.links?.data || [],
+        linkInfo =>
+          linkInfo &&
+          !linkInfo.hidden &&
+          !isEmpty(linkInfo) &&
+          !isEmpty(linkInfo?.link) &&
+          !isEmpty(linkInfo?.name),
+      ),
+    [spaceInfo],
+  );
 
   return (
     <>
@@ -122,10 +140,10 @@ const InfoSidebar = () => {
               <Apps />
             </div>
 
-            {!isEmpty(spaceInfo?.links) && (
+            {!isEmpty(spaceLinks) && (
               <div className="links-container">
                 <p className="info-label"> Links </p>
-                <Links socials={spaceInfo?.links || []} />
+                <Links links={spaceLinks} />
               </div>
             )}
           </div>

@@ -11,12 +11,14 @@ export interface ISpace {
   host?: Partial<IUser>;
   selected?: boolean;
   bots?: Partial<IBot>[];
-  links?: ISpaceLink[];
+  links?: { data: ISpaceLink[] };
 }
 
 export interface ISpaceLink {
+  id?: string;
   name: string;
   link: string;
+  hidden?: boolean;
 }
 
 export interface ISpaceStoreState {

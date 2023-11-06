@@ -7,7 +7,7 @@ import { RoomUser } from '@/types';
 import { isEmpty, isNumber } from 'lodash';
 import { serverRoomSendQueue } from '@/lib/rivet';
 import { shallow } from 'zustand/shallow';
-import { useAppStore, useGameServer } from '@/store/Spaces';
+import { useAppStore, useGameServer } from '@/store/App';
 import { useBotnetAuth } from '@/store/Auth';
 import { guestId } from '@/store/GameServerProvider';
 

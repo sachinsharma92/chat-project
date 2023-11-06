@@ -3,8 +3,8 @@ import { LoadingMaterial } from './LoadingMaterial';
 import { useProgress, useTexture } from '@react-three/drei';
 import { ReactThreeFiber, useFrame } from '@react-three/fiber';
 import { gsap } from 'gsap';
+import { useWorldStore } from '@/store/Canvas';
 import * as THREE from 'three';
-import { useWorldStore } from '@/store/CanvasProvider';
 
 declare global {
   namespace JSX {

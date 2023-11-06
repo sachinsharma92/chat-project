@@ -1,0 +1,7 @@
+.dashboard-page {
+  @apply flex items-center justify-center h-full w-full;
+
+  box-sizing: border-box;
+  background: #f8f6f0;
+  overflow-y: auto;
+}

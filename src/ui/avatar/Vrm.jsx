@@ -3,7 +3,7 @@ import { Outlines, useGLTF, useTexture } from '@react-three/drei';
 import { useFrame, useLoader } from '@react-three/fiber';
 import { useControls } from 'leva';
 import * as THREE from 'three';
-import { colorStore, hairStyleStore } from '@/store/AvatarStore';
+import { colorStore, hairStyleStore } from '@/store/Avatar';
 
 const corresponding = {
   A: 'Fcl_MTH_Close',

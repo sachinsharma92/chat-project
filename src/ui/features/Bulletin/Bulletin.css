@@ -93,13 +93,13 @@
 }
 
 .bulletin-chat > .chat-form {
-  max-width: 240px;
-  min-width: 220px;
+  min-width: 190px;
+  max-width: calc(100% - 36px - 36px - 20px);
 }
 
 .bulletin-chat > .chat-form > input[type='text'] {
   background: #fffff7;
-  color: #725c4e;
+  color: #725c4e !important;
 }
 
 .bulletin-chat > .chat-form > input[type='text']::placeholder {
@@ -156,7 +156,7 @@
 }
 
 .close-button {
-  @apply hidden justify-center items-center;
+  @apply relative hidden;
 
   height: 36px;
   width: 36px;
@@ -170,6 +170,6 @@
 
 @media screen and (max-width: 720px) {
   .close-button {
-    display: flex;
+    @apply flex justify-center items-center;
   }
 }

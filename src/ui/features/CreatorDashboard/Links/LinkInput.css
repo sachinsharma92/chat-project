@@ -1,0 +1,65 @@
+.link-input-container {
+  @apply flex justify-start items-start relative w-full;
+
+  flex-direction: column;
+  border-radius: 24px;
+  background: #f8f6f0;
+  padding: 8px 16px;
+  box-sizing: border-box;
+  box-shadow: 0px 6px 20px 0px rgba(0, 0, 0, 0.02);
+  -moz-box-shadow: 0px 6px 20px 0px rgba(0, 0, 0, 0.02);
+  -webkit-box-shadow: 0px 6px 20px 0px rgba(0, 0, 0, 0.02);
+}
+
+.link-input-container > form {
+  @apply relative w-full;
+}
+
+.link-input-name,
+.link-input-url,
+.link-input-actions {
+  @apply relative flex justify-start items-center p-0 w-full;
+
+  box-sizing: border-box;
+}
+
+.link-input-name > input,
+.link-input-url > input[type='text'] {
+  @apply relative w-full h-[40px];
+
+  background: transparent;
+  padding: 4px 8px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.link-input-name,
+.link-input-url {
+  @apply mt-[8px];
+}
+
+.link-input-actions {
+  @apply flex justify-end items-center mt-[8px];
+
+  box-sizing: border-box;
+}
+
+.toggle-hide {
+  @apply relative flex mr-4;
+}
+
+.link-input-delete {
+  @apply relative;
+
+  height: 36px;
+  width: 80px;
+  padding: 8px 16px;
+  border-radius: 50px;
+  box-sizing: border-box;
+  background: #c72323;
+}
+
+.link-input-delete > p {
+  font-size: 16px;
+  color: #fff;
+}

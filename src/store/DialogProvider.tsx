@@ -2,13 +2,12 @@
 
 import * as Dialog from '@radix-ui/react-dialog';
 import { ReactNode } from 'react';
-import { useAppStore } from './Spaces';
+import { useAppStore } from './App';
 import { useBotnetAuth } from './Auth';
 import { DialogEnums, MobileDrawerEnums } from '@/types/dialog';
 import Auth from '@/ui/dialogs/Auth';
 import '../components/common/styles/Dialog.css';
 import OnboardDisplayName from '@/ui/dialogs/OnboardDisplayName';
-import Account from '@/ui/dialogs/Account';
 import AuthLoadingScreen from '@/ui/dialogs/AuthLoadingScreen';
 import DrawerComponent from '@/components/common/Drawer';
 import ChatMobile from '@/ui/features/Chat/ChatMobile';
@@ -46,7 +45,6 @@ const DialogProvider = (props: { children?: ReactNode }) => {
             {showDialogType === DialogEnums.onboardDisplayName && (
               <OnboardDisplayName />
             )}
-            {showDialogType === DialogEnums.account && <Account />}
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>

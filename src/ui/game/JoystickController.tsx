@@ -1,8 +1,9 @@
-import { useDirectionStore } from '@/store/JoystickProvider';
+import { useDirectionStore } from '@/store/Joystick';
 import { Joystick } from 'react-joystick-component';
 
 const JoystickController = () => {
   const setDirection = useDirectionStore(state => state.setDirection);
+
   return (
     <div className="absolute bottom-2 left-2">
       <Joystick

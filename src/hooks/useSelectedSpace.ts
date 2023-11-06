@@ -1,4 +1,4 @@
-import { useSpacesStore } from '@/store/Spaces';
+import { useSpacesStore } from '@/store/App';
 import { filter, head } from 'lodash';
 import { useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';

@@ -5,7 +5,7 @@ import { shallow } from 'zustand/shallow';
 import { useMemo } from 'react';
 
 import Player from '../Game/Player';
-import { useGameServer } from '@/store/Spaces';
+import { useGameServer } from '@/store/App';
 import { useBotnetAuth } from '@/store/Auth';
 import { guestId } from '@/store/GameServerProvider';
 

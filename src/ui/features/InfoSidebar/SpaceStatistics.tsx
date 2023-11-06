@@ -1,7 +1,7 @@
 import cx from 'classnames';
 import { EllipseIcon, MembersIcon } from '@/icons';
 import { size } from 'lodash';
-import { useGameServer } from '@/store/Spaces';
+import { useGameServer } from '@/store/App';
 import './SpaceStatistics.css';
 
 const SpaceStatistics = (props: { collapsed?: boolean }) => {

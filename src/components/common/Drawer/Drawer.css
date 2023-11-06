@@ -1,5 +1,8 @@
 .drawer {
-  @apply fixed bottom-0 left-0 w-full transform transition-transform;
+  @apply fixed bottom-0 left-0 right-0 h-full w-full transform transition-transform;
+
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .drawer-overlay {
@@ -7,8 +10,9 @@
 
   background: #fff;
   opacity: 0.5;
+  box-sizing: border-box;
 }
 
 .drawer-content {
-  @apply p-0 shadow-md;
+  @apply flex items-end absolute p-0 shadow-md bottom-0 h-full w-full left-0 right-0;
 }

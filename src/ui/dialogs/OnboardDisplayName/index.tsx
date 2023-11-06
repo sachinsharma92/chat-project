@@ -10,7 +10,7 @@ import './OnboardDisplayName.css';
 import { updateUserProfileProps } from '@/lib/supabase';
 import { toString } from 'lodash';
 import { useState } from 'react';
-import { useAppStore } from '@/store/Spaces';
+import { useAppStore } from '@/store/App';
 import { DialogEnums } from '@/types/dialog';
 
 const OnboardDisplayName = () => {

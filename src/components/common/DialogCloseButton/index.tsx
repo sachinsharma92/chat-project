@@ -1,5 +1,5 @@
 import { CrossIcon } from '@/icons';
-import { useAppStore } from '@/store/Spaces';
+import { useAppStore } from '@/store/App';
 import { isFunction } from 'lodash';
 import { DialogEnums } from '@/types/dialog';
 import './DialogCloseButton.css';

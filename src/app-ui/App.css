@@ -1,19 +1,13 @@
 .root-container {
-  position: relative;
-  display: flex;
-  flex-direction: row;
+  @apply absolute flex items-start w-full h-full top-0 left-0;
+
   justify-content: space-between;
-  align-items: flex-start;
-  height: 100vh;
-  width: 100%;
   box-sizing: border-box;
-  background: var(--tans-light-off-white, #f8f4e8);
+  background: #f8f6f0;
 }
 
 @media screen and (max-width: 720px) {
   .root-container {
-    height: 100vh;
-    max-height: 100vh;
     overflow-y: auto;
   }
 }

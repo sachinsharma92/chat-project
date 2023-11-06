@@ -1,4 +1,4 @@
-import { useAppStore } from '@/store/Spaces';
+import { useAppStore } from '@/store/App';
 import { DialogEnums, MobileDrawerEnums } from '@/types/dialog';
 import { useBotnetAuth } from '@/store/Auth';
 import ChatInput from './ChatInput';
@@ -9,10 +9,12 @@ import './StickyChat.css';
  * @returns
  */
 const StickyChat = () => {
-  const [setShowMobileDrawer, setShowDialog] = useAppStore(state => [
-    state.setShowMobileDrawer,
-    state.setShowDialog,
-  ]);
+  const [showMobileDrawerType, setShowMobileDrawer, setShowDialog] =
+    useAppStore(state => [
+      state.showMobileDrawerType,
+      state.setShowMobileDrawer,
+      state.setShowDialog,
+    ]);
   const [authIsLoading] = useBotnetAuth(state => [state.isLoading]);
 
   return (
@@ -27,7 +29,10 @@ const StickyChat = () => {
         setShowMobileDrawer(true, MobileDrawerEnums.chat);
       }}
     >
-      <ChatInput hideExpand className="sticky-chat-input" />
+      {showMobileDrawerType !== MobileDrawerEnums.chat && (
+        <ChatInput hideExpand className="sticky-chat-input" />
+      )}
+      <div className="sticky-chat-cover"></div>
     </div>
   );
 };

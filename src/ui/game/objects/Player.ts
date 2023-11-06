@@ -1,8 +1,8 @@
 'use client';
 
-import { isChatFocused } from '@/ui/features/Chat/ChatInput';
 import Phaser from 'phaser';
-import { joystickProviderStoreRef } from '@/store/JoystickProvider';
+import { isChatFocused } from '@/ui/features/Chat/ChatInput';
+import { joystickProviderStoreRef } from '@/store/Joystick';
 
 export class Player extends Phaser.GameObjects.Sprite {
   keys: Record<string | number, any> | undefined | null = null;
@@ -121,7 +121,7 @@ export class Player extends Phaser.GameObjects.Sprite {
     const keys = this.keys;
     const speed = 70;
     // @ts-ignore
-    const direction = joystickProviderStoreRef.direction.direction;
+    const direction = joystickProviderStoreRef.direction?.direction;
 
     if (this.body) {
       // @ts-ignore

@@ -11,6 +11,14 @@
   display: none;
 }
 
+.sticky-chat-cover {
+  @apply h-full w-full;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 @media screen and (max-width: 720px) {
   .sticky-chat {
     display: flex;
@@ -59,7 +67,7 @@
   }
 
   .sticky-chat-input > .chat-form {
-    max-width: calc(100% - 80px);
+    max-width: calc(100% - 80px - 8px);
     width: calc(100% - 80px);
     margin: 0 8px;
   }
