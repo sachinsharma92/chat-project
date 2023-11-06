@@ -1,5 +1,5 @@
 .button {
-  @apply relative flex items-center justify-center p-[4px] overflow-hidden outline-none;
+  @apply flex items-center justify-center p-[4px] overflow-hidden outline-none;
 }
 
 .primary-button {

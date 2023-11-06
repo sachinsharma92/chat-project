@@ -125,10 +125,7 @@ const ChatInput = (props: ChatInputPropsType) => {
           placeholder={`"Enter" to chat`}
           {...register('chatInput', { required: false })}
         />
-        <Button
-          type="submit"
-          className={cx('send-button', 'flex justify-center items-center')}
-        >
+        <Button type="submit" className="send-button">
           <PaperPlane height={'20px'} width={'20px'} />
         </Button>
       </form>

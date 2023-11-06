@@ -48,9 +48,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             onClick(e);
           }
         }}
-        className={`button${variant === 'primary' ? ' primary-button' : ''}${
-          isString(className) && !isEmpty(className) ? ` ${className}` : ''
-        }`}
+        className={`${
+          isString(className) && !isEmpty(className) ? `${className} ` : ''
+        }button${variant === 'primary' ? ' primary-button' : ''}`}
       >
         {children || null} {text || null}
         {isDisabled && <div className="button-disabled"></div>}
