@@ -93,8 +93,8 @@
 }
 
 .bulletin-chat > .chat-form {
-  max-width: 240px;
-  min-width: 220px;
+  min-width: 190px;
+  max-width: calc(100% - 36px - 36px - 20px);
 }
 
 .bulletin-chat > .chat-form > input[type='text'] {
@@ -156,12 +156,12 @@
 }
 
 .close-button {
+  @apply relative hidden;
+
   height: 36px;
   width: 36px;
   background: #fffff7;
   border-radius: 50%;
-  display: none;
-  overflow: hidden;
 }
 
 .close-button:hover {

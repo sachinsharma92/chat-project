@@ -58,7 +58,7 @@ const CreatorDashboard = () => {
 
   const navigateToSpace = () => {
     if (spaceInfo?.id) {
-      setQuery('space', spaceInfo.id, '/');
+      router.push(`/?space=${spaceInfo.id}`);
     }
   };
 

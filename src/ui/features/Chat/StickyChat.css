@@ -67,7 +67,7 @@
   }
 
   .sticky-chat-input > .chat-form {
-    max-width: calc(100% - 80px);
+    max-width: calc(100% - 80px - 8px);
     width: calc(100% - 80px);
     margin: 0 8px;
   }

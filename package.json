@@ -1,7 +1,7 @@
 {
   "name": "camp-ui",
   "private": true,
-  "version": "0.0.103123",
+  "version": "0.0.110623",
   "type": "module",
   "scripts": {
     "dev": "next dev",
