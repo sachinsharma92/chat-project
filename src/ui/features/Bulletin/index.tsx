@@ -4,13 +4,16 @@ import { ChatIcon, CrossIcon } from '@/icons';
 import { InterTight } from '@/app/fonts';
 import { useAppStore, useBotData } from '@/store/App';
 import { filter, isEmpty, isString, map } from 'lodash';
+import { MobileDrawerEnums } from '@/types/dialog';
+import { useWindowResize } from '@/hooks';
+import { mobileWidthBreakpoint } from '@/constants';
 import Message from '../Chat/Message';
 import ChatInput from '../Chat/ChatInput';
-import './Bulletin.css';
 import BotResponding from '../Chat/BotResponding';
 import Pinned from '../Chat/Pinned';
 import Button from '@/components/common/Button';
-import { MobileDrawerEnums } from '@/types/dialog';
+
+import './Bulletin.css';
 
 const Bulletin = (props: {
   className?: string;
@@ -26,6 +29,8 @@ const Bulletin = (props: {
     state.botRoomIsResponding,
     state.chatMessages,
   ]);
+
+  const { availableWidth } = useWindowResize();
 
   const sanitizedChatMessages = useMemo(
     () => filter(chatMessages, line => !isEmpty(line?.id)),
@@ -74,9 +79,11 @@ const Bulletin = (props: {
           <h1 className={cx(InterTight.className, 'bulletin-label')}>Chat</h1>
         </div>
         <div className="bulletin-right">
-          <Button onClick={hideMobileChat} className="close-button">
-            <CrossIcon />
-          </Button>
+          {availableWidth < mobileWidthBreakpoint && (
+            <Button onClick={hideMobileChat} className="close-button">
+              <CrossIcon />
+            </Button>
+          )}
         </div>
       </div>
       <div className="bulletin-chat-stream">

@@ -62,8 +62,9 @@
 }
 
 .send-button {
-  @apply absolute flex justify-center items-center;
+  @apply flex justify-center items-center;
 
+  position: absolute !important;
   height: 24px;
   width: 24px;
   top: 6px;

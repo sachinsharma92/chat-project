@@ -19,6 +19,7 @@ import Links from './Links';
 import './CreatorDashboard.css';
 import { AuthStateContext } from '@/store/AuthProvider';
 import { useRouter } from 'next/navigation';
+import CloneAudio from './CloneAudio';
 
 const CreatorDashboard = () => {
   const [isLoading, session, image, email, displayName] = useBotnetAuth(
@@ -177,6 +178,9 @@ const CreatorDashboard = () => {
                 </TabsContent>
                 <TabsContent value="clone" className="mt-6 w-full">
                   <CloneAISettings />
+                </TabsContent>
+                <TabsContent value="audio" className="mt-6 w-full">
+                  <CloneAudio />
                 </TabsContent>
               </Tabs>
             </div>

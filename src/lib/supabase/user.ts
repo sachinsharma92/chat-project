@@ -1,11 +1,12 @@
 import { SupabaseResult } from '@/types/supbase';
 import { supabaseClient } from '.';
 import { IUser } from '@/types/auth';
-import { map, omit } from 'lodash';
+import { map, omit, trim } from 'lodash';
 import snakecaseKeys from 'snakecase-keys';
 import camelcaseKeys from 'camelcase-keys';
 
 const userProfilesTable = 'user_profiles';
+const userWaitlistTable = 'user_waitlist';
 
 /**
  * Fetch user profile by id
@@ -43,6 +44,19 @@ export const updateUserProfileProps = async (
     .from('user_profiles')
     .update(snakecaseKeys(omit(props, ['id', 'createdAt', 'deletedAt'])))
     .eq('user_id', userId);
+
+  return response;
+};
+
+/**
+ * Email waitlist on signup
+ * @param email
+ * @returns
+ */
+export const postEmailWaitlist = async (email: string) => {
+  const response = await supabaseClient
+    .from(userWaitlistTable)
+    .insert({ email: trim(email) });
 
   return response;
 };
