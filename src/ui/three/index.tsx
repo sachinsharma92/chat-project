@@ -47,7 +47,7 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 			renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
 
 			camera = new THREE.PerspectiveCamera( fov, window.innerWidth / window.innerHeight, near, far );
-			camera.position.set(-3.4,18.3, 10);
+			camera.position.set( -1.4, 18.3, 10);
 			//camera.rotation.x = 45 * Math.PI / 180;
 
 			//
@@ -63,7 +63,7 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 				camera: new THREE.PerspectiveCamera( fov, window.innerWidth / window.innerHeight, near, far  )
 			//camera has same properties with main camera.
 			};
-			skyBox.camera.position.set(-3.4,18.3, 10);
+			skyBox.camera.position.set( -1.4, 18.3, 10);
 			//
 
 			renderer.setClearColor( 0x000000);
@@ -103,8 +103,9 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 			//controls.maxDistance = 100;
 			controls.enablePan = false;
 			controls.enableZoom  = false;
-			controls.maxPolarAngle = Math.PI * 18 / 36;
-			controls.minPolarAngle = Math.PI * 18 / 36;
+			controls.enableRotate = false;
+			//controls.maxPolarAngle = Math.PI * 18 / 36;
+			//controls.minPolarAngle = Math.PI * 18 / 36;
 			controls.update();
 
 
@@ -116,8 +117,9 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 			//controls2.maxDistance = 100;
 			controls2.enablePan = false;
 			controls2.enableZoom  = false;
-			controls2.maxPolarAngle = Math.PI * 18 / 36;
-			controls2.minPolarAngle = Math.PI * 18 / 36;
+			controls2.enableRotate = false;
+			//controls2.maxPolarAngle = Math.PI * 18 / 36;
+			//controls2.minPolarAngle = Math.PI * 18 / 36;
 			controls2.update();
 
 
