@@ -74,36 +74,21 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 			//container.appendChild( renderer.domElement );
 
 
-			particleLight = new THREE.Mesh(
-				new THREE.SphereGeometry( 0.5, 8, 8 ),
-				new THREE.MeshBasicMaterial( { color: 0xFFEDCA } )
-			);
-			
-			scene.add( particleLight );
-
-			particleLightSky = new THREE.Mesh(
-				new THREE.SphereGeometry( 0.5, 8, 8 ),
-				new THREE.MeshBasicMaterial( { color: 0xFFEDCA } )
-			);
-			
-			skyBox.scene.add( particleLightSky );
-
-
-
-
 
 			// Lights
 
 			scene.add( new THREE.AmbientLight( 0xc1c1ee, 3 ) );
 			skyBox.scene.add( new THREE.AmbientLight( 0xc1c1ee, 3 ) );
 
+
 			const pointLight = new THREE.PointLight( 0xFFEDCA, 14, 20, 0.5 );
-			particleLight.add( pointLight );
-			particleLight.position.set(-8.0,17,-11);
+			pointLight.position.set(-8.0,17,-11);
+			scene.add(pointLight);
 
 			const pointLightSky = new THREE.PointLight( 0xFFEDCA, 14, 20, 0.5 );
-			particleLightSky.add( pointLightSky );
-			particleLightSky.position.set(-8.0,17,-11);
+			pointLightSky.position.set(-8.0,17,-11);
+			skyBox.scene.add(pointLightSky);
+
 
 			//
 			if(devicePC)	effect = new OutlineEffect( renderer );
@@ -114,8 +99,12 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 
 			controls = new OrbitControls( camera, renderer.domElement );
 			controls.target.set( 0, 18.6, 0 );
-			controls.minDistance = 8;
-			controls.maxDistance = 100;
+			//controls.minDistance = 8;
+			//controls.maxDistance = 100;
+			controls.enablePan = false;
+			controls.enableZoom  = false;
+			controls.maxPolarAngle = Math.PI * 18 / 36;
+			controls.minPolarAngle = Math.PI * 18 / 36;
 			controls.update();
 
 
@@ -123,9 +112,14 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 			controls2 = new OrbitControls( skyBox.camera, renderer.domElement );
 			//controls2.addEventListener('change', camRender );  // for control
 			controls2.target.set( 0, 18.6, 0 );
-			controls2.minDistance = 8;
-			controls2.maxDistance = 100;
+			//controls2.minDistance = 8;
+			//controls2.maxDistance = 100;
+			controls2.enablePan = false;
+			controls2.enableZoom  = false;
+			controls2.maxPolarAngle = Math.PI * 18 / 36;
+			controls2.minPolarAngle = Math.PI * 18 / 36;
 			controls2.update();
+
 
 
 
