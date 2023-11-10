@@ -49,6 +49,8 @@ export async function POST(request: Request) {
     // there's problem with sending FormData() from nodejs env
     // approach me @robert when you have a solution
     voiceId = 'g6pr0Z1BRlXIYjtpHFR6';
+  } else if (spaceId === '5b1e8603-144c-4b13-842a-ada5533ea43c') {
+    voiceId = 'EaxEsbwameBaIZWcBKy0';
   }
 
   try {
