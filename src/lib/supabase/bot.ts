@@ -3,7 +3,7 @@ import { supabaseClient } from '.';
 import { v4 as uuid } from 'uuid';
 import { IBotFormAnswers } from '@/types';
 import snakecaseKeys from 'snakecase-keys';
-import { SupabaseResult } from '@/types/supbase';
+import { SupabaseResult } from '@/types/supabase';
 
 export const userBotFormAnswersTable = 'user_bot_form_answers';
 export const botChatMessagesTable = 'bot_chat_messages';

@@ -9,6 +9,7 @@ function App() {
   return (
     <div className="root-container" id={AppRootContainerId}>
       <MainComponent />
+      <audio id="bot-audio" autoPlay className="bot-audio" src=""></audio>
     </div>
   );
 }

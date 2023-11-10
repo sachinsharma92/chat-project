@@ -16,6 +16,7 @@ import { isResponseStatusSuccess } from '@/lib/utils';
 
 import { APIClient } from '@/lib/api';
 import { useSpacesStore } from '@/store/App';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 import './CloneAIFacts.css';
 
@@ -149,52 +150,54 @@ const CloneAIFacts = () => {
   };
 
   return (
-    <div className="clone-facts">
-      <label className="clone-facts-label" htmlFor="description">
-        Character Facts:
-      </label>
+    <TooltipProvider>
+      <div className="clone-facts">
+        <label className="clone-facts-label" htmlFor="description">
+          Character Facts:
+        </label>
 
-      <form
-        onSubmit={handleSubmit(createContext)}
-        className={`create-new${maxFactsLimitReached ? ' hidden' : ''}`}
-      >
-        <TextInput
-          variant="primary"
-          placeholder="I like anime!"
-          {...register('context', {
-            required: false,
+        <form
+          onSubmit={handleSubmit(createContext)}
+          className={`create-new${maxFactsLimitReached ? ' hidden' : ''}`}
+        >
+          <TextInput
+            variant="primary"
+            placeholder="I like anime!"
+            {...register('context', {
+              required: false,
+            })}
+          />
+          <div className="create-new-actions">
+            <Button
+              variant={'primary'}
+              className="create-new-button"
+              type="submit"
+              isLoading={isCreating}
+              isDisabled={size(watch('context')) < 2}
+            >
+              Create
+            </Button>
+          </div>
+        </form>
+
+        <ul>
+          {map(facts, f => {
+            const key = `cloneAIFact${f.id}`;
+
+            return (
+              <li key={key}>
+                <CloneAIFact
+                  removeFact={onRemoveFact}
+                  updateFact={onUpdateFact}
+                  id={f.id}
+                  context={f.context || ''}
+                />
+              </li>
+            );
           })}
-        />
-        <div className="create-new-actions">
-          <Button
-            variant={'primary'}
-            className="create-new-button"
-            type="submit"
-            isLoading={isCreating}
-            isDisabled={size(watch('context')) < 2}
-          >
-            Create
-          </Button>
-        </div>
-      </form>
-
-      <ul>
-        {map(facts, f => {
-          const key = `cloneAIFact${f.id}`;
-
-          return (
-            <li key={key}>
-              <CloneAIFact
-                removeFact={onRemoveFact}
-                updateFact={onUpdateFact}
-                id={f.id}
-                context={f.context || ''}
-              />
-            </li>
-          );
-        })}
-      </ul>
-    </div>
+        </ul>
+      </div>
+    </TooltipProvider>
   );
 };
 

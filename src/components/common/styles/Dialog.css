@@ -1,10 +1,15 @@
 .dialog-overlay {
   position: fixed;
+  height: 100%;
+  width: 100vw;
   inset: 0;
+  top: 0;
+  left: 0;
   animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
   background: #f8f4e8;
   opacity: 0.5;
   z-index: 10;
+  box-sizing: border-box;
 }
 
 .dialog-content {
@@ -17,7 +22,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   width: 90vw;
-  max-width: 450px;
+  max-width: 500px;
   max-height: 90vh;
   padding: 16px;
   animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);

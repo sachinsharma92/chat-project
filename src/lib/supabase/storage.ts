@@ -4,6 +4,8 @@ export const publicBucketName = 'botnet-assets';
 
 export const publicFolderForAvatarImages = 'public-avatars';
 
+export const publicFolderForBotAudio = 'bot-audio';
+
 /**
  * Upload image file for profile avatar
  * @param file

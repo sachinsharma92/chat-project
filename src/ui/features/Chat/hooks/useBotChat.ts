@@ -5,11 +5,12 @@ import { head, isEmpty, map, pick } from 'lodash';
 import { isResponseStatusSuccess } from '@/lib/utils';
 import { ChatMessageProps, OpenAIRoles } from '@/types';
 import { useBotnetAuth } from '@/store/Auth';
-import { guestId } from '@/store/GameServerProvider';
 import { v4 as uuid } from 'uuid';
 import { useAuth } from '@/hooks';
 import { APIClient } from '@/lib/api';
-import { BotChatPostResponse } from '@/app/api/botchat/route';
+import { BotChatPostResponse } from '@/app/api/bot-chat/route';
+import { getGuestId } from '@/store/AuthProvider';
+import { BotAudioResponse } from '@/app/api/bot-audio/route';
 
 /**
  * Call function to send message to bot
@@ -29,11 +30,47 @@ export const useBotChat = () => {
   ]);
   const { spaceId, spaceInfo } = useSelectedSpace();
   const [userId, displayName, image] = useBotnetAuth(state => [
-    state.session?.user?.id || guestId,
+    state.session?.user?.id || getGuestId(),
     state.displayName,
     state.image,
   ]);
   const { getSupabaseAuthHeaders } = useAuth();
+
+  /**
+   * Grab mp3 file from protected route
+   * @param message
+   */
+  const playBotAudio = async (message: string) => {
+    try {
+      const authHeaders = getSupabaseAuthHeaders();
+      const reqHeaders = {
+        ...authHeaders,
+      };
+      const audioRes = await APIClient.post<BotAudioResponse>(
+        '/api/bot-audio',
+        {
+          userId,
+          message,
+          spaceId,
+        },
+        {
+          headers: reqHeaders,
+        },
+      );
+
+      if (audioRes?.data?.publicUrl?.endsWith('.mp3')) {
+        const publicUrl = audioRes?.data?.publicUrl;
+        const audio = document.getElementById('bot-audio') as HTMLAudioElement;
+
+        if (audio) {
+          audio.src = publicUrl;
+          audio.play();
+        }
+      }
+    } catch (err: any) {
+      console.log('playBotAudio() err:', err?.message);
+    }
+  };
 
   /**
    * Send a chat message for 1:1 bot chat
@@ -67,9 +104,11 @@ export const useBotChat = () => {
         setChatMessages([...chatMessages, chatMessage]);
         const bot = camelcaseKeys(head(spaceInfo?.bots) || {});
         const authHeaders = getSupabaseAuthHeaders();
-
+        const reqHeaders = {
+          ...authHeaders,
+        };
         const res = await APIClient.post<BotChatPostResponse>(
-          '/api/botchat',
+          '/api/bot-chat',
           {
             message,
             spaceId,
@@ -78,18 +117,19 @@ export const useBotChat = () => {
             authorId: userId,
           },
           {
-            headers: {
-              ...authHeaders,
-            },
+            headers: reqHeaders,
           },
         );
         const resData = res?.data;
 
         if (isResponseStatusSuccess(res) && !isEmpty(resData?.messages)) {
-          const responseMessage = head(resData?.messages || []) as Record<
-            string,
-            any
-          >;
+          const responseMessagePayload = head(
+            resData?.messages || [],
+          ) as Record<string, any>;
+          const responseMessage = responseMessagePayload?.message;
+          console.log(responseMessage);
+
+          await playBotAudio(responseMessage);
 
           // store chat
           // insert completed chat
@@ -97,7 +137,7 @@ export const useBotChat = () => {
             ...chatMessages,
             chatMessage,
             {
-              ...pick(camelcaseKeys(responseMessage), [
+              ...pick(camelcaseKeys(responseMessagePayload), [
                 'id',
                 'role',
                 'spaceId',

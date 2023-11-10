@@ -3,7 +3,7 @@ import { supabaseClient } from '.';
 import { v4 as uuid } from 'uuid';
 import snakecaseKeys from 'snakecase-keys';
 import { omit, trim } from 'lodash';
-import { SupabaseResult } from '@/types/supbase';
+import { SupabaseResult } from '@/types/supabase';
 import { PostgrestError } from '@supabase/supabase-js';
 
 const userContextsTable = 'user_contexts';

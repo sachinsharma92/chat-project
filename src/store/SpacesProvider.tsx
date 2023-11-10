@@ -1,7 +1,7 @@
 'use client';
 
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useCallback, useEffect } from 'react';
 import { useSpacesStore } from './App';
 import {
   getSpaceBots,
@@ -9,7 +9,7 @@ import {
   getUserProfileById,
 } from '@/lib/supabase';
 import { head, isEmpty } from 'lodash';
-import { useRouter, notFound } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { IUser } from '@/types/auth';
 import { ISpace } from '@/types';
 import PQueue from 'p-queue';
@@ -24,6 +24,10 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
   ]);
   const { spaceId } = useSelectedSpace();
   const router = useRouter();
+
+  const notFound = useCallback(() => {
+    router.push('/not-found');
+  }, [router]);
 
   /**
    * Store space id

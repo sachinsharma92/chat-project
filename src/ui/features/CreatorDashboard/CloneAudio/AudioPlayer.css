@@ -1,0 +1,9 @@
+.audio-player {
+  @apply relative flex justify-end items-center w-full mt-4 p-8;
+
+  box-sizing: border-box;
+}
+
+.audio-player > audio {
+  @apply relative w-[300px];
+}

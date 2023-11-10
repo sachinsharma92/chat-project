@@ -1,16 +1,16 @@
 'use client';
 
-import * as Dialog from '@radix-ui/react-dialog';
 import { ReactNode } from 'react';
 import { useAppStore } from './App';
 import { useBotnetAuth } from './Auth';
 import { DialogEnums, MobileDrawerEnums } from '@/types/dialog';
-import Auth from '@/ui/dialogs/Auth';
-import '../components/common/styles/Dialog.css';
-import OnboardDisplayName from '@/ui/dialogs/OnboardDisplayName';
+import * as Dialog from '@radix-ui/react-dialog';
 import AuthLoadingScreen from '@/ui/dialogs/AuthLoadingScreen';
 import DrawerComponent from '@/components/common/Drawer';
 import ChatMobile from '@/ui/features/Chat/ChatMobile';
+import CloneAudioUpdate from '@/ui/dialogs/CloneAudioUpdate';
+
+import '@/components/common/styles/Dialog.css';
 
 /**
  * App modal handler
@@ -36,14 +36,13 @@ const DialogProvider = (props: { children?: ReactNode }) => {
 
   return (
     <>
-      <Dialog.Root open={showDialog}>
+      <Dialog.Root open={showDialog} defaultOpen={false}>
         {children}
         <Dialog.Portal>
-          <Dialog.Overlay className="dialog-overlay" />
+          <div className="dialog-overlay" />
           <Dialog.Content className="dialog-content">
-            {showDialogType === DialogEnums.auth && <Auth />}
-            {showDialogType === DialogEnums.onboardDisplayName && (
-              <OnboardDisplayName />
+            {showDialogType === DialogEnums.cloneAudioUpdate && (
+              <CloneAudioUpdate />
             )}
           </Dialog.Content>
         </Dialog.Portal>

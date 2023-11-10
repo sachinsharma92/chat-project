@@ -20,10 +20,12 @@ import { ceil, head, isEmpty } from 'lodash';
 import { Session } from '@supabase/supabase-js';
 import { useAppStore, useGameServer, useSpacesStore } from './App';
 import { getUserIdFromSession, timeout } from '@/lib/utils';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { DialogEnums } from '@/types/dialog';
 import { useRouterQuery } from '@/hooks';
 import { IUser } from '@/types/auth';
+import { v4 as uuid } from 'uuid';
+import { botnetGuestIdLocalStorageKey } from '@/constants';
 
 interface IAuthAppState {}
 
@@ -46,6 +48,21 @@ export const AuthStateContext = createContext<{
   // @ts-ignore
   null,
 );
+
+/**
+ * Persist guest id for rate limit
+ * @returns
+ */
+export const getGuestId = (): string => {
+  let guestId = localStorage.getItem(botnetGuestIdLocalStorageKey);
+
+  if (!guestId) {
+    guestId = uuid();
+    localStorage.setItem(botnetGuestIdLocalStorageKey, guestId);
+  }
+
+  return guestId;
+};
 
 const reducer = (state: IAuthAppState, action: Action) => {
   switch (action.type) {
@@ -88,6 +105,7 @@ const AuthProvider = (props: { children?: ReactNode }) => {
     state.setBotRoom,
   ]);
   const pathname = usePathname();
+  const router = useRouter();
   const { searchParams, navigate } = useRouterQuery();
   const paramSpaceId = useMemo(() => searchParams.get('space'), [searchParams]);
 
@@ -278,7 +296,7 @@ const AuthProvider = (props: { children?: ReactNode }) => {
           setEmail(newSession?.user?.email || '');
         } else {
           if (pathname?.startsWith('/dashboard')) {
-            navigate('/');
+            router.push('/');
           }
 
           setIsLoading(false);
@@ -289,6 +307,7 @@ const AuthProvider = (props: { children?: ReactNode }) => {
         setSessionChecked(true);
       });
   }, [
+    router,
     pathname,
     sessionChecked,
     navigate,

@@ -7,7 +7,7 @@ import { useMemo } from 'react';
 import Player from '../Game/Player';
 import { useGameServer } from '@/store/App';
 import { useBotnetAuth } from '@/store/Auth';
-import { guestId } from '@/store/GameServerProvider';
+import { getGuestId } from '@/store/AuthProvider';
 
 /**
  * Handle matchmaking online players
@@ -18,7 +18,9 @@ const Multiplayer = () => {
     state => [state.gameRoom, state.players],
     shallow,
   );
-  const [userId] = useBotnetAuth(state => [state.session?.user?.id || guestId]);
+  const [userId] = useBotnetAuth(state => [
+    state.session?.user?.id || getGuestId(),
+  ]);
 
   const otherPlayers = useMemo(
     () =>

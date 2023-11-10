@@ -10,14 +10,12 @@ import {
   serverRoomReceiveQueue,
   serverRoomSendQueue,
 } from '@/lib/rivet';
-import { v4 as uuid } from 'uuid';
 import { useGameServer } from './App';
 import { useBotnetAuth } from './Auth';
 import { getNameFromEmail, getUserIdFromSession } from '@/lib/utils';
 import { consumeChatMessages, consumeUsers } from '@/lib/utils/gameserver';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
-
-export const guestId = uuid();
+import { getGuestId } from './AuthProvider';
 
 /**
  * Game server handler, make sure to instatiate this once
@@ -71,7 +69,10 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
     [session],
   );
   // present user id
-  const userId = useMemo(() => loggedInUserId || guestId, [loggedInUserId]);
+  const userId = useMemo(
+    () => loggedInUserId || getGuestId(),
+    [loggedInUserId],
+  );
 
   // Connect matchmaking using Rivet's API
   // check camp-gameserver repo for full implementation
@@ -260,7 +261,7 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
         startConnecting();
         console.log('connectBotChatServer()');
 
-        const userId = loggedInUserId || guestId;
+        const userId = loggedInUserId || getGuestId();
         const room = (await colyseusConnection.joinOrCreate('botChat', {
           userId,
           spaceId,

@@ -9,7 +9,7 @@ import { serverRoomSendQueue } from '@/lib/rivet';
 import { shallow } from 'zustand/shallow';
 import { useAppStore, useGameServer } from '@/store/App';
 import { useBotnetAuth } from '@/store/Auth';
-import { guestId } from '@/store/GameServerProvider';
+import { getGuestId } from '@/store/AuthProvider';
 
 const PLAYERSPEED = 4;
 
@@ -30,7 +30,9 @@ function useCharacterController(
   ]);
 
   const [gameRoom] = useGameServer(state => [state.gameRoom], shallow);
-  const [userId] = useBotnetAuth(state => [state.session?.user?.id || guestId]);
+  const [userId] = useBotnetAuth(state => [
+    state.session?.user?.id || getGuestId(),
+  ]);
 
   /**
    * Use x,y player data from gameserver if not user controlled
