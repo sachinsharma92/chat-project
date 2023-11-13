@@ -1,7 +1,7 @@
 import camelcaseKeys from 'camelcase-keys';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import { useBotData } from '@/store/App';
-import { head, isEmpty, map, pick } from 'lodash';
+import { head, isEmpty, map, pick, toString } from 'lodash';
 import { isResponseStatusSuccess } from '@/lib/utils';
 import { ChatMessageProps, OpenAIRoles } from '@/types';
 import { useBotnetAuth } from '@/store/Auth';
@@ -46,12 +46,15 @@ export const useBotChat = () => {
       const reqHeaders = {
         ...authHeaders,
       };
+      const spaceBot = head(spaceInfo?.bots);
+      const spaceBotId = toString(spaceBot?.id);
       const audioRes = await APIClient.post<BotAudioResponse>(
         '/api/bot-audio',
         {
           userId,
           message,
           spaceId,
+          spaceBotId,
         },
         {
           headers: reqHeaders,

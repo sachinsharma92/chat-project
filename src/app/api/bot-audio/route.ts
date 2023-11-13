@@ -5,20 +5,22 @@ dotenv.config({ path: `.env.local` });
 
 import axios from 'axios';
 import { Readable } from 'stream';
-import { last, toString, trim } from 'lodash';
+import { head, last, toString, trim } from 'lodash';
 import { applyApiRoutesAuth } from '../bot-chat/route';
 import {
   getElevenLabsTextToSpeechApiBaseUrl,
   getElevenLabsApiKey,
 } from '@/lib/elevenlabs';
 import { returnCommonStatusError } from '@/lib/utils/routes';
-import { supabaseClient } from '@/lib/supabase';
+import { getSpaceBotById, supabaseClient } from '@/lib/supabase';
 import {
   publicBucketName,
   publicFolderForBotAudio,
 } from '@/lib/supabase/storage';
 import { v4 as uuid } from 'uuid';
 import { isDevelopment } from '@/lib/environment';
+import camelcaseKeys from 'camelcase-keys';
+import { IBot } from '@/types';
 
 export interface BotAudioBodyRequest {
   message: string;
@@ -36,7 +38,7 @@ export async function POST(request: Request) {
   const authorization = headers.get('Authorization');
   const refreshToken = headers.get('X-RefreshToken') as string;
   const accessToken = last(toString(authorization).split('BEARER ')) as string;
-  const { message, userId, spaceId }: BotAudioBodyRequest =
+  const { message, userId, spaceId, spaceBotId }: BotAudioBodyRequest =
     await request.json();
   const defaultVoiceId = 'IKne3meq5aSn9XLyUdCD';
   const authRes = await applyApiRoutesAuth(accessToken, refreshToken);
@@ -51,6 +53,16 @@ export async function POST(request: Request) {
     voiceId = 'g6pr0Z1BRlXIYjtpHFR6';
   } else if (spaceId === '5b1e8603-144c-4b13-842a-ada5533ea43c') {
     voiceId = 'EaxEsbwameBaIZWcBKy0';
+  } else if (spaceBotId) {
+    // grab voice id from record
+    const { data, error } = await getSpaceBotById(spaceBotId);
+    const spaceBotInfo = camelcaseKeys(
+      head(data) as Record<string, any>,
+    ) as IBot;
+
+    if (!error && spaceBotInfo?.voiceId) {
+      voiceId = spaceBotInfo?.voiceId;
+    }
   }
 
   try {
