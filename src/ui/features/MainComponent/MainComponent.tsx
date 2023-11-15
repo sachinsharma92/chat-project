@@ -1,53 +1,96 @@
 'use client';
 
-import StickyChat from '../Chat/StickyChat';
-import dynamic from 'next/dynamic';
-import AppNavigation from '../AppNavigation';
-import Bulletin from '../Bulletin';
-
+import {
+  ExpandBoxIcon,
+  ExpandSmallBoxIcon,
+  ExpandV2Icon,
+  MinimizeBoxIcon,
+  MinimizeMedBoxIcon,
+} from '@/icons';
 import { useWindowResize } from '@/hooks';
 import { mobileWidthBreakpoint } from '@/constants';
+import { useState } from 'react';
+
+import cx from 'classnames';
+import AppNavigation from '../AppNavigation';
+import SpaceContent from '../SpaceContent';
+import Button from '@/components/common/Button';
+import GameScreen from '../GameScreen';
+
 import './MainComponent.css';
-
-const InfoSidebar = dynamic(
-  () => import('@/ui/features/InfoSidebar/InfoSidebar'),
-  {
-    ssr: false,
-  },
-);
-
-const ThreeJSComponent = dynamic(() => import('@/ui/three'), {
-  ssr: false,
-});
-
-// const Game = dynamic(() => import('@/ui/game'), {
-//   ssr: false,
-// });
 
 const MainComponent = () => {
   const { availableWidth } = useWindowResize();
 
+  const [minimizeMed, setMinimizeMed] = useState(true);
+  const [minimizeSm, setMinimizeSm] = useState(false);
+
+  const toggleMinimizeMedGameScreen = () => {
+    setMinimizeMed(!minimizeMed);
+
+    if (!minimizeMed) {
+      setMinimizeSm(false);
+    }
+  };
+
+  const toggleMinimizeSmGameScreen = () => {
+    setMinimizeSm(!minimizeSm);
+
+    if (!minimizeSm) {
+      setMinimizeMed(true);
+    }
+  };
+
   return (
-    <div className="main-component flex w-full fix-screen-overflow">
-      <AppNavigation />
-
-      <div className="info-side-bar-container">
-        <InfoSidebar />
+    <div className="main-component">
+      <div className="header-nav">
+        <AppNavigation />
       </div>
+      <div className="main-component-content">
+        <div className="space-content space-content-mobile">
+          <SpaceContent />
+        </div>
 
-      <div className="game-screen">
-        <div className="world">
-          <canvas className="game-canvas">
-            <ThreeJSComponent />
-          </canvas>
+        <div
+          className={cx('game-content', {
+            'game-content-min-sm': minimizeSm,
+            'game-content-max': !minimizeMed,
+          })}
+        >
+          <GameScreen
+            hideBotChat={minimizeMed && availableWidth >= mobileWidthBreakpoint}
+          />
+          <div className="expand-min-options">
+            {availableWidth > mobileWidthBreakpoint && (
+              <Button onClick={toggleMinimizeSmGameScreen}>
+                {!minimizeSm && <MinimizeBoxIcon />}
+                {minimizeSm && <ExpandSmallBoxIcon />}
+              </Button>
+            )}
+
+            {availableWidth > mobileWidthBreakpoint && (
+              <Button onClick={toggleMinimizeMedGameScreen}>
+                {minimizeMed && <ExpandBoxIcon />}
+                {!minimizeMed && <MinimizeMedBoxIcon />}
+              </Button>
+            )}
+
+            {availableWidth <= mobileWidthBreakpoint && (
+              <Button>
+                <ExpandV2Icon />
+              </Button>
+            )}
+          </div>
+        </div>
+        <div
+          className={cx('space-content space-content-desktop', {
+            'space-content-min-sm': minimizeSm,
+            'space-content-hide': !minimizeMed,
+          })}
+        >
+          <SpaceContent />
         </div>
       </div>
-
-      <div className="bulletin-container">
-        <Bulletin />
-      </div>
-
-      {availableWidth < mobileWidthBreakpoint && <StickyChat />}
     </div>
   );
 };

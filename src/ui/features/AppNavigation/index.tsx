@@ -1,22 +1,16 @@
 'use client';
 
+import cx from 'classnames';
 import Button from '@/components/common/Button';
 import UserAvatar from '@/components/common/UserAvatar';
-import {
-  BotnetIcon,
-  ExploreIcon,
-  NotificationBellIcon,
-  SearchIcon,
-} from '@/icons';
-import cx from 'classnames';
+import { BotnetIcon, SearchIcon } from '@/icons';
 import { InterTight } from '@/app/fonts';
 import { useBotnetAuth } from '@/store/Auth';
-import { ExitIcon } from '@radix-ui/react-icons';
-import { useContext } from 'react';
-import { AuthStateContext } from '@/store/AuthProvider';
+import { PlusIcon } from '@radix-ui/react-icons';
 import { useRouter } from 'next/navigation';
 
 import ProfileMenu from './ProfileMenu';
+import TextInput from '@/components/common/TextInput';
 import './AppNavigation.css';
 
 const AppNavigation = () => {
@@ -24,7 +18,6 @@ const AppNavigation = () => {
     state.session,
     state.isLoading,
   ]);
-  const { signOutUser } = useContext(AuthStateContext);
 
   const router = useRouter();
 
@@ -36,63 +29,32 @@ const AppNavigation = () => {
     router.push('/dashboard');
   };
 
-  const onSignOut = () => {
-    signOutUser();
-  };
-
   return (
     <div className={cx(InterTight.className, 'app-nav')}>
-      <div className="top left flex">
+      <div className="left">
         <Button className="logo flex justify-center">
           <BotnetIcon />
         </Button>
       </div>
 
-      <div className="center flex">
-        <Button className="explore flex justify-center">
-          <ExploreIcon />
-        </Button>
-
-        <Button className="search flex justify-center">
-          <SearchIcon />
-        </Button>
-
-        <Button className="notification flex justify-center">
-          <NotificationBellIcon />
-        </Button>
+      <div className="center">
+        <div className="search">
+          <Button className="search-icon">
+            <SearchIcon />
+          </Button>
+          <TextInput placeholder="Search" className="search-input" />
+        </div>
       </div>
 
-      <div className="right flex justify-center">
+      <div className="right">
         {!session && <ProfileMenu />}
-
         {session && (
           <>
-            <Button
-              className="flex justify-center items-center"
-              onClick={showAccount}
-            >
+            <Button className="add-bot">
+              <PlusIcon height={'18px'} width={'18px'} />
+            </Button>
+            <Button className="user-account" onClick={showAccount}>
               <UserAvatar />
-            </Button>
-            <Button className="flex ml-2" onClick={() => onSignOut()}>
-              <ExitIcon />
-            </Button>
-          </>
-        )}
-      </div>
-
-      <div className="bottom flex-col justify-start items-center">
-        {!session && <ProfileMenu />}
-
-        {session && (
-          <>
-            <Button
-              className="flex justify-center items-center"
-              onClick={showAccount}
-            >
-              <UserAvatar />
-            </Button>
-            <Button className="logout" onClick={() => onSignOut()}>
-              <ExitIcon />
             </Button>
           </>
         )}

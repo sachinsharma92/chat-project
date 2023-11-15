@@ -1,11 +1,5 @@
 .avatar-layout {
-  height: 100%;
-  width: 100%;
-  padding: 0;
-  box-sizing: border-box;
-  border-radius: 100%;
-  background: #44373c;
-  overflow: hidden;
+  @apply flex justify-center items-center h-full w-full box-border p-0 rounded-[100%] overflow-hidden bg-[#000];
 }
 
 .avatar-layout > p {
@@ -17,18 +11,8 @@
 }
 
 .avatar-image {
-  @apply flex justify-center items-center;
+  @apply flex h-full w-full justify-center items-center box-border;
 
-  height: 100%;
-  width: 100%;
-  box-sizing: border-box;
   object-position: center;
   object-fit: cover;
-  box-sizing: border-box;
-}
-
-.avatar-fallback {
-  @apply flex justify-center items-center;
-  color: #fff;
-  background: #44373c;
 }

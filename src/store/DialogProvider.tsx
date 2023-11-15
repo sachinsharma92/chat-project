@@ -7,7 +7,6 @@ import { DialogEnums, MobileDrawerEnums } from '@/types/dialog';
 import * as Dialog from '@radix-ui/react-dialog';
 import AuthLoadingScreen from '@/ui/dialogs/AuthLoadingScreen';
 import DrawerComponent from '@/components/common/Drawer';
-import ChatMobile from '@/ui/features/Chat/ChatMobile';
 import CloneAudioUpdate from '@/ui/dialogs/CloneAudioUpdate';
 
 import '@/components/common/styles/Dialog.css';
@@ -57,11 +56,7 @@ const DialogProvider = (props: { children?: ReactNode }) => {
         isOpen={
           showMobileDrawer && showMobileDrawerType !== MobileDrawerEnums.none
         }
-        content={
-          <>
-            {showMobileDrawerType === MobileDrawerEnums.chat && <ChatMobile />}
-          </>
-        }
+        content={<></>}
         closeOnOverlayClick
         onClose={() => {
           setShowMobileDrawer(false, MobileDrawerEnums.none);

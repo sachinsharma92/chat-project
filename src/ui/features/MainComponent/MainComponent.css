@@ -1,18 +1,24 @@
 .main-component {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  padding: 12px;
-  box-sizing: border-box;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
+  @apply fixed flex w-full justify-start items-start top-0 left-0 h-full w-full box-border;
+
+  padding: 24px;
+  padding-top: 16px;
+  flex-direction: column;
 }
 
-.fix-screen-overflow {
-  @apply overflow-y-auto;
+.header-nav {
+  height: 48px;
+}
+
+.header-nav,
+.main-component-content {
+  @apply relative flex w-full box-border box-border;
+}
+
+.main-component-content {
+  @apply flex justify-between items-center h-full mt-[16px];
+
+  max-height: calc(100% - 48px - 16px);
 }
 
 .right-sidebar {
@@ -22,98 +28,116 @@
   justify-content: space-between;
 }
 
-.game-screen {
-  position: relative;
-  height: 100%;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-  width: 100vw;
-  min-height: 440px;
-  padding: 12px 12px 12px 16px;
-  box-sizing: border-box;
-  border-radius: 24px;
+.game-content,
+.space-content {
+  @apply relative h-full box-border;
+
+  width: calc(50% - 20px);
   overflow: hidden;
-  background: transparent;
+}
+
+.game-content {
+  border-radius: 40px;
   box-shadow: 0px 6px 20px 0px rgba(0, 0, 0, 0.15);
-  transition: width 0.05s linear;
-  margin: 0 12px;
-
-  max-width: calc(100% - 12px - 12px - 48px - 320px - 8px - 320px);
-  width: calc(100% - 12px - 12px - 48px - 320px - 8px - 320px);
-  padding: 0;
 }
 
-.world,
-.game-canvas {
-  @apply absolute top-0 left-0;
+.world {
+  background-image: url('/assets/botnet-avatar-bg.png');
+  background-position: center;
+  background-size: cover;
+}
 
-  position: relative;
-  height: 100%;
+.game-content-min-sm {
+  width: 400px;
+}
+
+.game-content-max {
   width: 100%;
-  box-sizing: border-box;
 }
 
-.info-side-bar-container {
-  position: relative;
-  width: 320px;
-  height: 100%;
+.space-content {
+  padding-left: 4px;
 }
 
-.bulletin-container {
-  height: 100%;
-  width: 320px;
+.space-content-min-sm {
+  width: calc(100% - 400px - 10px - 20px);
 }
 
-@media screen and (max-width: 1124px) {
-  .game-screen {
-    max-width: calc(100% - 12px - 12px - 48px - 270px - 12px - 270px);
-    width: calc(100% - 12px - 12px - 48px - 270px - 12px - 270px);
-  }
+.space-content-hide {
+  display: none;
+  height: 0;
+  overflow: hidden;
+  width: 0;
+}
 
-  .info-side-bar-container {
-    width: 270px;
-  }
+.space-content-desktop {
+  display: flex;
+}
 
-  .bulletin-container {
-    width: 270px;
-  }
+.space-content-mobile {
+  display: none;
+}
+
+.expand-min-options {
+  @apply absolute flex justify-center items-center rounded-[80px] p-[8px] box-border top-[16px] right-[16px];
+
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.24);
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+}
+
+.expand-min-options > button {
+  @apply relative flex justify-center items-center h-[40px] w-[40px] p-[4px] box-border rounded-[500px];
+
+  background: rgba(0, 0, 0, 0.24);
+}
+
+.expand-min-options > button:hover {
+  background: rgba(0, 0, 0, 0.3);
 }
 
 @media screen and (max-width: 720px) {
   .main-component {
     padding: 0;
-    padding-top: 16px;
+    padding-top: 8px;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
   }
 
-  .info-side-bar-container {
-    position: absolute;
-    height: unset;
-    max-height: calc(100% - 78px);
-    max-width: calc(100% - 32px);
-    top: 78px;
-    left: 16px;
-    z-index: 1;
+  .header-nav {
+    height: 40px;
+    border-bottom: 0.5px solid #e5e5e5;
+    box-sizing: border-box;
   }
 
-  .game-screen {
-    height: calc(100% - 16px - 92px);
-    margin: 0;
-    margin-top: 16px;
-    border-radius: 0;
-    border-top-left-radius: 24px;
-    border-top-right-radius: 24px;
-    border-radius: 24px;
-    max-width: 100%;
-    width: 100%;
-    bottom: unset;
+  .space-content-mobile {
+    @apply relative flex w-full box-border;
   }
 
-  .bulletin-container {
+  .space-content-desktop {
     display: none;
-    overflow: hidden;
+  }
+
+  .main-component-content {
+    flex-direction: column;
+    box-sizing: border-box;
+
+    max-height: calc(100% - 40px - 8px);
+  }
+
+  .game-content,
+  .space-content {
+    @apply w-full h-[unset] box-border;
+  }
+
+  .space-content {
+    padding: 4px 8px 0 16px;
+  }
+
+  .game-content {
+    height: 60vh;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
   }
 }

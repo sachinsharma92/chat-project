@@ -1,14 +1,8 @@
 .app-nav {
-  @apply flex;
+  @apply flex w-full h-full items-center justify-between p-0;
 
-  flex-direction: column;
   background: transparent;
-  justify-content: space-between;
-  align-items: center;
-  height: 100%;
-  width: 46px;
   box-sizing: border-box;
-  padding: 16px 4px;
 }
 
 .logo {
@@ -21,66 +15,67 @@
   max-width: 100px;
 }
 
-.login {
-  border-radius: 80px;
-  background: var(--tans-off-white, #fffff7);
-  padding: 4px 6px;
-  box-sizing: border-box;
-}
-
-.login > p {
-  max-width: 100%;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--browns-dark-brown, #44373c);
-}
-
-.login {
-  margin-right: 8px;
-  background: transparent;
-}
-
-.login > p {
-  color: var(--browns-button-brown, #8a7b66);
+.left {
+  @apply relative flex;
 }
 
 .center {
-  display: none;
+  @apply relative flex;
+
+  box-sizing: border-box;
 }
 
 .right {
-  display: none;
+  @apply relative flex justify-center items-center box-border;
 }
 
-.left,
-.top {
-  /* .left is .top for desktop screens */
-  position: relative;
-}
+.search {
+  @apply relative flex justify-start items-center w-[480px] h-[48px];
 
-.top {
-  border-bottom: 1px solid #d1c699;
+  padding: 0 24px;
   box-sizing: border-box;
-  padding-bottom: 32px;
+  border-radius: 48px;
+  background: #f5f5f5;
 }
 
-.bottom {
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  padding-top: 24px;
-  border-top: 1px solid #d1c699;
-  box-sizing: border-box;
-  width: 30px;
-}
+.search-icon {
+  @apply relative flex justify-center items-center h-full p-0;
 
-.user-avatar {
-  height: 30px;
-  width: 30px;
   box-sizing: border-box;
 }
 
-.logout {
+.search-icon > svg,
+.search-icon > svg > path {
+  color: #999;
+}
+
+.search-input {
+  @apply relative ml-2 w-full;
+
+  color: #999;
+  font-size: 16px;
+  font-weight: 500;
+  background: transparent;
+  max-width: calc(100% - 30px);
+}
+
+.add-bot {
+  @apply flex justify-center items-center rounded-[80px] h-[36px] w-[36px] mr-[16px];
+
+  border: 1px solid #f5f5f5;
+  background: #f5f5f5;
+  box-shadow: 0px 1px 8px 6px rgba(0, 0, 0, 0.1);
+}
+
+.user-account {
+  @apply flex justify-center items-center h-[42px] w-[42px] rounded-[80px] box-border;
+
+  border: 1px solid #f5f5f5;
+  background: #fff;
+  box-shadow: 0px 1px 8px 6px rgba(0, 0, 0, 0.1);
+}
+
+.account .logout {
   @apply flex mt-2;
 }
 
@@ -90,36 +85,15 @@
 
 @media screen and (max-width: 720px) {
   .app-nav {
-    @apply flex-row space-x-4 w-full;
-
-    height: 30px;
-    width: 100%;
     padding: 0 12px;
     gap: unset;
     box-sizing: border-box;
   }
 
-  .top {
-    padding-bottom: 0;
-    border-bottom: none;
-  }
-
   .right,
   .center {
-    display: flex;
-  }
-
-  .center {
-    width: 100%;
-    max-width: calc(100% - 200px);
-    justify-content: space-between;
-  }
-
-  .login {
     display: none;
-  }
-
-  .bottom {
-    display: none;
+    overflow: hidden;
+    height: 0;
   }
 }

@@ -1,7 +1,7 @@
 import camelcaseKeys from 'camelcase-keys';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import { useBotData } from '@/store/App';
-import { head, isEmpty, map, pick, toString } from 'lodash';
+import { head, isEmpty, map, pick, size, toString } from 'lodash';
 import { isResponseStatusSuccess } from '@/lib/utils';
 import { ChatMessageProps, OpenAIRoles } from '@/types';
 import { useBotnetAuth } from '@/store/Auth';
@@ -11,6 +11,7 @@ import { APIClient } from '@/lib/api';
 import { BotChatPostResponse } from '@/app/api/bot-chat/route';
 import { getGuestId } from '@/store/AuthProvider';
 import { BotAudioResponse } from '@/app/api/bot-audio/route';
+import { useMemo } from 'react';
 
 /**
  * Call function to send message to bot
@@ -35,6 +36,13 @@ export const useBotChat = () => {
     state.image,
   ]);
   const { getSupabaseAuthHeaders } = useAuth();
+
+  const greeting = useMemo(() => {
+    const spaceBotInfo = head(spaceInfo?.bots);
+    const greeting = spaceBotInfo?.greeting;
+
+    return greeting || `Hi! What's on your mind?`;
+  }, [spaceInfo]);
 
   /**
    * Grab mp3 file from protected route
@@ -102,9 +110,21 @@ export const useBotChat = () => {
           chatMessages,
           message => pick(message, ['role', 'message']),
         );
+        const botGreeting = {
+          id: uuid(),
+          authorId: '',
+          message: greeting,
+          role: OpenAIRoles.assistant,
+        };
+        const firstChatMessage = !messageHistory || isEmpty(messageHistory);
+        const updatedMessages = [
+          ...(firstChatMessage && !isEmpty(greeting) ? [botGreeting] : []),
+          ...chatMessages,
+          chatMessage,
+        ];
 
         setBotRoomIsResponding(true);
-        setChatMessages([...chatMessages, chatMessage]);
+        setChatMessages(updatedMessages);
         const bot = camelcaseKeys(head(spaceInfo?.bots) || {});
         const authHeaders = getSupabaseAuthHeaders();
         const reqHeaders = {
@@ -130,15 +150,12 @@ export const useBotChat = () => {
             resData?.messages || [],
           ) as Record<string, any>;
           const responseMessage = responseMessagePayload?.message;
-          console.log(responseMessage);
-
           await playBotAudio(responseMessage);
 
           // store chat
           // insert completed chat
           setChatMessages([
-            ...chatMessages,
-            chatMessage,
+            ...updatedMessages,
             {
               ...pick(camelcaseKeys(responseMessagePayload), [
                 'id',
@@ -158,7 +175,24 @@ export const useBotChat = () => {
     }
   };
 
-  return {
-    sendBotChatMessage,
+  const resetChat = () => {
+    const botGreeting = {
+      id: uuid(),
+      authorId: '',
+      message: greeting,
+      role: OpenAIRoles.assistant,
+    };
+    const messageHistory: Partial<ChatMessageProps>[] = map(
+      chatMessages,
+      message => pick(message, ['role', 'message']),
+    );
+
+    if (isEmpty(messageHistory) || size(messageHistory) <= 1) {
+      return;
+    }
+
+    setChatMessages([botGreeting]);
   };
+
+  return { resetChat, sendBotChatMessage };
 };

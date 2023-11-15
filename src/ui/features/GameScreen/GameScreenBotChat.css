@@ -1,0 +1,42 @@
+.game-screen-bot-chat {
+  @apply absolute w-[300px] right-[24px] bottom-[24px] p-0 box-border;
+}
+
+.game-screen-bot-chat-content {
+  @apply relative flex w-full box-border;
+
+  flex-direction: column;
+}
+
+.game-screen-chat-input-container {
+  @apply relative flex justify-between w-full items-center h-[48px] rounded-[48px] pr-[8px] pl-[16px] box-border;
+
+  border: 1px solid #e5e5e5;
+  background: #fff;
+}
+
+.game-screen-chat-input-container > input {
+  @apply relative;
+
+  max-width: calc(100% - 80px);
+  width: 100%;
+  background: transparent;
+}
+
+.game-screen-attach-file {
+  @apply relative flex justify-center items-center h-[30px] w-[30px];
+}
+
+.game-screen-mic {
+  @apply relative flex justify-center items-center h-[36px] w-[36px] p-0 rounded-[500px] bg-[#000];
+}
+
+.game-screen-mic > svg > path {
+  fill: #fff;
+}
+
+@media screen and (max-width: 720px) {
+  .game-screen-bot-chat {
+    @apply w-full p-[24px] pt-0 bottom-0 right-0;
+  }
+}
