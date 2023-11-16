@@ -16,17 +16,6 @@
   @apply relative w-full mt-[24px];
 }
 
-.space-description > p {
-  max-width: 100%;
-  overflow: hidden;
-  color: #000;
-  text-overflow: ellipsis;
-  font-size: 15px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 150%;
-}
-
 .social-links {
   @apply relative flex justify-start items-center w-full mt-[24px] box-border;
 

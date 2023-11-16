@@ -10,6 +10,7 @@ import HomeSpace from './HomeSpace';
 import BotChat from './BotChat';
 
 import './SpaceContent.css';
+import SpaceDescription from '../SpaceDescription';
 
 export enum SpaceContentTabEnum {
   'chat' = 'chat',
@@ -74,7 +75,7 @@ const SpaceContent = () => {
       </div>
 
       <div className="space-description-mobile">
-        <p>{spaceDescription}</p>
+        <SpaceDescription text={spaceDescription} />
       </div>
 
       <Tabs
@@ -82,8 +83,6 @@ const SpaceContent = () => {
         className="space-content-tabs"
         value={spaceContentTab}
         onValueChange={v => {
-          console.log(v);
-
           setSpaceContentTab(v);
         }}
       >

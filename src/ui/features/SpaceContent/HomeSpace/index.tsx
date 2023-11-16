@@ -21,6 +21,7 @@ import SpaceLinks from '../../SpaceLinks';
 import TextInput from '@/components/common/TextInput';
 import Button from '@/components/common/Button';
 import Avatar from '@/components/common/Avatar/Avatar';
+import SpaceDescription from '../../SpaceDescription';
 
 import './HomeSpace.css';
 
@@ -79,7 +80,7 @@ const HomeSpace = (props: HomeSpaceProps) => {
     <>
       <div className="home-space">
         <div className="space-description">
-          <p>{spaceDescription}</p>
+          <SpaceDescription text={spaceDescription} />
         </div>
 
         <SpaceLinks />
@@ -119,6 +120,7 @@ const HomeSpace = (props: HomeSpaceProps) => {
             <FileIcon />
           </Button>
           <TextInput
+            className="cta-chat-input-container-text-input"
             {...register('message', {
               required: false,
             })}

@@ -1,0 +1,43 @@
+.space-description-container {
+  @apply relative w-full flex items-end;
+}
+
+.space-description-container > p {
+  max-width: 100%;
+  overflow: hidden;
+  color: #000;
+  text-overflow: ellipsis;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  box-sizing: border-box;
+}
+
+.space-description-container > button {
+  background: transparent;
+  box-shadow: none;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 100;
+  color: #999;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  margin-bottom: 2px;
+}
+
+@media screen and (max-width: 720px) {
+  .space-description-container > p {
+    color: #000;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+  }
+
+  .space-description-container > button {
+    font-size: 12px;
+  }
+}

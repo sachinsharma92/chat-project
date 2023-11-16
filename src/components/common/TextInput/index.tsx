@@ -1,6 +1,6 @@
 import { CSSProperties, InputHTMLAttributes, forwardRef } from 'react';
-import { isEmpty, isFunction, isString } from 'lodash';
-import cx from 'classnames';
+import { isEmpty, isFunction } from 'lodash';
+import { cn } from '@/lib/utils';
 import './TextInput.css';
 
 type TextInputPropsType = {
@@ -36,9 +36,8 @@ const TextInput = forwardRef<HTMLInputElement, TextInputPropsType>(
         ref={ref}
         type={type || 'text'}
         aria-label={ariaLabel || 'TextInput'}
-        className={cx('text-input', {
+        className={cn('text-input', className, {
           'primary-input': variant === 'primary',
-          [`${className}`]: !isEmpty(className) && isString(className),
         })}
         {...(isFunction(onChange) && { onChange, value })}
         {...(!isEmpty(defaultValue) && { defaultValue })}
