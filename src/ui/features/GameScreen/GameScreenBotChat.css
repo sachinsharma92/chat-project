@@ -3,9 +3,35 @@
 }
 
 .game-screen-bot-chat-content {
-  @apply relative flex w-full box-border;
+  @apply relative flex justify-end items-start w-full box-border;
 
   flex-direction: column;
+}
+
+.game-screen-chat-stream {
+  @apply relative w-full box-border mb-[16px];
+
+  max-height: 400px;
+  overflow: hidden;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.game-screen-chat-stream::-webkit-scrollbar {
+  opacity: 0;
+  width: 0;
+}
+
+.game-screen-chat-stream > ul {
+  @apply relative w-full box-border;
+
+  list-style: none;
+  list-style-type: none;
+}
+
+.game-screen-chat-stream > ul > li {
+  @apply relative w-full box-border mt-[8px];
 }
 
 .game-screen-chat-input-container {
@@ -35,8 +61,16 @@
   fill: #fff;
 }
 
+.game-screen-chat-stream-bot-message > div:last-child > p:nth-child(1) {
+  color: #fff;
+}
+
 @media screen and (max-width: 720px) {
   .game-screen-bot-chat {
     @apply w-full p-[24px] pt-0 bottom-0 right-0;
+  }
+
+  .game-screen-chat-stream {
+    max-height: 300px;
   }
 }
