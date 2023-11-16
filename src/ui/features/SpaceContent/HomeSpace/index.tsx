@@ -3,7 +3,6 @@ import { head } from 'lodash';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 
 import {
-  AIIcon,
   DiscordIcon,
   FileIcon,
   InstagramIcon,
@@ -15,14 +14,15 @@ import {
 } from '@/icons';
 import { SpaceContentTabEnum } from '..';
 import { useForm } from 'react-hook-form';
+import { useBotChat } from '../../Chat/hooks/useBotChat';
+import { useBotData } from '@/store/App';
 
 import SpaceLinks from '../../SpaceLinks';
 import TextInput from '@/components/common/TextInput';
 import Button from '@/components/common/Button';
+import Avatar from '@/components/common/Avatar/Avatar';
 
 import './HomeSpace.css';
-import { useBotChat } from '../../Chat/hooks/useBotChat';
-import { useBotData } from '@/store/App';
 
 type HomeSpaceProps = {
   setSpaceContentTab: (tab: SpaceContentTabEnum) => void;
@@ -53,6 +53,12 @@ const HomeSpace = (props: HomeSpaceProps) => {
 
     return greeting || `Hi! What's on your mind?`;
   }, [spaceInfo]);
+
+  const botDisplayImage = useMemo(
+    () =>
+      spaceInfo?.image || spaceInfo?.host?.image || '/assets/aibotavatar.png',
+    [spaceInfo],
+  );
 
   const switchToChat = (data: any) => {
     const message = data?.message;
@@ -102,9 +108,12 @@ const HomeSpace = (props: HomeSpaceProps) => {
 
       <form onSubmit={handleSubmit(switchToChat)} className="cta-greeting-chat">
         <div className="greetings">
-          <AIIcon />
+          <div className="greetings-bot-avatar">
+            <Avatar height={32} width={32} src={botDisplayImage} />
+          </div>
           <p>{greeting}</p>
         </div>
+
         <div className="cta-chat-input-container">
           <Button className="attach-file">
             <FileIcon />
