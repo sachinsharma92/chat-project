@@ -3,6 +3,12 @@ import dotenv from 'dotenv';
 
 dotenv.config({ path: `.env.local` });
 
+import {
+  SpeechConfig,
+  SpeechSynthesizer,
+  SpeechSynthesisVisemeEventArgs,
+} from 'microsoft-cognitiveservices-speech-sdk';
+
 import axios from 'axios';
 import { Readable } from 'stream';
 import { head, last, toString, trim } from 'lodash';
@@ -31,6 +37,7 @@ export interface BotAudioBodyRequest {
 
 export interface BotAudioResponse {
   publicUrl: string;
+  visemes: any[];
 }
 
 export async function POST(request: Request) {
@@ -134,13 +141,48 @@ export async function POST(request: Request) {
         .getPublicUrl(data?.path);
       const publicUrl = urlData?.publicUrl;
 
-      if (isDevelopment) {
-        console.log('bot audio file url', publicUrl);
+      const speechConfig = SpeechConfig.fromSubscription(
+        process.env.MICROSOFT_COGNITIVESERVICES_SPEECH || '',
+        process.env.MICROSOFT_COGNITIVESERVICES_SPEECH_REGION || '',
+      );
+      const synthesizer = new SpeechSynthesizer(speechConfig);
+
+      let visemeData: any[] = [];
+
+      // Subscribe to the viseme received event
+      // @ts-ignore
+      synthesizer.visemeReceived = (s, e: SpeechSynthesisVisemeEventArgs) => {
+        visemeData.push({
+          VisemeId: e.visemeId,
+          AudioOffset: e.audioOffset,
+        });
+      };
+
+      // Convert text to speech and wait for completion
+      try {
+        await new Promise((resolve, reject) => {
+          synthesizer.speakTextAsync(
+            message,
+            result => {
+              if (result) {
+                synthesizer.close();
+                resolve(result);
+              }
+            },
+            error => {
+              synthesizer.close();
+              reject(error);
+            },
+          );
+        });
+      } catch (error: any) {
+        console.log('synthesizer.speakTextAsync() err:', error?.message);
       }
 
       return NextResponse.json(
         {
           publicUrl,
+          visemes: visemeData,
         },
         {
           status: 200,

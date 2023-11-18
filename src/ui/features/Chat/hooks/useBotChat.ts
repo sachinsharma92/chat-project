@@ -1,4 +1,5 @@
 import camelcaseKeys from 'camelcase-keys';
+import EventEmitter from 'events';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import { useBotData } from '@/store/App';
 import { head, isEmpty, map, pick, size, toString } from 'lodash';
@@ -12,6 +13,8 @@ import { BotChatPostResponse } from '@/app/api/bot-chat/route';
 import { getGuestId } from '@/store/AuthProvider';
 import { BotAudioResponse } from '@/app/api/bot-audio/route';
 import { useMemo } from 'react';
+
+export const BotChatEvents = new EventEmitter();
 
 /**
  * Call function to send message to bot
@@ -71,7 +74,10 @@ export const useBotChat = () => {
 
       if (audioRes?.data?.publicUrl?.endsWith('.mp3')) {
         const publicUrl = audioRes?.data?.publicUrl;
+        const visemes = audioRes?.data?.visemes;
         const audio = document.getElementById('bot-audio') as HTMLAudioElement;
+
+        BotChatEvents.emit('audio', { visemes, publicUrl });
 
         if (audio) {
           audio.src = publicUrl;
