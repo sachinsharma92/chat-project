@@ -1,12 +1,11 @@
 // @ts-nocheck
 import * as THREE from 'three';
 import { ReactNode, useEffect, useRef } from 'react';
-import Stats from 'three/addons/libs/stats.module.js';
-
+import { visemeLoader } from './lib/visemeLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { OutlineEffect } from 'three/addons/effects/OutlineEffect.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
+
 
 const ThreeJSComponent = (props: { children?: ReactNode }) => {
   const initialized = useRef<boolean>(false);
@@ -24,210 +23,90 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
     // this useEffect function is set to invoke once
     // write your threejs code blocking below:
 
-    let stats;
-
-    let camera, scene, renderer, effect, clock, controls, skyBox, controls2;
-    let particleLight, particleLightSky, rootBone;
-    let currentVrm = undefined;
+	let clock, scene, camera, renderer, controls, mixer, effect, sound;
     let devicePC = iswap();
-    init();
-    loadVrmModel();
-    animate();
 
-  		function init() {
+	var vise = './audio/viseme5';
+	var visemeJSON = vise.concat( '.json' );
 
-			var fov = 40;
-			var near = 1;
-			var far = 2500;
+    initGraph();
+	loadMesh();
 
-			clock = new THREE.Clock();
+  
+		function initGraph() {
 
-			const containers = document.getElementsByClassName('game-canvas');
+			const containers = document.getElementsByClassName( 'game-canvas' );
 			const canvas = containers[0];
 			renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
 
-			camera = new THREE.PerspectiveCamera( fov, window.innerWidth / window.innerHeight, near, far );
-			camera.position.set( -1.4, 18.3, 10);
-			//camera.rotation.x = 45 * Math.PI / 180;
+            clock = new THREE.Clock();
 
-			//
+            scene = new THREE.Scene();
 
-			scene = new THREE.Scene();
-			scene.background = '';
-			scene.fog = new THREE.Fog( 0x392F1C, 11, 100 );
+            camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.2, 5000 );
+            camera.position.set( - .5, 3.35, .7 );
 
+            const hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 1 );
+            scene.add( hemiLight );
 
-			//2nd scene where outLIneEffect will be disabled;
-			skyBox = {
-				scene: new THREE.Scene(),
-				camera: new THREE.PerspectiveCamera( fov, window.innerWidth / window.innerHeight, near, far  )
-			//camera has same properties with main camera.
-			};
-			skyBox.camera.position.set( -1.4, 18.3, 10);
-			//
+            const dirLight = new THREE.DirectionalLight( 0xffffff, 2 );
 
+            dirLight.position.set( - 2, 0.75, 2 );
+            dirLight.position.multiplyScalar( 10 );
+            scene.add( dirLight );
+
+            dirLight.castShadow = true;
+
+            dirLight.shadow.mapSize.width = 2048;
+            dirLight.shadow.mapSize.height = 2048;
+
+            const d = 50;
+
+            dirLight.shadow.camera.left = - d;
+            dirLight.shadow.camera.right = d;
+            dirLight.shadow.camera.top = d;
+            dirLight.shadow.camera.bottom = - d;
+
+            dirLight.shadow.camera.far = 13500;
+
+            //Setup the renderer
 			renderer.setClearColor( 0x000000);
 			renderer.setPixelRatio( canvas.clientWidth / canvas.clientHeight );
 			renderer.setSize( canvas.clientWidth, canvas.clientHeight );
 			renderer.autoClear = false; 
 
-			//container.appendChild( renderer.domElement );
+            renderer.gammaInput = true;
+            renderer.gammaOutput = true;
 
+            renderer.shadowMap.enabled = true;
 
+            effect = new OutlineEffect( renderer );
 
-			// Lights
-
-			scene.add( new THREE.AmbientLight( 0xc1c1ee, 3 ) );
-			skyBox.scene.add( new THREE.AmbientLight( 0xc1c1ee, 3 ) );
-
-
-			const pointLight = new THREE.PointLight( 0xFFEDCA, 14, 20, 0.5 );
-			pointLight.position.set(-8.0,17,-11);
-			scene.add(pointLight);
-
-			const pointLightSky = new THREE.PointLight( 0xFFEDCA, 14, 20, 0.5 );
-			pointLightSky.position.set(-8.0,17,-11);
-			skyBox.scene.add(pointLightSky);
-
-
-			//
-			if(devicePC)	effect = new OutlineEffect( renderer );
-
-			//
-			stats = new Stats();
-			canvas.appendChild( stats.dom );
-
-			controls = new OrbitControls( camera, renderer.domElement );
-			controls.target.set( 0, 18.6, 0 );
-			//controls.minDistance = 8;
-			//controls.maxDistance = 100;
-			controls.enablePan = false;
-			controls.enableZoom  = false;
+            controls = new OrbitControls( camera, renderer.domElement );
+            controls.enableZoom = false;
+            controls.enablePan = false;
 			controls.enableRotate = false;
-			//controls.maxPolarAngle = Math.PI * 18 / 36;
-			//controls.minPolarAngle = Math.PI * 18 / 36;
-			controls.update();
+            controls.target.set( 0, 3.35, 0 );
+            controls.update();
 
+            window.addEventListener( 'resize', onWindowResize );
 
+			const divElem = document.getElementsByClassName( 'world' );
 
-			controls2 = new OrbitControls( skyBox.camera, renderer.domElement );
-			//controls2.addEventListener('change', camRender );  // for control
-			controls2.target.set( 0, 18.6, 0 );
-			//controls2.minDistance = 8;
-			//controls2.maxDistance = 100;
-			controls2.enablePan = false;
-			controls2.enableZoom  = false;
-			controls2.enableRotate = false;
-			//controls2.maxPolarAngle = Math.PI * 18 / 36;
-			//controls2.minPolarAngle = Math.PI * 18 / 36;
-			controls2.update();
-
-
-
-
-			window.addEventListener( 'resize', onWindowResize );
-
-
-		}
-
-		function loadVrmModel(){
-
-			const loader = new GLTFLoader();
-			loader.crossOrigin = 'anonymous';
-
-			loader.register( ( parser ) => {
-
-				return new VRMLoaderPlugin( parser );
-
+			const resizeObserver = new ResizeObserver( ( entries ) => {
+	
+				for ( const entry of entries ) {
+	
+					const { target, contentRect } = entry;
+					onWindowResize();
+				}
+	
 			} );
+	
+			resizeObserver.observe( divElem[ 0 ] );
 
-			loader.load(
+        }
 
-				'./assets/model/zero_two.vrm',
-
-				( gltf ) => {
-
-					const vrm = gltf.userData.vrm;
-
-					// calling these functions greatly improves the performance
-					VRMUtils.removeUnnecessaryVertices( gltf.scene );
-					VRMUtils.removeUnnecessaryJoints( gltf.scene );
-
-					// Disable frustum culling
-					vrm.scene.traverse( ( obj ) => {
-						if ( obj.isMesh && devicePC ){
-							var matArray = Array.isArray(obj.material);
-							if(matArray){
-								for(var i=0; i<obj.material.length; i++){
-									//matChange( obj, obj.material[ i ] );
-									var diffuseMap = obj.material[i].map;
-									var side = obj.material[i].side;
-									if(side!=2)
-									obj.userData.singleSide = "true";
-
-									var _alphaTest = obj.material[i]._alphaTest;
-									var name = obj.material[i].name;
-									const toonMaterial = new THREE.MeshToonMaterial( {
-										name: name,
-										color: 0xffffff,
-										map: diffuseMap,
-										side: THREE.DoubleSide,
-										alphaTest: _alphaTest,
-										//gradientMap: threeTone
-									});
-									obj.recieveShadow = true;
-									obj.castShadow = true;
-									obj.material[i] = toonMaterial;  
-									obj.frustumCulled = false;
-									obj.material.needsUpdate = true;
-									obj.needsUpdate = true;
-								}
-
-							}else{
-
-								var diffuseMap = obj.material.map;
-								var side = obj.material.side;
-								if(side!=2)
-									obj.userData.singleSide = "true";
-								var _alphaTest = obj.material._alphaTest;
-								const toonMaterial = new THREE.MeshToonMaterial( {
-									color: 0xffffff,
-									map: diffuseMap,
-									side: THREE.DoubleSide,
-									alphaTest: _alphaTest,
-									//gradientMap: threeTone
-								});
-								obj.recieveShadow = true;
-								obj.castShadow = true;
-								//obj.material = toonMaterial;  
-								obj.frustumCulled = false;
-								obj.needsUpdate = true;
-							}	
-						} 
-
-					});
-					vrm.scene.scale.set(12,12,12);
-					scene.add( vrm.scene );
-					console.log(scene);
-					rootBone = scene.children[2].children[5].children[0];
-					rootBone.rotateY(3.14);
-
-					scene.traverse( ( child ) => {
-
-						if(child.isMesh && child.userData.singleSide);
-						//skyBox.scene.add(child);
-
-					});
-					currentVrm = vrm;
-
-				},
-
-				( progress ) => (console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ,'time:',clock.getDelta())),
-
-				( error ) => console.error( error )
-
-			);
-		}
 
 		function onWindowResize() {
 
@@ -236,8 +115,169 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 			camera.updateProjectionMatrix();
 			renderer.setSize(  container.clientWidth == 0 ? 440 : container.clientWidth, container.clientHeight );
 			renderer.render( scene, camera );
+			effect.render( scene, camera );
 
 		}
+
+		function loadMesh() {
+
+            var visemeObj, mesh;
+
+            const loader = new GLTFLoader().setPath( './assets/model/' );
+
+            loader.load( '02viseme.glb', function ( gltf ) {
+
+                mesh = gltf.scene.getObjectByName( 'Face_Baked' );
+
+                visemeObj = new visemeLoader( visemeJSON, mesh, continueWork );
+
+                gltf.scene.traverse( function ( child ) {
+
+                    if ( child.isMesh ) {
+
+                        const material = new THREE.MeshToonMaterial();
+                        const map = child.material.map;
+                        child.material = material;
+                        child.material.map = map;
+
+                    }
+
+                } );
+
+                function continueWork() {
+
+                    var blinkTrack = creatBlinkTrack( mesh, true );
+
+                    const lipTracks = [];
+                    const blinkTracks = [];
+                    blinkTracks.push( blinkTrack );
+                    lipTracks.push( visemeObj.track );
+
+                    const clip = new THREE.AnimationClip( '', visemeObj.timeLaps, lipTracks );
+
+                    var blinkTrackTimeLaps = blinkTrack.times[ blinkTrack.times.length - 1 ];
+                    const blinkClip = new THREE.AnimationClip( '', blinkTrackTimeLaps, blinkTracks );
+
+                    mixer = new THREE.AnimationMixer( mesh );
+
+
+                    const action = mixer.clipAction( clip );
+                    const action1 = mixer.clipAction( blinkClip );
+
+                    action.setDuration( visemeObj.timeLaps / 1000 );
+
+                    //audio listner
+                    const listener = new THREE.AudioListener();
+                    camera.add( listener );
+                    sound = new THREE.Audio( listener );
+                    sound.autoplay = true;
+
+                    const loader = new THREE.AudioLoader();
+                    loader.setPath( './assets/' );
+
+                    loader.load( vise + '.mp3', function ( buffer ) {
+
+                        //sound.stop();
+						sound.setBuffer( buffer );
+                        sound.duration = visemeObj.timeLaps / 1000;
+                        sound.setLoop( false );
+						sound.play();
+                        action.loop = THREE.LoopOnce;
+                        action.play();
+
+
+					} );
+
+                    action1.play();
+                    animate();
+
+                    gltf.scene.scale.set( 2, 2, 2 );
+                    scene.add( gltf.scene );
+
+                }
+
+            } );
+
+        }
+
+
+        function creatBlinkTrack( mesh, blinkWithBrow = false, blinkInterval = 5, blinkInDuration = 0.1, blinkOutDuration = 0.1 ) {
+
+            const blinkKey = [];
+            var keys = Object.keys( mesh.morphTargetDictionary );
+            var blendShapeLength = keys.length;
+
+            keys.forEach( function ( res ) {
+
+                if ( res.indexOf( 'Blink' ) !== - 1 ) {
+
+                    blinkKey.push( mesh.morphTargetDictionary[ res ] );
+
+                }
+
+                if ( blinkWithBrow ) {
+
+                    if ( res.indexOf( 'browDown' ) !== - 1 ) {
+
+                        blinkKey.push( mesh.morphTargetDictionary[ res ] );
+
+                    }
+
+                }
+
+            } );
+
+            var blinkTimes = Math.round( Math.random() * 10, 0 );
+
+            const trackTimes = [];
+            trackTimes.push( 0 );
+
+            const trackValues = [];
+
+            var blinkEye = 0;
+
+            for ( var i = 0; i < blinkTimes; i ++ ) {
+
+                var blinker = Math.random() * blinkInterval / 2 + blinkInterval / 2;
+                blinkEye += blinker;
+
+                //                 open(in)        blink    blinklast        open(out)
+                trackTimes.push( blinkEye - blinkInDuration, blinkEye, blinkEye + blinkOutDuration / 10, blinkEye + blinkOutDuration );
+
+            }
+
+            for ( var i = 0; i < trackTimes.length; i ++ ) {
+
+
+                for ( var j = 0; j < blendShapeLength; j ++ ) {
+
+                    var value;
+                    // open-open(in)-blink-blink-open(out)-open(in)-blink-blink-open(out)
+                    //  0      1      2     3      4          5      6      7      8
+                    //  So, It is ( 2 + 2 ) % 4 == 0 , ( 3 + 1 ) % 4 = 0;
+                    if ( ( blinkKey.indexOf( j ) !== - 1 ) && ( ( i + 2 ) % 4 == 0 || ( i + 1 ) % 4 == 0 ) ) {
+
+                        value = 2;
+
+                    } else {
+
+                        value = 0;
+
+                    }
+
+                    trackValues.push( value );
+
+                    }
+
+            }
+
+            const myName = mesh.name.concat( '.morphTargetInfluences' );
+            const blinkTrack = new THREE.NumberKeyframeTrack( myName, trackTimes, trackValues );
+
+            return blinkTrack;
+
+        }
+
 
 		function resizeRendererToDisplaySize(renderer) {
 
@@ -265,29 +305,9 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 			}
 
 			const dt = clock.getDelta();
-			//if(mixer) mixer.update( dt );
-			if ( currentVrm ) currentVrm.update(dt);
-			stats.begin();
-			render();
-			stats.end();
+			if(mixer) mixer.update( dt );
 			requestAnimationFrame( animate );
-		}
-
-		function render() {
-
-			const timer = Date.now() * 0.00025;
-			skyBox.camera.copy(camera);
-
-			var azimuthalAngle = controls.getAzimuthalAngle();
-			if(rootBone)rootBone.rotation.y = azimuthalAngle;
-
-			if(devicePC){  
-				effect.render(scene,camera);
-				renderer.render(skyBox.scene, skyBox.camera);
-			}else{
-				renderer.render( scene, camera );
-				renderer.render( skyBox.scene, skyBox.camera );
-			}
+			effect.render( scene, camera );
 
 		}
 
