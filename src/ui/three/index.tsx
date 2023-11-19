@@ -23,8 +23,10 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
     // this useEffect function is set to invoke once
     // write your threejs code blocking below:
 
-	let clock, scene, camera, renderer, controls, mixer, effect, sound;
+	let clock, scene, camera, renderer, controls, mixer, effect, sound, action;
     let devicePC = iswap();
+    var isPlaying = false;
+
 
 	var vise = './audio/viseme5';
 	var visemeJSON = vise.concat( '.json' );
@@ -36,6 +38,7 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 		function initGraph() {
 
 			const containers = document.getElementsByClassName( 'game-canvas' );
+            containers[0].addEventListener( 'click', playViseme );
 			const canvas = containers[0];
 			renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
 
@@ -108,6 +111,20 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
         }
 
 
+        function playViseme(){
+
+            if ( isPlaying == false ) {
+
+                sound.play();
+                action.reset();
+                action.setLoop ( THREE.LoopOnce );
+                action.play();
+                isPlaying = true;
+
+            }
+
+        }
+
 		function onWindowResize() {
 
 			const container = document.querySelector('.world');
@@ -159,9 +176,9 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
                     const blinkClip = new THREE.AnimationClip( '', blinkTrackTimeLaps, blinkTracks );
 
                     mixer = new THREE.AnimationMixer( mesh );
+                    mixer.addEventListener( 'finished', restoreState );
 
-
-                    const action = mixer.clipAction( clip );
+                    action = mixer.clipAction( clip );
                     const action1 = mixer.clipAction( blinkClip );
 
                     action.setDuration( visemeObj.timeLaps / 1000 );
@@ -170,7 +187,7 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
                     const listener = new THREE.AudioListener();
                     camera.add( listener );
                     sound = new THREE.Audio( listener );
-                    sound.autoplay = true;
+                    //sound.autoplay = true;
 
                     const loader = new THREE.AudioLoader();
                     loader.setPath( './assets/' );
@@ -181,9 +198,9 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 						sound.setBuffer( buffer );
                         sound.duration = visemeObj.timeLaps / 1000;
                         sound.setLoop( false );
-						sound.play();
-                        action.loop = THREE.LoopOnce;
-                        action.play();
+
+                        //action.loop = THREE.LoopOnce;
+                        //action.play();
 
 
 					} );
@@ -197,6 +214,12 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
                 }
 
             } );
+
+        }
+
+        function restoreState(){
+
+            isPlaying = false;
 
         }
 
