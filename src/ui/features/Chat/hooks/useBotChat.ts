@@ -1,3 +1,5 @@
+'use client';
+
 import camelcaseKeys from 'camelcase-keys';
 import EventEmitter from 'events';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
@@ -193,7 +195,11 @@ export const useBotChat = () => {
       message => pick(message, ['role', 'message']),
     );
 
-    if (isEmpty(messageHistory) || size(messageHistory) <= 1) {
+    if (
+      isEmpty(messageHistory) ||
+      size(messageHistory) <= 1 ||
+      botRoomIsResponding
+    ) {
       return;
     }
 
