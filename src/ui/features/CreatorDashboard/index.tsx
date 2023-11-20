@@ -8,6 +8,9 @@ import { ExitIcon, ExternalLinkIcon } from '@radix-ui/react-icons';
 import { useCreatorSpace, useRouterQuery } from '@/hooks';
 import { copyTextToClipboard } from '@/lib/utils';
 import { BotnetIcon } from '@/icons';
+import { AuthStateContext } from '@/store/AuthProvider';
+import { useRouter } from 'next/navigation';
+
 import Button from '@/components/common/Button';
 import Avatar from '@/components/common/Avatar/Avatar';
 import CloneAISettings from './CloneAISettings';
@@ -15,11 +18,9 @@ import SpaceSettings from './SpaceSettings';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import Profile from './Profile';
 import Links from './Links';
+import CloneAudio from './CloneAudio';
 
 import './CreatorDashboard.css';
-import { AuthStateContext } from '@/store/AuthProvider';
-import { useRouter } from 'next/navigation';
-import CloneAudio from './CloneAudio';
 
 const CreatorDashboard = () => {
   const [isLoading, session, image, email, displayName] = useBotnetAuth(

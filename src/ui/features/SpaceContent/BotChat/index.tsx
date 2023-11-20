@@ -1,3 +1,5 @@
+'use client';
+
 import { EyeOpenIcon, FileIcon, Microphone, ResetIcon } from '@/icons';
 import { useForm } from 'react-hook-form';
 import { useBotData } from '@/store/App';

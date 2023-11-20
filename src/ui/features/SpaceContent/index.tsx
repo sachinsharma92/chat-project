@@ -1,3 +1,5 @@
+'use client';
+
 import { useMemo, useState } from 'react';
 import { head } from 'lodash';
 import { HomeIcon } from '@/icons';
@@ -8,9 +10,9 @@ import Button from '@/components/common/Button';
 import Avatar from '@/components/common/Avatar/Avatar';
 import HomeSpace from './HomeSpace';
 import BotChat from './BotChat';
+import SpaceDescription from '../SpaceDescription';
 
 import './SpaceContent.css';
-import SpaceDescription from '../SpaceDescription';
 
 export enum SpaceContentTabEnum {
   'chat' = 'chat',

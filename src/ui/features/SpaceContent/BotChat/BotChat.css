@@ -1,10 +1,7 @@
 .bot-chat {
-  @apply relative flex h-full w-full box-border p-[24px];
+  @apply relative flex justify-end items-center h-full w-full box-border p-[24px];
 
   flex-direction: column;
-  justify-content: end;
-  align-items: center;
-  box-sizing: border-box;
   border-radius: 24px;
   border: 1px solid #f5f5f5;
   background: #fff;
@@ -15,7 +12,7 @@
 }
 
 .chat-input-container {
-  @apply absolute bottom-[24px] left-[24px] flex justify-between items-center h-[48px] mt-[16px] rounded-[48px] pr-[8px] pl-[16px] box-border;
+  @apply absolute flex justify-between items-center bottom-[24px] left-[24px] h-[48px] mt-[16px] rounded-[48px] pr-[8px] pl-[16px] box-border;
 
   width: calc(100% - 48px);
   border: 1px solid #e5e5e5;

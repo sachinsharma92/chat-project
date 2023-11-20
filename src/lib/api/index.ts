@@ -1,7 +1,11 @@
 'use client';
 
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { last, size } from 'lodash';
+import axios, {
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+  AxiosResponseHeaders,
+} from 'axios';
 
 interface QueryParams {
   [key: string]: any;
@@ -14,6 +18,7 @@ interface RequestBody {
 interface ApiResponse<T> {
   data: T;
   status: number;
+  headers: AxiosResponseHeaders;
   statusText: string;
 }
 
@@ -67,6 +72,7 @@ export class ApiClient {
 
   private handleResponse<T>(response: AxiosResponse<T>): ApiResponse<T> {
     return {
+      headers: response.headers as AxiosResponseHeaders,
       data: response.data,
       status: response.status,
       statusText: response.statusText,
@@ -74,18 +80,4 @@ export class ApiClient {
   }
 }
 
-const getAPIBaseUrl = () => {
-  try {
-    let origin = typeof window !== 'undefined' ? window.location.origin : '/';
-
-    if (last(origin) === '/') {
-      origin = origin.substring(0, size(origin) - 1);
-    }
-
-    return origin;
-  } catch {
-    return '';
-  }
-};
-
-export const APIClient = new ApiClient(getAPIBaseUrl());
+export const APIClient = new ApiClient('/');

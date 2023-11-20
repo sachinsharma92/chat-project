@@ -1,4 +1,3 @@
-import { NextResponse } from 'next/server';
 import dotenv from 'dotenv';
 
 dotenv.config({ path: `.env.local` });
@@ -8,8 +7,6 @@ import {
   SpeechSynthesizer,
   SpeechSynthesisVisemeEventArgs,
 } from 'microsoft-cognitiveservices-speech-sdk';
-
-import axios from 'axios';
 import { Readable } from 'stream';
 import { head, last, toString, trim } from 'lodash';
 import { applyApiRoutesAuth } from '../bot-chat/route';
@@ -18,15 +15,11 @@ import {
   getElevenLabsApiKey,
 } from '@/lib/elevenlabs';
 import { returnCommonStatusError } from '@/lib/utils/routes';
-import { getSpaceBotById, supabaseClient } from '@/lib/supabase';
-import {
-  publicBucketName,
-  publicFolderForBotAudio,
-} from '@/lib/supabase/storage';
-import { v4 as uuid } from 'uuid';
+import { getSpaceBotById } from '@/lib/supabase';
 import { isDevelopment } from '@/lib/environment';
-import camelcaseKeys from 'camelcase-keys';
 import { IBot } from '@/types';
+import axios from 'axios';
+import camelcaseKeys from 'camelcase-keys';
 
 export interface BotAudioBodyRequest {
   message: string;
@@ -45,7 +38,7 @@ export async function POST(request: Request) {
   const authorization = headers.get('Authorization');
   const refreshToken = headers.get('X-RefreshToken') as string;
   const accessToken = last(toString(authorization).split('BEARER ')) as string;
-  const { message, userId, spaceId, spaceBotId }: BotAudioBodyRequest =
+  const { message, spaceId, spaceBotId }: BotAudioBodyRequest =
     await request.json();
   const defaultVoiceId = 'IKne3meq5aSn9XLyUdCD';
   const authRes = await applyApiRoutesAuth(accessToken, refreshToken);
@@ -106,8 +99,44 @@ export async function POST(request: Request) {
       },
     );
 
-    const fileName = `${uuid()}-${userId}.mp3`;
-    const filePath = `${publicFolderForBotAudio}/${fileName}`;
+    const speechConfig = SpeechConfig.fromSubscription(
+      process.env.MICROSOFT_COGNITIVESERVICES_SPEECH || '',
+      process.env.MICROSOFT_COGNITIVESERVICES_SPEECH_REGION || '',
+    );
+    const synthesizer = new SpeechSynthesizer(speechConfig);
+
+    let visemeData: any[] = [];
+
+    // Subscribe to the viseme received event
+    // @ts-ignore
+    synthesizer.visemeReceived = (s, e: SpeechSynthesisVisemeEventArgs) => {
+      visemeData.push({
+        VisemeId: e.visemeId,
+        AudioOffset: e.audioOffset,
+      });
+    };
+
+    // Convert text to speech and wait for completion
+    try {
+      await new Promise((resolve, reject) => {
+        synthesizer.speakTextAsync(
+          message,
+          result => {
+            if (result) {
+              synthesizer.close();
+              resolve(result);
+            }
+          },
+          error => {
+            synthesizer.close();
+            reject(error);
+          },
+        );
+      });
+    } catch (error: any) {
+      console.log('synthesizer.speakTextAsync() err:', error?.message);
+    }
+
     const readableInstanceStream = new Readable({
       read() {
         this.push(res.data);
@@ -115,83 +144,12 @@ export async function POST(request: Request) {
       },
     });
 
-    if (isDevelopment) {
-      console.log('fileName', fileName, 'filePath', filePath);
-    }
+    // @ts-ignore
+    const response = new Response(readableInstanceStream);
 
-    const { data, error } = await supabaseClient.storage
-      .from(publicBucketName)
-      .upload(filePath, readableInstanceStream, {
-        duplex: 'half',
-        contentType: 'audio/mpeg', // MIME type of mp3
-        upsert: true, // If you want to overwrite existing files with the same name
-      });
-
-    if (error?.message) {
-      throw new Error(error?.message);
-    }
-
-    if (isDevelopment) {
-      console.log('data path', data?.path);
-    }
-
-    if (data?.path) {
-      const { data: urlData } = supabaseClient.storage
-        .from(publicBucketName)
-        .getPublicUrl(data?.path);
-      const publicUrl = urlData?.publicUrl;
-
-      const speechConfig = SpeechConfig.fromSubscription(
-        process.env.MICROSOFT_COGNITIVESERVICES_SPEECH || '',
-        process.env.MICROSOFT_COGNITIVESERVICES_SPEECH_REGION || '',
-      );
-      const synthesizer = new SpeechSynthesizer(speechConfig);
-
-      let visemeData: any[] = [];
-
-      // Subscribe to the viseme received event
-      // @ts-ignore
-      synthesizer.visemeReceived = (s, e: SpeechSynthesisVisemeEventArgs) => {
-        visemeData.push({
-          VisemeId: e.visemeId,
-          AudioOffset: e.audioOffset,
-        });
-      };
-
-      // Convert text to speech and wait for completion
-      try {
-        await new Promise((resolve, reject) => {
-          synthesizer.speakTextAsync(
-            message,
-            result => {
-              if (result) {
-                synthesizer.close();
-                resolve(result);
-              }
-            },
-            error => {
-              synthesizer.close();
-              reject(error);
-            },
-          );
-        });
-      } catch (error: any) {
-        console.log('synthesizer.speakTextAsync() err:', error?.message);
-      }
-
-      return NextResponse.json(
-        {
-          publicUrl,
-          visemes: visemeData,
-        },
-        {
-          status: 200,
-        },
-      );
-    } else {
-      // @ts-ignore
-      throw new Error(error);
-    }
+    response.headers.set('X-visemes-data', JSON.stringify({ visemeData }));
+    response.headers.set('Content-Type', 'audio/mpeg');
+    return response;
   } catch (error: any) {
     if (process.env.NODE_ENV === 'development') {
       console.log('/api/bot-audio err:', error?.message);

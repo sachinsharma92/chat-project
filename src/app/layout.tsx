@@ -1,9 +1,10 @@
 import './globals.css';
+
 import { ReactNode } from 'react';
 import type { Metadata } from 'next';
-import Providers from './providers';
 import { Inter } from './fonts';
 import { Toaster } from '@/components/ui/toaster';
+import Providers from './providers';
 
 export const metadata: Metadata = {
   title: 'Botnet',
@@ -20,10 +21,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1, maximum-scale=1, viewport-fit=cover"
         />
         <link rel="icon" href="/favicon.svg" />
-        <script
-          src="https://open.spotify.com/embed-podcast/iframe-api/v1"
-          async
-        ></script>
       </head>
       <body>
         <div id="root">

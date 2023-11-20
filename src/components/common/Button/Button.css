@@ -1,7 +1,3 @@
-.button {
-  @apply relative flex items-center justify-center p-[4px] overflow-hidden outline-none;
-}
-
 .primary-button {
   @apply flex items-center justify-center mt-4 mb-2 h-[40px] w-full rounded-[4px];
 
@@ -21,7 +17,7 @@
   font-weight: normal;
 }
 
-.button-loading {
+.is-loading {
   @apply flex justify-center items-center;
 
   position: absolute;
@@ -31,7 +27,7 @@
   background: rgba(255, 255, 255, 0.6);
 }
 
-.button-disabled {
+.is-disabled {
   position: absolute;
   top: 0;
   left: 0;

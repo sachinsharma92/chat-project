@@ -1,5 +1,14 @@
-import MainComponent from '@/ui/features/MainComponent/MainComponent';
+'use client';
+
 import './App.css';
+import dynamic from 'next/dynamic';
+
+const MainComponent = dynamic(
+  () => import('@/ui/features/MainComponent/MainComponent'),
+  {
+    ssr: false,
+  },
+);
 
 // SSR
 // Grab the dom by calling 'getElementById'

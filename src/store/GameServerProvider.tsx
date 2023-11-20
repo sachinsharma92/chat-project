@@ -22,7 +22,7 @@ import { getGuestId } from './AuthProvider';
  * @param param0
  * @returns
  */
-export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
+const GameServerProvider = ({ children }: { children?: ReactNode }) => {
   const { isStarted } = useWorldStore(state => ({
     isStarted: state.isStarted,
   }));
@@ -315,3 +315,5 @@ export const GameServerProvider = ({ children }: { children?: ReactNode }) => {
 
   return <>{children}</>;
 };
+
+export default GameServerProvider;

@@ -1,5 +1,14 @@
-import CreatorDashboard from '@/ui/features/CreatorDashboard';
+'use client';
+
+import dynamic from 'next/dynamic';
 import './page.css';
+
+const CreatorDashboard = dynamic(
+  () => import('@/ui/features/CreatorDashboard'),
+  {
+    ssr: false,
+  },
+);
 
 const DashboardPage = () => {
   return (

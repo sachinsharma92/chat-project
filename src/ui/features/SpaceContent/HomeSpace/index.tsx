@@ -1,3 +1,5 @@
+'use client';
+
 import { useMemo } from 'react';
 import { head } from 'lodash';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';

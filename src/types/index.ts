@@ -9,7 +9,6 @@ export enum MusicPlayerMediaType {
 export interface IAppState {
   showDialog: boolean;
   showDialogType: DialogEnums;
-  expandInfoSidebar: boolean;
   expandBulletinSidebar: boolean;
   showMobileDrawer: boolean;
   showMobileDrawerType: MobileDrawerEnums;
@@ -19,7 +18,6 @@ export interface IAppState {
   ) => void;
   setShowDialog: (showDialog: boolean, showDialogType: DialogEnums) => void;
   setExpandBulletinSidebar: (expandBulletinSidebar: boolean) => void;
-  setExpandInfoSidebar: (expandInfoSidebar: boolean) => void;
 }
 
 export interface iAsset {

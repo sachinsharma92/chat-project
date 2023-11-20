@@ -1,3 +1,5 @@
+'use client';
+
 import { filter, head, isEmpty, map, size, omit } from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
 import { getUserContextListByPage } from '@/lib/supabase/embeddings';

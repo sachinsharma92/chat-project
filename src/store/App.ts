@@ -13,15 +13,12 @@ import {
 import { create } from 'zustand';
 import { Client } from 'colyseus.js';
 import { DialogEnums, MobileDrawerEnums } from '@/types/dialog';
-import { includes, isUndefined, map } from 'lodash';
-import { mobileWidthBreakpoint } from '@/constants';
+import { includes, map } from 'lodash';
 
 /**
  * In-app related states
  */
 export const useAppStore = create<IAppState>()(set => ({
-  expandInfoSidebar:
-    !isUndefined(window) && window?.innerWidth > mobileWidthBreakpoint,
   expandBulletinSidebar: true,
   showDialog: false,
   showDialogType: DialogEnums.none,
@@ -40,8 +37,6 @@ export const useAppStore = create<IAppState>()(set => ({
     set(() => ({ showDialog, showDialogType })),
   setExpandBulletinSidebar: expandBulletinSidebar =>
     set(() => ({ expandBulletinSidebar: Boolean(expandBulletinSidebar) })),
-  setExpandInfoSidebar: expandInfoSidebar =>
-    set(() => ({ expandInfoSidebar: Boolean(expandInfoSidebar) })),
 }));
 
 /**

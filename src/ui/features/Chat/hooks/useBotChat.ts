@@ -56,9 +56,6 @@ export const useBotChat = () => {
   const playBotAudio = async (message: string) => {
     try {
       const authHeaders = getSupabaseAuthHeaders();
-      const reqHeaders = {
-        ...authHeaders,
-      };
       const spaceBot = head(spaceInfo?.bots);
       const spaceBotId = toString(spaceBot?.id);
       const audioRes = await APIClient.post<BotAudioResponse>(
@@ -70,21 +67,37 @@ export const useBotChat = () => {
           spaceBotId,
         },
         {
-          headers: reqHeaders,
+          headers: {
+            ...authHeaders,
+            Accept: 'audio/mpeg',
+          },
+          responseType: 'blob',
         },
       );
+      const resHeaders = audioRes?.headers;
 
-      if (audioRes?.data?.publicUrl?.endsWith('.mp3')) {
-        const publicUrl = audioRes?.data?.publicUrl;
-        const visemes = audioRes?.data?.visemes;
-        const audio = document.getElementById('bot-audio') as HTMLAudioElement;
-
-        BotChatEvents.emit('audio', { visemes, publicUrl });
-
-        if (audio) {
-          audio.src = publicUrl;
-          audio.play();
+      if (resHeaders && !isEmpty(resHeaders) && resHeaders['x-visemes-data']) {
+        // send event for viseme facial data
+        try {
+          const visemes = JSON.parse(resHeaders['x-visemes-data']);
+          const evtPayload = { visemes: visemes?.visemeData };
+          BotChatEvents.emit('audio', evtPayload);
+        } catch (err: any) {
+          console.log(
+            `JSON.parse(resHeaders['x-visemes-data'])() err:`,
+            err?.message,
+          );
         }
+      }
+
+      // @ts-ignore
+      const audioBlob = new Blob([audioRes.data], { type: 'audio/mpeg' });
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const audio = document.getElementById('bot-audio') as HTMLAudioElement;
+
+      if (audio) {
+        audio.src = audioUrl;
+        audio.play();
       }
     } catch (err: any) {
       console.log('playBotAudio() err:', err?.message);

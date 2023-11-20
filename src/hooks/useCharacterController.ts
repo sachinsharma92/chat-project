@@ -1,4 +1,4 @@
-import { useMemo, useEffect, useRef } from 'react';
+import { useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Quaternion, Vector3, MathUtils, Object3D, Group } from 'three';
 import { RapierRigidBody, useRapier } from '@react-three/rapier';
@@ -7,7 +7,7 @@ import { RoomUser } from '@/types';
 import { isEmpty, isNumber } from 'lodash';
 import { serverRoomSendQueue } from '@/lib/rivet';
 import { shallow } from 'zustand/shallow';
-import { useAppStore, useGameServer } from '@/store/App';
+import { useGameServer } from '@/store/App';
 import { useBotnetAuth } from '@/store/Auth';
 import { getGuestId } from '@/store/AuthProvider';
 
@@ -19,15 +19,9 @@ function useCharacterController(
   playerTextGroup?: Group | null,
   playerData?: Partial<RoomUser>,
 ) {
-  const firstMovement = useRef(false);
   const userInputs = useInputs();
   const { world } = useRapier();
   const controlled = useMemo(() => !playerData, [playerData]);
-
-  const [expandInfoSidebar, setExpandInfoSidebar] = useAppStore(state => [
-    state.expandInfoSidebar,
-    state.setExpandInfoSidebar,
-  ]);
 
   const [gameRoom] = useGameServer(state => [state.gameRoom], shallow);
   const [userId] = useBotnetAuth(state => [
@@ -50,20 +44,6 @@ function useCharacterController(
 
     return [userInputs.x, userInputs.y];
   }, [playerData, controlled, userInputs]);
-
-  /**
-   * Minimize Info sidebar on first player movement
-   */
-  useEffect(() => {
-    if (firstMovement?.current || !controlled) {
-      return;
-    }
-
-    if ((x || y) && expandInfoSidebar) {
-      firstMovement.current = true;
-      setExpandInfoSidebar(false);
-    }
-  }, [x, y, controlled, expandInfoSidebar, setExpandInfoSidebar]);
 
   const characterController = useMemo(() => {
     if (!character) {

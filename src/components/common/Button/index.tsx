@@ -1,75 +1,66 @@
-import { isFunction } from 'lodash';
-import { CSSProperties, ReactNode, forwardRef } from 'react';
+'use client';
+
+import React, { forwardRef } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
 import { cn } from '@/lib/utils';
+
 import './Button.css';
 
-export type ButtonProps = CSSProperties & {
-  type?: 'button' | 'submit' | 'reset' | undefined;
-  variant?: 'primary' | undefined;
-  isLoading?: boolean;
-  isDisabled?: boolean;
-  children?: ReactNode;
+interface VariantProps {
+  variant?: 'primary' | string;
   text?: string;
   ariaLabel?: string;
-  onClick?:
-    | (<CB extends (...args: any) => any>(
-        args?: Parameters<CB>,
-      ) => ReturnType<CB>)
-    | (() => void);
-  style?: Partial<CSSProperties>;
-  className?: string;
-};
+  isLoading?: boolean;
+  isDisabled?: boolean;
+}
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps {
+  asChild?: boolean;
+}
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  (props: ButtonProps, ref) => {
-    const {
+  (
+    {
       variant,
       className,
       type,
       text,
       children,
-      onClick,
       ariaLabel,
-      style,
       isLoading,
       isDisabled,
-    } = props;
-
-    return (
-      <button
-        ref={ref}
-        type={type || 'button'}
-        aria-label={ariaLabel}
-        style={{
-          ...style,
-        }}
-        onClick={e => {
-          if (isFunction(onClick)) {
-            onClick(e);
-          }
-        }}
-        className={cn(
-          `button${variant === 'primary' ? ' primary-button' : ''}`,
-          className,
-        )}
-      >
-        {children || null} {text || null}
-        {isDisabled && <div className="button-disabled"></div>}
-        {isLoading && (
-          <div className="button-loading">
-            <RotatingLines
-              strokeColor="grey"
-              strokeWidth="5"
-              animationDuration="0.75"
-              width="20"
-              visible={true}
-            />
-          </div>
-        )}
-      </button>
-    );
-  },
+      ...props
+    },
+    ref,
+  ) => (
+    <button
+      ref={ref}
+      type={type || 'button'}
+      aria-label={ariaLabel}
+      className={cn(
+        `${variant === 'primary' ? ' primary-button' : ''}`,
+        'relative flex items-center justify-center p-[4px] overflow-hidden outline-none',
+        className,
+      )}
+      {...props}
+    >
+      {children || null} {text || null}
+      {isDisabled && <div className="is-disabled"></div>}
+      {isLoading && (
+        <div className="is-loading">
+          <RotatingLines
+            strokeColor="grey"
+            strokeWidth="5"
+            animationDuration="0.75"
+            width="20"
+            visible={true}
+          />
+        </div>
+      )}
+    </button>
+  ),
 );
 
 Button.displayName = 'Button';

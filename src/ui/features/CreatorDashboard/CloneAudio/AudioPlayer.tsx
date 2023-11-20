@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useRef, useState } from 'react';
 import { useAppStore } from '@/store/App';
 import { DialogEnums } from '@/types/dialog';
