@@ -5,7 +5,7 @@ import { visemeLoader } from './lib/visemeLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { OutlineEffect } from 'three/addons/effects/OutlineEffect.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-
+import { BotChatEvents } from '@/ui/features/Chat/hooks/useBotChat';
 
 const ThreeJSComponent = (props: { children?: ReactNode }) => {
   const initialized = useRef<boolean>(false);
@@ -25,15 +25,15 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 
 	let clock, scene, camera, renderer, controls, mixer, effect, sound, action;
     let devicePC = iswap();
-    var isPlaying = false;
+/*     var isPlaying = false; */
 
 
-	var vise = './audio/viseme5';
-	var visemeJSON = vise.concat( '.json' );
+/* 	var vise = './audio/viseme5';
+	var visemeJSON = vise.concat( '.json' ); */
 
     initGraph();
 	loadMesh();
-
+    animate();
   
 		function initGraph() {
 
@@ -112,7 +112,7 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 
 
         function playViseme(){
-
+/* 
             if ( isPlaying == false ) {
 
                 sound.play();
@@ -121,8 +121,9 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
                 action.play();
                 isPlaying = true;
 
-            }
 
+            } */
+            console.log(mixer);
         }
 
 		function onWindowResize() {
@@ -145,8 +146,9 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
             loader.load( '02viseme.glb', function ( gltf ) {
 
                 mesh = gltf.scene.getObjectByName( 'Face_Baked' );
+                mixer = new THREE.AnimationMixer( mesh );
+                //mixer.addEventListener( 'finished', restoreState );
 
-                visemeObj = new visemeLoader( visemeJSON, mesh, continueWork );
 
                 gltf.scene.traverse( function ( child ) {
 
@@ -161,67 +163,79 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 
                 } );
 
-                function continueWork() {
+                gltf.scene.scale.set( 2, 2, 2 );
+                scene.add( gltf.scene );
+
+                BotChatEvents.on('audio', ({ visemes }) => {
+
+                    console.log(visemes);
+                    const visemeIdOffset = 53;
+                    const trackTimes = [];
+                    const trackValues = [];
+            
+                    const morphDict = mesh.morphTargetDictionary;
+            
+                    const shapeKeyLength = Object.getOwnPropertyNames( morphDict ).length;
+            
+                    const myName = mesh.name.concat( '.morphTargetInfluences' );
+            
+                    for ( var i = 0; i < visemes.length; i ++ ) {
+            
+                        for ( var j = 0; j < shapeKeyLength; j ++ ) {
+            
+                            var amplitude = 1;
+            
+                            if ( i < visemes.length - 1 ) {
+            
+                                var temp = visemes[ i + 1 ].AudioOffset - visemes[ i ].AudioOffset;
+                                amplitude = temp > 1000000 ? 1 : temp / 1000000 * 1.5;
+            
+                            }
+            
+                            var value = visemes[ i ].VisemeId + visemeIdOffset == j ? amplitude : 0;
+            
+                            value = j == 53 ? 0 : value;
+                            trackValues.push( value );
+            
+                        }
+            
+                        var duration = visemes[ i ].AudioOffset;
+                        trackTimes.push( duration / 10000 );
+            
+                    }
+            
+                    const visemeTrack = new THREE.NumberKeyframeTrack( myName, trackTimes, trackValues );
+                    console.log(visemeTrack);
+                    const visemeTimeLaps = visemeTrack.times[ visemeTrack.times.length - 1 ];
+
+
 
                     var blinkTrack = creatBlinkTrack( mesh, true );
-
                     const lipTracks = [];
                     const blinkTracks = [];
                     blinkTracks.push( blinkTrack );
-                    lipTracks.push( visemeObj.track );
+                    lipTracks.push( visemeTrack ); 
+        
+                    const clip = new THREE.AnimationClip( '', visemeTimeLaps, lipTracks );
 
-                    const clip = new THREE.AnimationClip( '', visemeObj.timeLaps, lipTracks );
-
+        
                     var blinkTrackTimeLaps = blinkTrack.times[ blinkTrack.times.length - 1 ];
                     const blinkClip = new THREE.AnimationClip( '', blinkTrackTimeLaps, blinkTracks );
-
-                    mixer = new THREE.AnimationMixer( mesh );
-                    mixer.addEventListener( 'finished', restoreState );
-
+        
                     action = mixer.clipAction( clip );
                     const action1 = mixer.clipAction( blinkClip );
-
-                    action.setDuration( visemeObj.timeLaps / 1000 );
-
-                    //audio listner
-                    const listener = new THREE.AudioListener();
-                    camera.add( listener );
-                    sound = new THREE.Audio( listener );
-                    //sound.autoplay = true;
-
-                    const loader = new THREE.AudioLoader();
-                    loader.setPath( './assets/' );
-
-                    loader.load( vise + '.mp3', function ( buffer ) {
-
-                        //sound.stop();
-						sound.setBuffer( buffer );
-                        sound.duration = visemeObj.timeLaps / 1000;
-                        sound.setLoop( false );
-
-                        //action.loop = THREE.LoopOnce;
-                        //action.play();
-
-
-					} );
-
+        
+                    action.setDuration( visemeTimeLaps / 1000 );
+                    action.loop = THREE.LoopOnce;
+                    action.play();
                     action1.play();
-                    animate();
-
-                    gltf.scene.scale.set( 2, 2, 2 );
-                    scene.add( gltf.scene );
-
-                }
+        
+                });
 
             } );
 
         }
 
-        function restoreState(){
-
-            isPlaying = false;
-
-        }
 
 
         function creatBlinkTrack( mesh, blinkWithBrow = false, blinkInterval = 5, blinkInDuration = 0.1, blinkOutDuration = 0.1 ) {
