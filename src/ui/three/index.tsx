@@ -23,7 +23,7 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
     // this useEffect function is set to invoke once
     // write your threejs code blocking below:
 
-	let clock, scene, camera, renderer, controls, mixer, effect, sound, action;
+	let clock, scene, camera, renderer, controls, mixer, effect;
     let devicePC = iswap();
 
 
@@ -127,6 +127,13 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 
                 mesh = gltf.scene.getObjectByName( 'Face_Baked' );
                 mixer = new THREE.AnimationMixer( mesh );
+                var blinkTrack = creatBlinkTrack( mesh, true );
+
+                BotChatEvents.on('audio', ({ visemes }) => {
+ 
+                    creatVisemeTrack( mesh, visemes )
+
+                });
 
                 gltf.scene.traverse( function ( child ) {
 
@@ -144,77 +151,58 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
                 gltf.scene.scale.set( 2, 2, 2 );
                 scene.add( gltf.scene );
 
-                BotChatEvents.on('audio', ({ visemes }) => {
-
-                    console.log(visemes);
-                    const visemeIdOffset = 53;
-                    const trackTimes = [];
-                    const trackValues = [];
-            
-                    const morphDict = mesh.morphTargetDictionary;
-            
-                    const shapeKeyLength = Object.getOwnPropertyNames( morphDict ).length;
-            
-                    const myName = mesh.name.concat( '.morphTargetInfluences' );
-            
-                    for ( var i = 0; i < visemes.length; i ++ ) {
-            
-                        for ( var j = 0; j < shapeKeyLength; j ++ ) {
-            
-                            var amplitude = 1;
-            
-                            if ( i < visemes.length - 1 ) {
-            
-                                var temp = visemes[ i + 1 ].AudioOffset - visemes[ i ].AudioOffset;
-                                amplitude = temp > 1000000 ? 1 : temp / 1000000 * 1.5;
-            
-                            }
-            
-                            var value = visemes[ i ].VisemeId + visemeIdOffset == j ? amplitude : 0;
-            
-                            value = j == 53 ? 0 : value;
-                            trackValues.push( value );
-            
-                        }
-            
-                        var duration = visemes[ i ].AudioOffset;
-                        trackTimes.push( duration / 10000 );
-            
-                    }
-            
-                    const visemeTrack = new THREE.NumberKeyframeTrack( myName, trackTimes, trackValues );
-                    console.log(visemeTrack);
-                    const visemeTimeLaps = visemeTrack.times[ visemeTrack.times.length - 1 ];
-
-
-
-                    var blinkTrack = creatBlinkTrack( mesh, true );
-                    const lipTracks = [];
-                    const blinkTracks = [];
-                    blinkTracks.push( blinkTrack );
-                    lipTracks.push( visemeTrack ); 
-        
-                    const clip = new THREE.AnimationClip( '', visemeTimeLaps, lipTracks );
-
-        
-                    var blinkTrackTimeLaps = blinkTrack.times[ blinkTrack.times.length - 1 ];
-                    const blinkClip = new THREE.AnimationClip( '', blinkTrackTimeLaps, blinkTracks );
-        
-                    action = mixer.clipAction( clip );
-                    const action1 = mixer.clipAction( blinkClip );
-        
-                    action.setDuration( visemeTimeLaps / 1000 );
-                    action.loop = THREE.LoopOnce;
-                    action.play();
-                    action1.play();
-        
-                });
-
             } );
 
         }
 
+        function creatVisemeTrack( mesh, visemes ) {
 
+            const visemeIdOffset = 53;
+            const trackTimes = [];
+            const trackValues = [];
+    
+            const morphDict = mesh.morphTargetDictionary;
+    
+            const shapeKeyLength = Object.getOwnPropertyNames( morphDict ).length;
+    
+            const myName = mesh.name.concat( '.morphTargetInfluences' );
+    
+            for ( var i = 0; i < visemes.length; i ++ ) {
+    
+                for ( var j = 0; j < shapeKeyLength; j ++ ) {
+    
+                    var amplitude = 1;
+    
+                    if ( i < visemes.length - 1 ) {
+    
+                        var temp = visemes[ i + 1 ].AudioOffset - visemes[ i ].AudioOffset;
+                        amplitude = temp > 1000000 ? 1 : temp / 1000000 * 1.5;
+    
+                    }
+    
+                    var value = visemes[ i ].VisemeId + visemeIdOffset == j ? amplitude : 0;
+    
+                    value = j == 53 ? 0 : value;
+                    trackValues.push( value );
+    
+                }
+    
+                var duration = visemes[ i ].AudioOffset;
+                trackTimes.push( duration / 10000 );
+    
+            }
+    
+            const visemeTrack = new THREE.NumberKeyframeTrack( myName, trackTimes, trackValues );
+            const visemeTimeLaps = visemeTrack.times[ visemeTrack.times.length - 1 ];
+            const lipTracks = [];
+            lipTracks.push( visemeTrack );       
+            const clip = new THREE.AnimationClip( '', visemeTimeLaps, lipTracks );
+            const action = mixer.clipAction( clip );  
+            action.setDuration( visemeTimeLaps / 1000 );
+            action.loop = THREE.LoopOnce;
+            action.play();
+
+        }
 
         function creatBlinkTrack( mesh, blinkWithBrow = false, blinkInterval = 5, blinkInDuration = 0.1, blinkOutDuration = 0.1 ) {
 
@@ -289,7 +277,13 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
             const myName = mesh.name.concat( '.morphTargetInfluences' );
             const blinkTrack = new THREE.NumberKeyframeTrack( myName, trackTimes, trackValues );
 
-            return blinkTrack;
+            const blinkTracks = [];
+            blinkTracks.push( blinkTrack );
+            var blinkTrackTimeLaps = blinkTrack.times[ blinkTrack.times.length - 1 ];
+            const blinkClip = new THREE.AnimationClip( '', blinkTrackTimeLaps, blinkTracks );
+            const action1 = mixer.clipAction( blinkClip );
+            action1.play();
+
 
         }
 
