@@ -25,11 +25,7 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 
 	let clock, scene, camera, renderer, controls, mixer, effect, sound, action;
     let devicePC = iswap();
-/*     var isPlaying = false; */
 
-
-/* 	var vise = './audio/viseme5';
-	var visemeJSON = vise.concat( '.json' ); */
 
     initGraph();
 	loadMesh();
@@ -38,7 +34,6 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 		function initGraph() {
 
 			const containers = document.getElementsByClassName( 'game-canvas' );
-            containers[0].addEventListener( 'click', playViseme );
 			const canvas = containers[0];
 			renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
 
@@ -111,21 +106,6 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
         }
 
 
-        function playViseme(){
-/* 
-            if ( isPlaying == false ) {
-
-                sound.play();
-                action.reset();
-                action.setLoop ( THREE.LoopOnce );
-                action.play();
-                isPlaying = true;
-
-
-            } */
-            console.log(mixer);
-        }
-
 		function onWindowResize() {
 
 			const container = document.querySelector('.world');
@@ -147,8 +127,6 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 
                 mesh = gltf.scene.getObjectByName( 'Face_Baked' );
                 mixer = new THREE.AnimationMixer( mesh );
-                //mixer.addEventListener( 'finished', restoreState );
-
 
                 gltf.scene.traverse( function ( child ) {
 
