@@ -75,12 +75,19 @@ export const useBotChat = () => {
         },
       );
       const resHeaders = audioRes?.headers;
+      // @ts-ignore
+      const audioBlob = new Blob([audioRes.data], { type: 'audio/mpeg' });
+      const audioUrl = URL.createObjectURL(audioBlob);
 
       if (resHeaders && !isEmpty(resHeaders) && resHeaders['x-visemes-data']) {
         // send event for viseme facial data
         try {
           const visemes = JSON.parse(resHeaders['x-visemes-data']);
-          const evtPayload = { visemes: visemes?.visemeData };
+          const evtPayload = {
+            audioUrl,
+            audioBlob,
+            visemes: visemes?.visemeData,
+          };
           BotChatEvents.emit('audio', evtPayload);
         } catch (err: any) {
           console.log(
@@ -90,9 +97,6 @@ export const useBotChat = () => {
         }
       }
 
-      // @ts-ignore
-      const audioBlob = new Blob([audioRes.data], { type: 'audio/mpeg' });
-      const audioUrl = URL.createObjectURL(audioBlob);
       const audio = document.getElementById('bot-audio') as HTMLAudioElement;
 
       if (audio) {
