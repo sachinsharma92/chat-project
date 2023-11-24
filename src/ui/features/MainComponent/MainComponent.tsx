@@ -28,6 +28,7 @@ const MainComponent = () => {
 
   const [minimizeMed, setMinimizeMed] = useState(true);
   const [minimizeSm, setMinimizeSm] = useState(false);
+  const [expandFullScreen, setExpandFullScreen] = useState(false);
 
   const toggleMinimizeMedGameScreen = () => {
     setMinimizeMed(!minimizeMed);
@@ -59,6 +60,7 @@ const MainComponent = () => {
           className={cx('game-content', {
             'game-content-min-sm': minimizeSm,
             'game-content-max': !minimizeMed,
+            'game-content-expand-screen': expandFullScreen,
           })}
         >
           <GameScreen
@@ -80,7 +82,11 @@ const MainComponent = () => {
             )}
 
             {availableWidth <= mobileWidthBreakpoint && (
-              <Button>
+              <Button
+                onClick={() => {
+                  setExpandFullScreen(!expandFullScreen);
+                }}
+              >
                 <ExpandV2Icon />
               </Button>
             )}
