@@ -1,11 +1,19 @@
 // @ts-nocheck
 import * as THREE from 'three';
 import { ReactNode, useEffect, useRef } from 'react';
-import { visemeLoader } from './lib/visemeLoader.js';
+//import { visemeLoader } from './lib/visemeLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { OutlineEffect } from 'three/addons/effects/OutlineEffect.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { BotChatEvents } from '@/ui/features/Chat/hooks/useBotChat';
+import {
+    VRMSpringBoneManager,
+    VRMSpringBoneJoint,
+    VRMSpringBoneJointHelper,
+    VRMSpringBoneColliderShapeSphere,
+    VRMSpringBoneCollider,
+    VRMSpringBoneColliderHelper
+} from './lib/three-vrm.module.min.js';
 
 const ThreeJSComponent = (props: { children?: ReactNode }) => {
   const initialized = useRef<boolean>(false);
@@ -23,12 +31,26 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
     // this useEffect function is set to invoke once
     // write your threejs code blocking below:
 
-	let clock, scene, camera, renderer, controls, mixer, effect;
+	let clock, scene, camera, renderer, controls, mixer, mixer1, effect;
+    let anchorABone, anchorBBone, sharedSkeleton, faceMesh;
+    var sklHelper = false;
+    var jointHelper = false;
+    var colliderHelper = false;
+
+    const colliders = [];
+    const collidersAgent = [];
+    const collidersAgentName = [];
+    const hairBones = [];
+    const hairBonesName = [];
+    const springBoneNameGroup = [];
+    const springBoneHelperNameGroup = [];
+
     let devicePC = iswap();
 
-
+    const springBoneManager = new VRMSpringBoneManager();
     initGraph();
-	loadMesh();
+    loadModel( 'body-1.glb' );
+    loadModel( 'hair.glb', 1 );
     animate();
   
 		function initGraph() {
@@ -42,30 +64,29 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
             scene = new THREE.Scene();
 
             camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.2, 5000 );
-            camera.position.set( - .5, 3.35, .7 );
+            camera.position.set( - 0.3, 1.5, 0.5 );
 
             const hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 1 );
             scene.add( hemiLight );
 
             const dirLight = new THREE.DirectionalLight( 0xffffff, 2 );
 
-            dirLight.position.set( - 2, 0.75, 2 );
-            dirLight.position.multiplyScalar( 10 );
+            dirLight.position.set( 1, 1, 3 );
+            dirLight.position.multiplyScalar( 5 );
             scene.add( dirLight );
 
-            dirLight.castShadow = true;
+/*             dirLight.castShadow = true;
 
             dirLight.shadow.mapSize.width = 2048;
             dirLight.shadow.mapSize.height = 2048;
 
-            const d = 50;
+            const d = 3;
 
             dirLight.shadow.camera.left = - d;
             dirLight.shadow.camera.right = d;
             dirLight.shadow.camera.top = d;
             dirLight.shadow.camera.bottom = - d;
-
-            dirLight.shadow.camera.far = 13500;
+            dirLight.shadow.camera.far = 5; */
 
             //Setup the renderer
 			renderer.setClearColor( 0x000000);
@@ -75,7 +96,6 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 
             renderer.gammaInput = true;
             renderer.gammaOutput = true;
-
             renderer.shadowMap.enabled = true;
 
             effect = new OutlineEffect( renderer );
@@ -84,7 +104,7 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
             controls.enableZoom = false;
             controls.enablePan = false;
 			controls.enableRotate = false;
-            controls.target.set( 0, 3.35, 0 );
+            controls.target.set( 0, 1.5, 0 );
             controls.update();
 
             window.addEventListener( 'resize', onWindowResize );
@@ -112,52 +132,246 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 			camera.aspect = container.clientWidth / container.clientHeight;
 			camera.updateProjectionMatrix();
 			renderer.setSize(  container.clientWidth == 0 ? 440 : container.clientWidth, container.clientHeight );
-			renderer.render( scene, camera );
+			//renderer.render( scene, camera );
 			effect.render( scene, camera );
 
 		}
 
-		function loadMesh() {
+        function loadModel( modelFile, skeletonType = 0, part ) {
 
-            var visemeObj, mesh;
+            var animation;
+            //skeletonType: 0, Skeleton Sharing类型；
+            //skeletonType: 1, 挂载型；
 
             const loader = new GLTFLoader().setPath( './assets/model/' );
+            loader.load( modelFile, function ( gltf ) {
 
-            loader.load( '02viseme.glb', function ( gltf ) {
+                const model = gltf.scene;
 
-                mesh = gltf.scene.getObjectByName( 'Face_Baked' );
-                mixer = new THREE.AnimationMixer( mesh );
-                var blinkTrack = creatBlinkTrack( mesh, true );
+                scene.add( model );
 
-                BotChatEvents.on('audio', ({ visemes }) => {
- 
-                    creatVisemeTrack( mesh, visemes )
+                const tempMesh = gltf.scene.getObjectByName( 'face' );
+                if(tempMesh) {
 
-                });
+                    faceMesh = tempMesh;
+                    mixer = new THREE.AnimationMixer( faceMesh );
+                    creatBlinkTrack( faceMesh, true );
+                    BotChatEvents.on('audio', ({ visemes }) => {
+     
+                        creatVisemeTrack( faceMesh, visemes )
+    
+                    });
 
-                gltf.scene.traverse( function ( child ) {
+                }
 
-                    if ( child.isMesh ) {
+                model.traverse( function ( object ) {
 
+
+                    if ( object.isMesh ) {
+
+                        object.geometry.attributes.uv2 = object.geometry.attributes.uv;
+                        const aoMap = object.material.aoMap;
+                        const map = object.material.map;
                         const material = new THREE.MeshToonMaterial();
-                        const map = child.material.map;
-                        child.material = material;
-                        child.material.map = map;
+                        //////for future hair shader;
+/* 							const material = new NodeToyMaterial( {
+                                data
+                                } ); */
+                        object.material = material;
+                        object.material.map = map;
+                        object.material.aoMap = aoMap;
+                        object.castShadow = true;
+                        object.receiveShadow = true;
+
+                    }
+
+                    ///////////////////////////////////////////////////Any amature type root shouldn't be anchorA, so here should be && not ||
+
+                    if ( object.isSkinnedMesh && object.skeleton.bones[ 0 ].name.indexOf( 'Root' ) == - 1 && object.skeleton.bones[ 0 ].name.indexOf( 'root' ) == - 1 && object.skeleton.bones[ 0 ].name.indexOf( 'hips' ) == - 1 ) {
+
+                        anchorABone = object.skeleton.bones[ 0 ];
+
+                    }
+
+
+
+                    if ( object.name.indexOf( 'J_Sec' ) !== - 1 && hairBonesName.indexOf( object.name ) == - 1 ) {
+
+                        hairBones.push( object );
+                        hairBonesName.push( object.name );
+
+                    }
+
+                    if ( ( object.name.indexOf( 'Collider' ) !== - 1 || object.name.indexOf( 'collider' ) !== - 1 ) && collidersAgentName.indexOf( object.name ) == - 1 ) {
+
+                        collidersAgent.push( object );
+                        collidersAgentName.push( object.name );
 
                     }
 
                 } );
 
-                gltf.scene.scale.set( 2, 2, 2 );
-                scene.add( gltf.scene );
+                var nowModel = [ ];
+                var nowModel = model.getObjectsByProperty( 'type', 'SkinnedMesh' );
+
+                if ( skeletonType == 0 ) {
+
+                    if ( gltf.animations.length > 0 ) {
+
+                        animation = gltf.animations[ 0 ];
+                        sharedSkeleton = nowModel[ 0 ].skeleton;
+
+                    }
+
+
+
+                    /////////////////////////Skeleton Sharing                  skeletonSharing();
+                    for ( var i = 0; i < nowModel.length; i ++ ) {
+
+                        const oldSkeleton = nowModel[ i ].skeleton;
+                        nowModel[ i ].bind( sharedSkeleton, nowModel[ i ].matrixWorld );
+                        if ( oldSkeleton !== sharedSkeleton ) oldSkeleton.dispose(); //This has some mistake?
+
+                    }
+
+                }
+
+
+                if ( anchorABone && sharedSkeleton ) {
+
+                    anchorBBone = sharedSkeleton.getBoneByName( anchorABone.name );
+
+                }
+                    ///////////////////////////挂载型，这里需要根据挂载的骨骼进行修改；
+
+
+                if ( anchorBBone && anchorBBone !== anchorABone ) {
+
+                    anchorBBone.add( anchorABone );
+                    anchorABone.position.y = 0;
+                    anchorABone.position.x = 0;
+                    anchorABone.position.z = 0;
+
+                }
+
+                //////////////////////////创建动力学骨骼
+                createPhysicsBone();
+
+                ////////////////Skeleton Helper
+                if ( sklHelper ) {
+
+                    var skeletonHelper = new THREE.SkeletonHelper( model );
+                    scene.add( skeletonHelper );
+
+                }
+
+                /////////////////////////Aniamtion Setup
+
+                if ( animation ) {
+
+                    var action;
+                    mixer1 = new THREE.AnimationMixer( nowModel[ 0 ] );
+                    action = mixer1.clipAction( animation );
+                    action.play();
+
+                }
 
             } );
 
         }
 
+        function createPhysicsBone() {
+
+            ///////////////////////////////////Collider Helpers
+            for ( var i = 0; i < collidersAgent.length; i ++ ) {
+
+                if ( collidersAgent[ i ].children.length == 0 ) {
+
+                    const sizeAgent = [];
+                    sizeAgent.push( '_A_', '_B_', '_C_' );
+                    const sizeArray = [];
+                    sizeArray.push( 0.75, 0.25, 0.1 );
+                    var radius;
+                    for ( var j = 0; j < sizeAgent.length; j ++ ) {
+
+                        radius = collidersAgent[ i ].name.indexOf( sizeAgent[ j ] ) !== - 1 ? sizeArray[ j ] : 0.05;
+
+                    }
+
+                    //var radius = collidersAgent[ i ].name.indexOf( '_C_' ) !== - 1 ? 0.1 : 0.05;
+                    const colliderShape = new VRMSpringBoneColliderShapeSphere( { radius: radius } );
+                    const collider = new VRMSpringBoneCollider( colliderShape );
+                    var pos = new THREE.Vector3();
+                    collider.position.copy( collidersAgent[ i ].getWorldPosition( pos ) );
+                    collidersAgent[ i ].attach( collider );
+                    colliders.push( collider );
+
+
+                    // collider helper
+                    if ( colliderHelper ) {
+
+                        const helper = new VRMSpringBoneColliderHelper( collider );
+                        helper.name = helper.collider.name = helper.collider.parent.name;
+                        scene.add( helper );
+
+                    }
+
+                }
+
+            }
+
+            //////////////////////////////Spring Bone Helpers
+            for ( var i = 0; i < hairBones.length; i ++ ) {
+
+                var hairCluster = [];
+                hairBones[ i ].traverse( function ( child ) {
+
+                    if ( child.isBone ) hairCluster.push( child );
+
+                } );
+
+                for ( var j = 0; j < hairCluster.length; j ++ ) {
+
+                    if ( springBoneNameGroup.indexOf( hairCluster[ j ].name ) == - 1 ) {
+
+                        const springBone = new VRMSpringBoneJoint( hairCluster[ j ], hairCluster[ j + 1 ], { hitRadius: 0.02, stiffness: 0.1, gravityPower: 0.3 } );
+                        springBone.name = hairCluster[ j ].name;
+                        springBone.colliderGroups = [ { colliders } ];
+                        springBoneNameGroup.push( springBone.name );
+                        springBoneManager.addJoint( springBone );
+
+                    }
+
+                }
+
+            }
+
+            //Spring Bone Helper
+
+            if ( jointHelper ) {
+
+                springBoneManager.joints.forEach( ( bone ) => {
+
+                    if ( springBoneHelperNameGroup.indexOf( bone.name ) == - 1 ) {
+
+                        const helper = new VRMSpringBoneJointHelper( bone );
+                        helper.name = helper.springBone.bone.name;
+                        springBoneHelperNameGroup.push( helper.name );
+                        scene.add( helper );
+
+                    }
+
+                } );
+
+            }
+
+            springBoneManager.setInitState();
+
+        }
+
         function creatVisemeTrack( mesh, visemes ) {
 
-            const visemeIdOffset = 53;
+            const visemeIdOffset = 52;
             const trackTimes = [];
             const trackValues = [];
     
@@ -284,7 +498,6 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
             const action1 = mixer.clipAction( blinkClip );
             action1.play();
 
-
         }
 
 
@@ -312,9 +525,10 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 				camera.aspect = canvas.clientWidth / canvas.clientHeight;
 				camera.updateProjectionMatrix();
 			}
-
 			const dt = clock.getDelta();
+            springBoneManager.update( dt );
 			if(mixer) mixer.update( dt );
+            if(mixer1) mixer1.update( dt );
 			requestAnimationFrame( animate );
 			effect.render( scene, camera );
 
