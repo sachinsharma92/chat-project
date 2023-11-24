@@ -14,10 +14,10 @@ import {
   XIcon,
   YouTubeIcon,
 } from '@/icons';
-import { SpaceContentTabEnum } from '..';
 import { useForm } from 'react-hook-form';
 import { useBotChat } from '../../Chat/hooks/useBotChat';
-import { useBotData } from '@/store/App';
+import { useAppStore, useBotData } from '@/store/App';
+import { SpaceContentTabEnum } from '@/types';
 
 import SpaceLinks from '../../SpaceLinks';
 import TextInput from '@/components/common/TextInput';
@@ -27,12 +27,8 @@ import SpaceDescription from '../../SpaceDescription';
 
 import './HomeSpace.css';
 
-type HomeSpaceProps = {
-  setSpaceContentTab: (tab: SpaceContentTabEnum) => void;
-};
-
-const HomeSpace = (props: HomeSpaceProps) => {
-  const { setSpaceContentTab } = props;
+const HomeSpace = () => {
+  const [setSpaceContentTab] = useAppStore(state => [state.setSpaceContentTab]);
   const { spaceInfo } = useSelectedSpace();
   const { sendBotChatMessage } = useBotChat();
   const { handleSubmit, register, setValue } = useForm();

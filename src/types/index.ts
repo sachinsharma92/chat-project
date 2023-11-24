@@ -6,12 +6,20 @@ export enum MusicPlayerMediaType {
   notFound = 'notFound',
 }
 
+export enum SpaceContentTabEnum {
+  'chat' = 'chat',
+  'world' = 'world',
+  'home' = 'home',
+}
+
 export interface IAppState {
   showDialog: boolean;
   showDialogType: DialogEnums;
   expandBulletinSidebar: boolean;
   showMobileDrawer: boolean;
   showMobileDrawerType: MobileDrawerEnums;
+  spaceContentTab: SpaceContentTabEnum;
+  setSpaceContentTab: (spaceContentTab: SpaceContentTabEnum) => void;
   setShowMobileDrawer: (
     showMobileDrawer: boolean,
     showMobileDrawerType: MobileDrawerEnums,
