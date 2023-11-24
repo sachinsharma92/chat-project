@@ -9,6 +9,7 @@ import {
   CampRoom,
   BotRoom,
   IBotData,
+  SpaceContentTabEnum,
 } from '@/types';
 import { create } from 'zustand';
 import { Client } from 'colyseus.js';
@@ -24,6 +25,10 @@ export const useAppStore = create<IAppState>()(set => ({
   showDialogType: DialogEnums.none,
   showMobileDrawer: false,
   showMobileDrawerType: MobileDrawerEnums.none,
+  spaceContentTab: SpaceContentTabEnum.home,
+  setSpaceContentTab(spaceContentTab: SpaceContentTabEnum) {
+    return set({ spaceContentTab });
+  },
 
   setShowMobileDrawer: (
     showMobileDrawer: boolean,

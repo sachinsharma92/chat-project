@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { head } from 'lodash';
 import { HomeIcon } from '@/icons';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
@@ -13,24 +13,21 @@ import BotChat from './BotChat';
 import SpaceDescription from '../SpaceDescription';
 
 import './SpaceContent.css';
-
-export enum SpaceContentTabEnum {
-  'chat' = 'chat',
-  'world' = 'world',
-  'home' = 'home',
-}
+import { SpaceContentTabEnum } from '@/types';
+import { useAppStore } from '@/store/App';
 
 const SpaceContent = () => {
   const { spaceInfo } = useSelectedSpace();
+
+  const [spaceContentTab, setSpaceContentTab] = useAppStore(state => [
+    state.spaceContentTab,
+    state.setSpaceContentTab,
+  ]);
 
   const spaceName = useMemo(
     () => spaceInfo?.spaceName || spaceInfo?.host?.displayName || 'Botnet',
     [spaceInfo],
   );
-
-  const [spaceContentTab, setSpaceContentTab] = useState<
-    SpaceContentTabEnum | string
-  >(SpaceContentTabEnum.home);
 
   const spaceDescription = useMemo(() => {
     const spaceBotInfo = head(spaceInfo?.bots);
@@ -85,7 +82,7 @@ const SpaceContent = () => {
         className="space-content-tabs"
         value={spaceContentTab}
         onValueChange={v => {
-          setSpaceContentTab(v);
+          setSpaceContentTab(v as SpaceContentTabEnum);
         }}
       >
         <TabsList className="space-content-nav">
@@ -112,7 +109,7 @@ const SpaceContent = () => {
           value={SpaceContentTabEnum.home}
           className="space-content-tabs-content box-border mt-[24px] w-full"
         >
-          <HomeSpace setSpaceContentTab={t => setSpaceContentTab(t)} />
+          <HomeSpace />
         </TabsContent>
         <TabsContent
           value={SpaceContentTabEnum.chat}
