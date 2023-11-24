@@ -31,7 +31,7 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
     // this useEffect function is set to invoke once
     // write your threejs code blocking below:
 
-	let clock, scene, camera, renderer, controls, mixer, mixer1, effect;
+	let clock, scene, camera, renderer, controls, blendShapeMixer, amatureMixer, effect;
     let anchorABone, anchorBBone, sharedSkeleton, faceMesh;
     var sklHelper = false;
     var jointHelper = false;
@@ -75,19 +75,6 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
             dirLight.position.multiplyScalar( 5 );
             scene.add( dirLight );
 
-/*             dirLight.castShadow = true;
-
-            dirLight.shadow.mapSize.width = 2048;
-            dirLight.shadow.mapSize.height = 2048;
-
-            const d = 3;
-
-            dirLight.shadow.camera.left = - d;
-            dirLight.shadow.camera.right = d;
-            dirLight.shadow.camera.top = d;
-            dirLight.shadow.camera.bottom = - d;
-            dirLight.shadow.camera.far = 5; */
-
             //Setup the renderer
 			renderer.setClearColor( 0x000000);
 			renderer.setPixelRatio( canvas.clientWidth / canvas.clientHeight );
@@ -125,23 +112,11 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 
         }
 
-
-		function onWindowResize() {
-
-			const container = document.querySelector('.world');
-			camera.aspect = container.clientWidth / container.clientHeight;
-			camera.updateProjectionMatrix();
-			renderer.setSize(  container.clientWidth == 0 ? 440 : container.clientWidth, container.clientHeight );
-			//renderer.render( scene, camera );
-			effect.render( scene, camera );
-
-		}
-
+        //skeletonType: 0, Skeleton Sharing类型；
+        //skeletonType: 1, 挂载型；
         function loadModel( modelFile, skeletonType = 0, part ) {
 
             var animation;
-            //skeletonType: 0, Skeleton Sharing类型；
-            //skeletonType: 1, 挂载型；
 
             const loader = new GLTFLoader().setPath( './assets/model/' );
             loader.load( modelFile, function ( gltf ) {
@@ -154,7 +129,7 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
                 if(tempMesh) {
 
                     faceMesh = tempMesh;
-                    mixer = new THREE.AnimationMixer( faceMesh );
+                    blendShapeMixer = new THREE.AnimationMixer( faceMesh );
                     creatBlinkTrack( faceMesh, true );
                     BotChatEvents.on('audio', ({ visemes }) => {
      
@@ -165,7 +140,6 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
                 }
 
                 model.traverse( function ( object ) {
-
 
                     if ( object.isMesh ) {
 
@@ -186,13 +160,11 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
                     }
 
                     ///////////////////////////////////////////////////Any amature type root shouldn't be anchorA, so here should be && not ||
-
                     if ( object.isSkinnedMesh && object.skeleton.bones[ 0 ].name.indexOf( 'Root' ) == - 1 && object.skeleton.bones[ 0 ].name.indexOf( 'root' ) == - 1 && object.skeleton.bones[ 0 ].name.indexOf( 'hips' ) == - 1 ) {
 
                         anchorABone = object.skeleton.bones[ 0 ];
 
                     }
-
 
 
                     if ( object.name.indexOf( 'J_Sec' ) !== - 1 && hairBonesName.indexOf( object.name ) == - 1 ) {
@@ -223,8 +195,6 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 
                     }
 
-
-
                     /////////////////////////Skeleton Sharing                  skeletonSharing();
                     for ( var i = 0; i < nowModel.length; i ++ ) {
 
@@ -236,15 +206,13 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 
                 }
 
-
                 if ( anchorABone && sharedSkeleton ) {
 
                     anchorBBone = sharedSkeleton.getBoneByName( anchorABone.name );
 
                 }
-                    ///////////////////////////挂载型，这里需要根据挂载的骨骼进行修改；
-
-
+                
+                ///////////////////////////挂载型，这里需要根据挂载的骨骼进行修改；
                 if ( anchorBBone && anchorBBone !== anchorABone ) {
 
                     anchorBBone.add( anchorABone );
@@ -266,12 +234,11 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
                 }
 
                 /////////////////////////Aniamtion Setup
-
                 if ( animation ) {
 
                     var action;
-                    mixer1 = new THREE.AnimationMixer( nowModel[ 0 ] );
-                    action = mixer1.clipAction( animation );
+                    amatureMixer = new THREE.AnimationMixer( nowModel[ 0 ] );
+                    action = amatureMixer.clipAction( animation );
                     action.play();
 
                 }
@@ -282,7 +249,7 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 
         function createPhysicsBone() {
 
-            ///////////////////////////////////Collider Helpers
+            ///////////////////////////////////Filter out Collider Helpers
             for ( var i = 0; i < collidersAgent.length; i ++ ) {
 
                 if ( collidersAgent[ i ].children.length == 0 ) {
@@ -298,7 +265,6 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 
                     }
 
-                    //var radius = collidersAgent[ i ].name.indexOf( '_C_' ) !== - 1 ? 0.1 : 0.05;
                     const colliderShape = new VRMSpringBoneColliderShapeSphere( { radius: radius } );
                     const collider = new VRMSpringBoneCollider( colliderShape );
                     var pos = new THREE.Vector3();
@@ -307,7 +273,7 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
                     colliders.push( collider );
 
 
-                    // collider helper
+                    //////////Collider helpers Processing
                     if ( colliderHelper ) {
 
                         const helper = new VRMSpringBoneColliderHelper( collider );
@@ -320,7 +286,7 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 
             }
 
-            //////////////////////////////Spring Bone Helpers
+            //////////////////////////////Spring bone processing
             for ( var i = 0; i < hairBones.length; i ++ ) {
 
                 var hairCluster = [];
@@ -346,8 +312,7 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 
             }
 
-            //Spring Bone Helper
-
+            //Spring Bone Helper Processing
             if ( jointHelper ) {
 
                 springBoneManager.joints.forEach( ( bone ) => {
@@ -411,7 +376,7 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
             const lipTracks = [];
             lipTracks.push( visemeTrack );       
             const clip = new THREE.AnimationClip( '', visemeTimeLaps, lipTracks );
-            const action = mixer.clipAction( clip );  
+            const action = blendShapeMixer.clipAction( clip );  
             action.setDuration( visemeTimeLaps / 1000 );
             action.loop = THREE.LoopOnce;
             action.play();
@@ -465,24 +430,23 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 
             for ( var i = 0; i < trackTimes.length; i ++ ) {
 
-
                 for ( var j = 0; j < blendShapeLength; j ++ ) {
 
-                    var value;
-                    // open-open(in)-blink-blink-open(out)-open(in)-blink-blink-open(out)
-                    //  0      1      2     3      4          5      6      7      8
-                    //  So, It is ( 2 + 2 ) % 4 == 0 , ( 3 + 1 ) % 4 = 0;
-                    if ( ( blinkKey.indexOf( j ) !== - 1 ) && ( ( i + 2 ) % 4 == 0 || ( i + 1 ) % 4 == 0 ) ) {
+                        var value;
+                        // open-open(in)-blink-blink-open(out)-open(in)-blink-blink-open(out)
+                        //  0      1      2     3      4          5      6      7      8
+                        //  So, It is ( 2 + 2 ) % 4 == 0 , ( 3 + 1 ) % 4 = 0;
+                        if ( ( blinkKey.indexOf( j ) !== - 1 ) && ( ( i + 2 ) % 4 == 0 || ( i + 1 ) % 4 == 0 ) ) {
 
-                        value = 2;
+                            value = 2;
 
-                    } else {
+                        } else {
 
-                        value = 0;
+                            value = 0;
 
-                    }
+                        }
 
-                    trackValues.push( value );
+                        trackValues.push( value );
 
                     }
 
@@ -495,45 +459,32 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
             blinkTracks.push( blinkTrack );
             var blinkTrackTimeLaps = blinkTrack.times[ blinkTrack.times.length - 1 ];
             const blinkClip = new THREE.AnimationClip( '', blinkTrackTimeLaps, blinkTracks );
-            const action1 = mixer.clipAction( blinkClip );
+            const action1 = blendShapeMixer.clipAction( blinkClip );
             action1.play();
 
         }
 
+        function onWindowResize() {
 
-		function resizeRendererToDisplaySize(renderer) {
-
-			const canvas = renderer.domElement;
-			const pixelRatio = window.devicePixelRatio;
-			const width = (canvas.clientWidth * pixelRatio) | 0;
-			const height = (canvas.clientHeight * pixelRatio) | 0;
-			const needResize = canvas.width !== width || canvas.height !== height;
-			if (needResize) {
-			renderer.setSize(width, height, false);
-			}
-	
-			return needResize;
-		}
-
-
-		//
-
-		function animate() {
-
-			if (resizeRendererToDisplaySize(renderer)) {
-				const canvas = renderer.domElement;
-				camera.aspect = canvas.clientWidth / canvas.clientHeight;
-				camera.updateProjectionMatrix();
-			}
-			const dt = clock.getDelta();
-            springBoneManager.update( dt );
-			if(mixer) mixer.update( dt );
-            if(mixer1) mixer1.update( dt );
-			requestAnimationFrame( animate );
+			const container = document.querySelector('.world');
+			camera.aspect = container.clientWidth / container.clientHeight;
+			camera.updateProjectionMatrix();
+			renderer.setSize(  container.clientWidth == 0 ? 440 : container.clientWidth, container.clientHeight );
+			//renderer.render( scene, camera );
 			effect.render( scene, camera );
 
 		}
 
+		function animate() {
+
+			const dt = clock.getDelta();
+            springBoneManager.update( dt );
+			if(blendShapeMixer) blendShapeMixer.update( dt );
+            if(amatureMixer) amatureMixer.update( dt );
+			requestAnimationFrame( animate );
+			effect.render( scene, camera );
+
+		}
 
 		function iswap() {
 			var uA = navigator.userAgent.toLowerCase();
