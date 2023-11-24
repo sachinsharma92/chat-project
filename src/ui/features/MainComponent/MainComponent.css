@@ -111,10 +111,6 @@
     box-sizing: border-box;
   }
 
-  .space-content-mobile {
-    @apply relative flex w-full box-border;
-  }
-
   .space-content-desktop {
     display: none;
   }
@@ -131,13 +127,30 @@
     @apply w-full h-[unset] box-border;
   }
 
+  .space-content-mobile {
+    @apply relative flex w-full box-border;
+  }
+
   .space-content {
     padding: 4px 8px 0 16px;
   }
 
   .game-content {
-    height: 60vh;
+    height: calc(72vh - 60px);
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+  }
+
+  .game-content-expand-screen {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    box-sizing: border-box;
+    border-radius: 0;
+    max-height: unset;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
   }
 }
