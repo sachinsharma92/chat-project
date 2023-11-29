@@ -131,10 +131,16 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
                     faceMesh = tempMesh;
                     blendShapeMixer = new THREE.AnimationMixer( faceMesh );
                     creatBlinkTrack( faceMesh, true );
-                    BotChatEvents.on('audio', ({ visemes }) => {
+/*                     BotChatEvents.on('audio', ({ visemes }) => {
      
                         creatVisemeTrack( faceMesh, visemes )
     
+                    }); */
+
+                    BotChatEvents.on('visemes', (value) => {
+     
+                        creatVisemeTrack( faceMesh, value.visemes )
+
                     });
 
                 }
@@ -339,6 +345,7 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
             const visemeIdOffset = 52;
             const trackTimes = [];
             const trackValues = [];
+            var duration = 0;
     
             const morphDict = mesh.morphTargetDictionary;
     
@@ -352,12 +359,12 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
     
                     var amplitude = 1;
     
-                    if ( i < visemes.length - 1 ) {
+/*                     if ( i < visemes.length - 1 ) {
     
                         var temp = visemes[ i + 1 ].AudioOffset - visemes[ i ].AudioOffset;
                         amplitude = temp > 1000000 ? 1 : temp / 1000000 * 1.5;
     
-                    }
+                    } */
     
                     var value = visemes[ i ].VisemeId + visemeIdOffset == j ? amplitude : 0;
     
@@ -366,8 +373,11 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
     
                 }
     
-                var duration = visemes[ i ].AudioOffset;
-                trackTimes.push( duration / 10000 );
+/*                 var duration = visemes[ i ].AudioOffset;
+                trackTimes.push( duration / 10000 ); */
+
+                duration += 400 / visemes.length;
+                trackTimes.push( duration );
     
             }
     
@@ -469,7 +479,7 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 			const container = document.querySelector('.world');
 			camera.aspect = container.clientWidth / container.clientHeight;
 			camera.updateProjectionMatrix();
-			renderer.setSize(  container.clientWidth == 0 ? 440 : container.clientWidth, container.clientHeight );
+			renderer.setSize( container.clientWidth, container.clientHeight );
 			//renderer.render( scene, camera );
 			effect.render( scene, camera );
 

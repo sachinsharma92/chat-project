@@ -14,7 +14,8 @@ import { APIClient } from '@/lib/api';
 import { BotChatPostResponse } from '@/app/api/bot-chat/route';
 import { getGuestId } from '@/store/AuthProvider';
 import { BotAudioResponse } from '@/app/api/bot-audio/route';
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
+import { isDevelopment, isStaging } from '@/lib/environment';
 
 export const BotChatEvents = new EventEmitter();
 
@@ -41,6 +42,7 @@ export const useBotChat = () => {
     state.image,
   ]);
   const { getSupabaseAuthHeaders } = useAuth();
+  const syncAudioIntervalId = useRef<NodeJS.Timer | null | number>(null);
 
   const greeting = useMemo(() => {
     const spaceBotInfo = head(spaceInfo?.bots);
@@ -53,60 +55,138 @@ export const useBotChat = () => {
    * Grab mp3 file from protected route
    * @param message
    */
-  const playBotAudio = async (message: string) => {
-    try {
-      const authHeaders = getSupabaseAuthHeaders();
-      const spaceBot = head(spaceInfo?.bots);
-      const spaceBotId = toString(spaceBot?.id);
-      const audioRes = await APIClient.post<BotAudioResponse>(
-        '/api/bot-audio',
-        {
-          userId,
-          message,
-          spaceId,
-          spaceBotId,
-        },
-        {
-          headers: {
-            ...authHeaders,
-            Accept: 'audio/mpeg',
+  const playBotAudio = (message: string): Promise<void> =>
+    new Promise(async resolve => {
+      try {
+        const authHeaders = getSupabaseAuthHeaders();
+        const spaceBot = head(spaceInfo?.bots);
+        const spaceBotId = toString(spaceBot?.id);
+        const audioRes = await APIClient.post<BotAudioResponse>(
+          '/api/bot-audio',
+          {
+            userId,
+            message,
+            spaceId,
+            spaceBotId,
           },
-          responseType: 'blob',
-        },
-      );
-      const resHeaders = audioRes?.headers;
-      // @ts-ignore
-      const audioBlob = new Blob([audioRes.data], { type: 'audio/mpeg' });
-      const audioUrl = URL.createObjectURL(audioBlob);
+          {
+            headers: {
+              ...authHeaders,
+              Accept: 'audio/mpeg',
+            },
+            responseType: 'blob',
+          },
+        );
+        const resHeaders = audioRes?.headers;
+        // @ts-ignore
+        const audioBlob = new Blob([audioRes.data], { type: 'audio/mpeg' });
+        const audioUrl = URL.createObjectURL(audioBlob);
 
-      if (resHeaders && !isEmpty(resHeaders) && resHeaders['x-visemes-data']) {
-        // send event for viseme facial data
-        try {
-          const visemes = JSON.parse(resHeaders['x-visemes-data']);
-          const evtPayload = {
-            audioUrl,
-            audioBlob,
-            visemes: visemes?.visemeData,
-          };
-          BotChatEvents.emit('audio', evtPayload);
-        } catch (err: any) {
-          console.log(
-            `JSON.parse(resHeaders['x-visemes-data'])() err:`,
-            err?.message,
-          );
+        if (
+          resHeaders &&
+          !isEmpty(resHeaders) &&
+          resHeaders['x-visemes-data']
+        ) {
+          // send event for viseme facial data
+          try {
+            const visemes = JSON.parse(resHeaders['x-visemes-data']);
+            const visemeData = visemes?.visemeData;
+            const visemeQueue = [...visemeData];
+            const evtPayload = {
+              audioUrl,
+              audioBlob,
+              visemes: visemeData,
+            };
+
+            BotChatEvents.emit('audio', evtPayload);
+
+            const emitVisemesEventForAudio = () => {
+              if (isDevelopment || isStaging) {
+                console.log('emitVisemesEventForAudio()');
+              }
+
+              const currentTime = audio.currentTime * 10000000; // Convert to 100 nanoseconds units
+              const visemes = [];
+
+              // Emit all visemes that should have occurred up until the current time
+              while (
+                visemeQueue.length > 0 &&
+                // @ts-ignore
+                head(visemeQueue)?.AudioOffset <= currentTime
+              ) {
+                const visemeEvent = visemeQueue.shift();
+                const payload = {
+                  VisemeId: visemeEvent.VisemeId,
+                };
+
+                visemes.push(payload);
+              }
+
+              if (!isEmpty(visemes)) {
+                BotChatEvents.emit('visemes', { visemes });
+              }
+            };
+
+            const clearVisemesIntervalEmit = () => {
+              clearInterval(syncAudioIntervalId.current as number);
+              syncAudioIntervalId.current = null;
+
+              // end close mouth
+              BotChatEvents.emit('visemes', {
+                visemes: [
+                  {
+                    VisemeId: 1,
+                  },
+                  {
+                    VisemeId: 0,
+                  },
+                ],
+              });
+            };
+
+            const audio = document.getElementById(
+              'bot-audio',
+            ) as HTMLAudioElement;
+            const onAudioEnd = () => {
+              resolve();
+              clearVisemesIntervalEmit();
+
+              if (audio) {
+                // safely unsubscribe
+                audio.removeEventListener('error', onAudioEnd);
+                audio.removeEventListener('pause', onAudioEnd);
+                audio.removeEventListener('ended', onAudioEnd);
+              }
+            };
+
+            if (audio) {
+              audio.src = audioUrl;
+
+              audio.addEventListener('play', () => {
+                // run interval to sync lipsync with audio
+                // in each interval function call we emit an event
+                syncAudioIntervalId.current = setInterval(
+                  emitVisemesEventForAudio,
+                  400,
+                );
+              });
+              audio.addEventListener('ended', onAudioEnd);
+              audio.addEventListener('error', onAudioEnd);
+              audio.play();
+              // listen pause after play
+              audio.addEventListener('pause', onAudioEnd);
+            }
+          } catch (err: any) {
+            console.log(
+              `JSON.parse(resHeaders['x-visemes-data'])() err:`,
+              err?.message,
+            );
+          }
         }
+      } catch (err: any) {
+        console.log('playBotAudio() err:', err?.message);
       }
-
-      const audio = document.getElementById('bot-audio') as HTMLAudioElement;
-
-      if (audio) {
-        audio.src = audioUrl;
-        audio.play();
-      }
-    } catch (err: any) {
-      console.log('playBotAudio() err:', err?.message);
-    }
-  };
+    });
 
   /**
    * Send a chat message for 1:1 bot chat
