@@ -10,6 +10,7 @@ export interface IBot {
   formId?: string;
   greeting?: string;
   description?: string;
+  voiceId?: string;
 }
 
 export interface IBotFormAnswers {

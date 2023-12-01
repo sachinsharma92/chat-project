@@ -26,6 +26,7 @@ const ProfileMenu = () => {
           <PersonIcon height={16} width={16} />
         </Button>
       }
+      side="bottom"
     >
       <div className="profile-menu">
         <ul>

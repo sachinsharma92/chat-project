@@ -1,0 +1,68 @@
+.clone-audio-update {
+  @apply relative w-full p-[8px];
+
+  box-sizing: border-box;
+}
+
+.clone-audio-transcript {
+  @apply relative w-full mt-8 bg-[#F8F6F0] p-[16px] rounded-[8px];
+
+  box-sizing: border-box;
+}
+
+.clone-audio-instructions {
+  @apply relative flex justify-center items-center mt-2 mb-2;
+}
+
+.clone-audio-instructions > p {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.clone-audio-transcript > p {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 22px;
+}
+
+.recorder-timer {
+  @apply relative mr-4;
+}
+
+.recorder-actions {
+  @apply flex justify-end items-center relative w-full mt-6;
+}
+
+.uploading-spinner {
+  @apply relative flex justify-center items-center w-full;
+
+  flex-direction: column;
+}
+
+.uploading-spinner > p {
+  @apply mt-2;
+
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.discard-save {
+  @apply flex relative justify-center items-center w-full mt-4;
+}
+
+.save-button {
+  @apply relative flex ml-4;
+
+  max-width: 120px;
+}
+
+.discard-button {
+  @apply relative flex justify-center items-center;
+
+  background: gray !important;
+  max-width: 120px;
+}
+
+.discard-button:hover {
+  opacity: 0.8;
+}

@@ -3,3 +3,46 @@
 
   flex-direction: column;
 }
+
+.file-input-container {
+  @apply relative flex justify-between items-center w-full mt-2;
+
+  box-sizing: border-box;
+  padding: 0 32px;
+}
+
+.device-unsupported {
+  @apply relative flex justify-center items-center w-full mt-8 mb-4;
+}
+
+.device-unsupported > p {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.file-path {
+  @apply relative p-2;
+
+  box-sizing: border-box;
+  max-width: calc(100% - 220px);
+  font-size: 15px;
+}
+
+.file-update {
+  @apply flex justify-center items-center;
+
+  background: #303032;
+  box-sizing: border-box;
+  color: #fff;
+  height: 40px;
+  font-size: 14px;
+  width: 150px;
+  border-radius: 50px;
+  padding: 8px 16px;
+}
+
+@media screen and (max-width: 720px) {
+  .file-input-container {
+    padding: 0 16px;
+  }
+}

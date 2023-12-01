@@ -10,7 +10,7 @@ import {
   returnApiUnauthorizedError,
   returnCommonStatusError,
 } from '@/lib/utils/routes';
-import { applyApiRoutesAuth } from '../botchat/route';
+import { applyApiRoutesAuth } from '../bot-chat/route';
 import {
   getUserContextById,
   insertNewUserCloneContext,

@@ -1,5 +1,7 @@
-import { head, isEmpty, isNumber, isString, toString, toUpper } from 'lodash';
-import cx from 'classnames';
+'use client';
+
+import { head, isEmpty, isNumber, toString, toUpper } from 'lodash';
+import { cn } from '@/lib/utils';
 import * as AvatarRadix from '@radix-ui/react-avatar';
 import './Avatar.css';
 
@@ -18,9 +20,7 @@ function Avatar(props: AvatarComponentProps) {
 
   return (
     <AvatarRadix.Root
-      className={cx('avatar-layout flex justify-center items-center', {
-        [`${className}`]: !isEmpty(className) && isString(className),
-      })}
+      className={cn('avatar-layout', className)}
       aria-label={!isEmpty(ariaLabel) ? ariaLabel : 'Avatar'}
       {...(isNumber(height) &&
         height > 0 &&
@@ -32,7 +32,10 @@ function Avatar(props: AvatarComponentProps) {
         src={src}
         {...(alt && !isEmpty(alt) && { alt })}
       />
-      <AvatarRadix.Fallback className="avatar-fallback" delayMs={400}>
+      <AvatarRadix.Fallback
+        className="flex justify-center items-center bg-[#44373c] text-[#fff]"
+        delayMs={400}
+      >
         {toUpper(head(toString(name)))}
       </AvatarRadix.Fallback>
     </AvatarRadix.Root>

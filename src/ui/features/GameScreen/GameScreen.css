@@ -1,0 +1,13 @@
+.world {
+  @apply relative h-full w-full top-0 left-0 box-border;
+}
+
+.game-canvas {
+  @apply absolute top-0 left-0 right-0 h-full w-full box-border;
+}
+
+.world {
+  background-image: url('/assets/botnet-avatar-bg.png');
+  background-position: center;
+  background-size: cover;
+}

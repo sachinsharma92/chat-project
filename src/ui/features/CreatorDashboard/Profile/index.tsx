@@ -1,3 +1,5 @@
+'use client';
+
 import { useMemo, useState } from 'react';
 import { useBotnetAuth } from '@/store/Auth';
 import { isEmpty, isString, toString } from 'lodash';

@@ -1,3 +1,5 @@
+'use client';
+
 import { CrossIcon } from '@/icons';
 import { useAppStore } from '@/store/App';
 import { isFunction } from 'lodash';

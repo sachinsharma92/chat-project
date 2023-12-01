@@ -2,8 +2,8 @@ import { useDebounce } from '@/hooks';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import { serverRoomSendQueue } from '@/lib/rivet';
 import { useBotnetAuth } from '@/store/Auth';
-import { guestId } from '@/store/GameServerProvider';
 import { useGameServer } from '@/store/App';
+import { getGuestId } from '@/store/AuthProvider';
 
 /**
  * Hook for space chats.
@@ -12,7 +12,9 @@ import { useGameServer } from '@/store/App';
  */
 export const usePlayersChat = () => {
   const [gameRoom] = useGameServer(state => [state.gameRoom]);
-  const [userId] = useBotnetAuth(state => [state.session?.user?.id || guestId]);
+  const [userId] = useBotnetAuth(state => [
+    state.session?.user?.id || getGuestId(),
+  ]);
   const { spaceId } = useSelectedSpace();
 
   /**

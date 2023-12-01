@@ -5,6 +5,7 @@ export enum DialogEnums {
   'none' = 'none',
   'account' = 'account',
   'onboardDisplayName' = 'onboardDisplayName',
+  'cloneAudioUpdate' = 'cloneAudioUpdate',
 }
 
 export enum MobileDrawerEnums {

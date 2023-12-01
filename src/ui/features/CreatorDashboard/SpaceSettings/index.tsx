@@ -1,3 +1,5 @@
+'use client';
+
 import Button from '@/components/common/Button';
 import TextInput from '@/components/common/TextInput';
 import Avatar from '@/components/common/Avatar/Avatar';

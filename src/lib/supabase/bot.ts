@@ -2,8 +2,8 @@ import { pick, trim } from 'lodash';
 import { supabaseClient } from '.';
 import { v4 as uuid } from 'uuid';
 import { IBotFormAnswers } from '@/types';
+import { SupabaseResult } from '@/types/supabase';
 import snakecaseKeys from 'snakecase-keys';
-import { SupabaseResult } from '@/types/supbase';
 
 export const userBotFormAnswersTable = 'user_bot_form_answers';
 export const botChatMessagesTable = 'bot_chat_messages';

@@ -10,7 +10,7 @@ import {
   createSpaceBotProfile,
   getAICloneCompletedForms,
   updateOrCreateAICloneFormProperties,
-  updateSpaceBotProfileProperties,
+  updateSpaceBotProfilePropertiesByFormId,
 } from '@/lib/supabase';
 import { IBotFormAnswers } from '@/types';
 import { v4 as uuid } from 'uuid';
@@ -112,7 +112,7 @@ const CloneAISettings = () => {
       }
 
       if (formId) {
-        await updateSpaceBotProfileProperties(formId, {
+        await updateSpaceBotProfilePropertiesByFormId(formId, {
           description,
           greeting,
         });

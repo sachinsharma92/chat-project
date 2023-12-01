@@ -1,4 +1,4 @@
-import { SupabaseResult } from '@/types/supbase';
+import { IUserPrivateProps, SupabaseResult } from '@/types/supabase';
 import { supabaseClient } from '.';
 import { IUser } from '@/types/auth';
 import { map, omit, trim } from 'lodash';
@@ -7,6 +7,7 @@ import camelcaseKeys from 'camelcase-keys';
 
 const userProfilesTable = 'user_profiles';
 const userWaitlistTable = 'user_waitlist';
+const userPrivateTable = 'user_private';
 
 /**
  * Fetch user profile by id
@@ -28,6 +29,54 @@ export const getUserProfileById = async (
   return {
     data: map(response.data, d => camelcaseKeys(d)) as IUser[],
   };
+};
+
+/**
+ * Fetch user private data by user id
+ * @param userId
+ */
+export const getUserPrivateDataById = async (
+  userId: string,
+): Promise<SupabaseResult<IUserPrivateProps[]>> => {
+  const response = await supabaseClient
+    .from<'user_private', IUserPrivateProps>(userPrivateTable)
+    .select('*')
+    .eq('owner', userId);
+
+  if (response.error) {
+    return { error: response.error };
+  }
+
+  return {
+    data: map(response.data, d => camelcaseKeys(d)) as IUserPrivateProps[],
+  };
+};
+
+/**
+ * Update user private property
+ * @param props
+ */
+export const updateUserPrivateDataProps = async (
+  userId: string,
+  props: Partial<IUserPrivateProps>,
+) => {
+  return await supabaseClient
+    .from(userPrivateTable)
+    .update(snakecaseKeys(omit(props, ['id'])))
+    .eq('owner', userId);
+};
+
+/**
+ * Insert new user private property
+ * @param props
+ */
+export const insertUserPrivateDataProps = async (
+  props: Partial<IUserPrivateProps>,
+) => {
+  return await supabaseClient.from(userPrivateTable).insert({
+    ...snakecaseKeys(props),
+    created_at: new Date().toISOString(),
+  });
 };
 
 /**

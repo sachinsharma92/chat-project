@@ -2,10 +2,17 @@
 module.exports = {
   darkMode: ['class'],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    './pages/**/*.{js,ts,jsx,tsx,html}',
+    '/components/**/*.{js,ts,jsx,tsx,html}',
+    '/app/**/*.{js,ts,jsx,tsx,html}',
+    '@/components/**/*.{js,ts,jsx,tsx,html}',
+    '@/app/**/*.{js,ts,jsx,tsx,html}',
+    'components/**/*.{js,ts,jsx,tsx,html}',
+    'app/**/*.{js,ts,jsx,tsx,html}',
+    './src/**/*.{js,ts,jsx,tsx,html}',
+    './src/components/**/*.{js,ts,jsx,tsx,html}',
+    './src/app/**/*.{js,ts,jsx,tsx,html}',
+    './src/**/*.{js,ts,jsx,tsx,html}',
   ],
   theme: {
     container: {
@@ -32,16 +39,5 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    function ({ addUtilities }) {
-      const newUtilities = {
-        '.input-scale': {
-          fontSize: '16px',
-          transformOrigin: 'left center',
-        },
-      };
-      addUtilities(newUtilities, ['responsive', 'hover']);
-    },
-    require('tailwindcss-animate'),
-  ],
+  plugins: [require('tailwindcss-animate')],
 };

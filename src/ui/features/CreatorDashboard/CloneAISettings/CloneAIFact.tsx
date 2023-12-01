@@ -1,3 +1,5 @@
+'use client';
+
 import Button from '@/components/common/Button';
 import TextInput from '@/components/common/TextInput';
 import { ReactNode, useMemo, useState } from 'react';
@@ -12,10 +14,15 @@ import {
 } from '@/app/api/generate-embeddings/route';
 import { isResponseStatusSuccess } from '@/lib/utils';
 import { IUserContext } from '@/types';
-
-import './CloneAIFact.css';
 import { APIClient } from '@/lib/api';
 import { useSpacesStore } from '@/store/App';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+
+import './CloneAIFact.css';
 
 /**
  * Character fact item component
@@ -118,14 +125,10 @@ const CloneAIFact = (props: {
       return;
     }
 
-    setDeleting(true);
-    const response = await deleteUserContextEmbedding(id);
-    const error = response?.error;
-
-    if (!error && isFunction(props?.removeFact)) {
+    if (isFunction(props?.removeFact)) {
+      setDeleting(true);
       props.removeFact(id);
-    } else {
-      setDeleting(false);
+      await deleteUserContextEmbedding(id);
     }
   };
 
@@ -139,13 +142,14 @@ const CloneAIFact = (props: {
             value: context,
           })}
         />
-        <Button
-          isLoading={deleting}
-          onClick={onDelete}
-          className="clone-ai-fact-delete"
-        >
-          <TrashIcon height={'20px'} width={'20px'} />
-        </Button>
+        <Tooltip>
+          <TooltipTrigger onClick={onDelete} className="clone-ai-fact-delete">
+            <TrashIcon height={'18px'} width={'18px'} />
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Remove item</p>
+          </TooltipContent>
+        </Tooltip>
       </div>
 
       {showSaveButton && (

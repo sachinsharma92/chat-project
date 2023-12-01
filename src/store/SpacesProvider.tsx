@@ -1,17 +1,19 @@
 'use client';
 
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
-import { ReactNode, useEffect } from 'react';
-import { useSpacesStore } from './App';
+import { ReactNode, useCallback, useEffect } from 'react';
+import { useBotData, useSpacesStore } from './App';
 import {
   getSpaceBots,
   getSpaceProfile,
   getUserProfileById,
 } from '@/lib/supabase';
 import { head, isEmpty } from 'lodash';
-import { useRouter, notFound } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { IUser } from '@/types/auth';
-import { ISpace } from '@/types';
+import { ISpace, OpenAIRoles } from '@/types';
+import { v4 as uuid } from 'uuid';
+
 import PQueue from 'p-queue';
 
 export const saveSpacePropertiesQueue = new PQueue({ concurrency: 1 });
@@ -22,8 +24,13 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
     state.addSpace,
     state.setSpaceInfo,
   ]);
+  const [setChatMessages] = useBotData(state => [state.setChatMessages]);
   const { spaceId } = useSelectedSpace();
   const router = useRouter();
+
+  const notFound = useCallback(() => {
+    router.push('/not-found');
+  }, [router]);
 
   /**
    * Store space id
@@ -55,7 +62,20 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
             host: spaceOwnerProfile || {},
             bots: spaceBotsData || [],
           };
+          const spaceBotInfo = head(spaceBotsData);
+          const greeting = spaceBotInfo?.greeting || '';
+          const botGreeting = {
+            id: uuid(),
+            authorId: '',
+            message: greeting,
+            role: OpenAIRoles.assistant,
+          };
+
           setSpaceInfo(spaceId, { ...props });
+
+          if (greeting) {
+            setChatMessages([botGreeting]);
+          }
         } else if (error) {
           // redirect user to 404 page
           if (notFound) {

@@ -1,7 +1,7 @@
 import { map, omit, pick, trim } from 'lodash';
 import { supabaseClient } from '.';
 import { IBot, ISpace } from '@/types';
-import { SupabaseResult } from '@/types/supbase';
+import { SupabaseResult } from '@/types/supabase';
 import snakecaseKeys from 'snakecase-keys';
 import camelcaseKeys from 'camelcase-keys';
 
@@ -95,12 +95,12 @@ export const getSpaceBotById = async (
 };
 
 /**
- * Update space bot profile properties
+ * Update space bot profile properties by form id
  * @param formId
  * @param props
  * @returns
  */
-export const updateSpaceBotProfileProperties = async (
+export const updateSpaceBotProfilePropertiesByFormId = async (
   formId: string,
   props: { greeting: string; description: string },
 ) => {
@@ -108,6 +108,24 @@ export const updateSpaceBotProfileProperties = async (
     .from(spacesBotsTable)
     .update({ ...snakecaseKeys(pick(props, ['description', 'greeting'])) })
     .eq('form_id', trim(formId));
+};
+
+/**
+ * Update space bot profile properties by id
+ * @param id
+ * @param props
+ * @returns
+ */
+export const updateSpaceBotProfilePropertiesById = async (
+  id: string,
+  props: { voiceId?: string; greeting?: string; description?: string },
+) => {
+  return await supabaseClient
+    .from(spacesBotsTable)
+    .update({
+      ...snakecaseKeys(pick(props, ['voiceId', 'description', 'greeting'])),
+    })
+    .eq('id', trim(id));
 };
 
 /**

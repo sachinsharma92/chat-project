@@ -1,0 +1,95 @@
+.home-space {
+  @apply relative w-full box-border;
+
+  height: calc(100% - 100px);
+  box-sizing: border-box;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.home-space::-webkit-scrollbar {
+  opacity: 0;
+  width: 0;
+}
+
+.space-description {
+  @apply relative w-full mt-[24px];
+}
+
+.social-links {
+  @apply relative flex justify-start items-center w-full mt-[24px] box-border;
+
+  gap: 8px;
+}
+
+.social-links > a {
+  @apply relative h-[48px] w-[48px] p-[16px] box-border;
+}
+
+.cta-greeting-chat {
+  @apply absolute bottom-0 left-0 right-0 w-full rounded-[24px] box-border;
+
+  padding: 24px;
+  border: 1px solid #e5e5e5;
+  background: #fff;
+  box-shadow: 0px 1px 8px 1px rgba(0, 0, 0, 0.05);
+}
+
+.greetings {
+  @apply relative flex items-center justify-start w-full rounded-[48px] pl-[16px] pr-[8px] box-border;
+
+  gap: 8px;
+}
+
+.greetings-bot-avatar {
+  @apply relative h-[32px] w-[32px];
+}
+
+.greetings > p {
+  padding: 8px 12px;
+  box-sizing: border-box;
+  color: #000;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  max-width: 340px;
+  border-radius: 16px 16px 16px 0px;
+  background: #f5f5f5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cta-chat-input-container {
+  @apply relative flex justify-between items-center h-[48px] w-full mt-[16px] rounded-[48px] pr-[8px] pl-[16px] box-border;
+
+  border: 1px solid #e5e5e5;
+  background: #fff;
+}
+
+.cta-chat-input-container > input {
+  @apply relative;
+
+  max-width: calc(100% - 100px);
+  width: 100%;
+  background: transparent;
+}
+
+.attach-file {
+  @apply relative flex justify-center items-center h-[36px] w-[36px];
+}
+
+.mic {
+  @apply relative flex justify-center items-center h-[36px] w-[36px] p-0 rounded-[500px] bg-[#000];
+}
+
+.mic > svg > path {
+  fill: #fff;
+}
+
+@media screen and (max-width: 720px) {
+  .cta-greeting-chat {
+    display: none;
+    overflow: hidden;
+  }
+}

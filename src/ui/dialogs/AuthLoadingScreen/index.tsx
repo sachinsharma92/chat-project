@@ -1,4 +1,4 @@
-import '../../../components/common/styles/Dialog.css';
+import '@/components/common/styles/Dialog.css';
 import './AuthLoadingScreen.css';
 
 const AuthLoadingScreen = () => {

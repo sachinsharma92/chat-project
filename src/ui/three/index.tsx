@@ -1,12 +1,19 @@
 // @ts-nocheck
 import * as THREE from 'three';
 import { ReactNode, useEffect, useRef } from 'react';
-import Stats from 'three/addons/libs/stats.module.js';
-
+//import { visemeLoader } from './lib/visemeLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { OutlineEffect } from 'three/addons/effects/OutlineEffect.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
+import { BotChatEvents } from '@/ui/features/Chat/hooks/useBotChat';
+import {
+    VRMSpringBoneManager,
+    VRMSpringBoneJoint,
+    VRMSpringBoneJointHelper,
+    VRMSpringBoneColliderShapeSphere,
+    VRMSpringBoneCollider,
+    VRMSpringBoneColliderHelper
+} from './lib/three-vrm.module.min.js';
 
 const ThreeJSComponent = (props: { children?: ReactNode }) => {
   const initialized = useRef<boolean>(false);
@@ -24,277 +31,470 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
     // this useEffect function is set to invoke once
     // write your threejs code blocking below:
 
-    let stats;
+	let clock, scene, camera, renderer, controls, blendShapeMixer, amatureMixer, effect;
+    let anchorABone, anchorBBone, sharedSkeleton, faceMesh;
+    var sklHelper = false;
+    var jointHelper = false;
+    var colliderHelper = false;
 
-    let camera, scene, renderer, effect, clock, controls, skyBox, controls2;
-    let particleLight, particleLightSky, rootBone;
-    let currentVrm = undefined;
+    const colliders = [];
+    const collidersAgent = [];
+    const collidersAgentName = [];
+    const hairBones = [];
+    const hairBonesName = [];
+    const springBoneNameGroup = [];
+    const springBoneHelperNameGroup = [];
+
     let devicePC = iswap();
-    init();
-    loadVrmModel();
+
+    const springBoneManager = new VRMSpringBoneManager();
+    initGraph();
+    loadModel( 'body-1.glb' );
+    loadModel( 'hair.glb', 1 );
     animate();
+  
+		function initGraph() {
 
-  		function init() {
-
-			var fov = 40;
-			var near = 1;
-			var far = 2500;
-
-			clock = new THREE.Clock();
-
-			const containers = document.getElementsByClassName('game-canvas');
+			const containers = document.getElementsByClassName( 'game-canvas' );
 			const canvas = containers[0];
 			renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
 
-			camera = new THREE.PerspectiveCamera( fov, window.innerWidth / window.innerHeight, near, far );
-			camera.position.set(-3.4,18.3, 10);
-			//camera.rotation.x = 45 * Math.PI / 180;
+            clock = new THREE.Clock();
 
-			//
+            scene = new THREE.Scene();
 
-			scene = new THREE.Scene();
-			scene.background = '';
-			scene.fog = new THREE.Fog( 0x392F1C, 11, 100 );
+            camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.2, 5000 );
+            camera.position.set( - 0.3, 1.5, 0.5 );
 
+            const hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 1 );
+            scene.add( hemiLight );
 
-			//2nd scene where outLIneEffect will be disabled;
-			skyBox = {
-				scene: new THREE.Scene(),
-				camera: new THREE.PerspectiveCamera( fov, window.innerWidth / window.innerHeight, near, far  )
-			//camera has same properties with main camera.
-			};
-			skyBox.camera.position.set(-3.4,18.3, 10);
-			//
+            const dirLight = new THREE.DirectionalLight( 0xffffff, 2 );
 
+            dirLight.position.set( 1, 1, 3 );
+            dirLight.position.multiplyScalar( 5 );
+            scene.add( dirLight );
+
+            //Setup the renderer
 			renderer.setClearColor( 0x000000);
 			renderer.setPixelRatio( canvas.clientWidth / canvas.clientHeight );
 			renderer.setSize( canvas.clientWidth, canvas.clientHeight );
 			renderer.autoClear = false; 
 
-			//container.appendChild( renderer.domElement );
+            renderer.gammaInput = true;
+            renderer.gammaOutput = true;
+            renderer.shadowMap.enabled = true;
 
+            effect = new OutlineEffect( renderer );
 
-			particleLight = new THREE.Mesh(
-				new THREE.SphereGeometry( 0.5, 8, 8 ),
-				new THREE.MeshBasicMaterial( { color: 0xFFEDCA } )
-			);
-			
-			scene.add( particleLight );
+            controls = new OrbitControls( camera, renderer.domElement );
+            controls.enableZoom = false;
+            controls.enablePan = false;
+			controls.enableRotate = false;
+            controls.target.set( 0, 1.5, 0 );
+            controls.update();
 
-			particleLightSky = new THREE.Mesh(
-				new THREE.SphereGeometry( 0.5, 8, 8 ),
-				new THREE.MeshBasicMaterial( { color: 0xFFEDCA } )
-			);
-			
-			skyBox.scene.add( particleLightSky );
+            window.addEventListener( 'resize', onWindowResize );
 
+			const divElem = document.getElementsByClassName( 'world' );
 
-
-
-
-			// Lights
-
-			scene.add( new THREE.AmbientLight( 0xc1c1ee, 3 ) );
-			skyBox.scene.add( new THREE.AmbientLight( 0xc1c1ee, 3 ) );
-
-			const pointLight = new THREE.PointLight( 0xFFEDCA, 14, 20, 0.5 );
-			particleLight.add( pointLight );
-			particleLight.position.set(-8.0,17,-11);
-
-			const pointLightSky = new THREE.PointLight( 0xFFEDCA, 14, 20, 0.5 );
-			particleLightSky.add( pointLightSky );
-			particleLightSky.position.set(-8.0,17,-11);
-
-			//
-			if(devicePC)	effect = new OutlineEffect( renderer );
-
-			//
-			stats = new Stats();
-			canvas.appendChild( stats.dom );
-
-			controls = new OrbitControls( camera, renderer.domElement );
-			controls.target.set( 0, 18.6, 0 );
-			controls.minDistance = 8;
-			controls.maxDistance = 100;
-			controls.update();
-
-
-
-			controls2 = new OrbitControls( skyBox.camera, renderer.domElement );
-			//controls2.addEventListener('change', camRender );  // for control
-			controls2.target.set( 0, 18.6, 0 );
-			controls2.minDistance = 8;
-			controls2.maxDistance = 100;
-			controls2.update();
-
-
-
-			window.addEventListener( 'resize', onWindowResize );
-
-
-		}
-
-		function loadVrmModel(){
-
-			const loader = new GLTFLoader();
-			loader.crossOrigin = 'anonymous';
-
-			loader.register( ( parser ) => {
-
-				return new VRMLoaderPlugin( parser );
-
+			const resizeObserver = new ResizeObserver( ( entries ) => {
+	
+				for ( const entry of entries ) {
+	
+					const { target, contentRect } = entry;
+					onWindowResize();
+				}
+	
 			} );
+	
+			resizeObserver.observe( divElem[ 0 ] );
 
-			loader.load(
+        }
 
-				'./assets/model/zero_two.vrm',
+        //skeletonType: 0, Skeleton Sharing类型；
+        //skeletonType: 1, 挂载型；
+        function loadModel( modelFile, skeletonType = 0, part ) {
 
-				( gltf ) => {
+            var animation;
 
-					const vrm = gltf.userData.vrm;
+            const loader = new GLTFLoader().setPath( './assets/model/' );
+            loader.load( modelFile, function ( gltf ) {
 
-					// calling these functions greatly improves the performance
-					VRMUtils.removeUnnecessaryVertices( gltf.scene );
-					VRMUtils.removeUnnecessaryJoints( gltf.scene );
+                const model = gltf.scene;
 
-					// Disable frustum culling
-					vrm.scene.traverse( ( obj ) => {
-						if ( obj.isMesh && devicePC ){
-							var matArray = Array.isArray(obj.material);
-							if(matArray){
-								for(var i=0; i<obj.material.length; i++){
-									//matChange( obj, obj.material[ i ] );
-									var diffuseMap = obj.material[i].map;
-									var side = obj.material[i].side;
-									if(side!=2)
-									obj.userData.singleSide = "true";
+                scene.add( model );
 
-									var _alphaTest = obj.material[i]._alphaTest;
-									var name = obj.material[i].name;
-									const toonMaterial = new THREE.MeshToonMaterial( {
-										name: name,
-										color: 0xffffff,
-										map: diffuseMap,
-										side: THREE.DoubleSide,
-										alphaTest: _alphaTest,
-										//gradientMap: threeTone
-									});
-									obj.recieveShadow = true;
-									obj.castShadow = true;
-									obj.material[i] = toonMaterial;  
-									obj.frustumCulled = false;
-									obj.material.needsUpdate = true;
-									obj.needsUpdate = true;
-								}
+                const tempMesh = gltf.scene.getObjectByName( 'face' );
+                if(tempMesh) {
 
-							}else{
+                    faceMesh = tempMesh;
+                    blendShapeMixer = new THREE.AnimationMixer( faceMesh );
+                    creatBlinkTrack( faceMesh, true );
+/*                     BotChatEvents.on('audio', ({ visemes }) => {
+     
+                        creatVisemeTrack( faceMesh, visemes )
+    
+                    }); */
 
-								var diffuseMap = obj.material.map;
-								var side = obj.material.side;
-								if(side!=2)
-									obj.userData.singleSide = "true";
-								var _alphaTest = obj.material._alphaTest;
-								const toonMaterial = new THREE.MeshToonMaterial( {
-									color: 0xffffff,
-									map: diffuseMap,
-									side: THREE.DoubleSide,
-									alphaTest: _alphaTest,
-									//gradientMap: threeTone
-								});
-								obj.recieveShadow = true;
-								obj.castShadow = true;
-								//obj.material = toonMaterial;  
-								obj.frustumCulled = false;
-								obj.needsUpdate = true;
-							}	
-						} 
+                    BotChatEvents.on('visemes', (value) => {
+     
+                        creatVisemeTrack( faceMesh, value.visemes )
 
-					});
-					vrm.scene.scale.set(12,12,12);
-					scene.add( vrm.scene );
-					console.log(scene);
-					rootBone = scene.children[2].children[5].children[0];
-					rootBone.rotateY(3.14);
+                    });
 
-					scene.traverse( ( child ) => {
+                }
 
-						if(child.isMesh && child.userData.singleSide);
-						//skyBox.scene.add(child);
+                model.traverse( function ( object ) {
 
-					});
-					currentVrm = vrm;
+                    if ( object.isMesh ) {
 
-				},
+                        object.geometry.attributes.uv2 = object.geometry.attributes.uv;
+                        const aoMap = object.material.aoMap;
+                        const map = object.material.map;
+                        const material = new THREE.MeshToonMaterial();
+                        //////for future hair shader;
+/* 							const material = new NodeToyMaterial( {
+                                data
+                                } ); */
+                        object.material = material;
+                        object.material.map = map;
+                        object.material.aoMap = aoMap;
+                        object.castShadow = true;
+                        object.receiveShadow = true;
 
-				( progress ) => (console.log( 'Loading model...', 100.0 * ( progress.loaded / progress.total ), '%' ,'time:',clock.getDelta())),
+                    }
 
-				( error ) => console.error( error )
+                    ///////////////////////////////////////////////////Any amature type root shouldn't be anchorA, so here should be && not ||
+                    if ( object.isSkinnedMesh && object.skeleton.bones[ 0 ].name.indexOf( 'Root' ) == - 1 && object.skeleton.bones[ 0 ].name.indexOf( 'root' ) == - 1 && object.skeleton.bones[ 0 ].name.indexOf( 'hips' ) == - 1 ) {
 
-			);
-		}
+                        anchorABone = object.skeleton.bones[ 0 ];
 
-		function onWindowResize() {
+                    }
+
+
+                    if ( object.name.indexOf( 'J_Sec' ) !== - 1 && hairBonesName.indexOf( object.name ) == - 1 ) {
+
+                        hairBones.push( object );
+                        hairBonesName.push( object.name );
+
+                    }
+
+                    if ( ( object.name.indexOf( 'Collider' ) !== - 1 || object.name.indexOf( 'collider' ) !== - 1 ) && collidersAgentName.indexOf( object.name ) == - 1 ) {
+
+                        collidersAgent.push( object );
+                        collidersAgentName.push( object.name );
+
+                    }
+
+                } );
+
+                var nowModel = [ ];
+                var nowModel = model.getObjectsByProperty( 'type', 'SkinnedMesh' );
+
+                if ( skeletonType == 0 ) {
+
+                    if ( gltf.animations.length > 0 ) {
+
+                        animation = gltf.animations[ 0 ];
+                        sharedSkeleton = nowModel[ 0 ].skeleton;
+
+                    }
+
+                    /////////////////////////Skeleton Sharing                  skeletonSharing();
+                    for ( var i = 0; i < nowModel.length; i ++ ) {
+
+                        const oldSkeleton = nowModel[ i ].skeleton;
+                        nowModel[ i ].bind( sharedSkeleton, nowModel[ i ].matrixWorld );
+                        if ( oldSkeleton !== sharedSkeleton ) oldSkeleton.dispose(); //This has some mistake?
+
+                    }
+
+                }
+
+                if ( anchorABone && sharedSkeleton ) {
+
+                    anchorBBone = sharedSkeleton.getBoneByName( anchorABone.name );
+
+                }
+                
+                ///////////////////////////挂载型，这里需要根据挂载的骨骼进行修改；
+                if ( anchorBBone && anchorBBone !== anchorABone ) {
+
+                    anchorBBone.add( anchorABone );
+                    anchorABone.position.y = 0;
+                    anchorABone.position.x = 0;
+                    anchorABone.position.z = 0;
+
+                }
+
+                //////////////////////////创建动力学骨骼
+                createPhysicsBone();
+
+                ////////////////Skeleton Helper
+                if ( sklHelper ) {
+
+                    var skeletonHelper = new THREE.SkeletonHelper( model );
+                    scene.add( skeletonHelper );
+
+                }
+
+                /////////////////////////Aniamtion Setup
+                if ( animation ) {
+
+                    var action;
+                    amatureMixer = new THREE.AnimationMixer( nowModel[ 0 ] );
+                    action = amatureMixer.clipAction( animation );
+                    action.play();
+
+                }
+
+            } );
+
+        }
+
+        function createPhysicsBone() {
+
+            ///////////////////////////////////Filter out Collider Helpers
+            for ( var i = 0; i < collidersAgent.length; i ++ ) {
+
+                if ( collidersAgent[ i ].children.length == 0 ) {
+
+                    const sizeAgent = [];
+                    sizeAgent.push( '_A_', '_B_', '_C_' );
+                    const sizeArray = [];
+                    sizeArray.push( 0.75, 0.25, 0.1 );
+                    var radius;
+                    for ( var j = 0; j < sizeAgent.length; j ++ ) {
+
+                        radius = collidersAgent[ i ].name.indexOf( sizeAgent[ j ] ) !== - 1 ? sizeArray[ j ] : 0.05;
+
+                    }
+
+                    const colliderShape = new VRMSpringBoneColliderShapeSphere( { radius: radius } );
+                    const collider = new VRMSpringBoneCollider( colliderShape );
+                    var pos = new THREE.Vector3();
+                    collider.position.copy( collidersAgent[ i ].getWorldPosition( pos ) );
+                    collidersAgent[ i ].attach( collider );
+                    colliders.push( collider );
+
+
+                    //////////Collider helpers Processing
+                    if ( colliderHelper ) {
+
+                        const helper = new VRMSpringBoneColliderHelper( collider );
+                        helper.name = helper.collider.name = helper.collider.parent.name;
+                        scene.add( helper );
+
+                    }
+
+                }
+
+            }
+
+            //////////////////////////////Spring bone processing
+            for ( var i = 0; i < hairBones.length; i ++ ) {
+
+                var hairCluster = [];
+                hairBones[ i ].traverse( function ( child ) {
+
+                    if ( child.isBone ) hairCluster.push( child );
+
+                } );
+
+                for ( var j = 0; j < hairCluster.length; j ++ ) {
+
+                    if ( springBoneNameGroup.indexOf( hairCluster[ j ].name ) == - 1 ) {
+
+                        const springBone = new VRMSpringBoneJoint( hairCluster[ j ], hairCluster[ j + 1 ], { hitRadius: 0.02, stiffness: 0.1, gravityPower: 0.3 } );
+                        springBone.name = hairCluster[ j ].name;
+                        springBone.colliderGroups = [ { colliders } ];
+                        springBoneNameGroup.push( springBone.name );
+                        springBoneManager.addJoint( springBone );
+
+                    }
+
+                }
+
+            }
+
+            //Spring Bone Helper Processing
+            if ( jointHelper ) {
+
+                springBoneManager.joints.forEach( ( bone ) => {
+
+                    if ( springBoneHelperNameGroup.indexOf( bone.name ) == - 1 ) {
+
+                        const helper = new VRMSpringBoneJointHelper( bone );
+                        helper.name = helper.springBone.bone.name;
+                        springBoneHelperNameGroup.push( helper.name );
+                        scene.add( helper );
+
+                    }
+
+                } );
+
+            }
+
+            springBoneManager.setInitState();
+
+        }
+
+        function creatVisemeTrack( mesh, visemes ) {
+
+            const visemeIdOffset = 52;
+            const trackTimes = [];
+            const trackValues = [];
+            var duration = 0;
+    
+            const morphDict = mesh.morphTargetDictionary;
+    
+            const shapeKeyLength = Object.getOwnPropertyNames( morphDict ).length;
+    
+            const myName = mesh.name.concat( '.morphTargetInfluences' );
+    
+            for ( var i = 0; i < visemes.length; i ++ ) {
+    
+                for ( var j = 0; j < shapeKeyLength; j ++ ) {
+    
+                    var amplitude = 1;
+    
+/*                     if ( i < visemes.length - 1 ) {
+    
+                        var temp = visemes[ i + 1 ].AudioOffset - visemes[ i ].AudioOffset;
+                        amplitude = temp > 1000000 ? 1 : temp / 1000000 * 1.5;
+    
+                    } */
+    
+                    var value = visemes[ i ].VisemeId + visemeIdOffset == j ? amplitude : 0;
+    
+                    value = j == 53 ? 0 : value;
+                    trackValues.push( value );
+    
+                }
+    
+/*                 var duration = visemes[ i ].AudioOffset;
+                trackTimes.push( duration / 10000 ); */
+
+                duration += 400 / visemes.length;
+                trackTimes.push( duration );
+    
+            }
+    
+            const visemeTrack = new THREE.NumberKeyframeTrack( myName, trackTimes, trackValues );
+            const visemeTimeLaps = visemeTrack.times[ visemeTrack.times.length - 1 ];
+            const lipTracks = [];
+            lipTracks.push( visemeTrack );       
+            const clip = new THREE.AnimationClip( '', visemeTimeLaps, lipTracks );
+            const action = blendShapeMixer.clipAction( clip );  
+            action.setDuration( visemeTimeLaps / 1000 );
+            action.loop = THREE.LoopOnce;
+            action.play();
+
+        }
+
+        function creatBlinkTrack( mesh, blinkWithBrow = false, blinkInterval = 5, blinkInDuration = 0.1, blinkOutDuration = 0.1 ) {
+
+            const blinkKey = [];
+            var keys = Object.keys( mesh.morphTargetDictionary );
+            var blendShapeLength = keys.length;
+
+            keys.forEach( function ( res ) {
+
+                if ( res.indexOf( 'Blink' ) !== - 1 ) {
+
+                    blinkKey.push( mesh.morphTargetDictionary[ res ] );
+
+                }
+
+                if ( blinkWithBrow ) {
+
+                    if ( res.indexOf( 'browDown' ) !== - 1 ) {
+
+                        blinkKey.push( mesh.morphTargetDictionary[ res ] );
+
+                    }
+
+                }
+
+            } );
+
+            var blinkTimes = Math.round( Math.random() * 10, 0 );
+
+            const trackTimes = [];
+            trackTimes.push( 0 );
+
+            const trackValues = [];
+
+            var blinkEye = 0;
+
+            for ( var i = 0; i < blinkTimes; i ++ ) {
+
+                var blinker = Math.random() * blinkInterval / 2 + blinkInterval / 2;
+                blinkEye += blinker;
+
+                //                 open(in)        blink    blinklast        open(out)
+                trackTimes.push( blinkEye - blinkInDuration, blinkEye, blinkEye + blinkOutDuration / 10, blinkEye + blinkOutDuration );
+
+            }
+
+            for ( var i = 0; i < trackTimes.length; i ++ ) {
+
+                for ( var j = 0; j < blendShapeLength; j ++ ) {
+
+                        var value;
+                        // open-open(in)-blink-blink-open(out)-open(in)-blink-blink-open(out)
+                        //  0      1      2     3      4          5      6      7      8
+                        //  So, It is ( 2 + 2 ) % 4 == 0 , ( 3 + 1 ) % 4 = 0;
+                        if ( ( blinkKey.indexOf( j ) !== - 1 ) && ( ( i + 2 ) % 4 == 0 || ( i + 1 ) % 4 == 0 ) ) {
+
+                            value = 2;
+
+                        } else {
+
+                            value = 0;
+
+                        }
+
+                        trackValues.push( value );
+
+                    }
+
+            }
+
+            const myName = mesh.name.concat( '.morphTargetInfluences' );
+            const blinkTrack = new THREE.NumberKeyframeTrack( myName, trackTimes, trackValues );
+
+            const blinkTracks = [];
+            blinkTracks.push( blinkTrack );
+            var blinkTrackTimeLaps = blinkTrack.times[ blinkTrack.times.length - 1 ];
+            const blinkClip = new THREE.AnimationClip( '', blinkTrackTimeLaps, blinkTracks );
+            const action1 = blendShapeMixer.clipAction( blinkClip );
+            action1.play();
+
+        }
+
+        function onWindowResize() {
 
 			const container = document.querySelector('.world');
 			camera.aspect = container.clientWidth / container.clientHeight;
 			camera.updateProjectionMatrix();
-			renderer.setSize(  container.clientWidth == 0 ? 440 : container.clientWidth, container.clientHeight );
-			renderer.render( scene, camera );
+			renderer.setSize( container.clientWidth, container.clientHeight );
+			//renderer.render( scene, camera );
+			effect.render( scene, camera );
 
 		}
-
-		function resizeRendererToDisplaySize(renderer) {
-
-			const canvas = renderer.domElement;
-			const pixelRatio = window.devicePixelRatio;
-			const width = (canvas.clientWidth * pixelRatio) | 0;
-			const height = (canvas.clientHeight * pixelRatio) | 0;
-			const needResize = canvas.width !== width || canvas.height !== height;
-			if (needResize) {
-			renderer.setSize(width, height, false);
-			}
-	
-			return needResize;
-		}
-
-
-		//
 
 		function animate() {
 
-			if (resizeRendererToDisplaySize(renderer)) {
-				const canvas = renderer.domElement;
-				camera.aspect = canvas.clientWidth / canvas.clientHeight;
-				camera.updateProjectionMatrix();
-			}
-
 			const dt = clock.getDelta();
-			//if(mixer) mixer.update( dt );
-			if ( currentVrm ) currentVrm.update(dt);
-			stats.begin();
-			render();
-			stats.end();
+            springBoneManager.update( dt );
+			if(blendShapeMixer) blendShapeMixer.update( dt );
+            if(amatureMixer) amatureMixer.update( dt );
 			requestAnimationFrame( animate );
-		}
-
-		function render() {
-
-			const timer = Date.now() * 0.00025;
-			skyBox.camera.copy(camera);
-
-			var azimuthalAngle = controls.getAzimuthalAngle();
-			if(rootBone)rootBone.rotation.y = azimuthalAngle;
-
-			if(devicePC){  
-				effect.render(scene,camera);
-				renderer.render(skyBox.scene, skyBox.camera);
-			}else{
-				renderer.render( scene, camera );
-				renderer.render( skyBox.scene, skyBox.camera );
-			}
+			effect.render( scene, camera );
 
 		}
-
 
 		function iswap() {
 			var uA = navigator.userAgent.toLowerCase();
