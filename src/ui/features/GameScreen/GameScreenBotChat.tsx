@@ -3,17 +3,16 @@
 import { useForm } from 'react-hook-form';
 import { FileIcon, Microphone } from '@/icons';
 import { useBotData } from '@/store/App';
-import { useBotChat } from '../Chat/hooks/useBotChat';
-
-import Button from '@/components/common/Button';
-import TextInput from '@/components/common/TextInput';
-
+import { useBotChat } from '../Chat/hooks/useBotChat'; 
 import { useMemo } from 'react';
 import { filter, isEmpty, map } from 'lodash';
 import { OpenAIRoles } from '@/types';
 
+
 import BotMessage from '../SpaceContent/BotChat/BotMessage';
-import UserMessage from '../SpaceContent/BotChat/UserMessage';
+import UserMessage from '../SpaceContent/BotChat/UserMessage';  
+import Button from '@/components/common/Button';
+import TextInput from '@/components/common/TextInput';
 
 import './GameScreenBotChat.css';
 

@@ -1,3 +1,5 @@
+'use client';
+
 import { supabaseClient } from '.';
 
 export const publicBucketName = 'botnet-assets';

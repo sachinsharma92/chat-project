@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { IUserPrivateProps } from '@/types/supabase';
 import { getUserPrivateDataById } from '@/lib/supabase';
@@ -7,8 +9,8 @@ import { DialogEnums } from '@/types/dialog';
 import { head, isEmpty } from 'lodash';
 
 import Button from '@/components/common/Button';
-import './CloneAudio.css';
 import AudioPlayer from './AudioPlayer';
+import './CloneAudio.css';
 
 const CloneAudio = () => {
   const [userPrivateData, setUserPrivateData] = useState<

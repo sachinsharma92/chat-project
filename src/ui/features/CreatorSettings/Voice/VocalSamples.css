@@ -1,0 +1,31 @@
+.vocal-samples {
+  @apply relative w-full box-border;
+}
+
+.vocal-samples-list {
+  @apply relative w-[500px] box-border mt-[16px];
+
+  list-style-type: none;
+  list-style: none;
+}
+
+.vocal-sample-item {
+  @apply relative w-full h-[38px] flex justify-between items-center box-border;
+
+  border-radius: 8px;
+  border: 1px solid #e5e5e5;
+  background: #fff;
+  padding: 0 16px;
+}
+
+.vocal-sample-item > div:nth-child(1) {
+  width: calc(100% - 50px);
+}
+
+.vocal-sample-item > div:nth-child(1) > p {
+  max-width: calc(100% - 50px);
+  white-space: nowrap;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

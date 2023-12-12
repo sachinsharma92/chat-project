@@ -12,16 +12,12 @@ import { mobileWidthBreakpoint } from '@/constants';
 import { useState } from 'react';
 
 import cx from 'classnames';
-import dynamic from 'next/dynamic';
 import AppNavigation from '../AppNavigation';
 import Button from '@/components/common/Button';
 import GameScreen from '../GameScreen';
+import SpaceContent from '../SpaceContent';
 
 import './MainComponent.css';
-
-const SpaceContent = dynamic(() => import('../SpaceContent'), {
-  ssr: false,
-});
 
 const MainComponent = () => {
   const { availableWidth } = useWindowResize();

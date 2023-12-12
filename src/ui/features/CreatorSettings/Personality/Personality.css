@@ -1,0 +1,60 @@
+.personality {
+  @apply relative w-full box-border;
+}
+
+.personality > h1 {
+  color: #000;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 130%;
+}
+
+.personality > form > section {
+  @apply relative w-full mt-[24px];
+}
+
+.personality > form > section > input[type='text'] {
+  @apply relative w-[500px] mt-[8px];
+
+  height: 37px;
+  background: transparent;
+  padding: 8px 12px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  border: 1px solid #e5e5e5;
+  background: #fff;
+}
+
+.personality > form > section > h2 {
+  overflow: hidden;
+  color: #000;
+  text-overflow: ellipsis;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+}
+
+.personality > form > section > h2 > span {
+  margin-left: 4px;
+  color: #000;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+}
+
+.personality > form > section > textarea {
+  @apply relative w-[500px] mt-[8px];
+
+  border-radius: 8px;
+  outline: none;
+  box-shadow: none;
+  border: 1px solid #e5e5e5;
+  background: #fff;
+  padding: 12px 16px;
+  box-sizing: border-box;
+  resize: none;
+}

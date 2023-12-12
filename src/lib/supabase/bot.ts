@@ -27,7 +27,9 @@ export const updateOrCreateAICloneFormProperties = async (
       'meta',
       'spaceId',
       'owner',
+      'instructions',
       'updatedAt',
+      'knowledge',
     ]),
   );
 

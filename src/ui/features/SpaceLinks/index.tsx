@@ -42,7 +42,7 @@ const SpaceLinks = () => {
                 >
                   <LinkIcon />
                   <div className="link-texts">
-                    <p>{linkInfo.name}</p>
+                    <p>{linkInfo?.name || ''}</p>
                     <p>{linkInfo.link}</p>
                   </div>
                 </a>

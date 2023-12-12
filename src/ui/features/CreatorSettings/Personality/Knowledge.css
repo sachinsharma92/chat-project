@@ -1,0 +1,45 @@
+.personality-knowledge {
+  @apply relative w-[500px] box-border mt-2 mb-2;
+}
+
+.personality-knowledge > ul {
+  @apply relative w-full box-border mt-4;
+
+  list-style: none;
+  list-style-type: none;
+}
+
+.personality-knowledge > ul > li {
+  @apply relative w-full box-border mt-2;
+}
+
+.add-knowledge-button {
+  @apply relative flex justify-center items-center box-border;
+
+  height: 40px;
+  padding: 0 16px;
+  max-width: 200px;
+  min-width: 160px;
+  border-radius: 12px;
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  user-select: none;
+}
+
+.add-knowledge-button:hover {
+  background: #e5e5e5;
+}
+
+.add-knowledge-button > svg > path {
+  fill: #44373c;
+}
+
+.add-knowledge-button > p {
+  @apply ml-2;
+
+  color: #44373c;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 140%;
+}

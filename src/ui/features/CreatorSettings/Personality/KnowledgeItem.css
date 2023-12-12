@@ -1,0 +1,20 @@
+.knowledge-item {
+  @apply relative flex justify-between items-center w-full box-border h-[40px];
+
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid #e5e5e5;
+  background: #fff;
+}
+
+.knowledge-item > p {
+  @apply relative box-border;
+
+  color: #000;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  text-align: left;
+  width: calc(100% - 40px);
+}

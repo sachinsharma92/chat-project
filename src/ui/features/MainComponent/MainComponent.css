@@ -12,7 +12,7 @@
 
 .header-nav,
 .main-component-content {
-  @apply relative flex w-full box-border box-border;
+  @apply relative flex w-full box-border;
 }
 
 .main-component-content {
@@ -42,7 +42,7 @@
 }
 
 .world {
-  background-image: url('/assets/botnet-avatar-bg.png');
+  background-image: url('/assets/botnet-avatar-bg.jpg');
   background-position: center;
   background-size: cover;
 }
@@ -128,7 +128,7 @@
   }
 
   .space-content-mobile {
-    @apply relative flex w-full box-border;
+    @apply relative flex w-full box-border pb-[20px];
   }
 
   .space-content {
@@ -136,7 +136,7 @@
   }
 
   .game-content {
-    height: calc(72vh - 60px);
+    height: calc(73vh - 160px);
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
@@ -144,13 +144,14 @@
   .game-content-expand-screen {
     position: fixed;
     width: 100vw;
-    height: 100vh;
+    height: 100%;
     box-sizing: border-box;
     border-radius: 0;
-    max-height: unset;
+    max-height: 100%;
     top: 0;
     left: 0;
     right: 0;
     z-index: 10;
+    overflow: hidden;
   }
 }

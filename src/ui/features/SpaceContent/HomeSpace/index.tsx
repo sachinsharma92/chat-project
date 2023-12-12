@@ -40,6 +40,7 @@ const HomeSpace = () => {
     const spaceBotInfo = head(spaceInfo?.bots);
 
     return (
+      spaceInfo?.host?.bio ||
       spaceBotInfo?.description ||
       spaceInfo?.description ||
       'Welcome to Botnet!'

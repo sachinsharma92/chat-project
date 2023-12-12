@@ -1,10 +1,10 @@
 'use client';
 
-import dynamic from 'next/dynamic';
-import AuthProvider from '@/store/AuthProvider';
-import SpacesProvider from '@/store/SpacesProvider';
-import GameServerProvider from '@/store/GameServerProvider';
 import { ReactNode } from 'react';
+import AuthProvider from '@/store/AuthProvider';
+// import GameServerProvider from '@/store/GameServerProvider';
+import SpacesProvider from '@/store/SpacesProvider';
+import dynamic from 'next/dynamic';
 
 const DialogProvider = dynamic(() => import('@/store/DialogProvider'), {
   ssr: false,
@@ -19,13 +19,11 @@ const Providers = (props: { children: ReactNode }) => {
   const { children } = props;
 
   return (
-    <DialogProvider>
-      <AuthProvider>
-        <SpacesProvider>
-          <GameServerProvider> {children}</GameServerProvider>
-        </SpacesProvider>
-      </AuthProvider>
-    </DialogProvider>
+    <AuthProvider>
+      <SpacesProvider>
+        <DialogProvider>{children}</DialogProvider>
+      </SpacesProvider>
+    </AuthProvider>
   );
 };
 

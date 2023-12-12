@@ -17,7 +17,7 @@ import CloneAISettings from './CloneAISettings';
 import SpaceSettings from './SpaceSettings';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import Profile from './Profile';
-import Links from './Links';
+import Links from '../CreatorSettings/CreatorProfile/Links';
 import CloneAudio from './CloneAudio';
 
 import './CreatorDashboard.css';

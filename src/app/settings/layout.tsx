@@ -2,8 +2,8 @@ import { ReactNode } from 'react';
 
 export async function generateMetadata() {
   return {
-    title: 'Botnet - Creator dashboard',
-    description: 'Creator dashboard',
+    title: 'Botnet - Creator settings',
+    description: 'Creator settings',
   };
 }
 

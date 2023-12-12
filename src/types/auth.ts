@@ -10,6 +10,8 @@ export interface IUser {
   updatedAt?: string;
   deletedAt?: string;
   spaceId?: string;
+  bio?: string;
+  username?: string;
 }
 
 export interface IAppAuthState {
@@ -18,8 +20,12 @@ export interface IAppAuthState {
   email: string;
   handle: string;
   image: string;
+  username: string;
   sessionChecked: boolean;
   isLoading: boolean;
+  bio: string;
+  setBio: (bio: string) => void;
+  setUsername: (username: string) => void;
   setIsLoading: (isLoading: boolean) => void;
   setImage: (image: string) => void;
   setSessionChecked: (sessionChecked: boolean) => void;

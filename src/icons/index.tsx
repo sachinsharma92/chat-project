@@ -35,3 +35,4 @@ export { default as ResetIcon } from './ResetIcon';
 export { default as EyeOpenIcon } from './EyeOpenIcon';
 export { default as MinimizeMedBoxIcon } from './MinimizeMedBoxIcon';
 export { default as ExpandSmallBoxIcon } from './ExpandSmallBoxIcon';
+export { default as PlayIcon } from './PlayIcon';

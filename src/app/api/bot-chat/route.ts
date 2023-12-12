@@ -267,7 +267,11 @@ export async function POST(request: Request) {
     !isEmpty(userDisplayName) ? userDisplayName : 'a random user'
   }.
   You must keep the conversation going and ask questions. 
-
+  ${
+    form?.instructions
+      ? `Below are ${cloneDisplayName}'s instructions for you:\n ${form?.instructions}`
+      : ''
+  }
   Below are relevant details about ${cloneDisplayName}'s backstory: \n
     ${form?.backstory}
   \n
@@ -280,7 +284,7 @@ export async function POST(request: Request) {
   \n
   ${
     !isEmpty(characterFacts)
-      ? `Below are character facts
+      ? `Below are character facts: \n
   ${characterFacts}
   \n
     End of facts.

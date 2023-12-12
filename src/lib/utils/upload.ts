@@ -1,7 +1,8 @@
-import { uploadAvatarIamge } from '@/lib/supabase/storage';
+import { publicBucketName, uploadAvatarIamge } from '@/lib/supabase/storage';
 import { createId } from '@paralleldrive/cuid2';
-import { head } from 'lodash';
+import { head, includes } from 'lodash';
 import { base64ToBlob, getImageBase64, scaleImageToJpeg } from './image';
+import { supabaseClient } from '../supabase';
 
 // @ts-ignore
 type CallBackFunc<T extends unknown[]> = (...args: any) => Promise<any> | void;
@@ -123,6 +124,120 @@ export const uploadImageAvatarFile = <T extends unknown[]>(
       input?.remove();
     };
     input.setAttribute('id', imageAvatarUploadFileInputId);
+    input.setAttribute('multiple', 'false');
+    input.setAttribute('type', 'file');
+    input.setAttribute('name', 'file');
+    document.body.appendChild(input);
+    input.click();
+  });
+
+export const uploadAIKnowledgeFile = <T extends unknown[]>(
+  userId: string,
+  onStart?: CallBackFunc<T>,
+  onEnd?: CallBackFunc<T>,
+): Promise<
+  { url: string; fileName: string; fileType: string; size: number } | undefined
+> =>
+  new Promise((resolve, reject) => {
+    const cloneKnowledgeFileInputId = 'cloneKnowledgeFileInputId';
+
+    let input = document.getElementById(
+      cloneKnowledgeFileInputId,
+    ) as HTMLInputElement;
+
+    if (input?.remove) {
+      input.remove();
+    }
+
+    input = document.createElement('input');
+
+    if (onStart) {
+      onStart();
+    }
+
+    const onFileSelectHandler = async function () {
+      // @ts-ignore
+      const files = this.files as File[];
+      const file = head(files);
+      const fileSize = file?.size as number;
+      const fileType = file?.type || '';
+      const fileName = file?.name || '';
+      const fileSizeLimitErr =
+        // max 5MB for now
+        fileSize < 0 || (fileSize && fileSize > 5_360_000);
+
+      if (onEnd && (!fileName || fileSizeLimitErr || !file)) {
+        onEnd();
+      }
+
+      if (fileSizeLimitErr) {
+        reject(new Error('File size limit reached.'));
+        return;
+      }
+
+      if (
+        !fileName ||
+        (!includes(fileName, 'pdf') && !includes(fileName, 'txt'))
+      ) {
+        reject(new Error('File not supported.'));
+        return;
+      } else if (!file) {
+        reject(new Error('Invalid file type.'));
+        return;
+      }
+
+      const storageFileName = `${userId}/${Date.now()}_${fileName}`;
+      // upload files
+      const { data, error: uploadError } = await supabaseClient.storage
+        .from(publicBucketName)
+        .upload(storageFileName, file);
+
+      if (uploadError) {
+        reject(new Error(uploadError?.message));
+      } else if (data?.path) {
+        const { data: urlData } = supabaseClient.storage
+          .from(publicBucketName)
+          .getPublicUrl(data?.path);
+        const url = urlData?.publicUrl;
+
+        resolve({ url, size: fileSize, fileName, fileType });
+      } else {
+        reject(new Error('Failed to upload.'));
+      }
+
+      if (onEnd) {
+        onEnd();
+      }
+    };
+
+    const onFileError = function (err: any) {
+      if (onEnd) {
+        onEnd();
+      }
+
+      if (err?.message) {
+        reject(err);
+      } else {
+        reject(new Error('Something went wrong'));
+      }
+    };
+
+    input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', '.pdf, .txt');
+
+    input.onchange = onFileSelectHandler;
+    input.onerror = onFileError;
+    input.oncancel = function () {
+      if (onEnd) {
+        onEnd();
+      }
+
+      input?.remove();
+
+      reject(new Error('Canceled'));
+    };
+    input.setAttribute('id', cloneKnowledgeFileInputId);
     input.setAttribute('multiple', 'false');
     input.setAttribute('type', 'file');
     input.setAttribute('name', 'file');

@@ -5,22 +5,20 @@
 }
 
 .add-link-button {
-  @apply relative flex justify-center items-center;
+  @apply relative flex justify-center items-center box-border;
 
-  box-sizing: border-box;
-  border-radius: 50px;
   height: 40px;
-  min-width: 140px;
-  padding: 4px 8px;
-  background: #9fe870;
-
-  box-shadow: 0px 6px 20px 0px rgba(0, 0, 0, 0.02);
-  -moz-box-shadow: 0px 6px 20px 0px rgba(0, 0, 0, 0.02);
-  -webkit-box-shadow: 0px 6px 20px 0px rgba(0, 0, 0, 0.02);
+  padding: 0 16px;
+  min-width: 123px;
+  border-radius: 12px;
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  user-select: none;
 }
 
 .add-link-button:hover {
-  background: rgba(159, 232, 112, 0.8);
+  background: #e5e5e5;
 }
 
 .add-link-button > svg > path {

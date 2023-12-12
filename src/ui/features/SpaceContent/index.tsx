@@ -5,6 +5,8 @@ import { head } from 'lodash';
 import { HomeIcon } from '@/icons';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { SpaceContentTabEnum } from '@/types';
+import { useAppStore } from '@/store/App';
 
 import Button from '@/components/common/Button';
 import Avatar from '@/components/common/Avatar/Avatar';
@@ -13,8 +15,6 @@ import BotChat from './BotChat';
 import SpaceDescription from '../SpaceDescription';
 
 import './SpaceContent.css';
-import { SpaceContentTabEnum } from '@/types';
-import { useAppStore } from '@/store/App';
 
 const SpaceContent = () => {
   const { spaceInfo } = useSelectedSpace();
@@ -25,7 +25,7 @@ const SpaceContent = () => {
   ]);
 
   const spaceName = useMemo(
-    () => spaceInfo?.spaceName || spaceInfo?.host?.displayName || 'Botnet',
+    () => spaceInfo?.host?.displayName || spaceInfo?.spaceName || 'Botnet',
     [spaceInfo],
   );
 

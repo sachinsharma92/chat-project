@@ -102,7 +102,7 @@ export const getSpaceBotById = async (
  */
 export const updateSpaceBotProfilePropertiesByFormId = async (
   formId: string,
-  props: { greeting: string; description: string },
+  props: { greeting?: string; description?: string },
 ) => {
   return await supabaseClient
     .from(spacesBotsTable)

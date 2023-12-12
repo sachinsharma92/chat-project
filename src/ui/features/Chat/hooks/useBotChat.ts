@@ -15,7 +15,7 @@ import { BotChatPostResponse } from '@/app/api/bot-chat/route';
 import { getGuestId } from '@/store/AuthProvider';
 import { BotAudioResponse } from '@/app/api/bot-audio/route';
 import { useMemo, useRef } from 'react';
-import { isDevelopment, isStaging } from '@/lib/environment';
+import { isDevelopment } from '@/lib/environment';
 
 export const BotChatEvents = new EventEmitter();
 
@@ -101,7 +101,7 @@ export const useBotChat = () => {
             BotChatEvents.emit('audio', evtPayload);
 
             const emitVisemesEventForAudio = () => {
-              if (isDevelopment || isStaging) {
+              if (isDevelopment) {
                 console.log('emitVisemesEventForAudio()');
               }
 

@@ -1,18 +1,20 @@
 'use client';
 
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
-import { ReactNode, useCallback, useEffect } from 'react';
+import { ReactNode, useCallback, useEffect, useRef } from 'react';
 import { useBotData, useSpacesStore } from './App';
 import {
   getSpaceBots,
   getSpaceProfile,
   getUserProfileById,
+  getUserProfileByUsername,
 } from '@/lib/supabase';
 import { head, isEmpty } from 'lodash';
 import { useRouter } from 'next/navigation';
 import { IUser } from '@/types/auth';
 import { ISpace, OpenAIRoles } from '@/types';
 import { v4 as uuid } from 'uuid';
+import { useUsername } from '@/hooks/useUsername';
 
 import PQueue from 'p-queue';
 
@@ -28,9 +30,13 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
   const { spaceId } = useSelectedSpace();
   const router = useRouter();
 
+  const { username } = useUsername();
+
   const notFound = useCallback(() => {
     router.push('/not-found');
   }, [router]);
+
+  const fetchingSpace = useRef(false);
 
   /**
    * Store space id
@@ -46,51 +52,84 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
    */
   useEffect(() => {
     const getSpaceInfo = async () => {
-      if (spaceId) {
-        const { data: spaceData, error } = await getSpaceProfile(spaceId);
+      let targetSpaceId = spaceId;
 
-        if (!isEmpty(spaceData) && !error) {
-          const spaceInfo = head(spaceData) as ISpace;
-          const res = await getUserProfileById(spaceInfo?.owner);
-          const resBots = await getSpaceBots(spaceId);
-          const spaceBotsData = resBots?.data;
-          const spaceOwnerData = res?.data;
-          const spaceOwnerProfile = head(spaceOwnerData) as IUser;
+      if ((!spaceId && !username) || fetchingSpace.current) {
+        return;
+      }
 
-          const props = {
-            ...spaceInfo,
-            host: spaceOwnerProfile || {},
-            bots: spaceBotsData || [],
-          };
-          const spaceBotInfo = head(spaceBotsData);
-          const greeting = spaceBotInfo?.greeting || '';
-          const botGreeting = {
-            id: uuid(),
-            authorId: '',
-            message: greeting,
-            role: OpenAIRoles.assistant,
-          };
+      if (username && !spaceId) {
+        const { data: userProfileData } = await getUserProfileByUsername(
+          username,
+        );
+        const targetUserProfile = head(userProfileData);
 
-          setSpaceInfo(spaceId, { ...props });
-
-          if (greeting) {
-            setChatMessages([botGreeting]);
-          }
-        } else if (error) {
+        if (!targetUserProfile?.spaceId) {
           // redirect user to 404 page
           if (notFound) {
             notFound();
           } else {
             router.push('/not-found');
           }
+
+          return;
         }
+
+        targetSpaceId = targetUserProfile?.spaceId;
+        addSpace({ id: targetSpaceId });
+      }
+
+      console.log(
+        'getSpaceInfo() spaceId',
+        targetSpaceId,
+        'username',
+        username,
+      );
+      fetchingSpace.current = true;
+      const { data: spaceData, error } = await getSpaceProfile(targetSpaceId);
+
+      if (!isEmpty(spaceData) && !error) {
+        const spaceInfo = head(spaceData) as ISpace;
+        const res = await getUserProfileById(spaceInfo?.owner);
+        const resBots = await getSpaceBots(targetSpaceId);
+        const spaceBotsData = resBots?.data;
+        const spaceOwnerData = res?.data;
+        const spaceOwnerProfile = head(spaceOwnerData) as IUser;
+        const props = {
+          ...spaceInfo,
+          host: spaceOwnerProfile || {},
+          bots: spaceBotsData || [],
+        };
+        const spaceBotInfo = head(spaceBotsData);
+        const greeting = spaceBotInfo?.greeting || '';
+        const botGreeting = {
+          id: uuid(),
+          authorId: '',
+          message: greeting,
+          role: OpenAIRoles.assistant,
+        };
+
+        setSpaceInfo(targetSpaceId, { ...props });
+
+        if (greeting) {
+          setChatMessages([botGreeting]);
+        }
+
+        fetchingSpace.current = false;
+      } else if (error) {
+        // redirect user to 404 page
+        // if (notFound) {
+        //   notFound();
+        // } else {
+        //   router.push('/not-found');
+        // }
       }
     };
 
     getSpaceInfo();
 
     // eslint-disable-next-line
-  }, [spaceId, router?.push, notFound, setSpaceInfo]);
+  }, [spaceId, username, router?.push, notFound, setSpaceInfo]);
 
   return <>{children}</>;
 };

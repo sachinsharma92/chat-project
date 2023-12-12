@@ -1,3 +1,5 @@
+'use client';
+
 import { useMemo, useState } from 'react';
 import { PlayIcon, StopIcon } from '@radix-ui/react-icons';
 import {

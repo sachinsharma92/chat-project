@@ -2,9 +2,9 @@ import { IUserContext, IUserContextEmbedding, IUserContextType } from '@/types';
 import { supabaseClient } from '.';
 import { v4 as uuid } from 'uuid';
 import snakecaseKeys from 'snakecase-keys';
-import { omit, trim } from 'lodash';
+import { map, omit, trim } from 'lodash';
 import { SupabaseResult } from '@/types/supabase';
-import { PostgrestError } from '@supabase/supabase-js';
+import camelcaseKeys from 'camelcase-keys';
 
 const userContextsTable = 'user_contexts';
 
@@ -17,7 +17,7 @@ const userOpenAIContextEmbeddingsTable = 'user_openai_context_embeddings';
  */
 export const insertNewUserCloneContext = async (
   props: Partial<IUserContext>,
-): Promise<IUserContext | { error: PostgrestError }> => {
+): Promise<SupabaseResult<IUserContext[]>> => {
   const sanitizedProps = snakecaseKeys(props);
   const newContext = snakecaseKeys({
     id: uuid(),
@@ -26,14 +26,17 @@ export const insertNewUserCloneContext = async (
   });
 
   const response = await supabaseClient
-    .from(userContextsTable)
+    .from<'user_contexts', IUserContext>(userContextsTable)
+    // @ts-ignore
     .insert(newContext);
 
   if (response?.error) {
     return { error: response.error };
   }
 
-  return newContext as IUserContext;
+  return {
+    data: map([newContext], d => camelcaseKeys(d)) as IUserContext[],
+  };
 };
 
 /**
@@ -66,18 +69,20 @@ export const insertNewUserCloneContextWithEmbeddings = async (
  * @param id
  * @param props
  */
-export const updateUserCloneContext = async (
+export const updateUserCloneContextEmbeddings = async (
   id: string,
   props: Partial<IUserContextEmbedding>,
 ) => {
   const sanitizedProps = snakecaseKeys(props);
   const response = await supabaseClient
+    // update contexts table
     .from(userContextsTable)
     .update(omit(sanitizedProps, ['id', 'embedding']))
     .eq('id', id);
 
   if (!response?.error) {
     return await supabaseClient
+      // update open AI embeddings
       .from(userOpenAIContextEmbeddingsTable)
       .update(omit(sanitizedProps, ['id']))
       .eq('id', id);
@@ -91,6 +96,18 @@ export const updateUserCloneContext = async (
  * @returns
  */
 export const deleteUserContextEmbedding = async (id: string) => {
+  return await supabaseClient
+    .from(userOpenAIContextEmbeddingsTable)
+    .delete()
+    .eq('id', trim(id));
+};
+
+/**
+ * Delete user readable context
+ * @param id
+ * @returns
+ */
+export const deleteUserContext = async (id: string) => {
   return await supabaseClient
     .from(userContextsTable)
     .delete()

@@ -14,7 +14,10 @@ import {
   getElevenLabsTextToSpeechApiBaseUrl,
   getElevenLabsApiKey,
 } from '@/lib/elevenlabs';
-import { returnCommonStatusError } from '@/lib/utils/routes';
+import {
+  returnApiUnauthorizedError,
+  returnCommonStatusError,
+} from '@/lib/utils/routes';
 import { getSpaceBotById } from '@/lib/supabase';
 import { isDevelopment } from '@/lib/environment';
 import { IBot } from '@/types';
@@ -65,11 +68,11 @@ export async function POST(request: Request) {
     }
   }
 
-  try {
-    if (!validAuth) {
-      // @todo limit messages
-    }
+  if (!validAuth) {
+    return returnApiUnauthorizedError();
+  }
 
+  try {
     const elevenlabsUrl = `${
       getElevenLabsTextToSpeechApiBaseUrl() + voiceId
     }?optimize_streaming_latency=0&output_format=mp3_44100_128`;

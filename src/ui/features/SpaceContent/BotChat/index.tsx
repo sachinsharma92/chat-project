@@ -76,7 +76,7 @@ const BotChat = () => {
   return (
     <div className="bot-chat">
       <div className="chat-stream">
-        <div className="relative w-full flex justify-end items-center box-border p-0 mb-[8px]">
+        <div className="relative w-full flex justify-end items-center box-border p-0 pr-[2px] mb-[8px]">
           <Button className="reset-chat" onClick={onResetChat}>
             <ResetIcon />
             <p>Reset Chat</p>
