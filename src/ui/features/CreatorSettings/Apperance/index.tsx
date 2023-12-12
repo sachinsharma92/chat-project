@@ -4,7 +4,11 @@ import { InterTight } from '@/app/fonts';
 import { useForm } from 'react-hook-form';
 import { useEffect, useMemo, useState } from 'react';
 import { AIIcon } from '@/icons';
-import { supabaseClient, updateUserPrivateDataProps } from '@/lib/supabase';
+import {
+  supabaseClient,
+  updateSpaceBotProfilePropertiesByFormId,
+  updateUserPrivateDataProps,
+} from '@/lib/supabase';
 import { useAuth } from '@/hooks';
 import { isEmpty, toString, trim } from 'lodash';
 import { APIClient } from '@/lib/api';
@@ -12,6 +16,7 @@ import { GenerateBackgroundPostResponse } from '@/app/api/generate-background/ro
 import { useUserPrivateData } from '@/hooks/useUserPrivateData';
 import { publicBucketName } from '@/lib/supabase/storage';
 import { base64ToBlob } from '@/lib/utils/image';
+import { useSpaceBotForm } from '@/hooks/useSpaceBotForm';
 
 import TextareaAutosize from 'react-textarea-autosize';
 import Button from '@/components/common/Button';
@@ -24,9 +29,12 @@ const Appearance = () => {
     setValue,
     formState: { errors },
   } = useForm();
+
   const { userId, getSupabaseAuthHeaders } = useAuth();
   const [updating, setUpdating] = useState(false);
   const { userPrivateData, setUserPrivateData } = useUserPrivateData();
+
+  const { botFormAnswers, fetchingFormData } = useSpaceBotForm();
 
   const memoedUserId = useMemo(() => userId, [userId]);
 
@@ -91,6 +99,7 @@ const Appearance = () => {
                 toString(userPrivateData?.appearance?.background),
               backgroundUrl: url,
             };
+            const botFormId = botFormAnswers?.id;
 
             setUserPrivateData({
               ...userPrivateData,
@@ -100,6 +109,12 @@ const Appearance = () => {
             await updateUserPrivateDataProps(memoedUserId, {
               appearance: { ...updatedAppearance },
             });
+
+            if (botFormId) {
+              await updateSpaceBotProfilePropertiesByFormId(botFormId, {
+                background: url,
+              });
+            }
           }
         }
       }
@@ -152,7 +167,7 @@ const Appearance = () => {
 
           <div className="flex justify-start items-center box-border w-full mt-6 mb-4">
             <Button
-              isLoading={updating || !userPrivateData}
+              isLoading={updating || !userPrivateData || fetchingFormData}
               type="submit"
               className="regenerate-button bg-[#f5f5f5]"
             >
@@ -180,7 +195,7 @@ const Appearance = () => {
           <Button
             type="submit"
             className="relative w-[500px] box-border"
-            isLoading={updating || !userPrivateData}
+            isLoading={updating || !userPrivateData || fetchingFormData}
           >
             Save
           </Button>

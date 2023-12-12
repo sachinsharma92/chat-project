@@ -1,12 +1,11 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
-import { head, isEmpty, map, pick, size, toString, trim } from 'lodash';
+import { isEmpty, map, pick, size, toString, trim } from 'lodash';
 import { useAuth, useCreatorSpace } from '@/hooks';
 import { useEffect, useMemo, useState } from 'react';
 import {
   createSpaceBotProfile,
-  getAICloneCompletedForms,
   updateOrCreateAICloneFormProperties,
   updateSpaceBotProfilePropertiesByFormId,
 } from '@/lib/supabase';
@@ -15,11 +14,11 @@ import { useBotnetAuth } from '@/store/Auth';
 import { defaultCloneAIGreetingPhrase } from '@/lib/utils/bot';
 import { useSpacesStore } from '@/store/App';
 import { v4 } from 'uuid';
+import { useSpaceBotForm } from '@/hooks/useSpaceBotForm';
 
 import TextareaAutosize from 'react-textarea-autosize';
 import TextInput from '@/components/common/TextInput';
 import Button from '@/components/common/Button';
-import camelcaseKeys from 'camelcase-keys';
 import Knowledge from './Knowledge';
 import './Personality.css';
 
@@ -39,10 +38,8 @@ const Personality = () => {
 
   const [displayName] = useBotnetAuth(state => [state.displayName]);
 
-  const [fetchingFormData, setFetchingFormData] = useState(true);
-
-  const [botFormAnswers, setBotFormAnswers] =
-    useState<Partial<IBotFormAnswers> | null>(null);
+  const { botFormAnswers, fetchingFormData, setBotFormAnswers } =
+    useSpaceBotForm();
 
   const { userId } = useAuth();
 
@@ -187,30 +184,6 @@ const Personality = () => {
   useEffect(() => {
     setValue('instructions', instructions);
   }, [instructions, setValue]);
-
-  /**
-   * Fetch most recently accomplished bot forms, i.e. AI clones
-   */
-  useEffect(() => {
-    const get = async () => {
-      if (userId && spaceId) {
-        console.log('Personality getAICloneCompletedForms()');
-
-        const { data, error } = await getAICloneCompletedForms(spaceId);
-
-        if (data && !error) {
-          // we only pick the first bot data-
-          // since we only support 1 space == 1 bot for now
-          setBotFormAnswers(
-            camelcaseKeys(head(data) as Record<string, any>) as IBotFormAnswers,
-          );
-          setFetchingFormData(false);
-        }
-      }
-    };
-
-    get();
-  }, [userId, spaceId]);
 
   const errorMessage = useMemo(
     () =>

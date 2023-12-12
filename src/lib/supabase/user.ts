@@ -70,7 +70,15 @@ export const getUserPrivateDataById = async (
   }
 
   return {
-    data: map(response.data, d => camelcaseKeys(d)) as IUserPrivateProps[],
+    data: map(response.data, d => {
+      const props = camelcaseKeys(d) as IUserPrivateProps;
+
+      return {
+        ...props,
+        appearance: camelcaseKeys(props?.appearance || {}),
+        cloneAudio: camelcaseKeys(props?.cloneAudio || {}),
+      };
+    }) as IUserPrivateProps[],
   };
 };
 

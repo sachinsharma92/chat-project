@@ -48,8 +48,6 @@ const KnowledgeItem = (props: {
     setRemoving(false);
   };
 
-  console.log('knowledgeItem', knowledgeItem);
-
   return (
     <div className="knowledge-item">
       <p>{toString(knowledgeItem?.fileName)}</p>

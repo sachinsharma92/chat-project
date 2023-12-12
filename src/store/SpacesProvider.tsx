@@ -85,6 +85,7 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
         'username',
         username,
       );
+
       fetchingSpace.current = true;
       const { data: spaceData, error } = await getSpaceProfile(targetSpaceId);
 
@@ -118,11 +119,11 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
         fetchingSpace.current = false;
       } else if (error) {
         // redirect user to 404 page
-        // if (notFound) {
-        //   notFound();
-        // } else {
-        //   router.push('/not-found');
-        // }
+        if (notFound) {
+          notFound();
+        } else {
+          router.push('/not-found');
+        }
       }
     };
 
