@@ -29,11 +29,13 @@ export const useBotChat = () => {
     chatMessages,
     setBotRoomIsResponding,
     setChatMessages,
+    storeChatHistory,
   ] = useBotData(state => [
     state.botRoomIsResponding,
     state.chatMessages,
     state.setBotRoomIsResponding,
     state.setChatMessages,
+    state.storeChatHistory,
   ]);
   const { spaceId, spaceInfo } = useSelectedSpace();
   const [userId, displayName, image] = useBotnetAuth(state => [
@@ -257,9 +259,7 @@ export const useBotChat = () => {
           const responseMessage = responseMessagePayload?.message;
           await playBotAudio(responseMessage);
 
-          // store chat
-          // insert completed chat
-          setChatMessages([
+          const updatedChatMessages = [
             ...updatedMessages,
             {
               ...pick(camelcaseKeys(responseMessagePayload), [
@@ -270,7 +270,12 @@ export const useBotChat = () => {
                 'createdAt',
               ]),
             } as ChatMessageProps,
-          ]);
+          ];
+
+          // store chat
+          // insert completed chat
+          setChatMessages(updatedChatMessages);
+          storeChatHistory(updatedChatMessages);
         }
 
         setBotRoomIsResponding(false);

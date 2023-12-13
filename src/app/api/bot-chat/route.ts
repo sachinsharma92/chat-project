@@ -97,8 +97,12 @@ export async function POST(request: Request) {
   }
 
   const modelType = 'gpt';
-  const userRes = await getUserProfileById(authorId);
-  const botFormRes = await getBotFormAnswerById(botFormId, spaceId);
+
+  const [userRes, botFormRes, authRes] = await Promise.all([
+    getUserProfileById(authorId),
+    getBotFormAnswerById(botFormId, spaceId),
+    applyApiRoutesAuth(accessToken, refreshToken),
+  ]);
 
   if (!botFormRes?.data && !spaceId) {
     return returnCommonStatusError('Bot data not found');
@@ -128,12 +132,13 @@ export async function POST(request: Request) {
   const portkeyApi = getPortkeyApiKey();
   const openAIConfig = getOpenAIConfiguration();
   const openAIParams = {
-    max_tokens: 150,
+    max_tokens: 200,
     model:
       'gpt-3.5-turbo' ||
       // first fine tuned model
       'ft:gpt-3.5-turbo-0613:botnet::8BMExOLn',
   };
+
   const openai = getOpenAI();
   const form = head(botFormRes?.data || []);
   const owner = form?.owner as string;
@@ -179,7 +184,6 @@ export async function POST(request: Request) {
       { status: 200 },
     );
   }
-  const authRes = await applyApiRoutesAuth(accessToken, refreshToken);
   const validAuth = authRes && !authRes?.error && accessToken && refreshToken; // @todo send sentry error if validAuth === false
   const conversationHistory: IBotMessage[] = map(
     filter(
@@ -211,39 +215,37 @@ export async function POST(request: Request) {
 
   let characterFacts = '';
 
-  if (validAuth) {
-    // query character facts for additional info
-    // but only for authenticated users
-    const response = await openai.embeddings.create({
-      model: openAIEmbeddingModel,
-      input: toString(message),
-    });
+  // query character facts for additional info
+  // but only for authenticated users
+  const response = await openai.embeddings.create({
+    model: openAIEmbeddingModel,
+    input: toString(message),
+  });
 
-    if (response?.data) {
-      const embeddingsArray = response?.data;
-      const embedding = head(embeddingsArray)?.embedding;
-      const similarityThreshold = 0.77;
-      const { data: documents, error } = await supabaseClient.rpc(
-        'match_documents',
-        {
-          query_embedding: embedding,
-          match_count: 5,
-          owner,
+  if (response?.data) {
+    const embeddingsArray = response?.data;
+    const embedding = head(embeddingsArray)?.embedding;
+    const similarityThreshold = 0.77;
+    const { data: documents, error } = await supabaseClient.rpc(
+      'match_documents',
+      {
+        query_embedding: embedding,
+        match_count: 5,
+        owner,
+      },
+    );
+
+    if (documents && !error?.message) {
+      characterFacts = map(
+        filter(
+          documents,
+          doc =>
+            !isEmpty(doc?.context) && doc?.similarity >= similarityThreshold,
+        ),
+        doc => {
+          return `${doc?.context}`;
         },
-      );
-
-      if (documents && !error?.message) {
-        characterFacts = map(
-          filter(
-            documents,
-            doc =>
-              !isEmpty(doc?.context) && doc?.similarity >= similarityThreshold,
-          ),
-          doc => {
-            return `${doc?.context}`;
-          },
-        ).join('\n');
-      }
+      ).join('\n');
     }
   }
 

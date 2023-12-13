@@ -64,13 +64,13 @@
 .chat-stream {
   @apply relative w-full box-border pt-[4px];
 
-  max-height: calc(100% - 60px);
+  height: calc(100% - 60px);
   margin-bottom: 60px;
   overflow: hidden;
   overflow-y: scroll;
+
   -ms-overflow-style: none;
   scrollbar-width: none;
-  box-sizing: border-box;
 }
 
 .chat-stream::-webkit-scrollbar {

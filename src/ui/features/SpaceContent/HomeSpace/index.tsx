@@ -124,6 +124,8 @@ const HomeSpace = () => {
               required: false,
             })}
             placeholder="Message...."
+            // @ts-ignore
+            maxLength={120}
           />
           <Button className="mic">
             <Microphone />

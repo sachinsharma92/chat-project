@@ -30,6 +30,8 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
   const { spaceId } = useSelectedSpace();
   const router = useRouter();
 
+  const [restoreChatHistory] = useBotData(state => [state.restoreChatHistory]);
+
   const { username } = useUsername();
 
   const notFound = useCallback(() => {
@@ -114,6 +116,7 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
 
         if (greeting) {
           setChatMessages([botGreeting]);
+          restoreChatHistory([botGreeting]);
         }
 
         fetchingSpace.current = false;
@@ -130,7 +133,16 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
     getSpaceInfo();
 
     // eslint-disable-next-line
-  }, [spaceId, username, router?.push, notFound, setSpaceInfo]);
+  }, [
+    spaceId,
+    username,
+    router?.push,
+    addSpace,
+    setChatMessages,
+    restoreChatHistory,
+    notFound,
+    setSpaceInfo,
+  ]);
 
   return <>{children}</>;
 };

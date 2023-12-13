@@ -3,7 +3,7 @@
 import { EyeOpenIcon, FileIcon, Microphone, ResetIcon } from '@/icons';
 import { useForm } from 'react-hook-form';
 import { useBotData } from '@/store/App';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { filter, isEmpty, map } from 'lodash';
 import { useBotChat } from '../../Chat/hooks/useBotChat';
 import { OpenAIRoles } from '@/types';
@@ -25,6 +25,8 @@ const BotChat = () => {
     state.chatMessages,
   ]);
 
+  const chatStreamDomRef = useRef<any>(null);
+
   const sanitizedChatMessages = useMemo(
     () => filter(chatMessages, line => !isEmpty(line?.id)),
     [chatMessages],
@@ -41,24 +43,6 @@ const BotChat = () => {
     sendBotChatMessage(message);
   };
 
-  /** Scroll stream chat down bottom  */
-  const scrollChatToBottom = useCallback(() => {
-    const chatStreamDom = document.querySelector('.chat-stream');
-
-    if (chatStreamDom?.scroll) {
-      const timeoutId = setTimeout(() => {
-        chatStreamDom.scroll({
-          top: chatStreamDom.scrollHeight,
-          behavior: 'smooth',
-        });
-
-        clearTimeout(timeoutId);
-      }, 200);
-    }
-
-    // eslint-disable-next-line
-  }, [botRoomIsResponding]);
-
   /**
    * Clear chat array
    */
@@ -68,14 +52,34 @@ const BotChat = () => {
 
   /** Scroll on new chat */
   useEffect(() => {
-    if (!isEmpty(sanitizedChatMessages)) {
+    /** Scroll stream chat down bottom  */
+    const scrollChatToBottom = () => {
+      const timeoutId = setTimeout(() => {
+        const chatStreamDom = chatStreamDomRef?.current;
+
+        if (
+          chatStreamDom?.scroll &&
+          sanitizedChatMessages &&
+          !botRoomIsResponding
+        ) {
+          chatStreamDom.scroll({
+            top: chatStreamDom.scrollHeight,
+            behavior: 'smooth',
+          });
+        }
+
+        clearTimeout(timeoutId);
+      }, 300);
+    };
+
+    if (!botRoomIsResponding) {
       scrollChatToBottom();
     }
-  }, [botRoomIsResponding, sanitizedChatMessages, scrollChatToBottom]);
+  }, [botRoomIsResponding, sanitizedChatMessages]);
 
   return (
     <div className="bot-chat">
-      <div className="chat-stream">
+      <div className="chat-stream" id="chat-stream" ref={chatStreamDomRef}>
         <div className="relative w-full flex justify-end items-center box-border p-0 pr-[2px] mb-[8px]">
           <Button className="reset-chat" onClick={onResetChat}>
             <ResetIcon />
@@ -117,6 +121,8 @@ const BotChat = () => {
             })}
             placeholder="Message...."
             className="chat-form-input"
+            // @ts-ignore
+            maxLength={120}
           />
           <Button className="mic">
             <Microphone />
