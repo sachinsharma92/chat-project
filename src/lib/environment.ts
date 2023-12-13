@@ -9,6 +9,6 @@ export const isDevelopment = environment === 'development';
 
 export const isStaging =
   // do not override this for stage branch
-  !isDevelopment || environment === 'staging' || environment == 'stage';
+  environment === 'staging' || environment == 'stage';
 
 export const isProduction = environment === 'production';
