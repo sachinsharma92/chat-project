@@ -1,4 +1,8 @@
-import { getSpaceProfile, getUserProfileById } from '../supabase';
+import {
+  getSpaceProfile,
+  getUserProfileById,
+  getUserProfileByUsername,
+} from '../supabase';
 import { ISpace } from '@/types';
 import { head } from 'lodash';
 import { IUser } from '@/types/auth';
@@ -16,7 +20,19 @@ export const getSpacePageMetadata = async (
   props: any,
 ): Promise<{ image?: string; title?: string; description?: string }> => {
   try {
-    const spaceId = props?.searchParams?.space || '';
+    const username = props?.params?.username || '';
+    let spaceId = props?.searchParams?.space || '';
+
+    if (!spaceId && username) {
+      const { data: userProfileData } = await getUserProfileByUsername(
+        username,
+      );
+      const targetUserProfile = head(userProfileData);
+
+      if (targetUserProfile?.spaceId) {
+        spaceId = targetUserProfile.spaceId;
+      }
+    }
 
     if (spaceId) {
       const { data, error } = await getSpaceProfile(spaceId);
