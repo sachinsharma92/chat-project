@@ -98,12 +98,12 @@ const SpaceContent = () => {
           >
             Chat
           </TabsTrigger>
-          <TabsTrigger
+          {/* <TabsTrigger
             value={SpaceContentTabEnum.world}
             className="space-content-nav-trigger"
           >
             World
-          </TabsTrigger>
+          </TabsTrigger> */}
         </TabsList>
         <TabsContent
           value={SpaceContentTabEnum.home}

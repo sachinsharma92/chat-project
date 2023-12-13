@@ -1,3 +1,5 @@
+'use client';
+
 import Button from '@/components/common/Button';
 import Popover from '@/components/common/Popover';
 import { useAppStore } from '@/store/App';

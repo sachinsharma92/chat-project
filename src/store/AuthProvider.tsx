@@ -27,6 +27,7 @@ import { IUser } from '@/types/auth';
 import { v4 as uuid } from 'uuid';
 import { botnetGuestIdLocalStorageKey } from '@/constants';
 import { useUsername } from '@/hooks/useUsername';
+import { isDevelopment, isStaging } from '@/lib/environment';
 
 interface IAuthAppState {}
 
@@ -290,6 +291,10 @@ const AuthProvider = (props: { children?: ReactNode }) => {
    * Init store session
    */
   useEffect(() => {
+    if (!router) {
+      return;
+    }
+
     supabaseClient.auth
       .getSession()
       .then(({ data: { session: newSession } }) => {
@@ -321,6 +326,17 @@ const AuthProvider = (props: { children?: ReactNode }) => {
           }
 
           setIsLoading(false);
+
+          if (pathname === '/' || !pathname) {
+            const defaultSpaceId =
+              isStaging || isDevelopment
+                ? '554eb516-1a29-4739-b748-d239248607d3'
+                : '5b1e8603-144c-4b13-842a-ada5533ea43c';
+
+            // in prod force navigate to zero two's space
+            // for users landed in botnet.com and not logged in
+            router.push('/?space=' + defaultSpaceId);
+          }
         }
       })
       .catch(console.log);
