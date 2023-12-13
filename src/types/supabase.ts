@@ -15,6 +15,13 @@ export interface IUserPrivateProps {
   id: string;
   cloneAudio: {
     data: ICloneAudioItem[];
+    description?: string;
+    name?: string;
+    labels?: Record<string, string>;
+  };
+  appearance: {
+    background?: string;
+    backgroundUrl?: string;
   };
   owner: string;
   createdAt?: string;

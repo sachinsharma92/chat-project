@@ -46,6 +46,10 @@ export async function POST(request: Request) {
 
   let voiceId: string = defaultVoiceId;
 
+  if (validAuth) {
+    // add ons
+  }
+
   if (spaceId === '554eb516-1a29-4739-b748-d239248607d3') {
     // apparently, /api/clone-voice don't work yet
     // there's problem with sending FormData() from nodejs env
@@ -66,10 +70,6 @@ export async function POST(request: Request) {
   }
 
   try {
-    if (!validAuth) {
-      // @todo limit messages
-    }
-
     const elevenlabsUrl = `${
       getElevenLabsTextToSpeechApiBaseUrl() + voiceId
     }?optimize_streaming_latency=0&output_format=mp3_44100_128`;
@@ -86,7 +86,7 @@ export async function POST(request: Request) {
         model_id: model_id,
         voice_settings: {
           stability: 0.5,
-          similarity_boost: 0.5,
+          similarity_boost: 1,
         },
       },
       {

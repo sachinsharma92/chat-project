@@ -1,10 +1,10 @@
 'use client';
 
+import './Button.css';
+
 import React, { forwardRef } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
 import { cn } from '@/lib/utils';
-
-import './Button.css';
 
 interface VariantProps {
   variant?: 'primary' | string;
@@ -40,9 +40,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       type={type || 'button'}
       aria-label={ariaLabel}
       className={cn(
-        `${variant === 'primary' ? ' primary-button' : ''}`,
-        'relative flex items-center justify-center p-[4px] overflow-hidden outline-none',
         className,
+        'relative flex items-center justify-center p-[4px] overflow-hidden outline-none',
+        `${variant === 'primary' ? ' primary-button' : ''}`,
       )}
       {...props}
     >

@@ -1,0 +1,152 @@
+.creator-voice {
+  @apply relative w-full box-border;
+}
+
+.creator-voice > h1 {
+  color: #000;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 130%;
+}
+
+.creator-voice > div > section,
+.creator-voice > div > form > section,
+.creator-voice > div > form > div > section {
+  @apply relative w-full mt-[24px];
+}
+
+.creator-voice > div > section > h2,
+.creator-voice > div > form > section > h2,
+.creator-voice > div > form > div > section > h2 {
+  overflow: hidden;
+  color: #000;
+  text-overflow: ellipsis;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+}
+
+.creator-voice > form > section > h2 > span,
+.creator-voice > div > form > div > section > h2 > span {
+  margin-left: 4px;
+  color: #000;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+}
+
+.creator-voice > form > section > textarea,
+.creator-voice > div > form > div > section > textarea {
+  @apply relative w-[500px] mt-[8px];
+
+  border-radius: 8px;
+  outline: none;
+  box-shadow: none;
+  border: 1px solid #e5e5e5;
+  background: #fff;
+  padding: 12px 16px;
+  box-sizing: border-box;
+  resize: none;
+}
+
+.creator-voice-tabs-list {
+  @apply relative h-[80px] w-[500px] box-border mt-[8px] bg-[transparent] p-[8px];
+
+  border-radius: 12px;
+  border: 1px solid #e5e5e5;
+}
+
+.creator-voice-tabs-trigger {
+  @apply relative h-full w-[50%] box-border bg-[transparent] rounded-[8px] border-[none];
+}
+
+.creator-voice-tabs-trigger[data-state='active'] {
+  @apply bg-[#F5F5F5];
+}
+
+.creator-voice-custom-cta {
+  @apply relative w-[500px] box-border mt-[24px];
+}
+
+.creator-voice-custom-cta > button {
+  @apply w-[500px];
+}
+
+.creator-voice-label {
+  @apply relative w-[500px] box-border flex justify-between items-center mt-[8px];
+}
+
+.creator-voice-label > label {
+  overflow: hidden;
+  color: #000;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  width: 100px;
+  text-align: left;
+}
+
+.creator-voice-label > div {
+  @apply relative flex justify-between items-center h-[45px] box-border rounded-[8px];
+
+  padding: 12px 16px;
+  width: calc(100% - 112px);
+  box-sizing: border-box;
+  border: 1px solid #e5e5e5;
+  background: #fff;
+}
+
+.creator-voice-label > div > input[type='text'] {
+  @apply relative box-border;
+
+  width: calc(100% - 50px);
+  color: #000;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+}
+
+.add-sample-button {
+  @apply relative flex justify-center items-center box-border;
+
+  height: 40px;
+  padding: 0 16px;
+  max-width: 200px;
+  min-width: 160px;
+  border-radius: 12px;
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  user-select: none;
+}
+
+.add-sample-button:hover {
+  background: #e5e5e5;
+}
+
+.add-sample-button > svg > path {
+  fill: #44373c;
+}
+
+.add-sample-button > p {
+  @apply ml-2;
+
+  color: #44373c;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 140%;
+}
+
+.vocal-samples {
+  @apply relative w-[500px] box-border mt-[16px];
+
+  list-style: none;
+  list-style-type: none;
+}

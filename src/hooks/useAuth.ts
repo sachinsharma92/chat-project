@@ -1,4 +1,7 @@
+'use client';
+
 import { useBotnetAuth } from '@/store/Auth';
+import { getGuestId } from '@/store/AuthProvider';
 import { useMemo } from 'react';
 
 /**
@@ -17,7 +20,7 @@ const useAuth = () => {
       'X-RefreshToken': `${session?.refresh_token}`,
     };
   };
-  const userId = useMemo(() => session?.user?.id || '', [session]);
+  const userId = useMemo(() => session?.user?.id || getGuestId(), [session]);
 
   return {
     userId,

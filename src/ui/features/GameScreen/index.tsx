@@ -2,14 +2,11 @@
 
 import { useAppStore } from '@/store/App';
 import { SpaceContentTabEnum } from '@/types';
-import dynamic from 'next/dynamic';
+
+import ThreeJSComponent from '@/ui/three';
 import GameScreenBotChat from './GameScreenBotChat';
 
 import './GameScreen.css';
-
-const ThreeJSComponent = dynamic(() => import('@/ui/three'), {
-  ssr: false,
-});
 
 // const Game = dynamic(() => import('@/ui/game'), {
 //   ssr: false,

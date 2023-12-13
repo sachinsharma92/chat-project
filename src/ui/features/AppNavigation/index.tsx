@@ -26,7 +26,7 @@ const AppNavigation = () => {
       return;
     }
 
-    router.push('/dashboard');
+    router.push('/settings');
   };
 
   return (

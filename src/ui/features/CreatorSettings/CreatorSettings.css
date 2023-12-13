@@ -1,0 +1,102 @@
+.creator-settings {
+  @apply relative flex-col justify-start items-center w-full h-full box-border top-0 left-0 p-[24px] pt-[16px];
+
+  min-width: 1000px;
+}
+
+.creator-settings-header-nav {
+  @apply relative flex w-full h-[48px] box-border;
+}
+
+.creator-settings-content {
+  @apply relative flex justify-start items-start w-full box-border mt-[16px];
+
+  border-top: 1px solid #e5e5e5;
+}
+
+.creator-settings-content-left {
+  @apply relative w-[400px] p-[40px] box-border;
+
+  border-right: 1px solid #e5e5e5;
+}
+
+.creator-settings-content-nav {
+  @apply relative w-full;
+}
+
+.creator-settings-content-right {
+  @apply relative w-full box-border pt-[40px] pl-[120px] pb-[32px];
+
+  max-width: 100%;
+}
+
+.creator-settings-content-nav > ul {
+  @apply relative ml-[60px] box-border mt-[24px];
+
+  list-style: none;
+  list-style-type: none;
+  max-width: 100%;
+}
+
+.creator-settings-content-nav > ul > li {
+  @apply relative w-full box-border mt-2;
+
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+}
+
+.creator-settings-content-nav > ul > li > button {
+  @apply relative flex justify-start items-center h-[40px] w-full p-[16px] pt-[0px] pb-[0px] box-border rounded-[8px];
+
+  text-align: left;
+  font-weight: 500;
+}
+
+.creator-settings-nav-active {
+  background: #f5f5f5 !important;
+}
+
+.settings-cta-error {
+  @apply relative w-full flex justify-start items-center box-border mt-[24px];
+}
+
+.settings-cta-error > p {
+  color: red;
+  font-size: 15px;
+}
+
+.settings-cta {
+  @apply relative w-full flex justify-start items-center box-border mt-[24px];
+}
+
+.settings-cta > button {
+  @apply relative h-[40px] box-border;
+
+  min-width: 240px;
+  padding: 0 32px;
+  border-radius: 8px;
+  background: #000;
+  color: #fff;
+}
+
+.settings-tip {
+  @apply relative w-[500px] box-border flex justify-between items-center;
+}
+
+.settings-tip > p {
+  color: #666;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  text-align: left;
+}
+
+@media screen and (max-width: 720px) {
+  .creator-settings-header-nav {
+    @apply h-[40px];
+
+    border-bottom: 0.5px solid #e5e5e5;
+  }
+}

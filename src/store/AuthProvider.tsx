@@ -26,6 +26,8 @@ import { useRouterQuery } from '@/hooks';
 import { IUser } from '@/types/auth';
 import { v4 as uuid } from 'uuid';
 import { botnetGuestIdLocalStorageKey } from '@/constants';
+import { useUsername } from '@/hooks/useUsername';
+import { isDevelopment, isStaging } from '@/lib/environment';
 
 interface IAuthAppState {}
 
@@ -83,6 +85,8 @@ const AuthProvider = (props: { children?: ReactNode }) => {
     setHandle,
     setEmail,
     setIsLoading,
+    setUsername,
+    setBio,
   ] = useBotnetAuth(state => [
     state.session,
     state.sessionChecked,
@@ -93,6 +97,8 @@ const AuthProvider = (props: { children?: ReactNode }) => {
     state.setHandle,
     state.setEmail,
     state.setIsLoading,
+    state.setUsername,
+    state.setBio,
   ]);
   const [state, dispatch] = useReducer(reducer, initialState);
   const [setShowDialog] = useAppStore(state => [state.setShowDialog]);
@@ -108,6 +114,8 @@ const AuthProvider = (props: { children?: ReactNode }) => {
   const router = useRouter();
   const { searchParams, navigate } = useRouterQuery();
   const paramSpaceId = useMemo(() => searchParams.get('space'), [searchParams]);
+
+  const { username } = useUsername();
 
   const fromAuthPage = useMemo(
     () =>
@@ -178,8 +186,6 @@ const AuthProvider = (props: { children?: ReactNode }) => {
           const res = await getUserProfileById(userId);
 
           if (res?.data && !isEmpty(res?.data)) {
-            console.log('getUserProfile()');
-
             const targetProfile = head(res.data);
             const props = targetProfile as IUser;
             const {
@@ -187,11 +193,15 @@ const AuthProvider = (props: { children?: ReactNode }) => {
               handle = '',
               image = '',
               spaceId = '',
+              username: profileUsername = '',
+              bio = '',
             } = props;
 
             setImage(image);
             setHandle(handle);
             setDisplayName(displayName);
+            setUsername(profileUsername);
+            setBio(bio);
 
             console.log('getUserProfile() spaceId:', spaceId);
 
@@ -219,6 +229,7 @@ const AuthProvider = (props: { children?: ReactNode }) => {
                         const spaceBotsData = resBots?.data;
                         const props = {
                           ...spaceInfo,
+                          host: targetProfile,
                           bots: spaceBotsData || [],
                         };
 
@@ -233,13 +244,15 @@ const AuthProvider = (props: { children?: ReactNode }) => {
             }
 
             if (
-              (!isEmpty(spaceId) &&
-                (!paramSpaceId ||
+              (!pathname?.startsWith('/settings') &&
+                !pathname?.startsWith('/dashboard') &&
+                !isEmpty(spaceId) &&
+                ((!paramSpaceId && !username) ||
                   (recentlyCreated && spaceId !== paramSpaceId))) ||
               fromAuthPage
             ) {
               // navigate host to dashboard page
-              navigate('/dashboard');
+              navigate('/settings');
             }
 
             setIsLoading(false);
@@ -252,7 +265,12 @@ const AuthProvider = (props: { children?: ReactNode }) => {
         console.log('getUserProfile() err:', err?.message);
       }
     },
+
+    // eslint-disable-next-line
     [
+      username,
+      session?.user,
+      pathname,
       paramSpaceId,
       fromAuthPage,
       setSpaceInfo,
@@ -264,6 +282,8 @@ const AuthProvider = (props: { children?: ReactNode }) => {
       setImage,
       setHandle,
       setDisplayName,
+      setUsername,
+      setBio,
     ],
   );
 
@@ -271,6 +291,10 @@ const AuthProvider = (props: { children?: ReactNode }) => {
    * Init store session
    */
   useEffect(() => {
+    if (!router) {
+      return;
+    }
+
     supabaseClient.auth
       .getSession()
       .then(({ data: { session: newSession } }) => {
@@ -280,6 +304,8 @@ const AuthProvider = (props: { children?: ReactNode }) => {
 
         console.log('init session check');
 
+        setSessionChecked(true);
+
         const fromAuthPage =
           pathname?.startsWith('/login') ||
           pathname?.startsWith('/register') ||
@@ -287,7 +313,7 @@ const AuthProvider = (props: { children?: ReactNode }) => {
 
         if (newSession && !isEmpty(newSession?.user)) {
           if (fromAuthPage) {
-            navigate('/dashboard');
+            navigate('/settings');
           }
 
           setIsLoading(true);
@@ -295,23 +321,25 @@ const AuthProvider = (props: { children?: ReactNode }) => {
           getUserProfile(newSession);
           setEmail(newSession?.user?.email || '');
         } else {
-          if (pathname?.startsWith('/dashboard')) {
+          if (pathname?.startsWith('/settings')) {
             router.push('/');
           }
 
-          if (pathname === '/' || !pathname) {
-            // force navigate to zero two's space
-            // for users landed in botnet.com and not logged in
-            router.push('/?space=5b1e8603-144c-4b13-842a-ada5533ea43c');
-          }
-
           setIsLoading(false);
+
+          if (pathname === '/' || !pathname) {
+            const defaultSpaceId =
+              isStaging || isDevelopment
+                ? '554eb516-1a29-4739-b748-d239248607d3'
+                : '5b1e8603-144c-4b13-842a-ada5533ea43c';
+
+            // in prod force navigate to zero two's space
+            // for users landed in botnet.com and not logged in
+            router.push('/?space=' + defaultSpaceId);
+          }
         }
       })
-      .catch(console.log)
-      .finally(() => {
-        setSessionChecked(true);
-      });
+      .catch(console.log);
   }, [
     router,
     pathname,

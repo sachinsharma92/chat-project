@@ -102,11 +102,21 @@ export const getSpaceBotById = async (
  */
 export const updateSpaceBotProfilePropertiesByFormId = async (
   formId: string,
-  props: { greeting: string; description: string },
+  props: Partial<IBot>,
 ) => {
   return await supabaseClient
     .from(spacesBotsTable)
-    .update({ ...snakecaseKeys(pick(props, ['description', 'greeting'])) })
+    .update({
+      ...snakecaseKeys(
+        pick(props, [
+          'description',
+          'greeting',
+          'background',
+          'voice_id',
+          'voiceId',
+        ]),
+      ),
+    })
     .eq('form_id', trim(formId));
 };
 

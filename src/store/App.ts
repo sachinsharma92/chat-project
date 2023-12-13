@@ -10,11 +10,12 @@ import {
   BotRoom,
   IBotData,
   SpaceContentTabEnum,
+  OpenAIRoles,
 } from '@/types';
 import { create } from 'zustand';
 import { Client } from 'colyseus.js';
 import { DialogEnums, MobileDrawerEnums } from '@/types/dialog';
-import { includes, map } from 'lodash';
+import { cloneDeep, head, includes, isEmpty, map } from 'lodash';
 
 /**
  * In-app related states
@@ -111,6 +112,8 @@ export const useGameServer = create<IGameServerState>()(set => ({
   },
 }));
 
+export const botnetChatHistoryLocalKey = 'botnetChatHistoryLocalKey';
+
 /**
  * For bot 1:1 chat related states
  */
@@ -120,4 +123,41 @@ export const useBotData = create<IBotData>()(set => ({
   setChatMessages: chatMessages => set(() => ({ chatMessages })),
   setBotRoomIsResponding: (botRoomIsResponding: boolean) =>
     set(() => ({ botRoomIsResponding })),
+  storeChatHistory(chatMessages) {
+    /// save
+    if (!isEmpty(chatMessages)) {
+      const sanitizedChatMessages = cloneDeep(chatMessages);
+      const firstMessage = head(sanitizedChatMessages);
+
+      if (
+        firstMessage?.role === OpenAIRoles.assistant ||
+        firstMessage?.role === OpenAIRoles.system
+      ) {
+        // remove greeting text
+        sanitizedChatMessages.shift();
+      }
+
+      // @todo limit number of messages
+      localStorage.setItem(
+        botnetChatHistoryLocalKey,
+        JSON.stringify(sanitizedChatMessages),
+      );
+    }
+  },
+  restoreChatHistory(chatMessages) {
+    /// restore
+    try {
+      const chatMessagesStr = localStorage.getItem(botnetChatHistoryLocalKey);
+      if (chatMessagesStr && !isEmpty(chatMessagesStr)) {
+        const storedChatMessages = JSON.parse(chatMessagesStr);
+
+        return set(state => {
+          return {
+            ...state,
+            chatMessages: [...(chatMessages || []), ...storedChatMessages],
+          };
+        });
+      }
+    } catch (err) {}
+  },
 }));

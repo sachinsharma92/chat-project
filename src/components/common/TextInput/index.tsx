@@ -1,4 +1,9 @@
-import { CSSProperties, InputHTMLAttributes, forwardRef } from 'react';
+import {
+  CSSProperties,
+  ChangeEventHandler,
+  InputHTMLAttributes,
+  forwardRef,
+} from 'react';
 import { isEmpty, isFunction } from 'lodash';
 import { cn } from '@/lib/utils';
 import './TextInput.css';
@@ -13,6 +18,7 @@ type TextInputPropsType = {
   autoFocus?: boolean;
   type?: 'password' | 'text' | 'email';
   variant?: 'primary' | undefined;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
 };
 
 const TextInput = forwardRef<HTMLInputElement, TextInputPropsType>(
@@ -46,6 +52,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputPropsType>(
         autoComplete="off"
         autoCorrect="off"
         autoFocus={autoFocus}
+        onChange={onChange}
       />
     );
   },

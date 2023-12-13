@@ -40,6 +40,7 @@ const HomeSpace = () => {
     const spaceBotInfo = head(spaceInfo?.bots);
 
     return (
+      spaceInfo?.host?.bio ||
       spaceBotInfo?.description ||
       spaceInfo?.description ||
       'Welcome to Botnet!'
@@ -123,6 +124,8 @@ const HomeSpace = () => {
               required: false,
             })}
             placeholder="Message...."
+            // @ts-ignore
+            maxLength={120}
           />
           <Button className="mic">
             <Microphone />

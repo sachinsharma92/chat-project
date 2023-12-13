@@ -25,7 +25,7 @@ const SpaceContent = () => {
   ]);
 
   const spaceName = useMemo(
-    () => spaceInfo?.spaceName || spaceInfo?.host?.displayName || 'Botnet',
+    () => spaceInfo?.host?.displayName || spaceInfo?.spaceName || 'Botnet',
     [spaceInfo],
   );
 
@@ -50,7 +50,7 @@ const SpaceContent = () => {
         <div className="space-content-header-right">
           <p className="space-name">{spaceName}</p>
           <div className="relative flex justify-start items-center p-0 box-border mt-[16px]">
-            <Button className="subscribe">Subscribe</Button>
+            <Button className="subscribe hidden h-0 w-0">Subscribe</Button>
             <Button className="share">Share</Button>
           </div>
         </div>
@@ -98,12 +98,12 @@ const SpaceContent = () => {
           >
             Chat
           </TabsTrigger>
-          <TabsTrigger
+          {/* <TabsTrigger
             value={SpaceContentTabEnum.world}
             className="space-content-nav-trigger"
           >
             World
-          </TabsTrigger>
+          </TabsTrigger> */}
         </TabsList>
         <TabsContent
           value={SpaceContentTabEnum.home}

@@ -25,4 +25,5 @@ export type IUserContextType =
   | 'clone.facts'
   | 'clone.question'
   | 'clone.answer'
+  | 'clone.knowledge'
   | 'clone.qa'; // q&a

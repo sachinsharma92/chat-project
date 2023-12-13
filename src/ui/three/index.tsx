@@ -6,6 +6,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { OutlineEffect } from 'three/addons/effects/OutlineEffect.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { BotChatEvents } from '@/ui/features/Chat/hooks/useBotChat';
+import { GroundProjectedSkybox } from 'three/addons/objects/GroundProjectedSkybox.js';
 import {
     VRMSpringBoneManager,
     VRMSpringBoneJoint,
@@ -62,6 +63,13 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
             clock = new THREE.Clock();
 
             scene = new THREE.Scene();
+	            const envMap = new THREE.TextureLoader().load( './assets/robotech_internal.png' );
+            const skybox = new GroundProjectedSkybox( envMap );
+            skybox.scale.setScalar( 20 );
+            skybox.height = 3;
+            skybox.radius = 8;
+            skybox.material.userData.outlineParameters = { visible: false };
+            scene.add( skybox );
 
             camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.2, 5000 );
             camera.position.set( - 0.3, 1.5, 0.5 );
@@ -88,10 +96,16 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
             effect = new OutlineEffect( renderer );
 
             controls = new OrbitControls( camera, renderer.domElement );
-            controls.enableZoom = false;
+            //controls.enableZoom = false;
+            controls.minDistance = .5;
+            controls.maxDistance = 5;
             controls.enablePan = false;
-			controls.enableRotate = false;
+			//controls.enableRotate = false;
             controls.target.set( 0, 1.5, 0 );
+            controls.maxPolarAngle = Math.PI * 18 / 36;				
+            controls.minPolarAngle = Math.PI * 18 / 36;
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.04;
             controls.update();
 
             window.addEventListener( 'resize', onWindowResize );
@@ -488,6 +502,7 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 		function animate() {
 
 			const dt = clock.getDelta();
+			            controls.update();
             springBoneManager.update( dt );
 			if(blendShapeMixer) blendShapeMixer.update( dt );
             if(amatureMixer) amatureMixer.update( dt );

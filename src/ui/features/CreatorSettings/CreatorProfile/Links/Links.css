@@ -1,0 +1,48 @@
+.links {
+  @apply flex justify-center items-center w-full;
+
+  flex-direction: column;
+}
+
+.add-link-button {
+  @apply relative flex justify-center items-center box-border;
+
+  height: 40px;
+  padding: 0 16px;
+  min-width: 123px;
+  border-radius: 12px;
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  user-select: none;
+}
+
+.add-link-button:hover {
+  background: #e5e5e5;
+}
+
+.add-link-button > svg > path {
+  fill: #44373c;
+}
+
+.add-link-button > p {
+  @apply ml-2;
+
+  color: #44373c;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 140%;
+}
+
+.link-list-container {
+  @apply relative w-full mt-4 mb-4;
+}
+
+.link-list-container > ul {
+  list-style: none;
+  list-style-type: none;
+}
+
+.link-list-container > ul > li {
+  @apply relative w-full mt-4;
+}

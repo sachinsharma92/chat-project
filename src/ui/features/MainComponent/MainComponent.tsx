@@ -9,23 +9,17 @@ import {
 } from '@/icons';
 import { useWindowResize } from '@/hooks';
 import { mobileWidthBreakpoint } from '@/constants';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { useSelectedSpace } from '@/hooks/useSelectedSpace';
+import { head } from 'lodash';
 
 import cx from 'classnames';
-import dynamic from 'next/dynamic';
 import AppNavigation from '../AppNavigation';
 import Button from '@/components/common/Button';
 import GameScreen from '../GameScreen';
+import SpaceContent from '../SpaceContent';
 
 import './MainComponent.css';
-
-const SpaceContent = dynamic(() => import('../SpaceContent'), {
-  ssr: false,
-});
-
-// const Game = dynamic(() => import('@/ui/game'), {
-//   ssr: false,
-// });
 
 const MainComponent = () => {
   const { availableWidth } = useWindowResize();
@@ -33,6 +27,10 @@ const MainComponent = () => {
   const [minimizeMed, setMinimizeMed] = useState(true);
   const [minimizeSm, setMinimizeSm] = useState(false);
   const [expandFullScreen, setExpandFullScreen] = useState(false);
+
+  const { spaceInfo } = useSelectedSpace();
+
+  const spaceBotInfo = useMemo(() => head(spaceInfo?.bots), [spaceInfo]);
 
   const toggleMinimizeMedGameScreen = () => {
     setMinimizeMed(!minimizeMed);
@@ -67,6 +65,12 @@ const MainComponent = () => {
             'game-content-expand-screen': expandFullScreen,
           })}
         >
+          <div className="game-content-background">
+            <img
+              src={spaceBotInfo?.background || '/assets/botnet-avatar-bg.jpg'}
+              alt="Background preview"
+            />
+          </div>
           <GameScreen
             hideBotChat={minimizeMed && availableWidth >= mobileWidthBreakpoint}
           />

@@ -1,5 +1,17 @@
 import { IUserContext } from '.';
 
+export interface CloneVoiceBodyRequest {
+  fileUrl: string;
+  spaceBotId: string;
+  name: string;
+  description?: string;
+}
+
+export interface CloneVoiceResponse {
+  voiceId: string;
+  message?: string;
+}
+
 export interface IBot {
   id: string;
   createdAt: string;
@@ -11,6 +23,20 @@ export interface IBot {
   greeting?: string;
   description?: string;
   voiceId?: string;
+  background?: string;
+}
+
+export interface IBotKnowledge {
+  id: string;
+  url: string;
+  fileName: string;
+  fileType: string;
+  size: number; // bytes
+  contextEmbeddingsIds?: string[];
+}
+
+export interface IBotKnowledgeMeta {
+  data: IBotKnowledge[];
 }
 
 export interface IBotFormAnswers {
@@ -22,6 +48,7 @@ export interface IBotFormAnswers {
   deletedAt: string;
   updatedAt: string;
 
+  instructions: string;
   name: string;
   greeting: string;
   backstory: string;
@@ -30,6 +57,7 @@ export interface IBotFormAnswers {
     characteristics?: string;
     facts?: Partial<IUserContext>[];
   } & Record<string, any>;
+  knowledge: IBotKnowledgeMeta;
 }
 
 export interface IBotMessage {

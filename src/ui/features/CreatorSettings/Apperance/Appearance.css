@@ -1,0 +1,85 @@
+.creator-appearance {
+  @apply relative w-full box-border;
+}
+
+.creator-appearance > h1 {
+  color: #000;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 130%;
+}
+
+.creator-appearance > section,
+.creator-appearance > form > section {
+  @apply relative w-full mt-[24px];
+}
+
+.creator-appearance > section > h2,
+.creator-appearance > form > section > h2 {
+  overflow: hidden;
+  color: #000;
+  text-overflow: ellipsis;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+}
+
+.creator-appearance > form > section > textarea,
+.creator-appearance > form > section > div > textarea {
+  @apply relative w-[500px] mt-[8px];
+
+  border-radius: 8px;
+  outline: none;
+  box-shadow: none;
+  border: 1px solid #e5e5e5;
+  background: #fff;
+  padding: 12px 16px;
+  box-sizing: border-box;
+  resize: none;
+}
+
+.regenerate-button {
+  @apply relative flex justify-center items-center box-border;
+
+  height: 40px;
+  padding: 0 16px;
+  max-width: 200px;
+  min-width: 160px;
+  border-radius: 12px;
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  user-select: none;
+}
+
+.regenerate-button:hover {
+  background: #e5e5e5;
+}
+
+.regenerate-button > svg > path {
+  fill: #44373c;
+}
+
+.regenerate-button > p {
+  @apply ml-2;
+
+  color: #44373c;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 140%;
+}
+
+.creator-appearance-background-container {
+  @apply absolute top-0 right-0 w-[440px] h-full box-border;
+
+  min-height: 480px;
+}
+
+.creator-appearance-background-container > img {
+  @apply absolute top-0 left-0 h-full w-full;
+
+  object-fit: cover;
+  object-position: center;
+}

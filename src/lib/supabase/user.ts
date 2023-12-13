@@ -32,6 +32,28 @@ export const getUserProfileById = async (
 };
 
 /**
+ * Fetch user profile by username
+ * @param userId
+ * @returns
+ */
+export const getUserProfileByUsername = async (
+  username: string,
+): Promise<SupabaseResult<IUser[]>> => {
+  const response = await supabaseClient
+    .from<'user_profiles', IUser>(userProfilesTable)
+    .select('*')
+    .eq('username', trim(username));
+
+  if (response.error) {
+    return { error: response.error };
+  }
+
+  return {
+    data: map(response.data, d => camelcaseKeys(d)) as IUser[],
+  };
+};
+
+/**
  * Fetch user private data by user id
  * @param userId
  */
@@ -48,7 +70,15 @@ export const getUserPrivateDataById = async (
   }
 
   return {
-    data: map(response.data, d => camelcaseKeys(d)) as IUserPrivateProps[],
+    data: map(response.data, d => {
+      const props = camelcaseKeys(d) as IUserPrivateProps;
+
+      return {
+        ...props,
+        appearance: camelcaseKeys(props?.appearance || {}),
+        cloneAudio: camelcaseKeys(props?.cloneAudio || {}),
+      };
+    }) as IUserPrivateProps[],
   };
 };
 
