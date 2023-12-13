@@ -12,7 +12,7 @@
 }
 
 .chat-input-container {
-  @apply absolute flex justify-between items-center bottom-[24px] left-[24px] h-[48px] mt-[16px] rounded-[48px] pr-[8px] pl-[16px] box-border;
+  @apply absolute flex justify-start items-center bottom-[24px] left-[24px] h-[48px] mt-[16px] rounded-[48px] pr-[8px] pl-[16px] box-border;
 
   width: calc(100% - 48px);
   border: 1px solid #e5e5e5;
@@ -20,7 +20,7 @@
 }
 
 .chat-input-container > input {
-  @apply relative;
+  @apply relative ml-[16px] box-border;
 
   max-width: calc(100% - 100px);
   width: 100%;
@@ -33,6 +33,10 @@
 
 .mic {
   @apply relative flex justify-center items-center h-[36px] w-[36px] p-0 rounded-[500px] bg-[#000];
+
+  /* hidden */
+  display: none;
+  height: 0;
 }
 
 .mic > svg > path {

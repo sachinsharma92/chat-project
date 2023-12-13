@@ -50,7 +50,7 @@ const AppNavigation = () => {
         {!session && <ProfileMenu />}
         {session && (
           <>
-            <Button className="add-bot">
+            <Button className="add-bot hidden">
               <PlusIcon height={'18px'} width={'18px'} />
             </Button>
             <Button className="user-account" onClick={showAccount}>

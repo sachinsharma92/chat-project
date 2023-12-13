@@ -71,6 +71,11 @@
   border: 1px solid #f5f5f5;
   background: #f5f5f5;
   box-shadow: 0px 1px 8px 6px rgba(0, 0, 0, 0.1);
+
+  /* hidden */
+  height: 0;
+  overflow: hidden;
+  display: none;
 }
 
 .user-account {
