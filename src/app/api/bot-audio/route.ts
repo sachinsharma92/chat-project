@@ -14,10 +14,7 @@ import {
   getElevenLabsTextToSpeechApiBaseUrl,
   getElevenLabsApiKey,
 } from '@/lib/elevenlabs';
-import {
-  returnApiUnauthorizedError,
-  returnCommonStatusError,
-} from '@/lib/utils/routes';
+import { returnCommonStatusError } from '@/lib/utils/routes';
 import { getSpaceBotById } from '@/lib/supabase';
 import { isDevelopment } from '@/lib/environment';
 import { IBot } from '@/types';
@@ -69,7 +66,8 @@ export async function POST(request: Request) {
   }
 
   if (!validAuth) {
-    return returnApiUnauthorizedError();
+    // do not block audio for now
+    // @todo limit audio for non logged in users
   }
 
   try {
