@@ -2,6 +2,7 @@
 
 import camelcaseKeys from 'camelcase-keys';
 import EventEmitter from 'events';
+import posthog from 'posthog-js';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import { useBotData } from '@/store/App';
 import { head, isEmpty, map, pick, size, toString } from 'lodash';
@@ -15,7 +16,7 @@ import { BotChatPostResponse } from '@/app/api/bot-chat/route';
 import { getGuestId } from '@/store/AuthProvider';
 import { BotAudioResponse } from '@/app/api/bot-audio/route';
 import { useMemo, useRef } from 'react';
-import { isDevelopment } from '@/lib/environment';
+import { environment, isDevelopment } from '@/lib/environment';
 
 export const BotChatEvents = new EventEmitter();
 
@@ -282,6 +283,8 @@ export const useBotChat = () => {
       }
     } catch (err: any) {
       console.log('sendBotChatMessage() err:', err?.message);
+    } finally {
+      posthog.capture('ChatBot', { userId, env: environment });
     }
   };
 

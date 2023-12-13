@@ -71,6 +71,7 @@
     "phaser-matter-collision-plugin": "^1.0.0",
     "phaser3spectorjs": "^0.0.8",
     "postcss": "^8.4.31",
+    "posthog-js": "^1.95.1",
     "postprocessing": "^6.33.0",
     "r3f-perf": "^7.1.2",
     "react": "^18.2.0",
