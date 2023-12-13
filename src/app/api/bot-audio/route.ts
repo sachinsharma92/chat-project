@@ -46,10 +46,6 @@ export async function POST(request: Request) {
 
   let voiceId: string = defaultVoiceId;
 
-  if (validAuth) {
-    // add ons
-  }
-
   if (spaceId === '554eb516-1a29-4739-b748-d239248607d3') {
     // apparently, /api/clone-voice don't work yet
     // there's problem with sending FormData() from nodejs env
@@ -67,6 +63,11 @@ export async function POST(request: Request) {
     if (!error && spaceBotInfo?.voiceId) {
       voiceId = spaceBotInfo?.voiceId;
     }
+  }
+
+  if (!validAuth) {
+    // do not block audio for now
+    // @todo limit audio for non logged in users
   }
 
   try {

@@ -39,6 +39,14 @@ const SpaceContent = () => {
     );
   }, [spaceInfo]);
 
+  const onSharePage = () => {
+    // pop up share
+    if (navigator?.share) {
+      const title = `Botnet -${spaceName}`;
+      navigator.share({ title, text: title, url: `${window.location.href}` });
+    }
+  };
+
   return (
     <div className="space-content-container">
       <div className="space-content-header">
@@ -51,7 +59,9 @@ const SpaceContent = () => {
           <p className="space-name">{spaceName}</p>
           <div className="relative flex justify-start items-center p-0 box-border mt-[16px]">
             <Button className="subscribe hidden h-0 w-0">Subscribe</Button>
-            <Button className="share">Share</Button>
+            <Button className="share" onClick={onSharePage}>
+              Share
+            </Button>
           </div>
         </div>
       </div>

@@ -5,6 +5,7 @@ import type { Metadata } from 'next';
 import { Inter } from './fonts';
 import { Toaster } from '@/components/ui/toaster';
 
+import Script from 'next/script';
 import ProvidersContainer from './providersContainer';
 
 export const metadata: Metadata = {
@@ -22,6 +23,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1, maximum-scale=1, viewport-fit=cover"
         />
         <link rel="icon" href="/favicon.svg" />
+
+        <Script src="/twitter-pixel.js" strategy="lazyOnload" />
       </head>
       <body>
         <div id="root">
