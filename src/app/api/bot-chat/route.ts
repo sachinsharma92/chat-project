@@ -307,6 +307,7 @@ export async function POST(request: Request) {
     author_id: authorId,
     space_id: spaceId,
     created_at: new Date().toISOString(),
+    session_id: authorId,
   };
   const relevantHistory = form?.backstory;
   const chainPrompt = PromptTemplate.fromTemplate(`${botSystemMessage}`);
