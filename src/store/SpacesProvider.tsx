@@ -7,10 +7,21 @@ import {
   getBotChatMessagesByPage,
   getSpaceBots,
   getSpaceProfile,
+  getUserPrivateDataById,
   getUserProfileById,
   getUserProfileByUsername,
 } from '@/lib/supabase';
-import { cloneDeep, head, isArray, isEmpty, map, size } from 'lodash';
+import {
+  cloneDeep,
+  head,
+  isArray,
+  isEmpty,
+  isObject,
+  map,
+  size,
+  toString,
+  trim,
+} from 'lodash';
 import { useRouter } from 'next/navigation';
 import { IUser } from '@/types/auth';
 import { ChatMessageProps, ISpace, OpenAIRoles } from '@/types';
@@ -122,12 +133,12 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
         };
 
         setSpaceInfo(targetSpaceId, { ...props });
-
-        fetchingSpace.current = '';
       } else if (error) {
         // redirect user to 404 page
         notFound();
       }
+
+      fetchingSpace.current = '';
     };
 
     getSpaceInfo();
@@ -159,10 +170,23 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
           message: greeting,
           role: OpenAIRoles.assistant,
         };
+        const { data: userPrivateDataList } = await getUserPrivateDataById(
+          userId,
+        );
+        const userPrivateData = head(userPrivateDataList);
+        const sanitizedSpaceIdKey = trim(spaceId).replace(/\-/g, '_');
+        const afterTimestamp =
+          userPrivateData?.chatResetAtMeta &&
+          isObject(userPrivateData?.chatResetAtMeta)
+            ? toString(
+                userPrivateData?.chatResetAtMeta[sanitizedSpaceIdKey]?.date,
+              )
+            : '';
         const chatHistoryRes = await getBotChatMessagesByPage(
           1,
           spaceId,
           userId,
+          afterTimestamp,
         );
         const chatMessages = chatHistoryRes?.data || [];
         const sanitizedChatMessages: ChatMessageProps[] = map(
@@ -181,6 +205,10 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
           setChatMessages([botGreeting, ...sanitizedChatMessages.reverse()]);
         } else if (greeting) {
           restoreChatHistory([botGreeting]);
+        } else if (botGreeting) {
+          setChatMessages([botGreeting]);
+        } else {
+          setChatMessages([]);
         }
       } catch (err: any) {
         console.log('fetchChatHistory() err:', err?.message);
@@ -191,6 +219,8 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
 
     if (spaceId && !isLoading && !isEmpty(spaceInfo?.bots)) {
       fetchChatHistory();
+    } else {
+      setChatMessages([]);
     }
   }, [
     spaceId,
