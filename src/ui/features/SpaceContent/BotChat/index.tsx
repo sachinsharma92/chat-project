@@ -3,7 +3,7 @@
 import { EyeOpenIcon, FileIcon, Microphone, ResetIcon } from '@/icons';
 import { useForm } from 'react-hook-form';
 import { useBotData } from '@/store/App';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { filter, isEmpty, map } from 'lodash';
 import { useBotChat } from '../../../../hooks/useBotChat';
 import { OpenAIRoles } from '@/types';
@@ -25,6 +25,8 @@ const BotChat = () => {
     state.chatMessages,
   ]);
 
+  const [resettingChat, setResettingChat] = useState(false);
+
   const chatStreamDomRef = useRef<any>(null);
 
   const sanitizedChatMessages = useMemo(
@@ -35,7 +37,7 @@ const BotChat = () => {
   const sendChat = (data: any) => {
     const message = data?.message;
 
-    if (!message || botRoomIsResponding) {
+    if (!message || resettingChat || botRoomIsResponding) {
       return;
     }
 
@@ -46,8 +48,14 @@ const BotChat = () => {
   /**
    * Clear chat array
    */
-  const onResetChat = () => {
-    resetChat();
+  const onResetChat = async () => {
+    try {
+      setResettingChat(true);
+      await resetChat();
+    } catch {
+    } finally {
+      setResettingChat(false);
+    }
   };
 
   /** Scroll on new chat */
@@ -81,7 +89,11 @@ const BotChat = () => {
     <div className="bot-chat">
       <div className="chat-stream" id="chat-stream" ref={chatStreamDomRef}>
         <div className="relative w-full flex justify-end items-center box-border p-0 pr-[2px] mb-[8px]">
-          <Button className="reset-chat" onClick={onResetChat}>
+          <Button
+            className="reset-chat"
+            onClick={onResetChat}
+            isLoading={resettingChat}
+          >
             <ResetIcon />
             <p>Reset Chat</p>
           </Button>

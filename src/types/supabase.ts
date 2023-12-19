@@ -25,6 +25,12 @@ export interface IUserPrivateProps {
   };
   owner: string;
   chatResetAt?: string;
+  chatResetAtMeta?: Record<
+    string,
+    {
+      date: string;
+    }
+  >;
   createdAt?: string;
   updatedAt?: string;
   deletedAt?: string;

@@ -5,7 +5,7 @@ import EventEmitter from 'events';
 import posthog from 'posthog-js';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import { useBotData } from '@/store/App';
-import { head, isEmpty, map, pick, size, toString } from 'lodash';
+import { head, isEmpty, map, pick, size, toString, trim } from 'lodash';
 import { isResponseStatusSuccess } from '@/lib/utils';
 import { ChatMessageProps, OpenAIRoles } from '@/types';
 import { useBotnetAuth } from '@/store/Auth';
@@ -17,6 +17,10 @@ import { getGuestId } from '@/store/AuthProvider';
 import { BotAudioResponse } from '@/app/api/bot-audio/route';
 import { useMemo, useRef } from 'react';
 import { environment, isDevelopment } from '@/lib/environment';
+import {
+  getUserPrivateDataById,
+  updateUserPrivateDataProps,
+} from '@/lib/supabase';
 
 export const BotChatEvents = new EventEmitter();
 
@@ -39,10 +43,11 @@ export const useBotChat = () => {
     state.storeChatHistory,
   ]);
   const { spaceId, spaceInfo } = useSelectedSpace();
-  const [userId, displayName, image] = useBotnetAuth(state => [
+  const [userId, displayName, image, session] = useBotnetAuth(state => [
     state.session?.user?.id || getGuestId(),
     state.displayName,
     state.image,
+    state.session,
   ]);
   const { getSupabaseAuthHeaders } = useAuth();
   const syncAudioIntervalId = useRef<NodeJS.Timer | null | number>(null);
@@ -277,7 +282,7 @@ export const useBotChat = () => {
     }
   };
 
-  const resetChat = () => {
+  const resetChat = async () => {
     const botGreeting = {
       id: uuid(),
       authorId: '',
@@ -288,6 +293,23 @@ export const useBotChat = () => {
       chatMessages,
       message => pick(message, ['role', 'message']),
     );
+
+    if (userId && session?.user) {
+      // record last user chat reset on this space
+      // so we can cover from filter when fetching for chat history
+      const { data: userPrivateDataList } = await getUserPrivateDataById(
+        userId,
+      );
+      const userPrivateData = head(userPrivateDataList);
+      const sanitizedSpaceIdKey = trim(spaceId).replace(/\-/g, '_');
+
+      await updateUserPrivateDataProps(userId, {
+        chatResetAtMeta: {
+          ...(userPrivateData?.chatResetAtMeta || {}),
+          [sanitizedSpaceIdKey]: { date: new Date().toISOString() },
+        },
+      });
+    }
 
     if (
       isEmpty(messageHistory) ||
