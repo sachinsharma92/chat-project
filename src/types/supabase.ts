@@ -31,6 +31,7 @@ export interface IUserPrivateProps {
 }
 
 export interface IBotChatMessage {
+  id: string;
   createdAt: string;
   updatedAt: string;
   deletedAt: string;

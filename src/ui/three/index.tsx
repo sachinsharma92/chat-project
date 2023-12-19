@@ -70,7 +70,8 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
 
       scene = new THREE.Scene();
       const envMap = new THREE.TextureLoader().load(
-        './assets/robotech_internal.png',
+        'https://qxdiuckdrgtbrqtewqcp.supabase.co/storage/v1/object/public/botnet-assets/model/robotech_internal.png?t=2023-12-19T12%3A28%3A19.453Z' ||
+          './assets/robotech_internal.png',
       );
       const skybox = new GroundProjectedSkybox(envMap);
       skybox.scale.setScalar(20);
