@@ -1,7 +1,9 @@
 'use client';
 
+import { appRoutes, updatePasswordRoutes } from '@/constants';
 import { AxiosResponse } from 'axios';
 import { type ClassValue, clsx } from 'clsx';
+import { filter, includes, isEmpty } from 'lodash';
 import { twMerge } from 'tailwind-merge';
 
 export function timeout(ms: number) {
@@ -64,3 +66,11 @@ export function copyTextToClipboard(text: string) {
     }
   });
 }
+
+export const isPathnameAppRoute = (pathname: string) => {
+  return includes(appRoutes, pathname);
+};
+
+export const isPathnameForUpdatePassword = (pathname: string) => {
+  return !isEmpty(filter(updatePasswordRoutes, p => pathname?.startsWith(p)));
+};

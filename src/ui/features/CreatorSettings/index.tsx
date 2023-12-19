@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { isProduction } from '@/lib/environment';
 
 import dynamic from 'next/dynamic';
 import Button from '@/components/common/Button';
@@ -99,34 +100,38 @@ const CreatorSettings = () => {
                   Personality
                 </Button>
               </li>
-              <li>
-                <Button
-                  onClick={() =>
-                    pickCreatorView(CreatorSettingsView.appearance)
-                  }
-                  className={cn(
-                    'relative',
-                    creatorView === CreatorSettingsView.appearance
-                      ? 'creator-settings-nav-active'
-                      : '',
-                  )}
-                >
-                  Appearance
-                </Button>
-              </li>
-              <li>
-                <Button
-                  onClick={() => pickCreatorView(CreatorSettingsView.voice)}
-                  className={cn(
-                    'relative',
-                    creatorView === CreatorSettingsView.voice
-                      ? 'creator-settings-nav-active'
-                      : '',
-                  )}
-                >
-                  Voice
-                </Button>
-              </li>
+              {!isProduction && (
+                <li>
+                  <Button
+                    onClick={() =>
+                      pickCreatorView(CreatorSettingsView.appearance)
+                    }
+                    className={cn(
+                      'relative',
+                      creatorView === CreatorSettingsView.appearance
+                        ? 'creator-settings-nav-active'
+                        : '',
+                    )}
+                  >
+                    Appearance
+                  </Button>
+                </li>
+              )}
+              {!isProduction && (
+                <li>
+                  <Button
+                    onClick={() => pickCreatorView(CreatorSettingsView.voice)}
+                    className={cn(
+                      'relative',
+                      creatorView === CreatorSettingsView.voice
+                        ? 'creator-settings-nav-active'
+                        : '',
+                    )}
+                  >
+                    Voice
+                  </Button>
+                </li>
+              )}
             </ul>
           </div>
         </div>

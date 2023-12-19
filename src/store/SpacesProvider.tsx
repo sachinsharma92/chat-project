@@ -4,17 +4,19 @@ import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import { ReactNode, useCallback, useEffect, useRef } from 'react';
 import { useBotData, useSpacesStore } from './App';
 import {
+  getBotChatMessagesByPage,
   getSpaceBots,
   getSpaceProfile,
   getUserProfileById,
   getUserProfileByUsername,
 } from '@/lib/supabase';
-import { head, isEmpty } from 'lodash';
+import { cloneDeep, head, isArray, isEmpty, map, size } from 'lodash';
 import { useRouter } from 'next/navigation';
 import { IUser } from '@/types/auth';
-import { ISpace, OpenAIRoles } from '@/types';
+import { ChatMessageProps, ISpace, OpenAIRoles } from '@/types';
 import { v4 as uuid } from 'uuid';
 import { useUsername } from '@/hooks/useUsername';
+import { useBotnetAuth } from './Auth';
 
 import PQueue from 'p-queue';
 
@@ -26,19 +28,27 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
     state.addSpace,
     state.setSpaceInfo,
   ]);
-  const [setChatMessages] = useBotData(state => [state.setChatMessages]);
-  const { spaceId } = useSelectedSpace();
+  const [setChatMessages, setFetchingChatHistory] = useBotData(state => [
+    state.setChatMessages,
+    state.setFetchingChatHistory,
+  ]);
+  const { spaceId, spaceInfo } = useSelectedSpace();
   const router = useRouter();
 
   const [restoreChatHistory] = useBotData(state => [state.restoreChatHistory]);
 
   const { username } = useUsername();
 
+  const [isLoading, userId] = useBotnetAuth(state => [
+    state.isLoading,
+    state?.session?.user?.id || '',
+  ]);
+
   const notFound = useCallback(() => {
     router.push('/not-found');
   }, [router]);
 
-  const fetchingSpace = useRef(false);
+  const fetchingSpace = useRef('');
 
   /**
    * Store space id
@@ -46,6 +56,10 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
   useEffect(() => {
     if (addSpace && spaceId) {
       addSpace({ id: spaceId });
+    }
+
+    if (fetchingSpace.current && spaceId && spaceId !== fetchingSpace.current) {
+      fetchingSpace.current = '';
     }
   }, [spaceId, addSpace]);
 
@@ -78,6 +92,9 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
         }
 
         targetSpaceId = targetUserProfile?.spaceId;
+      }
+
+      if (targetSpaceId) {
         addSpace({ id: targetSpaceId });
       }
 
@@ -88,7 +105,7 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
         username,
       );
 
-      fetchingSpace.current = true;
+      fetchingSpace.current = targetSpaceId;
       const { data: spaceData, error } = await getSpaceProfile(targetSpaceId);
 
       if (!isEmpty(spaceData) && !error) {
@@ -103,6 +120,37 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
           host: spaceOwnerProfile || {},
           bots: spaceBotsData || [],
         };
+
+        setSpaceInfo(targetSpaceId, { ...props });
+
+        fetchingSpace.current = '';
+      } else if (error) {
+        // redirect user to 404 page
+        notFound();
+      }
+    };
+
+    getSpaceInfo();
+  }, [
+    spaceId,
+    username,
+    router,
+    addSpace,
+    setChatMessages,
+    restoreChatHistory,
+    notFound,
+    setSpaceInfo,
+  ]);
+
+  /**
+   * Fetch logged in user's chat history
+   */
+  useEffect(() => {
+    const fetchChatHistory = async () => {
+      try {
+        setFetchingChatHistory(true);
+
+        const spaceBotsData = spaceInfo?.bots;
         const spaceBotInfo = head(spaceBotsData);
         const greeting = spaceBotInfo?.greeting || '';
         const botGreeting = {
@@ -111,37 +159,47 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
           message: greeting,
           role: OpenAIRoles.assistant,
         };
+        const chatHistoryRes = await getBotChatMessagesByPage(
+          1,
+          spaceId,
+          userId,
+        );
+        const chatMessages = chatHistoryRes?.data || [];
+        const sanitizedChatMessages: ChatMessageProps[] = map(
+          chatMessages,
+          message => {
+            return cloneDeep(message) as ChatMessageProps;
+          },
+        );
 
-        setSpaceInfo(targetSpaceId, { ...props });
+        console.log(
+          'fetchChatHistory() chatMessages:',
+          size(sanitizedChatMessages),
+        );
 
-        if (greeting) {
-          setChatMessages([botGreeting]);
+        if (!isEmpty(sanitizedChatMessages) && isArray(chatMessages)) {
+          setChatMessages([botGreeting, ...sanitizedChatMessages.reverse()]);
+        } else if (greeting) {
           restoreChatHistory([botGreeting]);
         }
-
-        fetchingSpace.current = false;
-      } else if (error) {
-        // redirect user to 404 page
-        if (notFound) {
-          notFound();
-        } else {
-          router.push('/not-found');
-        }
+      } catch (err: any) {
+        console.log('fetchChatHistory() err:', err?.message);
+      } finally {
+        setFetchingChatHistory(false);
       }
     };
 
-    getSpaceInfo();
-
-    // eslint-disable-next-line
+    if (spaceId && !isLoading && !isEmpty(spaceInfo?.bots)) {
+      fetchChatHistory();
+    }
   }, [
     spaceId,
-    username,
-    router?.push,
-    addSpace,
+    spaceInfo?.bots,
+    isLoading,
+    userId,
+    setFetchingChatHistory,
     setChatMessages,
     restoreChatHistory,
-    notFound,
-    setSpaceInfo,
   ]);
 
   return <>{children}</>;

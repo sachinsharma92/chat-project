@@ -61,14 +61,14 @@
 }
 
 .cta-chat-input-container {
-  @apply relative flex justify-start items-center h-[48px] w-full mt-[16px] rounded-[48px] pr-[8px] pl-[16px] box-border;
+  @apply relative flex justify-between items-center h-[48px] w-full mt-[16px] rounded-[48px] pr-[8px] pl-[16px] box-border;
 
   border: 1px solid #e5e5e5;
   background: #fff;
 }
 
 .cta-chat-input-container > input {
-  @apply relative ml-[16px] box-border;
+  @apply relative;
 
   max-width: calc(100% - 100px);
   width: 100%;
@@ -81,10 +81,6 @@
 
 .mic {
   @apply relative flex justify-center items-center h-[36px] w-[36px] p-0 rounded-[500px] bg-[#000];
-
-  /* hidden */
-  display: none;
-  height: 0;
 }
 
 .mic > svg > path {

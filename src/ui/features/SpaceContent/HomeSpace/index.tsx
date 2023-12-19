@@ -15,7 +15,7 @@ import {
   YouTubeIcon,
 } from '@/icons';
 import { useForm } from 'react-hook-form';
-import { useBotChat } from '../../Chat/hooks/useBotChat';
+import { useBotChat } from '../../../../hooks/useBotChat';
 import { useAppStore, useBotData } from '@/store/App';
 import { SpaceContentTabEnum } from '@/types';
 

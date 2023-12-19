@@ -3,3 +3,7 @@
   height: 32px;
   width: 32px;
 }
+
+.user-avatar > span > span {
+  background: transparent;
+}

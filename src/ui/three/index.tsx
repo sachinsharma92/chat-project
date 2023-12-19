@@ -5,7 +5,7 @@ import { ReactNode, useEffect, useRef } from 'react';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { OutlineEffect } from 'three/addons/effects/OutlineEffect.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { BotChatEvents } from '@/ui/features/Chat/hooks/useBotChat';
+import { BotChatEvents } from '@/hooks/useBotChat';
 import { GroundProjectedSkybox } from 'three/addons/objects/GroundProjectedSkybox.js';
 import {
   VRMSpringBoneManager,
@@ -468,6 +468,7 @@ const ThreeJSComponent = (props: { children?: ReactNode }) => {
       camera.aspect = container.clientWidth / container.clientHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(container.clientWidth, container.clientHeight);
+      renderer.setPixelRatio(window.devicePixelRatio);
       //renderer.render( scene, camera );
       effect.render(scene, camera);
     }

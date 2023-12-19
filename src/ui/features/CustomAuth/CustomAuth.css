@@ -219,6 +219,19 @@
   background: rgba(24, 24, 27, 0.8) !important;
 }
 
+.forgot-password {
+  @apply relative w-full mt-4 mb-4 flex justify-center items-center box-border;
+}
+
+.forgot-password > a {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.forgot-password > a:hover {
+  text-decoration: underline;
+}
+
 .providers {
   @apply flex justify-center items-center;
 

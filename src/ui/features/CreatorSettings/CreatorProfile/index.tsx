@@ -10,6 +10,8 @@ import {
 } from '@/lib/supabase';
 import { useAuth } from '@/hooks';
 import { head, isEmpty, pick, size } from 'lodash';
+import { uploadImageAvatarFile } from '@/lib/utils/upload';
+import { useToast } from '@/components/ui/use-toast';
 
 import Avatar from '@/components/common/Avatar/Avatar';
 import Button from '@/components/common/Button';
@@ -18,8 +20,6 @@ import TextareaAutosize from 'react-textarea-autosize';
 import Links from './Links';
 
 import './CreatorProfile.css';
-import { uploadImageAvatarFile } from '@/lib/utils/upload';
-import { useToast } from '@/components/ui/use-toast';
 
 const CreatorProfile = () => {
   const [
@@ -191,7 +191,13 @@ const CreatorProfile = () => {
         <section>
           <h2>Photo</h2>
           <div className="relative w-full flex justify-start items-center mt-[8px]">
-            <Avatar height={64} width={64} src={image} name={displayName} />
+            <Avatar
+              className="creator-profile-avatar"
+              height={64}
+              width={64}
+              src={image}
+              name={displayName}
+            />
             <Button className="change-photo" onClick={onAccountAvatarUpdate}>
               Change Photo
             </Button>

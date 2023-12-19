@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useBotData } from '@/store/App';
 import { useEffect, useMemo, useRef } from 'react';
 import { filter, isEmpty, map } from 'lodash';
-import { useBotChat } from '../../Chat/hooks/useBotChat';
+import { useBotChat } from '../../../../hooks/useBotChat';
 import { OpenAIRoles } from '@/types';
 
 import TextInput from '@/components/common/TextInput';
