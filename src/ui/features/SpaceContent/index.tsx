@@ -8,13 +8,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SpaceContentTabEnum } from '@/types';
 import { useAppStore } from '@/store/App';
 
+import dynamic from 'next/dynamic';
 import Button from '@/components/common/Button';
 import Avatar from '@/components/common/Avatar/Avatar';
-import HomeSpace from './HomeSpace';
 import BotChat from './BotChat';
 import SpaceDescription from '../SpaceDescription';
 
 import './SpaceContent.css';
+
+const HomeSpace = dynamic(() => import('./HomeSpace'), { ssr: false });
 
 const SpaceContent = () => {
   const { spaceInfo } = useSelectedSpace();

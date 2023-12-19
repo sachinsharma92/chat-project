@@ -1,7 +1,9 @@
 .terms-page-container {
-  @apply flex justify-center items-start w-full h-full;
+  @apply flex justify-center items-start w-full;
 
-  height: 100%;
+  min-height: 100%;
+  box-sizing: border-box;
+  background: #f8f6f0;
 }
 
 .terms-page {

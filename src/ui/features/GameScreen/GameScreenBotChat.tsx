@@ -3,7 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { FileIcon, Microphone } from '@/icons';
 import { useBotData } from '@/store/App';
-import { useBotChat } from '../Chat/hooks/useBotChat'; 
+import { useBotChat } from '../../../hooks/useBotChat'; 
 import { useMemo } from 'react';
 import { filter, isEmpty, map } from 'lodash';
 import { OpenAIRoles } from '@/types';

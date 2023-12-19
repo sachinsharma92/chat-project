@@ -15,7 +15,7 @@ import {
 import { create } from 'zustand';
 import { Client } from 'colyseus.js';
 import { DialogEnums, MobileDrawerEnums } from '@/types/dialog';
-import { cloneDeep, head, includes, isEmpty, map } from 'lodash';
+import { cloneDeep, head, includes, isArray, isEmpty, map } from 'lodash';
 
 /**
  * In-app related states
@@ -76,15 +76,29 @@ export const useSpacesStore = create<ISpaceStoreState>()(set => ({
     }),
   /** Update space info */
   setSpaceInfo: (spaceId: string, props: Record<string, any>) =>
-    set(state => ({
-      spaces: map(state.spaces, space => {
-        if (space?.id && space?.id === spaceId) {
-          return { ...space, ...props };
-        }
+    set(state => {
+      const spaceIds = map(state.spaces, s => s?.id);
 
-        return space;
-      }),
-    })),
+      if (includes(spaceIds, spaceId)) {
+        return {
+          spaces: map(state.spaces, space => {
+            if (space?.id && space?.id === spaceId) {
+              return { ...space, ...props };
+            }
+
+            return space;
+          }),
+        };
+      }
+
+      if (spaceId) {
+        return {
+          spaces: [...state.spaces, props],
+        };
+      }
+
+      return state;
+    }),
   clearCampsList: () =>
     set(state => ({ ...state, selectedSpaceId: '', spaces: [] })),
 }));
@@ -120,12 +134,16 @@ export const botnetChatHistoryLocalKey = 'botnetChatHistoryLocalKey';
 export const useBotData = create<IBotData>()(set => ({
   chatMessages: [],
   botRoomIsResponding: false,
+  fetchingChatHistory: false,
+  setFetchingChatHistory(fetchingChatHistory) {
+    return set(() => ({ fetchingChatHistory }));
+  },
   setChatMessages: chatMessages => set(() => ({ chatMessages })),
   setBotRoomIsResponding: (botRoomIsResponding: boolean) =>
     set(() => ({ botRoomIsResponding })),
   storeChatHistory(chatMessages) {
     /// save
-    if (!isEmpty(chatMessages)) {
+    if (isArray(chatMessages)) {
       const sanitizedChatMessages = cloneDeep(chatMessages);
       const firstMessage = head(sanitizedChatMessages);
 
@@ -148,6 +166,7 @@ export const useBotData = create<IBotData>()(set => ({
     /// restore
     try {
       const chatMessagesStr = localStorage.getItem(botnetChatHistoryLocalKey);
+
       if (chatMessagesStr && !isEmpty(chatMessagesStr)) {
         const storedChatMessages = JSON.parse(chatMessagesStr);
 
@@ -157,6 +176,8 @@ export const useBotData = create<IBotData>()(set => ({
             chatMessages: [...(chatMessages || []), ...storedChatMessages],
           };
         });
+      } else if (!isEmpty(chatMessages)) {
+        return set(() => ({ chatMessages }));
       }
     } catch (err) {}
   },

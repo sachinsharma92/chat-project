@@ -191,7 +191,13 @@ const CreatorProfile = () => {
         <section>
           <h2>Photo</h2>
           <div className="relative w-full flex justify-start items-center mt-[8px]">
-            <Avatar height={64} width={64} src={image} name={displayName} />
+            <Avatar
+              className="creator-profile-avatar"
+              height={64}
+              width={64}
+              src={image}
+              name={displayName}
+            />
             <Button className="change-photo" onClick={onAccountAvatarUpdate}>
               Change Photo
             </Button>

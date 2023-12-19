@@ -4,6 +4,10 @@ import { includes, last, size, split } from 'lodash';
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
 
+/**
+ * Fetch active username
+ * @returns
+ */
 export const useUsername = () => {
   const pathname = usePathname();
 
@@ -23,6 +27,9 @@ export const useUsername = () => {
             'settings',
             'register',
             'terms',
+            'reset-password',
+            'forgot-password',
+            'oauth/',
           ],
           targetUsername,
         )

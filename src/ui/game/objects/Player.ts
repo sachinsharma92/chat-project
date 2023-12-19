@@ -1,7 +1,6 @@
 'use client';
 
 import Phaser from 'phaser';
-import { isChatFocused } from '@/ui/features/Chat/ChatInput';
 import { joystickProviderStoreRef } from '@/store/Joystick';
 
 export class Player extends Phaser.GameObjects.Sprite {
@@ -128,7 +127,7 @@ export class Player extends Phaser.GameObjects.Sprite {
       this.body.setVelocity(0);
     }
 
-    if (keys && !isChatFocused()) {
+    if (keys) {
       const playerVelocity = new Phaser.Math.Vector2();
 
       // movements

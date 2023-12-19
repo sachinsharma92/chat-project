@@ -8,7 +8,6 @@ import Image from 'next/image';
 import Avatar from '@/components/common/Avatar/Avatar';
 import Link from 'next/link';
 import * as EmailValidator from 'email-validator';
-import './CustomAuth.css';
 
 import { useEffect, useMemo, useState } from 'react';
 import { BotnetIcon, GithubLogoIcon } from '@/icons';
@@ -16,12 +15,15 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { isEmpty, toString } from 'lodash';
 import { AuthSection } from '@/app/auth/page';
-import { postEmailWaitlist, supabaseClient } from '@/lib/supabase';
+import { supabaseClient } from '@/lib/supabase';
 import { RedirectTo } from '@supabase/auth-ui-shared';
 import { useBotnetAuth } from '@/store/Auth';
 import { useRouterQuery } from '@/hooks';
-import { isProduction } from '@/lib/environment';
 import { CheckCircledIcon } from '@radix-ui/react-icons';
+
+import './CustomAuth.css';
+import { isDevelopment, isStaging } from '@/lib/environment';
+import { defaultSpaceId } from '@/store/AuthProvider';
 
 /**
  * Custom auth page
@@ -46,7 +48,6 @@ const CustomAuth = (props: { defaultSection?: AuthSection }) => {
     register,
     handleSubmit,
     getValues,
-    setValue,
     formState: { errors },
   } = useForm();
   const [error, setError] = useState('');
@@ -105,17 +106,6 @@ const CustomAuth = (props: { defaultSection?: AuthSection }) => {
           // let AuthProvider.tsx handle auth changes
           setIsLoading(true);
         }
-      } else if (isProduction && authSectionPick === AuthSection['sign-up']) {
-        // waitlist for prod env
-        const { error: waitlistError } = await postEmailWaitlist(email);
-
-        if (!waitlistError?.message) {
-          // success
-          setValue('email', '');
-          setSuccessMessage("You're on the waitlist!");
-        } else {
-          setError(waitlistError?.message?.toString());
-        }
       } else if (authSectionPick === AuthSection['sign-up']) {
         const options: { emailRedirectTo: RedirectTo; data?: object } = {
           emailRedirectTo: '',
@@ -137,7 +127,8 @@ const CustomAuth = (props: { defaultSection?: AuthSection }) => {
         if (!isEmpty(signUpSession)) {
           // success
           // redirect
-          navigate('/');
+          // navigate('/settings'); @todo
+          router.push('/?space=' + defaultSpaceId);
           // let AuthProvider.tsx handle auth changes
           setIsLoading(true);
         }
@@ -146,6 +137,23 @@ const CustomAuth = (props: { defaultSection?: AuthSection }) => {
       console.log('submitAuth() err:', err?.message);
     } finally {
       setSubmitted(false);
+    }
+  };
+
+  const handleLoginWithGithub = async () => {
+    const redirectTo = `${window.location.origin}/oauth/github`;
+
+    const { error, data } = await supabaseClient.auth.signInWithOAuth({
+      provider: 'github',
+      options: { redirectTo, scopes: 'user:email,read:user,public_repo' },
+    });
+
+    if (isStaging || isDevelopment) {
+      console.log('signInWithOAuth data', data);
+    }
+
+    if (error) {
+      setError(error.message);
     }
   };
 
@@ -216,12 +224,7 @@ const CustomAuth = (props: { defaultSection?: AuthSection }) => {
           <div className={cx('get-started-label', Inter.className)}>
             {authSectionPick === AuthSection.entry && <h1> Get Started </h1>}
             {authSectionPick === AuthSection.login && <h1> Log In </h1>}
-            {authSectionPick === AuthSection['sign-up'] && !isProduction && (
-              <h1> Sign Up </h1>
-            )}
-            {authSectionPick === AuthSection['sign-up'] && isProduction && (
-              <h1> Join the Waitlist </h1>
-            )}
+            {authSectionPick === AuthSection['sign-up'] && <h1> Sign Up </h1>}
           </div>
           <form onSubmit={handleSubmit(submitAuth)}>
             <TextInput
@@ -236,9 +239,7 @@ const CustomAuth = (props: { defaultSection?: AuthSection }) => {
               })}
             />
             {(authSectionPick === AuthSection.login ||
-              // waitlist on prod for now
-              (authSectionPick === AuthSection['sign-up'] &&
-                !isProduction)) && (
+              authSectionPick === AuthSection['sign-up']) && (
               <TextInput
                 placeholder={'Your password'}
                 className="auth-input auth-password"
@@ -308,11 +309,18 @@ const CustomAuth = (props: { defaultSection?: AuthSection }) => {
             <Button
               ariaLabel="Continue with Github"
               className="provider-button provider-github-button"
+              onClick={handleLoginWithGithub}
             >
               <GithubLogoIcon />
               <p>Github</p>
             </Button>
           </div>
+
+          {authSectionPick === AuthSection.login && (
+            <div className="forgot-password">
+              <Link href="/forgot-password">Forgot password?</Link>
+            </div>
+          )}
         </div>
 
         <div className="custom-auth-footer">

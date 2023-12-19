@@ -24,11 +24,17 @@ export const useSelectedSpace = () => {
         filter(
           spaces,
           space =>
-            space?.id === paramSpaceId || space?.host?.username === username,
+            (paramSpaceId && space?.id === paramSpaceId) ||
+            (!paramSpaceId && space?.host?.username === username),
         ),
       ) || null,
     [spaces, paramSpaceId, username],
   );
 
-  return { spaceInfo, spaceId: paramSpaceId || spaceInfo?.id || '' };
+  const spaceId = useMemo(
+    () => paramSpaceId || spaceInfo?.id || '',
+    [spaceInfo?.id, paramSpaceId],
+  );
+
+  return { spaceInfo, spaceId };
 };

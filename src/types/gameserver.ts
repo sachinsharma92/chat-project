@@ -29,6 +29,8 @@ export interface IGameServerState {
 export interface IBotData {
   chatMessages: ChatMessageProps[];
   botRoomIsResponding: boolean;
+  fetchingChatHistory: boolean;
+  setFetchingChatHistory: (fetchingChatHistory: boolean) => void;
   storeChatHistory: (chatMessages: ChatMessageProps[]) => void;
   restoreChatHistory: (chatMessages?: ChatMessageProps[]) => void;
   setChatMessages: (roomChatMessages: ChatMessageProps[]) => void;

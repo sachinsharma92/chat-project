@@ -16,6 +16,7 @@ import Appearance from './Apperance';
 // import Voice from './Voice';
 
 import './CreatorSettings.css';
+import { isProduction } from '@/lib/environment';
 
 export enum CreatorSettingsView {
   'profile' = 'profile',
@@ -99,34 +100,38 @@ const CreatorSettings = () => {
                   Personality
                 </Button>
               </li>
-              <li>
-                <Button
-                  onClick={() =>
-                    pickCreatorView(CreatorSettingsView.appearance)
-                  }
-                  className={cn(
-                    'relative',
-                    creatorView === CreatorSettingsView.appearance
-                      ? 'creator-settings-nav-active'
-                      : '',
-                  )}
-                >
-                  Appearance
-                </Button>
-              </li>
-              <li>
-                <Button
-                  onClick={() => pickCreatorView(CreatorSettingsView.voice)}
-                  className={cn(
-                    'relative',
-                    creatorView === CreatorSettingsView.voice
-                      ? 'creator-settings-nav-active'
-                      : '',
-                  )}
-                >
-                  Voice
-                </Button>
-              </li>
+              {!isProduction && (
+                <li>
+                  <Button
+                    onClick={() =>
+                      pickCreatorView(CreatorSettingsView.appearance)
+                    }
+                    className={cn(
+                      'relative',
+                      creatorView === CreatorSettingsView.appearance
+                        ? 'creator-settings-nav-active'
+                        : '',
+                    )}
+                  >
+                    Appearance
+                  </Button>
+                </li>
+              )}
+              {!isProduction && (
+                <li>
+                  <Button
+                    onClick={() => pickCreatorView(CreatorSettingsView.voice)}
+                    className={cn(
+                      'relative',
+                      creatorView === CreatorSettingsView.voice
+                        ? 'creator-settings-nav-active'
+                        : '',
+                    )}
+                  >
+                    Voice
+                  </Button>
+                </li>
+              )}
             </ul>
           </div>
         </div>

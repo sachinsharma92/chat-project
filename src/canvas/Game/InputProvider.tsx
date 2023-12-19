@@ -1,7 +1,6 @@
 'use client';
 
 import { useDirectionStore } from '@/store/Canvas';
-import { isChatFocused } from '@/ui/features/Chat/ChatInput';
 import React, {
   createContext,
   useEffect,
@@ -52,10 +51,6 @@ function InputProvider({ children }: PropsWithChildren<{}>) {
   }, [direction]);
 
   const onKeyDown = (event: KeyboardEvent) => {
-    if (isChatFocused()) {
-      return;
-    }
-
     if (!keyPressed[event.code]) {
       switch (event.code) {
         case 'KeyW':
@@ -83,10 +78,6 @@ function InputProvider({ children }: PropsWithChildren<{}>) {
   };
 
   const onKeyUp = (event: KeyboardEvent) => {
-    if (isChatFocused()) {
-      return;
-    }
-
     switch (event.code) {
       case 'KeyW':
       case 'ArrowUp':

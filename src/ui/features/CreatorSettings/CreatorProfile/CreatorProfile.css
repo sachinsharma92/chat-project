@@ -10,6 +10,10 @@
   line-height: 130%;
 }
 
+.creator-profile-avatar > span {
+  background: transparent;
+}
+
 .creator-profile > section,
 .creator-profile > form > section {
   @apply relative w-full mt-[24px];

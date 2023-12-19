@@ -16,17 +16,20 @@ import {
   useMemo,
 } from 'react';
 import { useBotnetAuth } from './Auth';
-import { ceil, head, isEmpty } from 'lodash';
+import { ceil, head, includes, isEmpty } from 'lodash';
 import { Session } from '@supabase/supabase-js';
-import { useAppStore, useGameServer, useSpacesStore } from './App';
-import { getUserIdFromSession, timeout } from '@/lib/utils';
+import { useGameServer, useSpacesStore } from './App';
+import {
+  getUserIdFromSession,
+  isPathnameAppRoute,
+  isPathnameForUpdatePassword,
+  timeout,
+} from '@/lib/utils';
 import { usePathname, useRouter } from 'next/navigation';
-import { DialogEnums } from '@/types/dialog';
 import { useRouterQuery } from '@/hooks';
 import { IUser } from '@/types/auth';
 import { v4 as uuid } from 'uuid';
 import { botnetGuestIdLocalStorageKey } from '@/constants';
-import { useUsername } from '@/hooks/useUsername';
 import { isDevelopment, isStaging } from '@/lib/environment';
 
 interface IAuthAppState {}
@@ -73,6 +76,11 @@ const reducer = (state: IAuthAppState, action: Action) => {
   }
 };
 
+export const defaultSpaceId =
+  isStaging || isDevelopment
+    ? '554eb516-1a29-4739-b748-d239248607d3'
+    : '5b1e8603-144c-4b13-842a-ada5533ea43c';
+
 const AuthProvider = (props: { children?: ReactNode }) => {
   const { children } = props;
   const [
@@ -101,7 +109,6 @@ const AuthProvider = (props: { children?: ReactNode }) => {
     state.setBio,
   ]);
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [setShowDialog] = useAppStore(state => [state.setShowDialog]);
   const [addSpace, setSpaceInfo] = useSpacesStore(state => [
     state.addSpace,
     state.setSpaceInfo,
@@ -115,8 +122,6 @@ const AuthProvider = (props: { children?: ReactNode }) => {
   const { searchParams, navigate } = useRouterQuery();
   const paramSpaceId = useMemo(() => searchParams.get('space'), [searchParams]);
 
-  const { username } = useUsername();
-
   const fromAuthPage = useMemo(
     () =>
       pathname?.startsWith('/login') ||
@@ -124,11 +129,13 @@ const AuthProvider = (props: { children?: ReactNode }) => {
       pathname?.startsWith('/auth'),
     [pathname],
   );
+
   /**
    * Sign out user session from supabase auth
    */
   const signOutUser = useCallback(async () => {
     setSession(null);
+    setIsLoading(true);
 
     const { error } = await supabaseClient.auth.signOut();
 
@@ -205,10 +212,6 @@ const AuthProvider = (props: { children?: ReactNode }) => {
 
             console.log('getUserProfile() spaceId:', spaceId);
 
-            if (recentlyCreated) {
-              setShowDialog(true, DialogEnums.onboardDisplayName);
-            }
-
             if (!isEmpty(spaceId)) {
               addSpace({ id: spaceId, owner: userId });
 
@@ -243,16 +246,11 @@ const AuthProvider = (props: { children?: ReactNode }) => {
                 .catch(console.log);
             }
 
-            if (
-              (!pathname?.startsWith('/settings') &&
-                !pathname?.startsWith('/dashboard') &&
-                !isEmpty(spaceId) &&
-                ((!paramSpaceId && !username) ||
-                  (recentlyCreated && spaceId !== paramSpaceId))) ||
-              fromAuthPage
-            ) {
+            if (!pathname?.startsWith('/settings') && recentlyCreated) {
               // navigate host to dashboard page
               navigate('/settings');
+            } else if (fromAuthPage) {
+              router.push('/?space=' + defaultSpaceId);
             }
 
             setIsLoading(false);
@@ -265,19 +263,14 @@ const AuthProvider = (props: { children?: ReactNode }) => {
         console.log('getUserProfile() err:', err?.message);
       }
     },
-
-    // eslint-disable-next-line
     [
-      username,
-      session?.user,
+      router,
       pathname,
-      paramSpaceId,
       fromAuthPage,
       setSpaceInfo,
       navigate,
       signOutUser,
       addSpace,
-      setShowDialog,
       setIsLoading,
       setImage,
       setHandle,
@@ -311,32 +304,34 @@ const AuthProvider = (props: { children?: ReactNode }) => {
           pathname?.startsWith('/register') ||
           pathname?.startsWith('/auth');
 
-        if (newSession && !isEmpty(newSession?.user)) {
-          if (fromAuthPage) {
-            navigate('/settings');
+        if (
+          (pathname === '/' && !paramSpaceId) ||
+          (newSession?.user && paramSpaceId !== defaultSpaceId) ||
+          (newSession?.user && fromAuthPage) ||
+          !newSession
+        ) {
+          if (
+            // only redirect if user is not updating password
+            !isPathnameForUpdatePassword(pathname) &&
+            // only redirect if user is not on predefined routes
+            (!isPathnameAppRoute(pathname) || includes(pathname, '/settings'))
+          ) {
+            // in prod force navigate to zero two's space
+            // for users landed in botnet.com and not logged in
+            router.replace(
+              window.location.origin + '/?space=' + defaultSpaceId,
+              {},
+            );
           }
+        }
 
+        if (newSession && !isEmpty(newSession?.user)) {
           setIsLoading(true);
           setSession(newSession);
           getUserProfile(newSession);
           setEmail(newSession?.user?.email || '');
         } else {
-          if (pathname?.startsWith('/settings')) {
-            router.push('/');
-          }
-
           setIsLoading(false);
-
-          if (pathname === '/' || !pathname) {
-            const defaultSpaceId =
-              isStaging || isDevelopment
-                ? '554eb516-1a29-4739-b748-d239248607d3'
-                : '5b1e8603-144c-4b13-842a-ada5533ea43c';
-
-            // in prod force navigate to zero two's space
-            // for users landed in botnet.com and not logged in
-            router.push('/?space=' + defaultSpaceId);
-          }
         }
       })
       .catch(console.log);
@@ -344,6 +339,7 @@ const AuthProvider = (props: { children?: ReactNode }) => {
     router,
     pathname,
     sessionChecked,
+    paramSpaceId,
     navigate,
     setIsLoading,
     getUserProfile,

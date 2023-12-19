@@ -59,6 +59,13 @@ serve(async req => {
         ...spaceProfilePayload,
       });
 
+    const { error: userPrivateDataCreateError } = await supabaseClient
+      .from('user_private')
+      .insert({
+        owner: userId,
+        created_at: new Date().toISOString(),
+      });
+
     if (userProfileCreateError?.message) {
       console.log(
         'sign-up-user-profile user_profiles err:',
@@ -70,6 +77,13 @@ serve(async req => {
       console.log(
         'sign-up-user-profile spaces_profiles err:',
         userProfileCreateError?.message,
+      );
+    }
+
+    if (userPrivateDataCreateError?.message) {
+      console.log(
+        'sign-up-user-profile user_private err:',
+        userPrivateDataCreateError?.message,
       );
     }
   }

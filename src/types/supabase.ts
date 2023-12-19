@@ -24,7 +24,21 @@ export interface IUserPrivateProps {
     backgroundUrl?: string;
   };
   owner: string;
+  chatResetAt?: string;
   createdAt?: string;
   updatedAt?: string;
   deletedAt?: string;
+}
+
+export interface IBotChatMessage {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string;
+  sessionId: string;
+  displayName: string;
+  spaceId: string;
+  role: string;
+  message: string;
+  authorId: string;
 }

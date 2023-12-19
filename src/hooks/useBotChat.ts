@@ -218,21 +218,11 @@ export const useBotChat = () => {
           chatMessages,
           message => pick(message, ['role', 'message']),
         );
-        const botGreeting = {
-          id: uuid(),
-          authorId: '',
-          message: greeting,
-          role: OpenAIRoles.assistant,
-        };
-        const firstChatMessage = !messageHistory || isEmpty(messageHistory);
-        const updatedMessages = [
-          ...(firstChatMessage && !isEmpty(greeting) ? [botGreeting] : []),
-          ...chatMessages,
-          chatMessage,
-        ];
 
         setBotRoomIsResponding(true);
-        setChatMessages(updatedMessages);
+
+        const updatedChatMessagesFromUserChat = [...chatMessages, chatMessage];
+        setChatMessages(updatedChatMessagesFromUserChat);
         const bot = camelcaseKeys(head(spaceInfo?.bots) || {});
         const authHeaders = getSupabaseAuthHeaders();
         const reqHeaders = {
@@ -261,7 +251,7 @@ export const useBotChat = () => {
           await playBotAudio(responseMessage);
 
           const updatedChatMessages = [
-            ...updatedMessages,
+            ...updatedChatMessagesFromUserChat,
             {
               ...pick(camelcaseKeys(responseMessagePayload), [
                 'id',
@@ -276,7 +266,6 @@ export const useBotChat = () => {
           // store chat
           // insert completed chat
           setChatMessages(updatedChatMessages);
-          storeChatHistory(updatedChatMessages);
         }
 
         setBotRoomIsResponding(false);
@@ -309,6 +298,7 @@ export const useBotChat = () => {
     }
 
     setChatMessages([botGreeting]);
+    storeChatHistory([]);
   };
 
   return { resetChat, sendBotChatMessage };

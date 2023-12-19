@@ -1,11 +1,11 @@
 .creator-settings {
-  @apply relative flex-col justify-start items-center w-full h-full box-border top-0 left-0 p-[24px] pt-[16px];
+  @apply relative flex-col justify-start items-center w-full h-full box-border top-0 left-0 pt-[16px];
 
   min-width: 1000px;
 }
 
 .creator-settings-header-nav {
-  @apply relative flex w-full h-[48px] box-border;
+  @apply relative flex w-full h-[48px] pl-[24px] pr-[24px] box-border;
 }
 
 .creator-settings-content {
