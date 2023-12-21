@@ -43,13 +43,13 @@ const SpaceContent = () => {
     );
   }, [spaceInfo]);
 
-  const onSharePage = () => {
-    // pop up share
-    if (navigator?.share) {
-      const title = `Botnet -${spaceName}`;
-      navigator.share({ title, text: title, url: `${window.location.href}` });
-    }
-  };
+  // const onSharePage = () => {
+  //   // pop up share
+  //   if (navigator?.share) {
+  //     const title = `Botnet -${spaceName}`;
+  //     navigator.share({ title, text: title, url: `${window.location.href}` });
+  //   }
+  // };
 
   return (
     <div className="space-content-container">
