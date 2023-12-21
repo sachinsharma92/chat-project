@@ -38,3 +38,6 @@ export { default as ExpandSmallBoxIcon } from './ExpandSmallBoxIcon';
 export { default as PlayIcon } from './PlayIcon';
 export { default as HomeOutlineIcon } from './HomeOutlineIcon';
 export { default as CommentIcon } from './CommentIcon';
+export { default as VolumeIcon } from './VolumeIcon';
+export { default as VerifyIcon } from './VerifyIcon';
+

@@ -10,6 +10,8 @@ export enum SpaceContentTabEnum {
   'chat' = 'chat',
   'world' = 'world',
   'home' = 'home',
+  'reviews' = 'reviews',
+  'pastChats'= 'pastChats'
 }
 
 export interface IAppState {
