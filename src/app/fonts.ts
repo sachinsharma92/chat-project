@@ -1,4 +1,4 @@
-import { Inter_Tight, Inter as InterFont } from '@next/font/google';
+import { Inter_Tight, Inter as InterFont } from "next/font/google";
 
 export const InterTight = Inter_Tight({
   style: ['normal'],
