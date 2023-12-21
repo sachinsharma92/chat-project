@@ -14,7 +14,7 @@ import dynamic from 'next/dynamic';
 import SpaceDescription from '../SpaceDescription';
 import BotChat from './BotChat';
 
-import { Heart, StarIcon } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import './SpaceContent.css';
 import { StarFilledIcon } from '@radix-ui/react-icons';
 
