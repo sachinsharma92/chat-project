@@ -40,13 +40,13 @@ const MainComponent = () => {
     }
   };
 
-  const toggleMinimizeSmGameScreen = () => {
-    setMinimizeSm(!minimizeSm);
+  // const toggleMinimizeSmGameScreen = () => {
+  //   setMinimizeSm(!minimizeSm);
 
-    if (!minimizeSm) {
-      setMinimizeMed(true);
-    }
-  };
+  //   if (!minimizeSm) {
+  //     setMinimizeMed(true);
+  //   }
+  // };
 
   return (
     <div className="main-component">
