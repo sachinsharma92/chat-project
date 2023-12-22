@@ -1,5 +1,5 @@
 .creator-settings {
-  @apply relative flex-col justify-start items-center w-full h-full box-border top-0 left-0 pt-[16px];
+  @apply relative flex-col justify-start items-center w-full h-full box-border top-0 left-0;
 
   min-width: 1000px;
 }
@@ -9,15 +9,13 @@
 }
 
 .creator-settings-content {
-  @apply relative flex justify-start items-start w-full box-border mt-[16px];
-
-  border-top: 1px solid #e5e5e5;
+  @apply relative flex justify-start items-start w-full box-border;
 }
 
 .creator-settings-content-left {
   @apply relative w-[400px] p-[40px] box-border;
-
   border-right: 1px solid #e5e5e5;
+  height: 100vh;
 }
 
 .creator-settings-content-nav {
@@ -25,13 +23,13 @@
 }
 
 .creator-settings-content-right {
-  @apply relative w-full box-border pt-[40px] pl-[120px] pb-[32px];
+  @apply relative w-full box-border pt-[40px] pl-[120px] pb-[40px];
 
   max-width: 100%;
 }
 
 .creator-settings-content-nav > ul {
-  @apply relative ml-[60px] box-border mt-[24px];
+  @apply relative;
 
   list-style: none;
   list-style-type: none;
@@ -55,6 +53,7 @@
 
 .creator-settings-nav-active {
   background: #f5f5f5 !important;
+  @apply font-semibold text-black;
 }
 
 .settings-cta-error {

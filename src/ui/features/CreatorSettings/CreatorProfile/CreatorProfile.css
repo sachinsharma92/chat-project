@@ -1,5 +1,6 @@
 .creator-profile {
   @apply relative w-full box-border;
+  max-width: 500px;
 }
 
 .creator-profile > h1 {

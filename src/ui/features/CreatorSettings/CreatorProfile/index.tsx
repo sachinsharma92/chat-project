@@ -49,6 +49,7 @@ const CreatorProfile = () => {
     handleSubmit,
     setValue,
     formState: { errors },
+    watch,
   } = useForm();
 
   const [updating, setUpdating] = useState(false);
@@ -236,12 +237,17 @@ const CreatorProfile = () => {
               value: bio,
             })}
           />
+
+          <div className='flex text-xs text-[#666] justify-between'>
+            <span>Describe your Bot to the public. This won’t be used for its personality.</span>
+            <span> {`${size(watch('instructions'))} / 300`}</span>
+          </div>
         </section>
 
         <section className="mb-2">
           <h2>Links </h2>
 
-          <div className="relative w-[500px] box-border">
+          <div className="relative w-[500px]">
             <Links />
           </div>
         </section>

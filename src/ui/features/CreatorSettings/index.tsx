@@ -17,6 +17,7 @@ import Appearance from './Apperance';
 
 import './CreatorSettings.css';
 import { isProduction } from '@/lib/environment';
+import { ArrowLeft } from 'lucide-react';
 
 export enum CreatorSettingsView {
   'profile' = 'profile',
@@ -53,21 +54,17 @@ const CreatorSettings = () => {
 
   return (
     <div className="creator-settings">
-      <div className="creator-settings-header-nav">
-        <AppNavigation />
-      </div>
-
       <div className="creator-settings-content">
         <div className="creator-settings-content-left">
           <div className="creator-settings-content-nav">
-            <div className="relative h-[40px] flex justify-start items-center box-border">
+            <div className="relative flex justify-start flex-col">
               <Button
-                className="relative h-[36px] w-[36px] box-border p-[6px] rounded-[80px] bg-[#F5F5F5]"
+                className="relative h-[36px] w-[36px] p-[6px] rounded-[80px] bg-[#F5F5F5]"
                 onClick={navigateToSpace}
               >
-                <ArrowLeftIcon height={'16px'} width={'16px'} />
+                <ArrowLeft height={'18px'} width={'18px'} />
               </Button>
-              <p className="ml-[40px]">{spaceName}</p>
+              <p className="font-bold mt-10 mb-6 text-xl">{spaceName}</p>
             </div>
 
             <ul>
