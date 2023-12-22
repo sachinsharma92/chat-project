@@ -1,23 +1,22 @@
 'use client';
 
 import { useCreatorSpace } from '@/hooks';
-import { useMemo, useState } from 'react';
-import { ArrowLeftIcon } from '@radix-ui/react-icons';
-import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
+import { useMemo, useState } from 'react';
 
-import dynamic from 'next/dynamic';
 import Button from '@/components/common/Button';
+import dynamic from 'next/dynamic';
+import Appearance from './Apperance';
 import CreatorProfile from './CreatorProfile';
 import Personality from './Personality';
-import Appearance from './Apperance';
 
 // import AppNavigation from '../AppNavigation';
 // import Voice from './Voice';
 
-import './CreatorSettings.css';
 import { isProduction } from '@/lib/environment';
 import { ArrowLeft } from 'lucide-react';
+import './CreatorSettings.css';
 
 export enum CreatorSettingsView {
   'profile' = 'profile',
@@ -27,7 +26,6 @@ export enum CreatorSettingsView {
   'community' = 'community',
 }
 
-const AppNavigation = dynamic(() => import('../AppNavigation'), { ssr: false });
 const Voice = dynamic(() => import('./Voice'), { ssr: false });
 
 const CreatorSettings = () => {
