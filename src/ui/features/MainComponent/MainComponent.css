@@ -16,7 +16,7 @@
 .main-component-content {
   @apply flex justify-between items-center h-full mt-[16px];
   max-height: calc(100% - 38px - 16px);
-  padding-right: 24px;
+  padding-right: 54px;
 }
 
 .right-sidebar {

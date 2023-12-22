@@ -32,7 +32,7 @@
   padding: 24px;
   border: 1px solid #e5e5e5;
   background: #fff;
-  box-shadow: 0px 1px 8px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0px 6px 20px 1px rgba(0, 0, 0, 0.05);
 }
 
 .greetings {
@@ -109,6 +109,11 @@
 
 .info-item h4 {
   margin-top: 0;
+}
+
+button:focus,
+button:focus-visible {
+  outline: none;
 }
 
 @media screen and (max-width: 720px) {
