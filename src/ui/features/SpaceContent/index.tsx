@@ -54,11 +54,6 @@ const SpaceContent = () => {
   return (
     <div className="space-content-container">
       <div className="space-content-header">
-        {/* <div className="space-content-header-left">
-          <div className="space-content-avatar">
-            <Avatar name={head(spaceName)} src={spaceInfo?.image} />
-          </div>
-        </div> */}
         <div className="space-content-header-right flex justify-between items-center bg-red w-full">
           <div className='space-content-header-main'>
             <p className="space-name">{spaceName}</p>
