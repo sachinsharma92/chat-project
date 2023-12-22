@@ -17,7 +17,7 @@
 }
 
 .left {
-  @apply relative flex;
+  @apply relative flex flex-col gap-10;
 }
 
 .center {

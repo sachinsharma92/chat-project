@@ -16,21 +16,21 @@ const AppNavigation = () => {
         <Button className="logo flex justify-center">
           <BotnetIcon />
         </Button>
-      </div>
 
-      <div className="center">
-        <Button className="search-icon">
-          <HomeOutlineIcon />
-        </Button>
-        <Button className="search-icon">
-          <SearchIcon />
-        </Button>
-        <Button className="search-icon">
-          <CommentIcon />
-        </Button>
-        <Button className="search-icon">
-          <NotificationBellIcon />
-        </Button>
+        <div className="center">
+          <Button className="search-icon">
+            <HomeOutlineIcon />
+          </Button>
+          <Button className="search-icon">
+            <SearchIcon />
+          </Button>
+          <Button className="search-icon">
+            <CommentIcon />
+          </Button>
+          <Button className="search-icon">
+            <NotificationBellIcon />
+          </Button>
+        </div>
       </div>
 
       <div className="right">
