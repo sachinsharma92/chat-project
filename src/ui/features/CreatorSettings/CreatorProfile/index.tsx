@@ -10,8 +10,6 @@ import {
 } from '@/lib/supabase';
 import { useAuth } from '@/hooks';
 import { head, isEmpty, pick, size } from 'lodash';
-import { uploadImageAvatarFile } from '@/lib/utils/upload';
-import { useToast } from '@/components/ui/use-toast';
 
 import Avatar from '@/components/common/Avatar/Avatar';
 import Button from '@/components/common/Button';
@@ -20,6 +18,8 @@ import TextareaAutosize from 'react-textarea-autosize';
 import Links from './Links';
 
 import './CreatorProfile.css';
+import { uploadImageAvatarFile } from '@/lib/utils/upload';
+import { useToast } from '@/components/ui/use-toast';
 
 const CreatorProfile = () => {
   const [

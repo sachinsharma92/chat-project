@@ -14,9 +14,9 @@ import dynamic from 'next/dynamic';
 import SpaceDescription from '../SpaceDescription';
 import BotChat from './BotChat';
 
+import { StarFilledIcon } from '@radix-ui/react-icons';
 import { Heart } from 'lucide-react';
 import './SpaceContent.css';
-import { StarFilledIcon } from '@radix-ui/react-icons';
 
 const HomeSpace = dynamic(() => import('./HomeSpace'), { ssr: false });
 

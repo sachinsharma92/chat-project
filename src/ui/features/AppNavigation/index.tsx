@@ -5,10 +5,8 @@ import { BotnetIcon, CommentIcon, HomeOutlineIcon, NotificationBellIcon, SearchI
 
 import Button from '@/components/common/Button';
 import cx from 'classnames';
-import ProfileMenu from './ProfileMenu';
-// import TextInput from '@/components/common/TextInput';
-import { PlusIcon } from 'lucide-react';
 import './AppNavigation.css';
+import ProfileMenu from './ProfileMenu';
 
 const AppNavigation = () => {
   return (
@@ -32,13 +30,9 @@ const AppNavigation = () => {
         <Button className="search-icon">
           <NotificationBellIcon />
         </Button>
-        {/* <TextInput placeholder="Search" className="search-input" /> */}
       </div>
 
       <div className="right">
-        <Button className="add-icon">
-          <PlusIcon size={18} />
-        </Button>
         <ProfileMenu />
       </div>
     </div>

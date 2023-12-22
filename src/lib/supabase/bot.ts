@@ -135,6 +135,8 @@ export const getBotChatMessagesByPage = async (
     .eq('space_id', trim(spaceId))
     .eq('session_id', trim(userId));
 
+  console.log('afterTimestamp', afterTimestamp);
+
   if (afterTimestamp && !isEmpty(afterTimestamp)) {
     query = query.gte('created_at', afterTimestamp);
   }

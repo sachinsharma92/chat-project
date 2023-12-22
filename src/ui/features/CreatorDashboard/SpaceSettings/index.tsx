@@ -14,6 +14,7 @@ import { uploadImageAvatarFile } from '@/lib/utils/upload';
 import { useToast } from '@/components/ui/use-toast';
 import { updateSpaceProfileProperties } from '@/lib/supabase';
 import { useCreatorSpace } from '@/hooks';
+
 import './SpaceSettings.css';
 import '@/components/common/styles/Textarea.css';
 

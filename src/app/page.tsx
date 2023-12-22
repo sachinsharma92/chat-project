@@ -15,5 +15,4 @@ async function Page() {
   return <CreatorPage />;
 }
 
-export const dynamic = 'force-dynamic';
 export default Page;

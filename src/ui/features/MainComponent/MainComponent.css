@@ -1,9 +1,5 @@
 .main-component {
   @apply fixed flex w-full justify-start items-start top-0 left-0 h-full w-full box-border;
-
-  /* padding: 24px; */
-  /* padding-top: 16px; */
-  /* flex-direction: column; */
 }
 
 .header-nav {

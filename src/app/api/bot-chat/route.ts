@@ -139,6 +139,7 @@ export async function POST(request: Request) {
       // first fine tuned model
       'ft:gpt-3.5-turbo-0613:botnet::8BMExOLn',
   };
+
   const openai = getOpenAI();
   const form = head(botFormRes?.data || []);
   const owner = form?.owner as string;

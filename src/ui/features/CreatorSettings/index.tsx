@@ -5,7 +5,6 @@ import { useMemo, useState } from 'react';
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { isProduction } from '@/lib/environment';
 
 import dynamic from 'next/dynamic';
 import Button from '@/components/common/Button';
@@ -17,6 +16,7 @@ import Appearance from './Apperance';
 // import Voice from './Voice';
 
 import './CreatorSettings.css';
+import { isProduction } from '@/lib/environment';
 
 export enum CreatorSettingsView {
   'profile' = 'profile',

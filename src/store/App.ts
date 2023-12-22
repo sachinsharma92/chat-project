@@ -166,6 +166,7 @@ export const useBotData = create<IBotData>()(set => ({
     /// restore
     try {
       const chatMessagesStr = localStorage.getItem(botnetChatHistoryLocalKey);
+
       if (chatMessagesStr && !isEmpty(chatMessagesStr)) {
         const storedChatMessages = JSON.parse(chatMessagesStr);
 

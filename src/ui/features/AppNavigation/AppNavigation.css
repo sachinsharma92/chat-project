@@ -12,6 +12,7 @@
 
 .login {
   @apply flex justify-center items-center;
+
   max-width: 100px;
 }
 
@@ -26,7 +27,7 @@
 }
 
 .right {
-  @apply relative flex justify-center items-center box-border flex-col gap-7;
+  @apply relative flex justify-center items-center box-border;
 }
 
 .search {
