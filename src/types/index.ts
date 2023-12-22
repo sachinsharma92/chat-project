@@ -9,6 +9,7 @@ export enum MusicPlayerMediaType {
 export enum SpaceContentTabEnum {
   'chat' = 'chat',
   'home' = 'home',
+  'world' = 'world',
   'reviews' = 'reviews',
   'pastChats'= 'pastChats'
 }
