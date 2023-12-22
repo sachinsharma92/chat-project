@@ -14,9 +14,13 @@
 }
 
 .main-component-content {
-  @apply flex justify-between items-center h-full mt-[16px];
-  max-height: calc(100% - 38px - 16px);
+  @apply flex justify-between items-center h-full;
+}
+
+.fullWidthStyle {
+  @apply mt-[16px];
   padding-right: 54px;
+  max-height: calc(100% - 38px - 16px);
 }
 
 .right-sidebar {
@@ -34,7 +38,7 @@
   overflow: hidden;
 }
 
-.game-content {
+.card-game-content {
   border-radius: 40px;
   box-shadow: 0px 6px 20px 0px rgba(0, 0, 0, 0.15);
 }
@@ -74,6 +78,14 @@
   display: none;
 }
 
+.volume-button-style {
+  @apply absolute flex justify-center items-center rounded-[80px] p-[8px] box-border top-[16px] left-[16px];
+
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.24);
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+}
+
 .expand-min-options {
   @apply absolute flex justify-center items-center rounded-[80px] p-[8px] box-border top-[16px] right-[16px];
 
@@ -82,10 +94,15 @@
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
 }
 
-.expand-min-options > button {
+.expand-min-options > button,
+.volume-button-style > button {
   @apply relative flex justify-center items-center h-[40px] w-[40px] p-[4px] box-border rounded-[500px];
 
   background: rgba(0, 0, 0, 0.24);
+}
+
+.volume-button-style > button svg {
+  filter: contrast(0) brightness(100);
 }
 
 .expand-min-options > button:hover {

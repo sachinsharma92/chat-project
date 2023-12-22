@@ -1,23 +1,21 @@
 'use client';
 
-import {
-  ExpandBoxIcon,
-  ExpandSmallBoxIcon,
-  ExpandV2Icon,
-  MinimizeBoxIcon,
-  MinimizeMedBoxIcon,
-} from '@/icons';
-import { useWindowResize } from '@/hooks';
 import { mobileWidthBreakpoint } from '@/constants';
-import { useMemo, useState } from 'react';
+import { useWindowResize } from '@/hooks';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
+import {
+  CloseIcon,
+  ExpandBoxIcon,
+  ExpandV2Icon,
+  Volume2Icon
+} from '@/icons';
 import { head } from 'lodash';
+import { useMemo, useState } from 'react';
 
+import Button from '@/components/common/Button';
 import cx from 'classnames';
 import dynamic from 'next/dynamic';
 import AppNavigation from '../AppNavigation';
-import Button from '@/components/common/Button';
-
 import './MainComponent.css';
 
 const SpaceContent = dynamic(() => import('../SpaceContent'));
@@ -52,11 +50,14 @@ const MainComponent = () => {
 
   return (
     <div className="main-component">
-      <div className="header-nav">
+      <div className={cx('header-nav', { 'space-content-hide': !minimizeMed })}>
         <AppNavigation />
       </div>
-      <div className="main-component-content">
-        <div className="space-content space-content-mobile">
+      <div
+        className={cx('main-component-content', {
+          'fullWidthStyle': minimizeMed,
+        })}>
+        <div className={cx('space-content-mobile', { 'space-content': minimizeMed })}>
           <SpaceContent />
         </div>
 
@@ -65,6 +66,7 @@ const MainComponent = () => {
             'game-content-min-sm': minimizeSm,
             'game-content-max': !minimizeMed,
             'game-content-expand-screen': expandFullScreen,
+            'card-game-content': minimizeMed,
           })}
         >
           <div className="game-content-background">
@@ -76,36 +78,40 @@ const MainComponent = () => {
           <GameScreen
             hideBotChat={minimizeMed && availableWidth >= mobileWidthBreakpoint}
           />
-          <div className="expand-min-options">
-            {availableWidth > mobileWidthBreakpoint && (
-              <Button onClick={toggleMinimizeSmGameScreen}>
-                {!minimizeSm && <MinimizeBoxIcon />}
-                {minimizeSm && <ExpandSmallBoxIcon />}
-              </Button>
-            )}
 
-            {availableWidth > mobileWidthBreakpoint && (
-              <Button onClick={toggleMinimizeMedGameScreen}>
-                {minimizeMed && <ExpandBoxIcon />}
-                {!minimizeMed && <MinimizeMedBoxIcon />}
-              </Button>
-            )}
 
-            {availableWidth <= mobileWidthBreakpoint && (
-              <Button
-                onClick={() => {
-                  setExpandFullScreen(!expandFullScreen);
-                }}
-              >
-                <ExpandV2Icon />
+          <div className='flex w-full'>
+            <div className="volume-button-style">
+              <Button>
+                <Volume2Icon />
               </Button>
-            )}
+            </div>
+
+            <div className="expand-min-options">
+              {availableWidth > mobileWidthBreakpoint && (
+                <Button onClick={toggleMinimizeMedGameScreen}>
+                  {minimizeMed && <ExpandBoxIcon />}
+                  {!minimizeMed && <CloseIcon />}
+                </Button>
+              )}
+
+              {availableWidth <= mobileWidthBreakpoint && (
+                <Button
+                  onClick={() => {
+                    setExpandFullScreen(!expandFullScreen);
+                  }}
+                >
+                  <ExpandV2Icon />
+                </Button>
+              )}
+            </div>
           </div>
         </div>
         <div
-          className={cx('space-content space-content-desktop', {
+          className={cx('space-content-desktop', {
             'space-content-min-sm': minimizeSm,
             'space-content-hide': !minimizeMed,
+            'space-content': minimizeMed
           })}
         >
           <SpaceContent />
