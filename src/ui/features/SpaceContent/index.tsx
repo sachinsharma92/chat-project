@@ -123,7 +123,7 @@ const SpaceContent = () => {
           >
             Past Chats
           </TabsTrigger>
-        </TabsList>
+        </TabsList >
         <TabsContent
           value={SpaceContentTabEnum.home}
           className="space-content-tabs-content box-border mt-[24px] w-full"
@@ -136,8 +136,8 @@ const SpaceContent = () => {
         >
           <BotChat />
         </TabsContent>
-      </Tabs>
-    </div>
+      </Tabs >
+    </div >
   );
 };
 
