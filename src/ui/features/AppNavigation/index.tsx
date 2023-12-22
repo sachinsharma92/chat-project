@@ -7,6 +7,7 @@ import Button from '@/components/common/Button';
 import cx from 'classnames';
 import './AppNavigation.css';
 import ProfileMenu from './ProfileMenu';
+import { PlusIcon } from 'lucide-react';
 
 const AppNavigation = () => {
   return (
@@ -33,6 +34,9 @@ const AppNavigation = () => {
       </div>
 
       <div className="right">
+        <Button className="add-icon">
+          <PlusIcon size={18} />
+        </Button>
         <ProfileMenu />
       </div>
     </div>

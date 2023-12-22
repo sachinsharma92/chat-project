@@ -13,7 +13,7 @@
 }
 
 .space-description {
-  @apply relative w-full mt-[24px];
+  @apply relative w-full;
 }
 
 .social-links {
@@ -85,6 +85,30 @@
 
 .mic > svg > path {
   fill: #fff;
+}
+
+.tag-style {
+  @apply h-[32px] rounded-full;
+  padding: 8px 16px;
+  background-color: #f5f5f5;
+}
+
+.info-section {
+  @apply gap-16 flex pt-8 mt-8;
+  border-top: 1px solid #f5f5f5;
+}
+
+.info-item {
+  @apply text-sm;
+}
+
+.info-item p {
+  @apply text-base text-black font-semibold;
+  margin-bottom: 0;
+}
+
+.info-item h4 {
+  margin-top: 0;
 }
 
 @media screen and (max-width: 720px) {

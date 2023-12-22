@@ -126,13 +126,13 @@ const SpaceContent = () => {
         </TabsList >
         <TabsContent
           value={SpaceContentTabEnum.home}
-          className="space-content-tabs-content box-border mt-[24px] w-full"
+          className="space-content-tabs-content box-border mt-[40px] w-full"
         >
           <HomeSpace />
         </TabsContent>
         <TabsContent
           value={SpaceContentTabEnum.chat}
-          className="space-content-tabs-content box-border mt-[24px] w-full"
+          className="space-content-tabs-content box-border mt-[40px] w-full"
         >
           <BotChat />
         </TabsContent>

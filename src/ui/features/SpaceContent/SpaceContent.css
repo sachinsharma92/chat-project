@@ -23,7 +23,7 @@
 }
 
 .space-content-nav {
-  @apply relative flex justify-start items-center w-full p-0 box-border mt-[24px];
+  @apply relative flex justify-start items-center w-full p-0 box-border mt-[16px];
 
   background: transparent;
   padding: 16px 0;
@@ -114,7 +114,7 @@
 }
 
 .space-content-tabs-content {
-  height: calc(100vh - 360px);
+  height: calc(100vh - 270px);
 }
 
 .space-content-header-mobile {

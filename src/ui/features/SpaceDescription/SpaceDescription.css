@@ -7,11 +7,10 @@
   overflow: hidden;
   color: #000;
   text-overflow: ellipsis;
-  font-size: 15px;
+  font-size: 16px;
   font-style: normal;
-  font-weight: 400;
-  line-height: 150%;
-  box-sizing: border-box;
+  font-weight: 500;
+  line-height: 24px;
 }
 
 .space-description-container > button {

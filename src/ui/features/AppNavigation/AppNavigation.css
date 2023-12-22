@@ -27,7 +27,7 @@
 }
 
 .right {
-  @apply relative flex justify-center items-center box-border;
+  @apply relative flex justify-center items-center box-border flex-col gap-7;
 }
 
 .search {

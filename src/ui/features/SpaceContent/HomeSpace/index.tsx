@@ -82,27 +82,30 @@ const HomeSpace = () => {
           <SpaceDescription text={spaceDescription} />
         </div>
 
+        <div className='flex gap-3 mt-4'>
+          <Button className='tag-style'>Female</Button>
+          <Button className='tag-style'>Anime</Button>
+          <Button className='tag-style'>Hero</Button>
+        </div>
+
         <SpaceLinks />
 
-        <div className="social-links">
-          <a>
-            <InstagramIcon />
-          </a>
-          <a>
-            <DiscordIcon />
-          </a>
-          <a>
-            <TiktokIcon />
-          </a>
-          <a>
-            <XIcon />
-          </a>
-          <a>
-            <YouTubeIcon />
-          </a>
-          <a>
-            <TelegramIcon />
-          </a>
+        <div className="info-section">
+          <div className='info-item flex gap-3 items-center'>
+            <Avatar height={40} width={40} src={botDisplayImage} />
+            <div>
+              <h4>Created by</h4>
+              <p>Shin-Chan</p>
+            </div>
+          </div>
+          <div className='info-item'>
+            <h4>Messages</h4>
+            <p>241k</p>
+          </div>
+          <div className='info-item'>
+            <h4>Users</h4>
+            <p>2.1k</p>
+          </div>
         </div>
       </div>
 
@@ -131,6 +134,8 @@ const HomeSpace = () => {
             <Microphone />
           </Button>
         </div>
+
+        <div className='bg-[#f5f5f5] rounded-xl mt-4 py-2 text-center text-black font-semibold'>Botnet is free to use during the public beta</div>
       </form>
     </>
   );
