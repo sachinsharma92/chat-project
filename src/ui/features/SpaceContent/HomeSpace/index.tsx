@@ -1,29 +1,23 @@
 'use client';
 
-import { useMemo } from 'react';
-import { head } from 'lodash';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
+import { head } from 'lodash';
+import { useMemo } from 'react';
 
 import {
-  DiscordIcon,
   FileIcon,
-  InstagramIcon,
-  Microphone,
-  TelegramIcon,
-  TiktokIcon,
-  XIcon,
-  YouTubeIcon,
+  Microphone
 } from '@/icons';
-import { useForm } from 'react-hook-form';
-import { useBotChat } from '../../../../hooks/useBotChat';
 import { useAppStore, useBotData } from '@/store/App';
 import { SpaceContentTabEnum } from '@/types';
+import { useForm } from 'react-hook-form';
+import { useBotChat } from '../../../../hooks/useBotChat';
 
-import SpaceLinks from '../../SpaceLinks';
-import TextInput from '@/components/common/TextInput';
-import Button from '@/components/common/Button';
 import Avatar from '@/components/common/Avatar/Avatar';
+import Button from '@/components/common/Button';
+import TextInput from '@/components/common/TextInput';
 import SpaceDescription from '../../SpaceDescription';
+import SpaceLinks from '../../SpaceLinks';
 
 import './HomeSpace.css';
 
