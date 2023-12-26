@@ -469,12 +469,11 @@ const ChatBotProvider = (props: { children?: ReactNode }) => {
       setRecentBotChat('');
       setRecentUserChat('');
       setLeavingChatRoom(true);
+      setChatMessages([]);
       chatRoom.removeAllListeners();
       await chatRoom?.leave(true);
-
       setConnectingChatRoom(false);
       setChatRoom(null);
-      setChatMessages([]);
     } catch (err: any) {
       console.log('leaveChatRoom() err:', err?.message);
     } finally {

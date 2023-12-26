@@ -181,8 +181,6 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
 
     if (spaceId && !isLoading && !isEmpty(spaceInfo?.bots) && spaceInfo?.host) {
       fetchChatHistory();
-    } else {
-      setChatMessages([]);
     }
   }, [
     session,

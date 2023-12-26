@@ -43,7 +43,7 @@ const CustomAuth = (props: { defaultSection?: AuthSection }) => {
     state.setIsLoading,
   ]);
   const pathname = usePathname();
-  const { navigate, searchParams, removeQuery } = useRouterQuery();
+  const { searchParams, removeQuery } = useRouterQuery();
   const [submitted, setSubmitted] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const {
@@ -55,8 +55,7 @@ const CustomAuth = (props: { defaultSection?: AuthSection }) => {
   const [error, setError] = useState('');
 
   const { leaveChatRoom } = useContext(ChatBotStateContext);
-  const [setChatMessages, clearLocalChatHistory] = useBotData(state => [
-    state.setChatMessages,
+  const [clearLocalChatHistory] = useBotData(state => [
     state.clearLocalChatHistory,
   ]);
 
@@ -111,11 +110,10 @@ const CustomAuth = (props: { defaultSection?: AuthSection }) => {
           setError(signInError.message);
         } else {
           clearLocalChatHistory();
-          setChatMessages([]);
           // join a new channel on each new session
           await leaveChatRoom();
 
-          navigate('/');
+          router.push('/?space=' + defaultSpaceId);
           // let AuthProvider.tsx handle auth changes
           setIsLoading(true);
         }
@@ -139,7 +137,6 @@ const CustomAuth = (props: { defaultSection?: AuthSection }) => {
 
         if (!isEmpty(signUpSession)) {
           clearLocalChatHistory();
-          setChatMessages([]);
           // join a new channel on each new session
           await leaveChatRoom();
 
