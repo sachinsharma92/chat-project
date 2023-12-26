@@ -319,7 +319,6 @@ const ChatBotProvider = (props: { children?: ReactNode }) => {
       const audioBlob = new Blob([convertURIToBinary(base64Audio)], {
         type: 'audio/mpeg',
       });
-      const botAudioId = 'bot-audio-gen-id';
       if (audioBlob) {
         const audioUrl = URL.createObjectURL(audioBlob);
 
@@ -329,23 +328,38 @@ const ChatBotProvider = (props: { children?: ReactNode }) => {
         const audioElem = document.getElementById(
           'bot-audio',
         ) as HTMLAudioElement;
+        const onAudioStalled = function () {
+          audioElem.load();
+          audioElem.play();
+          // audioElem.pause();
+        };
+
+        const onAudioPlay = () => {
+          // run interval to sync lipsync with audio
+          // in each interval function call we emit an event
+          syncAudioIntervalId.current = setInterval(
+            emitVisemesEventForAudio,
+            500,
+          );
+        };
 
         const onAudioEnd = () => {
           try {
+            clearVisemesIntervalEmit();
+
             const updatedAudioElem = document.getElementById(
-              botAudioId,
+              'bot-audio',
             ) as HTMLAudioElement;
 
             if (updatedAudioElem) {
               // safely unsubscribe
               updatedAudioElem.removeEventListener('error', onAudioEnd);
               updatedAudioElem.removeEventListener('ended', onAudioEnd);
+              updatedAudioElem.removeEventListener('play', onAudioPlay);
             }
 
             // avoid memory leak
             URL.revokeObjectURL(audioUrl);
-
-            clearVisemesIntervalEmit();
           } catch (err: any) {
             console.log('onAudioEnd() err:', err?.message);
           } finally {
@@ -355,24 +369,13 @@ const ChatBotProvider = (props: { children?: ReactNode }) => {
 
         document.body.append(audioElem);
 
-        audioElem.addEventListener('play', () => {
-          // run interval to sync lipsync with audio
-          // in each interval function call we emit an event
-          syncAudioIntervalId.current = setInterval(
-            emitVisemesEventForAudio,
-            500,
-          );
-        });
+        audioElem.addEventListener('play', onAudioPlay);
 
         audioElem.muted = false;
         audioElem.volume = 1;
         audioElem.addEventListener('ended', onAudioEnd);
         audioElem.addEventListener('error', onAudioEnd);
-        audioElem.addEventListener('stalled', function () {
-          audioElem.load();
-          audioElem.play();
-          // audioElem.pause();
-        });
+        audioElem.addEventListener('stalled', onAudioStalled);
 
         audioSource.src = audioUrl;
         audioElem.load();
