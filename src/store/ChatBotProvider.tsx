@@ -21,7 +21,7 @@ import {
 } from 'react';
 import { Client } from 'colyseus.js';
 import { useBotData } from './App';
-import { ChatRoomState } from '@/colyseus/schemas';
+import { ChatMessage, ChatRoomState } from '@/colyseus/schemas';
 import { useBotnetAuth } from './Auth';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import { useAuth } from '@/hooks';
@@ -35,6 +35,7 @@ import camelcaseKeys from 'camelcase-keys';
 
 import posthog from 'posthog-js';
 import { BotChatEvents } from '@/hooks/useBotChat';
+import { ArraySchema } from '@colyseus/schema';
 
 export const getBotServerHost = () => {
   return process.env.NEXT_PUBLIC_BOTNET_SOCKET_SERVER_HOST;
@@ -159,25 +160,33 @@ const ChatBotProvider = (props: { children?: ReactNode }) => {
 
   const syncAudioIntervalId = useRef<NodeJS.Timer | null | number>(null);
 
+  const consumeUserChatMessages = (chatMessages: ArraySchema<ChatMessage>) => {
+    const sanitizedMessages = map(chatMessages, chatMessage => {
+      const payload = pick(chatMessage, [
+        'id',
+        'spaceId',
+        'message',
+        'role',
+        'authorId',
+        'createdAt',
+      ]);
+
+      return payload as ChatMessageProps;
+    });
+
+    if (isDevelopment) {
+      console.log('consumeUserChatMessages()', sanitizedMessages);
+    }
+
+    setChatMessages([...sanitizedMessages]);
+  };
+
   const onRoomStateChange = (updatedState: ChatRoomState) => {
     if (updatedState?.users) {
       const user = updatedState.users.get(userId);
 
       if (user?.userId && !isEmpty(user?.chatMessages)) {
-        const sanitizedMessages = map(user.chatMessages, chatMessage => {
-          const payload = pick(chatMessage, [
-            'id',
-            'spaceId',
-            'message',
-            'role',
-            'authorId',
-            'createdAt',
-          ]);
-
-          return payload as ChatMessageProps;
-        });
-
-        setChatMessages([...sanitizedMessages]);
+        consumeUserChatMessages(user.chatMessages);
       }
 
       if (user?.botIsResponding) {
@@ -257,41 +266,7 @@ const ChatBotProvider = (props: { children?: ReactNode }) => {
     });
   }, [consumeChatBotResponse]);
 
-  const onChatBotAudioResponse = (payload: any) => {
-    if (payload?.base64Audio) {
-      ChatBotAudioResponseQueue.add(async () => {
-        try {
-          await playAudio(payload.base64Audio);
-        } catch (err: any) {
-          console.log('playAudio err', err?.message);
-
-          posthog.capture('AudioError', { userId, env: environment });
-        }
-      });
-    }
-  };
-
-  const emitVisemesEventForAudio = () => {
-    if (isDevelopment) {
-      console.log('emitVisemesEventForAudio()');
-    }
-
-    BotChatEvents.emit('visemes', {
-      visemes: [
-        {
-          VisemeId: 0,
-        },
-        { VisemeId: 8 },
-        { VisemeId: 4 },
-        { VisemeId: 17 },
-        { VisemeId: 16 },
-        { VisemeId: 6 },
-        { VisemeId: 21 },
-      ],
-    });
-  };
-
-  const playAudio = (base64Audio: string): Promise<void> => {
+  const playAudio = useCallback((base64Audio: string): Promise<void> => {
     return new Promise(resolve => {
       if (!base64Audio) {
         resolve();
@@ -382,6 +357,43 @@ const ChatBotProvider = (props: { children?: ReactNode }) => {
         audioElem.play();
       }
     });
+  }, []);
+
+  const onChatBotAudioResponse = useCallback(
+    (payload: any) => {
+      if (payload?.base64Audio) {
+        ChatBotAudioResponseQueue.add(async () => {
+          try {
+            await playAudio(payload.base64Audio);
+          } catch (err: any) {
+            console.log('playAudio err', err?.message);
+            posthog.capture('AudioError', { userId, env: environment });
+          }
+        });
+      }
+    },
+
+    [userId, playAudio],
+  );
+
+  const emitVisemesEventForAudio = () => {
+    if (isDevelopment) {
+      console.log('emitVisemesEventForAudio()');
+    }
+
+    BotChatEvents.emit('visemes', {
+      visemes: [
+        {
+          VisemeId: 0,
+        },
+        { VisemeId: 8 },
+        { VisemeId: 4 },
+        { VisemeId: 17 },
+        { VisemeId: 16 },
+        { VisemeId: 6 },
+        { VisemeId: 21 },
+      ],
+    });
   };
 
   const connectChatRoom = useCallback(async (): Promise<void> => {
@@ -429,10 +441,9 @@ const ChatBotProvider = (props: { children?: ReactNode }) => {
         chatBotAudioResponseChannel,
         onChatBotAudioResponse,
       );
-
       setChatRoom(newChatRoom);
 
-      await timeout(1_000);
+      await timeout(500);
     } catch (err: any) {
       console.log('connectChatRoom() err:', err?.message);
     } finally {

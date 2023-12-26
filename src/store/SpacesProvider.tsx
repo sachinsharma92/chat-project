@@ -19,6 +19,7 @@ import { useBotnetAuth } from './Auth';
 import { defaultCloneAIGreetingPhrase } from '@/lib/utils/bot';
 
 import PQueue from 'p-queue';
+import { useAuth } from '@/hooks';
 
 export const saveSpacePropertiesQueue = new PQueue({ concurrency: 1 });
 
@@ -35,14 +36,17 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
   const { spaceId, spaceInfo } = useSelectedSpace();
   const router = useRouter();
 
-  const [restoreLocalChatHistory] = useBotData(state => [state.restoreLocalChatHistory]);
+  const [restoreLocalChatHistory] = useBotData(state => [
+    state.restoreLocalChatHistory,
+  ]);
 
   const { username } = useUsername();
 
-  const [isLoading, userId] = useBotnetAuth(state => [
+  const [isLoading, session] = useBotnetAuth(state => [
     state.isLoading,
-    state?.session?.user?.id || '',
+    state.session,
   ]);
+  const { userId } = useAuth();
 
   const notFound = useCallback(() => {
     router.push('/not-found');
@@ -163,8 +167,10 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
           role: OpenAIRoles.assistant,
         };
 
-        if (greeting) {
+        if (greeting && !session?.user) {
           restoreLocalChatHistory([botGreeting]);
+        } else {
+          setChatMessages([botGreeting]);
         }
       } catch (err: any) {
         console.log('fetchChatHistory() err:', err?.message);
@@ -179,6 +185,7 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
       setChatMessages([]);
     }
   }, [
+    session,
     spaceId,
     spaceInfo?.host,
     spaceInfo?.bots,

@@ -110,6 +110,7 @@ const CustomAuth = (props: { defaultSection?: AuthSection }) => {
         if (signInError) {
           setError(signInError.message);
         } else {
+          clearLocalChatHistory();
           setChatMessages([]);
           // join a new channel on each new session
           await leaveChatRoom();
