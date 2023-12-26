@@ -23,8 +23,6 @@
 }
 
 .space-content-nav {
-  @apply relative flex justify-start items-center w-full p-0 mt-[16px];
-
   background: transparent;
   padding: 16px 0;
   height: 72px;
@@ -34,9 +32,9 @@
   background: #fff;
   gap: 8px;
   overflow-x: scroll;
-  overflow: hidden;
   -ms-overflow-style: none;
   scrollbar-width: none;
+  @apply relative flex justify-start items-center w-full p-0 mt-[16px] sm:overflow-hidden;
 }
 
 .space-content-nav::-webkit-scrollbar {
@@ -141,11 +139,12 @@
 @media screen and (max-width: 767px) {
   .space-content-nav {
     border-bottom: 0;
-    padding: 5px 0;
-    height: 62px;
+    padding: 5px 0 0;
+    height: 80px;
   }
   .space-content-tabs-content {
     height: 100%;
+    margin: 0;
   }
   .space-content-header-mobile {
     @apply flex w-full justify-between items-center box-border;

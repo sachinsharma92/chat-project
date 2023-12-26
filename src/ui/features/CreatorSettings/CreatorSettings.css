@@ -98,4 +98,8 @@
 
     border-bottom: 0.5px solid #e5e5e5;
   }
+
+  .creator-settings-content-right {
+    padding-left: 0;
+  }
 }
