@@ -588,12 +588,12 @@ const ChatBotProvider = (props: { children?: ReactNode }) => {
         setRecentUserChat('');
         clearTimeout(responseTimeoutId.current as number);
       }, 15_000);
+
+      posthog.capture('ChatBot', { userId, env: environment });
     } catch (err: any) {
       console.log('sendChat() err:', err?.message);
 
       setBotRoomIsResponding(false);
-
-      posthog.capture('ChatBot', { userId, env: environment });
     }
   };
 
