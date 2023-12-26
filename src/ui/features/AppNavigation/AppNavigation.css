@@ -80,7 +80,6 @@
     box-sizing: border-box;
   }
 
-  .right,
   .center {
     display: none;
     overflow: hidden;

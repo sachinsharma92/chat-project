@@ -11,6 +11,7 @@ export interface IUser {
   deletedAt?: string;
   spaceId?: string;
   bio?: string;
+  userId?: string;
   username?: string;
 }
 

@@ -3,14 +3,14 @@
 import { useForm } from 'react-hook-form';
 import { FileIcon, Microphone } from '@/icons';
 import { useBotData } from '@/store/App';
-import { useBotChat } from '../../../hooks/useBotChat'; 
-import { useMemo } from 'react';
-import { filter, isEmpty, map } from 'lodash';
+import { useContext, useEffect, useRef } from 'react';
+import { map } from 'lodash';
 import { OpenAIRoles } from '@/types';
-
+import { ChatBotStateContext } from '@/store/ChatBotProvider';
+import { useBotChat } from '@/hooks/useBotChat';
 
 import BotMessage from '../SpaceContent/BotChat/BotMessage';
-import UserMessage from '../SpaceContent/BotChat/UserMessage';  
+import UserMessage from '../SpaceContent/BotChat/UserMessage';
 import Button from '@/components/common/Button';
 import TextInput from '@/components/common/TextInput';
 
@@ -19,33 +19,52 @@ import './GameScreenBotChat.css';
 const GameScreenBotChat = () => {
   const { handleSubmit, setValue, register } = useForm();
 
-  const { sendBotChatMessage } = useBotChat();
+  const { sendChat } = useContext(ChatBotStateContext);
 
-  const [botRoomIsResponding, chatMessages] = useBotData(state => [
-    state.botRoomIsResponding,
-    state.chatMessages,
-  ]);
+  const [botRoomIsResponding, recentUserChat, recentBotChat] = useBotData(
+    state => [
+      state.botRoomIsResponding,
+      state.recentUserChat,
+      state.recentBotChat,
+    ],
+  );
 
-  const sendChat = (data: any) => {
+  const chatStreamDomRef = useRef<any>(null);
+
+  const { chatMessages: sanitizedChatMessages } = useBotChat();
+
+  const handleSendChat = (data: any) => {
     const message = data?.message;
 
     if (!message || botRoomIsResponding) {
       return;
     }
 
+    sendChat(message);
     setValue('message', '');
-    sendBotChatMessage(message);
   };
 
-  const sanitizedChatMessages = useMemo(
-    () => filter(chatMessages, line => !isEmpty(line?.id)),
-    [chatMessages],
-  );
+  /** Scroll on new chat */
+  useEffect(() => {
+    /** Scroll stream chat down bottom  */
+    const scrollChatToBottom = () => {
+      const chatStreamDom = chatStreamDomRef?.current;
+
+      if (chatStreamDom?.scroll) {
+        chatStreamDom.scroll({
+          top: chatStreamDom.scrollHeight,
+          behavior: 'smooth',
+        });
+      }
+    };
+
+    scrollChatToBottom();
+  }, [botRoomIsResponding, sanitizedChatMessages, recentBotChat]);
 
   return (
     <div className="game-screen-bot-chat">
       <div className="game-screen-bot-chat-content">
-        <div className="game-screen-chat-stream">
+        <div className="game-screen-chat-stream" ref={chatStreamDomRef}>
           <ul>
             {map(sanitizedChatMessages, message => {
               const key = `${message?.id}`;
@@ -64,11 +83,22 @@ const GameScreenBotChat = () => {
                 </li>
               );
             })}
+
+            {botRoomIsResponding && (
+              <>
+                <li>
+                  <UserMessage message={recentUserChat} />
+                </li>
+                <li>
+                  <BotMessage message={recentBotChat} />
+                </li>
+              </>
+            )}
           </ul>
         </div>
 
         <form
-          onSubmit={handleSubmit(sendChat)}
+          onSubmit={handleSubmit(handleSendChat)}
           className="game-screen-chat-input-container"
         >
           <Button className="game-screen-attach-file">

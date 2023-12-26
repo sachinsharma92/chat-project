@@ -18,7 +18,7 @@ import {
 import { useBotnetAuth } from './Auth';
 import { ceil, head, includes, isEmpty } from 'lodash';
 import { Session } from '@supabase/supabase-js';
-import { useGameServer, useSpacesStore } from './App';
+import { useBotData, useSpacesStore } from './App';
 import {
   getUserIdFromSession,
   isPathnameAppRoute,
@@ -113,15 +113,14 @@ const AuthProvider = (props: { children?: ReactNode }) => {
     state.addSpace,
     state.setSpaceInfo,
   ]);
-  const [botRoom, setBotRoom] = useGameServer(state => [
-    state.botRoom,
-    state.setBotRoom,
-  ]);
   const pathname = usePathname();
   const router = useRouter();
   const { searchParams, navigate } = useRouterQuery();
   const paramSpaceId = useMemo(() => searchParams.get('space'), [searchParams]);
 
+  const [clearLocalChatHistory] = useBotData(state => [
+    state.clearLocalChatHistory,
+  ]);
   const fromAuthPage = useMemo(
     () =>
       pathname?.startsWith('/login') ||
@@ -147,21 +146,16 @@ const AuthProvider = (props: { children?: ReactNode }) => {
       setDisplayName('');
       setImage('');
       setIsLoading(false);
-      setBotRoom(null);
-
-      if (botRoom) {
-        botRoom.leave(true);
-      }
+      clearLocalChatHistory();
     }
   }, [
-    botRoom,
     setEmail,
     setSession,
     setHandle,
     setDisplayName,
     setImage,
     setIsLoading,
-    setBotRoom,
+    clearLocalChatHistory,
   ]);
 
   /**

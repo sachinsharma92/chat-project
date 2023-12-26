@@ -1,9 +1,8 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import { head } from 'lodash';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
-
 import {
   DiscordIcon,
   FileIcon,
@@ -15,7 +14,6 @@ import {
   YouTubeIcon,
 } from '@/icons';
 import { useForm } from 'react-hook-form';
-import { useBotChat } from '../../../../hooks/useBotChat';
 import { useAppStore, useBotData } from '@/store/App';
 import { SpaceContentTabEnum } from '@/types';
 
@@ -26,15 +24,19 @@ import Avatar from '@/components/common/Avatar/Avatar';
 import SpaceDescription from '../../SpaceDescription';
 
 import './HomeSpace.css';
+import { ChatBotStateContext } from '@/store/ChatBotProvider';
+import { useBotChat } from '@/hooks/useBotChat';
 
 const HomeSpace = () => {
   const [setSpaceContentTab] = useAppStore(state => [state.setSpaceContentTab]);
   const { spaceInfo } = useSelectedSpace();
-  const { sendBotChatMessage } = useBotChat();
   const { handleSubmit, register, setValue } = useForm();
   const [botRoomIsResponding] = useBotData(state => [
     state.botRoomIsResponding,
   ]);
+
+  const { isLoading: botChatIsLoading } = useBotChat();
+  const { sendChat } = useContext(ChatBotStateContext);
 
   const spaceDescription = useMemo(() => {
     const spaceBotInfo = head(spaceInfo?.bots);
@@ -63,15 +65,15 @@ const HomeSpace = () => {
   const switchToChat = (data: any) => {
     const message = data?.message;
 
-    if (!message) {
+    if (!message || botChatIsLoading) {
       return;
     }
 
     setSpaceContentTab(SpaceContentTabEnum.chat);
 
     if (!botRoomIsResponding) {
+      sendChat(message);
       setValue('message', '');
-      sendBotChatMessage(message);
     }
   };
 
@@ -111,7 +113,8 @@ const HomeSpace = () => {
           <div className="greetings-bot-avatar">
             <Avatar height={32} width={32} src={botDisplayImage} />
           </div>
-          <p>{greeting}</p>
+          {botChatIsLoading && <p>{'. . . '}</p>}
+          {!botChatIsLoading && <p>{greeting}</p>}
         </div>
 
         <div className="cta-chat-input-container">

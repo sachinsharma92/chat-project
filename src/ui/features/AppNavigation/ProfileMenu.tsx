@@ -14,6 +14,7 @@ import Popover from '@/components/common/Popover';
 import UserAvatar from '@/components/common/UserAvatar';
 
 import './ProfileMenu.css';
+import { ChatBotStateContext } from '@/store/ChatBotProvider';
 
 const ProfileMenu = () => {
   const [setShowDialog] = useAppStore(state => [state.setShowDialog]);
@@ -22,6 +23,8 @@ const ProfileMenu = () => {
     state.session,
     state.isLoading,
   ]);
+
+  const { leaveChatRoom } = useContext(ChatBotStateContext);
 
   const { signOutUser } = useContext(AuthStateContext);
 
@@ -50,6 +53,8 @@ const ProfileMenu = () => {
   const logoutAccount = async () => {
     if (isFunction(signOutUser)) {
       await signOutUser();
+      // join a new channel on each new session
+      await leaveChatRoom();
 
       router.push(`/?space=${defaultSpaceId}`);
     }

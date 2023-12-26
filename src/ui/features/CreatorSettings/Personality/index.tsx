@@ -185,6 +185,13 @@ const Personality = () => {
     setValue('instructions', instructions);
   }, [instructions, setValue]);
 
+  /**
+   * Consume updated greeting text
+   */
+  useEffect(() => {
+    setValue('greeting', greetings);
+  }, [greetings, setValue]);
+
   const errorMessage = useMemo(
     () =>
       error ||

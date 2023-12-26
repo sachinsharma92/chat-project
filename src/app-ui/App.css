@@ -15,7 +15,8 @@
 .bot-audio {
   position: absolute;
   top: -100px;
-  left: -100px;
+  left: -200px;
   overflow: hidden;
   opacity: 0;
+  height: 0;
 }

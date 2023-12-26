@@ -9,7 +9,7 @@ import Avatar from '@/components/common/Avatar/Avatar';
 import Link from 'next/link';
 import * as EmailValidator from 'email-validator';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { BotnetIcon, GithubLogoIcon } from '@/icons';
 import { usePathname, useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -20,10 +20,12 @@ import { RedirectTo } from '@supabase/auth-ui-shared';
 import { useBotnetAuth } from '@/store/Auth';
 import { useRouterQuery } from '@/hooks';
 import { CheckCircledIcon } from '@radix-ui/react-icons';
-
-import './CustomAuth.css';
 import { isDevelopment, isStaging } from '@/lib/environment';
 import { defaultSpaceId } from '@/store/AuthProvider';
+
+import './CustomAuth.css';
+import { ChatBotStateContext } from '@/store/ChatBotProvider';
+import { useBotData } from '@/store/App';
 
 /**
  * Custom auth page
@@ -51,6 +53,12 @@ const CustomAuth = (props: { defaultSection?: AuthSection }) => {
     formState: { errors },
   } = useForm();
   const [error, setError] = useState('');
+
+  const { leaveChatRoom } = useContext(ChatBotStateContext);
+  const [setChatMessages, clearLocalChatHistory] = useBotData(state => [
+    state.setChatMessages,
+    state.clearLocalChatHistory,
+  ]);
 
   /**
    * Login flow
@@ -102,6 +110,10 @@ const CustomAuth = (props: { defaultSection?: AuthSection }) => {
         if (signInError) {
           setError(signInError.message);
         } else {
+          setChatMessages([]);
+          // join a new channel on each new session
+          await leaveChatRoom();
+
           navigate('/');
           // let AuthProvider.tsx handle auth changes
           setIsLoading(true);
@@ -125,6 +137,11 @@ const CustomAuth = (props: { defaultSection?: AuthSection }) => {
         }
 
         if (!isEmpty(signUpSession)) {
+          clearLocalChatHistory();
+          setChatMessages([]);
+          // join a new channel on each new session
+          await leaveChatRoom();
+
           // success
           // redirect
           // navigate('/settings'); @todo

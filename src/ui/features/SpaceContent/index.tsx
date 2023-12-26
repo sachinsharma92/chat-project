@@ -11,10 +11,11 @@ import { useAppStore } from '@/store/App';
 import dynamic from 'next/dynamic';
 import Button from '@/components/common/Button';
 import Avatar from '@/components/common/Avatar/Avatar';
-import BotChat from './BotChat';
 import SpaceDescription from '../SpaceDescription';
 
 import './SpaceContent.css';
+
+const BotChat = dynamic(() => import('./BotChat'));
 
 const HomeSpace = dynamic(() => import('./HomeSpace'), { ssr: false });
 

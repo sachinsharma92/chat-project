@@ -20,7 +20,10 @@ const useAuth = () => {
       'X-RefreshToken': `${session?.refresh_token}`,
     };
   };
-  const userId = useMemo(() => session?.user?.id || getGuestId(), [session]);
+  const userId = useMemo(
+    () => session?.user?.id || getGuestId(),
+    [session?.user],
+  );
 
   return {
     userId,
