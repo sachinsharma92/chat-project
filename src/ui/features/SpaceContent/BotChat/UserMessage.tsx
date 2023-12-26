@@ -1,3 +1,5 @@
+'use client';
+
 import { ChatMessageProps } from '@/types';
 
 import './UserMessage.css';

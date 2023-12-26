@@ -3,46 +3,66 @@
 import { EyeOpenIcon, FileIcon, Microphone, ResetIcon } from '@/icons';
 import { useForm } from 'react-hook-form';
 import { useBotData } from '@/store/App';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { filter, isEmpty, map } from 'lodash';
-import { useBotChat } from '../../../../hooks/useBotChat';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { map } from 'lodash';
 import { OpenAIRoles } from '@/types';
+import { ChatBotStateContext } from '@/store/ChatBotProvider';
+import { useBotChat } from '@/hooks/useBotChat';
 
 import TextInput from '@/components/common/TextInput';
 import Button from '@/components/common/Button';
 import BotMessage from './BotMessage';
 import UserMessage from './UserMessage';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 import './BotChat.css';
 
 const BotChat = () => {
   const { handleSubmit, register, setValue } = useForm();
 
-  const { sendBotChatMessage, resetChat } = useBotChat();
+  const [botRoomIsResponding, recentBotChat, recentUserChat] = useBotData(
+    state => [
+      state.botRoomIsResponding,
+      state.recentBotChat,
+      state.recentUserChat,
+    ],
+  );
 
-  const [botRoomIsResponding, chatMessages] = useBotData(state => [
-    state.botRoomIsResponding,
-    state.chatMessages,
-  ]);
+  const { sendChat } = useContext(ChatBotStateContext);
+
+  const {
+    resetChat,
+    chatMessages: sanitizedChatMessages,
+    isLoading,
+  } = useBotChat();
 
   const [resettingChat, setResettingChat] = useState(false);
 
   const chatStreamDomRef = useRef<any>(null);
 
-  const sanitizedChatMessages = useMemo(
-    () => filter(chatMessages, line => !isEmpty(line?.id)),
-    [chatMessages],
-  );
-
-  const sendChat = (data: any) => {
+  const handleChat = async (data: any) => {
     const message = data?.message;
 
     if (!message || resettingChat || botRoomIsResponding) {
       return;
     }
 
+    sendChat(message);
     setValue('message', '');
-    sendBotChatMessage(message);
+
+    const audioElem = document.getElementById('bot-audio') as HTMLAudioElement;
+    const audioSource = document.getElementById(
+      'bot-audio-source',
+    ) as HTMLSourceElement;
+
+    if (audioElem && audioSource) {
+      // ios audio fix
+      audioSource.src =
+        'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+
+      audioElem.load();
+      audioElem.play();
+    }
   };
 
   /**
@@ -50,7 +70,12 @@ const BotChat = () => {
    */
   const onResetChat = async () => {
     try {
+      if (resettingChat) {
+        return;
+      }
+
       setResettingChat(true);
+
       await resetChat();
     } catch {
     } finally {
@@ -62,32 +87,26 @@ const BotChat = () => {
   useEffect(() => {
     /** Scroll stream chat down bottom  */
     const scrollChatToBottom = () => {
-      const timeoutId = setTimeout(() => {
-        const chatStreamDom = chatStreamDomRef?.current;
+      const chatStreamDom = chatStreamDomRef?.current;
 
-        if (
-          chatStreamDom?.scroll &&
-          sanitizedChatMessages &&
-          !botRoomIsResponding
-        ) {
-          chatStreamDom.scroll({
-            top: chatStreamDom.scrollHeight,
-            behavior: 'smooth',
-          });
-        }
-
-        clearTimeout(timeoutId);
-      }, 300);
+      if (chatStreamDom?.scroll) {
+        chatStreamDom.scroll({
+          top: chatStreamDom.scrollHeight,
+          behavior: 'smooth',
+        });
+      }
     };
 
-    if (!botRoomIsResponding) {
-      scrollChatToBottom();
-    }
-  }, [botRoomIsResponding, sanitizedChatMessages]);
+    scrollChatToBottom();
+  }, [botRoomIsResponding, sanitizedChatMessages, recentBotChat]);
 
   return (
     <div className="bot-chat">
-      <div className="chat-stream" id="chat-stream" ref={chatStreamDomRef}>
+      <div
+        className="chat-stream"
+        id="space-content-chat-stream"
+        ref={chatStreamDomRef}
+      >
         <div className="relative w-full flex justify-end items-center box-border p-0 pr-[2px] mb-[8px]">
           <Button
             className="reset-chat"
@@ -116,12 +135,23 @@ const BotChat = () => {
               </li>
             );
           })}
+
+          {botRoomIsResponding && (
+            <>
+              <li>
+                <UserMessage message={recentUserChat} />
+              </li>
+              <li>
+                <BotMessage message={recentBotChat} />
+              </li>
+            </>
+          )}
         </ul>
       </div>
 
       {!botRoomIsResponding && (
         <form
-          onSubmit={handleSubmit(sendChat)}
+          onSubmit={handleSubmit(handleChat)}
           className="chat-input-container"
         >
           <Button className="attach-file">
@@ -140,6 +170,12 @@ const BotChat = () => {
             <Microphone />
           </Button>
         </form>
+      )}
+
+      {isLoading && (
+        <div className="bot-chat-loading">
+          <LoadingSpinner width={30} />
+        </div>
       )}
     </div>
   );

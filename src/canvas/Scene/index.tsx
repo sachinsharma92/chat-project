@@ -1,7 +1,6 @@
 import { Physics } from '@react-three/rapier';
 import InputProvider from '../Game/InputProvider';
-import Environment from '../Environment';
-import Multiplayer from '../Multiplayer';
+import Environment from '../Environment'; 
 import * as THREE from 'three';
 import { PerspectiveCamera } from '@react-three/drei';
 import { useRef } from 'react';
@@ -41,8 +40,7 @@ const Scene = () => {
         <InputProvider>
           <group ref={groupRef} position={[0, -2, -2]}>
             <Environment />
-          </group>
-          <Multiplayer />
+          </group> 
         </InputProvider>
       </Physics>
     </>

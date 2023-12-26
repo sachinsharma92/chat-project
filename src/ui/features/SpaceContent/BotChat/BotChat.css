@@ -88,3 +88,7 @@
 .chat-stream > ul > li {
   @apply relative w-full box-border mt-[8px];
 }
+
+.bot-chat-loading {
+  @apply absolute flex justify-center items-center h-full w-full top-0 left-0 box-border;
+}

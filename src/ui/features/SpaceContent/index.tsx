@@ -12,11 +12,12 @@ import Avatar from '@/components/common/Avatar/Avatar';
 import Button from '@/components/common/Button';
 import dynamic from 'next/dynamic';
 import SpaceDescription from '../SpaceDescription';
-import BotChat from './BotChat';
 
 import { StarFilledIcon } from '@radix-ui/react-icons';
 import { Heart } from 'lucide-react';
 import './SpaceContent.css';
+
+const BotChat = dynamic(() => import('./BotChat'));
 
 const HomeSpace = dynamic(() => import('./HomeSpace'), { ssr: false });
 

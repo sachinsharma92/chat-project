@@ -1,3 +1,5 @@
+'use client';
+
 import { IAppAuthState } from '@/types/auth';
 import { Session } from '@supabase/supabase-js';
 import { create } from 'zustand';

@@ -3,19 +3,14 @@
 import {
   IAppState,
   ISpaceStoreState,
-  IGameServerState,
-  RoomUser,
   ISpace,
-  CampRoom,
-  BotRoom,
   IBotData,
   SpaceContentTabEnum,
   OpenAIRoles,
 } from '@/types';
 import { create } from 'zustand';
-import { Client } from 'colyseus.js';
 import { DialogEnums, MobileDrawerEnums } from '@/types/dialog';
-import { cloneDeep, head, includes, isArray, isEmpty, map } from 'lodash';
+import { cloneDeep, head, includes, isEmpty, map } from 'lodash';
 
 /**
  * In-app related states
@@ -103,29 +98,6 @@ export const useSpacesStore = create<ISpaceStoreState>()(set => ({
     set(state => ({ ...state, selectedSpaceId: '', spaces: [] })),
 }));
 
-/**
- * For gameserver multiplayer states
- */
-export const useGameServer = create<IGameServerState>()(set => ({
-  clientConnection: null,
-  gameRoom: null,
-  botRoom: null,
-  roomChatMessages: [],
-  isConnecting: false,
-  players: [],
-  setBotRoom: (botRoom: BotRoom | null) => set(() => ({ botRoom })),
-  setRoomChatMessages: roomChatMessages => set(() => ({ roomChatMessages })),
-  setPlayers: (players: RoomUser[]) => set(() => ({ players })),
-  startConnecting: () => set(() => ({ isConnecting: true })),
-  endConnecting: () => set(() => ({ isConnecting: false })),
-  setRoom: (gameRoom: CampRoom) => {
-    set(() => ({ gameRoom }));
-  },
-  setClientConnection: (clientConnection: Client) => {
-    set(() => ({ clientConnection }));
-  },
-}));
-
 export const botnetChatHistoryLocalKey = 'botnetChatHistoryLocalKey';
 
 /**
@@ -135,16 +107,61 @@ export const useBotData = create<IBotData>()(set => ({
   chatMessages: [],
   botRoomIsResponding: false,
   fetchingChatHistory: false,
+  botServerColyseusClient: null,
+  chatRoom: null,
+  leavingChatRoom: false,
+  connectingChatroom: false,
+  recentBotChat: '',
+  recentUserChat: '',
+  setRecentUserChat(recentUserChat) {
+    return set(() => ({ recentUserChat }));
+  },
+  setRecentBotChat(recentBotChat) {
+    return set(() => ({ recentBotChat }));
+  },
+  setConnectingChatRoom(connectingChatroom) {
+    return set(() => ({ connectingChatroom }));
+  },
+  setLeavingChatRoom(leavingChatRoom) {
+    return set(() => ({ leavingChatRoom }));
+  },
+  setChatRoom(chatRoom) {
+    return set(() => ({ chatRoom }));
+  },
+  setBotServerColyseusClient(botServerColyseusClient) {
+    return set(() => ({ botServerColyseusClient }));
+  },
   setFetchingChatHistory(fetchingChatHistory) {
     return set(() => ({ fetchingChatHistory }));
   },
-  setChatMessages: chatMessages => set(() => ({ chatMessages })),
+  setChatMessages: chatMessages => {
+    set(state => {
+      const firstMessage = head(state?.chatMessages);
+
+      if (
+        !isEmpty(state?.chatMessages) &&
+        firstMessage?.role === OpenAIRoles.assistant
+      ) {
+        return { chatMessages: [firstMessage, ...chatMessages] };
+      }
+
+      return { chatMessages };
+    });
+  },
+  clearLocalChatHistory() {
+    localStorage.setItem(botnetChatHistoryLocalKey, JSON.stringify([]));
+  },
+
   setBotRoomIsResponding: (botRoomIsResponding: boolean) =>
     set(() => ({ botRoomIsResponding })),
-  storeChatHistory(chatMessages) {
+
+  storeLocalChatHistory() {
+    // used to save chat history for non logged in users
     /// save
-    if (isArray(chatMessages)) {
-      const sanitizedChatMessages = cloneDeep(chatMessages);
+    console.log('storeLocalChatHistory()');
+
+    return set(state => {
+      const sanitizedChatMessages = cloneDeep(state?.chatMessages);
       const firstMessage = head(sanitizedChatMessages);
 
       if (
@@ -160,9 +177,12 @@ export const useBotData = create<IBotData>()(set => ({
         botnetChatHistoryLocalKey,
         JSON.stringify(sanitizedChatMessages),
       );
-    }
+
+      return state;
+    });
   },
-  restoreChatHistory(chatMessages) {
+  restoreLocalChatHistory(chatMessages) {
+    // used to restore chat for non logged in users
     /// restore
     try {
       const chatMessagesStr = localStorage.getItem(botnetChatHistoryLocalKey);
@@ -176,8 +196,10 @@ export const useBotData = create<IBotData>()(set => ({
             chatMessages: [...(chatMessages || []), ...storedChatMessages],
           };
         });
-      } else if (!isEmpty(chatMessages)) {
-        return set(() => ({ chatMessages }));
+      } else if (chatMessages && !isEmpty(chatMessages)) {
+        return set(state => ({
+          chatMessages: [...chatMessages, ...state.chatMessages],
+        }));
       }
     } catch (err) {}
   },
