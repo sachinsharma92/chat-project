@@ -81,7 +81,11 @@
   min-height: 32px;
 }
 
-@media screen and (max-width: 720px) {
+@media screen and (max-width: 767px) {
+  .add-icon {
+    display: none;
+  }
+
   .app-nav {
     padding: 0 12px;
     gap: unset;

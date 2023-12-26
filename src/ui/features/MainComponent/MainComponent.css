@@ -109,10 +109,24 @@
   background: rgba(0, 0, 0, 0.3);
 }
 
-@media screen and (max-width: 720px) {
+.game-content-background {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+}
+
+.game-content-background > img {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+@media screen and (max-width: 767px) {
   .main-component {
     padding: 0;
-    padding-top: 8px;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
@@ -120,7 +134,12 @@
 
   .header-nav {
     border-bottom: 0.5px solid #e5e5e5;
-    box-sizing: border-box;
+    max-width: 100%;
+    padding: 10px 0;
+  }
+
+  .app-nav {
+    flex-direction: row;
   }
 
   .space-content-desktop {
@@ -166,19 +185,16 @@
     z-index: 10;
     overflow: hidden;
   }
-}
 
-.game-content-background {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  top: 0;
-}
+  .space-content {
+    padding: 16px 16px 0;
+  }
 
-.game-content-background > img {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  object-position: center;
+  .fullWidthStyle {
+    padding-right: 0;
+  }
+
+  .main-component-content {
+    margin-top: 0;
+  }
 }

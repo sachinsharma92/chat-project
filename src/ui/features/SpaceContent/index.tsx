@@ -8,7 +8,6 @@ import { SpaceContentTabEnum } from '@/types';
 import { head } from 'lodash';
 import { useMemo } from 'react';
 
-import Avatar from '@/components/common/Avatar/Avatar';
 import Button from '@/components/common/Button';
 import dynamic from 'next/dynamic';
 import SpaceDescription from '../SpaceDescription';
@@ -44,14 +43,6 @@ const SpaceContent = () => {
     );
   }, [spaceInfo]);
 
-  // const onSharePage = () => {
-  //   // pop up share
-  //   if (navigator?.share) {
-  //     const title = `Botnet -${spaceName}`;
-  //     navigator.share({ title, text: title, url: `${window.location.href}` });
-  //   }
-  // };
-
   return (
     <div className="space-content-container">
       <div className="space-content-header">
@@ -62,29 +53,7 @@ const SpaceContent = () => {
             <Button className="VerifyIcon"><VerifyIcon /></Button>
           </div>
           <Button className="subscribe"><Heart size={18} /></Button>
-          {/* <div className="relative flex justify-start items-center p-0 box-border ">
-            <Button className="share" onClick={onSharePage}>
-              Share
-            </Button>
-          </div> */}
         </div>
-      </div>
-
-      <div className="space-content-header-mobile">
-        <div className="space-content-header-mobile-creator">
-          <div className="space-content-avatar">
-            <Avatar
-              height={40}
-              width={40}
-              name={head(spaceName)}
-              src={spaceInfo?.image}
-            />
-          </div>
-          <p className="space-name">{spaceName}</p>
-        </div>
-        <Button className="subscribe space-content-header-mobile-subscribe">
-          Subscribe
-        </Button>
       </div>
 
       <div className="space-description-mobile">

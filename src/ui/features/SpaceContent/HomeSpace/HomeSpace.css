@@ -121,4 +121,12 @@ button:focus-visible {
     display: none;
     overflow: hidden;
   }
+
+  .home-space {
+    display: none;
+  }
+
+  .info-section {
+    @apply pt-4 mt-4;
+  }
 }

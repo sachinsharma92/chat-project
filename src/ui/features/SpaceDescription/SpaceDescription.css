@@ -1,5 +1,5 @@
 .space-description-container {
-  @apply relative w-full flex items-end;
+  @apply relative w-full flex-col;
 }
 
 .space-description-container > p {
