@@ -74,3 +74,15 @@ export const isPathnameAppRoute = (pathname: string) => {
 export const isPathnameForUpdatePassword = (pathname: string) => {
   return !isEmpty(filter(updatePasswordRoutes, p => pathname?.startsWith(p)));
 };
+
+export function convertURIToBinary(base64: string) {
+  let raw = window.atob(base64);
+  let rawLength = raw.length;
+  let arr = new Uint8Array(new ArrayBuffer(rawLength));
+
+  for (let i = 0; i < rawLength; i++) {
+    arr[i] = raw.charCodeAt(i);
+  }
+
+  return arr;
+}

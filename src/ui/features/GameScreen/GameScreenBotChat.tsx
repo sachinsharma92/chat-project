@@ -21,13 +21,13 @@ const GameScreenBotChat = () => {
 
   const { sendChat } = useContext(ChatBotStateContext);
 
-  const [botRoomIsResponding, recentUserChat, recentBotChat] = useBotData(
-    state => [
+  const [botRoomIsResponding, recentUserChat, recentBotChat, chatRoom] =
+    useBotData(state => [
       state.botRoomIsResponding,
       state.recentUserChat,
       state.recentBotChat,
-    ],
-  );
+      state.chatRoom,
+    ]);
 
   const chatStreamDomRef = useRef<any>(null);
 
@@ -36,8 +36,22 @@ const GameScreenBotChat = () => {
   const handleSendChat = (data: any) => {
     const message = data?.message;
 
-    if (!message || botRoomIsResponding) {
+    if (!message || botRoomIsResponding || !chatRoom) {
       return;
+    }
+
+    const audioElem = document.getElementById('bot-audio') as HTMLAudioElement;
+    const audioSource = document.getElementById(
+      'bot-audio-source',
+    ) as HTMLSourceElement;
+
+    if (audioElem && audioSource) {
+      // ios audio fix
+      audioSource.src =
+        'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+
+      audioElem.load();
+      audioElem.play();
     }
 
     sendChat(message);

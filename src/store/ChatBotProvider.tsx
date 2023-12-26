@@ -55,18 +55,6 @@ export const chatBotResponseEndChannel = 'chatBotEnd';
 
 export const chatBotAudioResponseChannel = 'chatBotAudio';
 
-function convertURIToBinary(base64: string) {
-  let raw = window.atob(base64);
-  let rawLength = raw.length;
-  let arr = new Uint8Array(new ArrayBuffer(rawLength));
-
-  for (let i = 0; i < rawLength; i++) {
-    arr[i] = raw.charCodeAt(i);
-  }
-
-  return arr;
-}
-
 enum ChatBotProviderActions {}
 
 interface IChatBotGameContextState {}
@@ -266,9 +254,9 @@ const ChatBotProvider = (props: { children?: ReactNode }) => {
     });
   }, [consumeChatBotResponse]);
 
-  const playAudio = useCallback((base64Audio: string): Promise<void> => {
+  const playAudio = useCallback((audioBuffer: ArrayBuffer): Promise<void> => {
     return new Promise(resolve => {
-      if (!base64Audio) {
+      if (!audioBuffer) {
         resolve();
         return;
       }
@@ -291,7 +279,7 @@ const ChatBotProvider = (props: { children?: ReactNode }) => {
       };
 
       // Create a blob from the Uint8Array
-      const audioBlob = new Blob([convertURIToBinary(base64Audio)], {
+      const audioBlob = new Blob([audioBuffer], {
         type: 'audio/mpeg',
       });
       if (audioBlob) {
@@ -361,10 +349,10 @@ const ChatBotProvider = (props: { children?: ReactNode }) => {
 
   const onChatBotAudioResponse = useCallback(
     (payload: any) => {
-      if (payload?.base64Audio) {
+      if (payload?.audioBuffer) {
         ChatBotAudioResponseQueue.add(async () => {
           try {
-            await playAudio(payload.base64Audio);
+            await playAudio(payload.audioBuffer);
           } catch (err: any) {
             console.log('playAudio err', err?.message);
             posthog.capture('AudioError', { userId, env: environment });
