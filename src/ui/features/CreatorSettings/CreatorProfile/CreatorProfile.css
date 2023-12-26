@@ -33,7 +33,7 @@
 
 .creator-profile > section > input[type='text'],
 .creator-profile > form > section > input[type='text'] {
-  @apply relative w-[500px] mt-[8px];
+  @apply relative sm:w-[500px] mt-[8px];
 
   height: 37px;
   background: transparent;
@@ -45,7 +45,7 @@
 }
 
 .creator-profile > form > section > textarea {
-  @apply relative w-[500px] mt-[8px];
+  @apply relative sm:w-[500px] mt-[8px];
 
   border-radius: 8px;
   outline: none;
@@ -70,4 +70,17 @@
   font-style: normal;
   font-weight: 500;
   line-height: 150%;
+}
+
+@media screen and (max-width: 767px) {
+  .creator-profile {
+    max-width: 100%;
+    padding: 20px;
+    overflow-x: hidden;
+  }
+
+  input,
+  textarea {
+    width: 100%;
+  }
 }

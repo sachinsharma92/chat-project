@@ -92,7 +92,10 @@
   text-align: left;
 }
 
-@media screen and (max-width: 720px) {
+@media screen and (max-width: 767px) {
+  .creator-settings {
+    min-width: 100%;
+  }
   .creator-settings-header-nav {
     @apply h-[40px];
 
@@ -100,6 +103,44 @@
   }
 
   .creator-settings-content-right {
-    padding-left: 0;
+    padding: 0;
+  }
+
+  .creator-settings-content-left {
+    height: 100vh;
+    position: fixed;
+    background: white;
+    z-index: 999;
+    max-width: 80%;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    border: none;
+    left: -100%;
+    transition: all 0.5s ease-in-out;
+  }
+
+  .creator-settings-content {
+    flex-direction: column;
+  }
+
+  .creator-settings-content-nav button.btn-back {
+    display: none;
+  }
+
+  .btn-mobile-menu {
+    width: 50px;
+    height: 50px;
+    background: #000;
+    border-radius: 100%;
+    position: fixed;
+    bottom: 35px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+  }
+
+  .mobile-menu-active {
+    left: 0%;
   }
 }

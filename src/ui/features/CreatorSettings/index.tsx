@@ -15,8 +15,9 @@ import Personality from './Personality';
 // import Voice from './Voice';
 
 import { isProduction } from '@/lib/environment';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Plus } from 'lucide-react';
 import './CreatorSettings.css';
+import { CloseIcon } from '@/icons';
 
 export enum CreatorSettingsView {
   'profile' = 'profile',
@@ -50,19 +51,21 @@ const CreatorSettings = () => {
     setCreatorView(view);
   };
 
+  const [toggleMenu, setToggleMenu] = useState(false)
+
   return (
     <div className="creator-settings">
       <div className="creator-settings-content">
-        <div className="creator-settings-content-left">
+        <div className={`creator-settings-content-left ${toggleMenu && "mobile-menu-active"}`}>
           <div className="creator-settings-content-nav">
             <div className="relative flex justify-start flex-col">
               <Button
-                className="relative h-[36px] w-[36px] p-[6px] rounded-[80px] bg-[#F5F5F5]"
+                className="relative h-[36px] w-[36px] p-[6px] rounded-[80px] bg-[#F5F5F5] btn-back"
                 onClick={navigateToSpace}
               >
                 <ArrowLeft height={'18px'} width={'18px'} />
               </Button>
-              <p className="font-bold mt-10 mb-6 text-xl">{spaceName}</p>
+              <p className="font-bold sm:mt-10 mb-6 text-xl">{spaceName}</p>
             </div>
 
             <ul>
@@ -135,6 +138,12 @@ const CreatorSettings = () => {
           {creatorView === CreatorSettingsView.personality && <Personality />}
           {creatorView === CreatorSettingsView.appearance && <Appearance />}
           {creatorView === CreatorSettingsView.voice && <Voice />}
+
+          <div className='btn-mobile-menu sm:hidden'>
+            <Button onClick={() => setToggleMenu(!toggleMenu)}>
+              {!toggleMenu ? <Plus /> : <CloseIcon />}
+            </Button>
+          </div>
         </div>
       </div>
     </div>

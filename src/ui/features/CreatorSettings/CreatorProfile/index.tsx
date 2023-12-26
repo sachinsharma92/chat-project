@@ -239,7 +239,7 @@ const CreatorProfile = () => {
           />
 
           <div className='flex text-xs text-[#666] justify-between'>
-            <span>Describe your Bot to the public. This won’t be used for its personality.</span>
+            <span className='max-w-[80%]'>Describe your Bot to the public. This won’t be used for its personality.</span>
             <span> {`${size(watch('instructions'))} / 300`}</span>
           </div>
         </section>
