@@ -8,6 +8,7 @@ import cx from 'classnames';
 import './AppNavigation.css';
 import ProfileMenu from './ProfileMenu';
 import { PlusIcon } from 'lucide-react';
+import * as Tooltip from '@radix-ui/react-tooltip';
 
 const AppNavigation = () => {
   return (
@@ -18,18 +19,63 @@ const AppNavigation = () => {
         </Button>
 
         <div className="center">
-          <Button className="search-icon">
-            <HomeOutlineIcon />
-          </Button>
-          <Button className="search-icon">
-            <SearchIcon />
-          </Button>
-          <Button className="search-icon">
-            <CommentIcon />
-          </Button>
-          <Button className="search-icon">
-            <NotificationBellIcon />
-          </Button>
+          <Tooltip.Provider>
+            <Tooltip.Root>
+              <Tooltip.Trigger asChild>
+                <Button className="search-icon">
+                  <HomeOutlineIcon />
+                </Button>
+              </Tooltip.Trigger>
+              <Tooltip.Portal>
+                <Tooltip.Content className="TooltipContent" sideOffset={5} side="right">
+                  Home
+                  <Tooltip.Arrow className="TooltipArrow" />
+                </Tooltip.Content>
+              </Tooltip.Portal>
+            </Tooltip.Root>
+
+            <Tooltip.Root>
+              <Tooltip.Trigger asChild>
+                <Button className="search-icon">
+                  <SearchIcon />
+                </Button>
+              </Tooltip.Trigger>
+              <Tooltip.Portal>
+                <Tooltip.Content className="TooltipContent" sideOffset={5} side="right">
+                  Home
+                  <Tooltip.Arrow className="TooltipArrow" />
+                </Tooltip.Content>
+              </Tooltip.Portal>
+            </Tooltip.Root>
+
+            <Tooltip.Root>
+              <Tooltip.Trigger asChild>
+                <Button className="search-icon">
+                  <CommentIcon />
+                </Button>
+              </Tooltip.Trigger>
+              <Tooltip.Portal>
+                <Tooltip.Content className="TooltipContent" sideOffset={5} side="right">
+                  Explore
+                  <Tooltip.Arrow className="TooltipArrow" />
+                </Tooltip.Content>
+              </Tooltip.Portal>
+            </Tooltip.Root>
+
+            <Tooltip.Root>
+              <Tooltip.Trigger asChild>
+                <Button className="search-icon">
+                  <NotificationBellIcon />
+                </Button>
+              </Tooltip.Trigger>
+              <Tooltip.Portal>
+                <Tooltip.Content className="TooltipContent" sideOffset={5} side="right">
+                  Notifications
+                  <Tooltip.Arrow className="TooltipArrow" />
+                </Tooltip.Content>
+              </Tooltip.Portal>
+            </Tooltip.Root>
+          </Tooltip.Provider>
         </div>
       </div>
 
@@ -39,7 +85,7 @@ const AppNavigation = () => {
         </Button>
         <ProfileMenu />
       </div>
-    </div>
+    </div >
   );
 };
 
