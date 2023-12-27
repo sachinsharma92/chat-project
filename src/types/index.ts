@@ -85,6 +85,7 @@ export interface IBotData {
   leavingChatRoom: boolean;
   recentBotChat: string;
   recentUserChat: string;
+  clearChatMessages: () => void;
   setRecentUserChat: (recentUserChat: string) => void;
   setRecentBotChat: (recentBotChat: string) => void;
   setConnectingChatRoom: (connectingChatroom: boolean) => void;

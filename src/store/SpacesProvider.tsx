@@ -36,8 +36,9 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
   const { spaceId, spaceInfo } = useSelectedSpace();
   const router = useRouter();
 
-  const [restoreLocalChatHistory] = useBotData(state => [
+  const [restoreLocalChatHistory, clearChatMessages] = useBotData(state => [
     state.restoreLocalChatHistory,
+    state.clearChatMessages,
   ]);
 
   const { username } = useUsername();
@@ -109,6 +110,7 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
         username,
       );
 
+      clearChatMessages();
       fetchingSpace.current = targetSpaceId;
       const { data: spaceData, error } = await getSpaceProfile(targetSpaceId);
 
@@ -139,19 +141,18 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
     spaceId,
     username,
     router,
+    clearChatMessages,
     addSpace,
     setChatMessages,
     notFound,
     setSpaceInfo,
   ]);
 
-  /**
-   * Fetch logged in user's chat history
-   */
   useEffect(() => {
-    const fetchChatHistory = async () => {
+    const fetchBotSpaceGreeting = async () => {
       try {
         setFetchingChatHistory(true);
+        console.log('fetchBotSpaceGreeting()');
 
         const spaceBotsData = spaceInfo?.bots;
         const spaceBotInfo = head(spaceBotsData);
@@ -180,7 +181,7 @@ const SpacesProvider = (props: { children?: ReactNode }) => {
     };
 
     if (spaceId && !isLoading && !isEmpty(spaceInfo?.bots) && spaceInfo?.host) {
-      fetchChatHistory();
+      fetchBotSpaceGreeting();
     }
   }, [
     session,
