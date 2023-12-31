@@ -61,7 +61,6 @@ const ProfileMenu = () => {
       await signOutUser();
       // join a new channel on each new session
       await leaveChatRoom();
-
       router.push(`/?space=${defaultSpaceId}`);
     }
   };

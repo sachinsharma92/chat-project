@@ -284,7 +284,7 @@ const Personality = () => {
             <p> Add files that this Bot would have knowledge of</p>
           </div>
 
-          {!isEmpty(botFormAnswers) && (
+          {isEmpty(botFormAnswers) && (
             <Knowledge
               botFormAnswers={botFormAnswers}
               updatePersonalityProps={updatePersonalityProps}

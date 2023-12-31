@@ -11,8 +11,10 @@ export enum MusicPlayerMediaType {
 
 export enum SpaceContentTabEnum {
   'chat' = 'chat',
-  'world' = 'world',
   'home' = 'home',
+  'world' = 'world',
+  'reviews' = 'reviews',
+  'pastChats'= 'pastChats'
 }
 
 export interface IAppState {

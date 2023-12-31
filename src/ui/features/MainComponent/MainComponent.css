@@ -1,13 +1,11 @@
 .main-component {
   @apply fixed flex w-full justify-start items-start top-0 left-0 h-full w-full box-border;
-
-  padding: 24px;
-  padding-top: 16px;
-  flex-direction: column;
 }
 
 .header-nav {
-  height: 48px;
+  height: calc(100vh - 24px);
+  max-width: 96px;
+  padding: 30px 0;
 }
 
 .header-nav,
@@ -16,9 +14,13 @@
 }
 
 .main-component-content {
-  @apply flex justify-between items-center h-full mt-[16px];
+  @apply flex justify-between items-center h-full;
+}
 
-  max-height: calc(100% - 48px - 16px);
+.fullWidthStyle {
+  @apply mt-[16px];
+  padding-right: 54px;
+  max-height: calc(100% - 38px - 16px);
 }
 
 .right-sidebar {
@@ -36,7 +38,7 @@
   overflow: hidden;
 }
 
-.game-content {
+.card-game-content {
   border-radius: 40px;
   box-shadow: 0px 6px 20px 0px rgba(0, 0, 0, 0.15);
 }
@@ -54,7 +56,7 @@
 }
 
 .space-content {
-  padding-left: 4px;
+  padding-left: 24px;
 }
 
 .space-content-min-sm {
@@ -76,6 +78,14 @@
   display: none;
 }
 
+.volume-button-style {
+  @apply absolute flex justify-center items-center rounded-[80px] p-[8px] box-border top-[16px] left-[16px];
+
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.24);
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+}
+
 .expand-min-options {
   @apply absolute flex justify-center items-center rounded-[80px] p-[8px] box-border top-[16px] right-[16px];
 
@@ -84,20 +94,39 @@
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
 }
 
-.expand-min-options > button {
+.expand-min-options > button,
+.volume-button-style > button {
   @apply relative flex justify-center items-center h-[40px] w-[40px] p-[4px] box-border rounded-[500px];
 
   background: rgba(0, 0, 0, 0.24);
+}
+
+.volume-button-style > button svg {
+  filter: contrast(0) brightness(100);
 }
 
 .expand-min-options > button:hover {
   background: rgba(0, 0, 0, 0.3);
 }
 
-@media screen and (max-width: 720px) {
+.game-content-background {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+}
+
+.game-content-background > img {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+@media screen and (max-width: 767px) {
   .main-component {
     padding: 0;
-    padding-top: 8px;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
@@ -105,7 +134,12 @@
 
   .header-nav {
     border-bottom: 0.5px solid #e5e5e5;
-    box-sizing: border-box;
+    max-width: 100%;
+    padding: 10px 0;
+  }
+
+  .app-nav {
+    flex-direction: row;
   }
 
   .space-content-desktop {
@@ -151,19 +185,16 @@
     z-index: 10;
     overflow: hidden;
   }
-}
 
-.game-content-background {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  top: 0;
-}
+  .space-content {
+    padding: 16px 16px 0;
+  }
 
-.game-content-background > img {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  object-position: center;
+  .fullWidthStyle {
+    padding-right: 0;
+  }
+
+  .main-component-content {
+    margin-top: 0;
+  }
 }

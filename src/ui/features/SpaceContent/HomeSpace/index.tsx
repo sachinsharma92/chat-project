@@ -1,31 +1,25 @@
 'use client';
 
-import { useContext, useMemo } from 'react';
-import { head } from 'lodash';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import {
-  DiscordIcon,
   FileIcon,
-  InstagramIcon,
-  Microphone,
-  TelegramIcon,
-  TiktokIcon,
-  XIcon,
-  YouTubeIcon,
+  Microphone
 } from '@/icons';
-import { useForm } from 'react-hook-form';
 import { useAppStore, useBotData } from '@/store/App';
 import { SpaceContentTabEnum } from '@/types';
+import { head } from 'lodash';
+import { useContext, useMemo } from 'react';
+import { useForm } from 'react-hook-form';
+import { useBotChat } from '../../../../hooks/useBotChat';
 
-import SpaceLinks from '../../SpaceLinks';
-import TextInput from '@/components/common/TextInput';
-import Button from '@/components/common/Button';
 import Avatar from '@/components/common/Avatar/Avatar';
+import Button from '@/components/common/Button';
+import TextInput from '@/components/common/TextInput';
 import SpaceDescription from '../../SpaceDescription';
+import SpaceLinks from '../../SpaceLinks';
 
-import './HomeSpace.css';
 import { ChatBotStateContext } from '@/store/ChatBotProvider';
-import { useBotChat } from '@/hooks/useBotChat';
+import './HomeSpace.css';
 
 const HomeSpace = () => {
   const [setSpaceContentTab] = useAppStore(state => [state.setSpaceContentTab]);
@@ -83,29 +77,7 @@ const HomeSpace = () => {
         <div className="space-description">
           <SpaceDescription text={spaceDescription} />
         </div>
-
         <SpaceLinks />
-
-        <div className="social-links">
-          <a>
-            <InstagramIcon />
-          </a>
-          <a>
-            <DiscordIcon />
-          </a>
-          <a>
-            <TiktokIcon />
-          </a>
-          <a>
-            <XIcon />
-          </a>
-          <a>
-            <YouTubeIcon />
-          </a>
-          <a>
-            <TelegramIcon />
-          </a>
-        </div>
       </div>
 
       <form onSubmit={handleSubmit(switchToChat)} className="cta-greeting-chat">
@@ -134,6 +106,8 @@ const HomeSpace = () => {
             <Microphone />
           </Button>
         </div>
+
+        <div className='bg-[#f5f5f5] rounded-xl mt-4 py-2 text-center text-black font-semibold'>Botnet is free to use during the public beta</div>
       </form>
     </>
   );

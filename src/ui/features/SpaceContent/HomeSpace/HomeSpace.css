@@ -13,7 +13,7 @@
 }
 
 .space-description {
-  @apply relative w-full mt-[24px];
+  @apply relative w-full;
 }
 
 .social-links {
@@ -32,7 +32,7 @@
   padding: 24px;
   border: 1px solid #e5e5e5;
   background: #fff;
-  box-shadow: 0px 1px 8px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0px 6px 20px 1px rgba(0, 0, 0, 0.05);
 }
 
 .greetings {
@@ -87,9 +87,46 @@
   fill: #fff;
 }
 
+.tag-style {
+  @apply h-[32px] rounded-full;
+  padding: 8px 16px;
+  background-color: #f5f5f5;
+}
+
+.info-section {
+  @apply gap-16 flex pt-8 mt-8;
+  border-top: 1px solid #f5f5f5;
+}
+
+.info-item {
+  @apply text-sm;
+}
+
+.info-item p {
+  @apply text-base text-black font-semibold;
+  margin-bottom: 0;
+}
+
+.info-item h4 {
+  margin-top: 0;
+}
+
+button:focus,
+button:focus-visible {
+  outline: none;
+}
+
 @media screen and (max-width: 720px) {
   .cta-greeting-chat {
     display: none;
     overflow: hidden;
+  }
+
+  .home-space {
+    display: none;
+  }
+
+  .info-section {
+    @apply pt-4 mt-4;
   }
 }
