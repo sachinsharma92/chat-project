@@ -1,13 +1,28 @@
-import { Inter_Tight, Inter as InterFont } from 'next/font/google';
+import localFont from 'next/font/local';
 
-export const InterTight = Inter_Tight({
-  style: ['normal'],
-  subsets: ['latin'],
+export const atlasGrotesk = localFont({
   display: 'swap',
-});
-
-export const Inter = InterFont({
-  style: ['normal'],
-  subsets: ['latin'],
-  display: 'swap',
+  variable: '--font-primary',
+  src: [
+    {
+      path: '../../public/fonts/AtlasGrotesk-Thin.otf',
+      weight: '100',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/AtlasGrotesk-Light.otf',
+      weight: '200',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/AtlasGrotesk-Regular.otf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/AtlasGrotesk-Medium.otf',
+      weight: '500',
+      style: 'normal',
+    },
+  ],
 });

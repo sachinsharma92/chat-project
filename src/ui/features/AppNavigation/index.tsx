@@ -1,6 +1,6 @@
 'use client';
 
-import { InterTight } from '@/app/fonts';
+import { atlasGrotesk } from '@/app/fonts';
 import { BotnetIcon, CommentIcon, HomeOutlineIcon, NotificationBellIcon, SearchIcon } from '@/icons';
 
 import Button from '@/components/common/Button';
@@ -12,7 +12,7 @@ import * as Tooltip from '@radix-ui/react-tooltip';
 
 const AppNavigation = () => {
   return (
-    <div className={cx(InterTight.className, 'app-nav')}>
+    <div className={cx(atlasGrotesk.className, 'app-nav')}>
       <div className="left">
         <Button className="logo flex justify-center">
           <BotnetIcon />

@@ -2,13 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: system;
-  src: local('.SFNSText-Light'), local('.HelveticaNeueDeskInterface-Light'),
-    local('.LucidaGrandeUI'), local('Ubuntu Light'), local('Segoe UI Light'),
-    local('Roboto-Light'), local('DroidSans'), local('Tahoma');
-}
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -74,7 +67,7 @@
 body {
   margin: 0;
   box-sizing: border-box;
-  font-family: var(--font-inter);
+  font-family: var(--font-primary);
   font-feature-settings: 'clig' off, 'liga' off;
 }
 
@@ -99,7 +92,7 @@ div[data-testid='joystick-base'] button {
 html {
   line-height: 1.15; /* 1 */
   -webkit-text-size-adjust: 100%; /* 2 */
-  font-family: var(--font-inter);
+  font-family: var(--font-primary);
 }
 
 /* Sections

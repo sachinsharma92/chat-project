@@ -22,6 +22,18 @@ module.exports = {
         '2xl': '1400px',
       },
     },
+    screens: {
+      sm: '767px',
+      md: '991px',
+      lg: '1440px',
+      xl: '1600px',
+    },
+    fontSize: {
+      xs: '0.625rem',
+      sm: '0.75rem',
+      base: '1rem',
+      xl: '1.25rem',
+    },
     extend: {
       keyframes: {
         'accordion-down': {

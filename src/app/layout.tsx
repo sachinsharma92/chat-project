@@ -2,7 +2,7 @@ import './globals.css';
 
 import { ReactNode } from 'react';
 import type { Metadata } from 'next';
-import { Inter } from './fonts';
+import { atlasGrotesk } from './fonts';
 import { Toaster } from '@/components/ui/toaster';
 
 import Script from 'next/script';
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={Inter.className}>
+    <html lang="en" className={atlasGrotesk.className}>
       <head>
         <Script src="/google-tag-manager.js" />
 
