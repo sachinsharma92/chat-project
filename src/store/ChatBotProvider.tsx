@@ -431,7 +431,15 @@ const ChatBotProvider = (props: { children?: ReactNode }) => {
       );
       setChatRoom(newChatRoom);
 
-      await timeout(500);
+      await timeout(300);
+
+      if (newChatRoom?.state?.users) {
+        const user = newChatRoom.state.users.get(userId);
+
+        if (user) {
+          consumeUserChatMessages(user.chatMessages);
+        }
+      }
     } catch (err: any) {
       console.log('connectChatRoom() err:', err?.message);
     } finally {
@@ -469,12 +477,11 @@ const ChatBotProvider = (props: { children?: ReactNode }) => {
       setRecentBotChat('');
       setRecentUserChat('');
       setLeavingChatRoom(true);
+      setChatMessages([]);
       chatRoom.removeAllListeners();
       await chatRoom?.leave(true);
-
       setConnectingChatRoom(false);
       setChatRoom(null);
-      setChatMessages([]);
     } catch (err: any) {
       console.log('leaveChatRoom() err:', err?.message);
     } finally {

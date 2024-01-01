@@ -1,6 +1,6 @@
 'use client';
 
-import { useAppStore } from '@/store/App';
+import { useAppStore, useBotData } from '@/store/App';
 import { PersonIcon } from '@radix-ui/react-icons';
 import { isEmpty, isFunction } from 'lodash';
 import { useRouter } from 'next/navigation';
@@ -22,6 +22,10 @@ const ProfileMenu = () => {
   const [session, authIsLoading] = useBotnetAuth(state => [
     state.session,
     state.isLoading,
+  ]);
+
+  const [clearLocalChatHistory] = useBotData(state => [
+    state.clearLocalChatHistory,
   ]);
 
   const { leaveChatRoom } = useContext(ChatBotStateContext);
@@ -52,6 +56,8 @@ const ProfileMenu = () => {
 
   const logoutAccount = async () => {
     if (isFunction(signOutUser)) {
+      clearLocalChatHistory();
+
       await signOutUser();
       // join a new channel on each new session
       await leaveChatRoom();

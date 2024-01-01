@@ -1,9 +1,9 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
-import { FileIcon, Microphone } from '@/icons';
+import { FileIcon, Microphone, ResetIcon } from '@/icons';
 import { useBotData } from '@/store/App';
-import { useContext, useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { map } from 'lodash';
 import { OpenAIRoles } from '@/types';
 import { ChatBotStateContext } from '@/store/ChatBotProvider';
@@ -29,9 +29,11 @@ const GameScreenBotChat = () => {
       state.chatRoom,
     ]);
 
+  const [resettingChat, setResettingChat] = useState(false);
+
   const chatStreamDomRef = useRef<any>(null);
 
-  const { chatMessages: sanitizedChatMessages } = useBotChat();
+  const { chatMessages: sanitizedChatMessages, resetChat } = useBotChat();
 
   const handleSendChat = (data: any) => {
     const message = data?.message;
@@ -56,6 +58,24 @@ const GameScreenBotChat = () => {
 
     sendChat(message);
     setValue('message', '');
+  };
+
+  /**
+   * Clear chat array
+   */
+  const onResetChat = async () => {
+    try {
+      if (resettingChat) {
+        return;
+      }
+
+      setResettingChat(true);
+
+      await resetChat();
+    } catch {
+    } finally {
+      setResettingChat(false);
+    }
   };
 
   /** Scroll on new chat */
@@ -109,6 +129,17 @@ const GameScreenBotChat = () => {
               </>
             )}
           </ul>
+
+          <div className="absolute top-[8px] w-full flex justify-end items-center box-border p-0 pr-[2px] mb-[8px]">
+            <Button
+              className="game-screen-bot-chat-reset-chat"
+              onClick={onResetChat}
+              isLoading={resettingChat}
+            >
+              <ResetIcon />
+              <p>Reset Chat</p>
+            </Button>
+          </div>
         </div>
 
         <form

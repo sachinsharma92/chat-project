@@ -134,15 +134,22 @@ export const useBotData = create<IBotData>()(set => ({
   setFetchingChatHistory(fetchingChatHistory) {
     return set(() => ({ fetchingChatHistory }));
   },
+
+  clearChatMessages() {
+    return set(() => ({ chatMessages: [] }));
+  },
+
   setChatMessages: chatMessages => {
     set(state => {
-      const firstMessage = head(state?.chatMessages);
+      const incomingFirstMessage = head(chatMessages);
+      const prevFirstMessage = head(state?.chatMessages);
 
       if (
-        !isEmpty(state?.chatMessages) &&
-        firstMessage?.role === OpenAIRoles.assistant
+        incomingFirstMessage?.message !== prevFirstMessage?.message &&
+        !isEmpty(prevFirstMessage?.message) &&
+        prevFirstMessage?.role === OpenAIRoles.assistant
       ) {
-        return { chatMessages: [firstMessage, ...chatMessages] };
+        return { chatMessages: [prevFirstMessage, ...chatMessages] };
       }
 
       return { chatMessages };
