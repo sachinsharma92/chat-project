@@ -28,7 +28,7 @@ const BotMessage = (
       </div>
       <div className="bot-message-text">
         {/* <p>{displayName}</p> */}
-        {message && <p className='msg-box'>{message} sasas sasa ss sasa sasa sa sas</p>}
+        {message && <p className='msg-box'>{message}</p>}
         {!message && (
           <p className="bot-message-loading">
             <EllipseIcon height={'10px'} width={'10px'} />

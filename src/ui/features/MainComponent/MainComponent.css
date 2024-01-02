@@ -14,7 +14,7 @@
 }
 
 .main-component-content {
-  @apply flex justify-between items-center;
+  @apply flex justify-between items-center sm:h-full;
 }
 
 .fullWidthStyle {
