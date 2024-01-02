@@ -1,8 +1,7 @@
 'use client';
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
-import { HomeIcon, VerifyIcon, VolumeIcon } from '@/icons';
+import { ExpandV2Icon, HomeIcon, UnionIcon } from '@/icons';
 import { useAppStore } from '@/store/App';
 import { SpaceContentTabEnum } from '@/types';
 import { head } from 'lodash';
@@ -13,7 +12,6 @@ import dynamic from 'next/dynamic';
 import SpaceDescription from '../SpaceDescription';
 
 import { StarFilledIcon } from '@radix-ui/react-icons';
-import { Heart } from 'lucide-react';
 import './SpaceContent.css';
 
 const BotChat = dynamic(() => import('./BotChat'));
@@ -23,10 +21,13 @@ const HomeSpace = dynamic(() => import('./HomeSpace'), { ssr: false });
 const SpaceContent = () => {
   const { spaceInfo } = useSelectedSpace();
 
+
   const [spaceContentTab, setSpaceContentTab] = useAppStore(state => [
     state.spaceContentTab,
     state.setSpaceContentTab,
   ]);
+
+  const spaceBotInfo = useMemo(() => head(spaceInfo?.bots), [spaceInfo]);
 
   const spaceName = useMemo(
     () => spaceInfo?.host?.displayName || spaceInfo?.spaceName || 'Botnet',
@@ -46,13 +47,34 @@ const SpaceContent = () => {
   return (
     <div className="space-content-container">
       <div className="space-content-header">
-        <div className="space-content-header-right flex justify-between items-center bg-red w-full">
+        <div className="space-content-header-right flex justify-between items-center bg-black w-full pr-2 pl-[2px]">
           <div className='space-content-header-main'>
-            <p className="space-name">{spaceName}</p>
-            <Button className="volumeIcon"><VolumeIcon /></Button>
-            <Button className="VerifyIcon"><VerifyIcon /></Button>
+            <div className="w-8 h-8 overflow-hidden">
+              <img
+                src={spaceBotInfo?.background || '/assets/botnet-avatar-bg.jpg'}
+                alt="Background preview"
+              />
+            </div>
+            <div>
+              <p className="space-name">{spaceName}</p>
+              <p className="text-xs text-white">20.1k Followers</p>
+            </div>
           </div>
-          <Button className="subscribe"><Heart size={18} /></Button>
+          <Button className="subscribe">Follow</Button>
+        </div>
+
+        <div className='flex gap-1'>
+          <div className='share-button-style'>
+            <Button>
+              <UnionIcon />
+            </Button>
+          </div>
+
+          <div className="expand-min-options">
+            <Button>
+              <ExpandV2Icon />
+            </Button>
+          </div>
         </div>
       </div>
 

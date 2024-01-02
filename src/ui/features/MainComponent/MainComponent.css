@@ -78,20 +78,18 @@
   display: none;
 }
 
-.volume-button-style {
-  @apply absolute flex justify-center items-center rounded-[80px] p-[8px] box-border top-[16px] left-[16px];
+.share-button-style {
+  @apply flex justify-center items-center top-[16px] left-[16px] w-8 h-8 text-white;
 
   gap: 8px;
-  background: rgba(0, 0, 0, 0.24);
-  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 1);
 }
 
 .expand-min-options {
-  @apply absolute flex justify-center items-center rounded-[80px] p-[8px] box-border top-[16px] right-[16px];
+  @apply flex justify-center items-center top-[16px] right-[16px] w-8 h-8;
 
   gap: 8px;
-  background: rgba(0, 0, 0, 0.24);
-  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 1);
 }
 
 .expand-min-options > button,
@@ -136,6 +134,7 @@
     border-bottom: 0.5px solid #e5e5e5;
     max-width: 100%;
     padding: 10px 0;
+    position: absolute;
   }
 
   .app-nav {
@@ -167,9 +166,10 @@
   }
 
   .game-content {
-    height: calc(73vh - 160px);
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
+    height: 100dvh;
+    position: fixed;
+    border-radius: 0;
+    z-index: -1;
   }
 
   .game-content-expand-screen {

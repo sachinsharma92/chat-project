@@ -3,16 +3,9 @@
 import { mobileWidthBreakpoint } from '@/constants';
 import { useWindowResize } from '@/hooks';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
-import {
-  CloseIcon,
-  ExpandBoxIcon,
-  ExpandV2Icon,
-  Volume2Icon
-} from '@/icons';
 import { head } from 'lodash';
 import { useMemo, useState } from 'react';
 
-import Button from '@/components/common/Button';
 import cx from 'classnames';
 import dynamic from 'next/dynamic';
 import AppNavigation from '../AppNavigation';
@@ -39,14 +32,6 @@ const MainComponent = () => {
       setMinimizeSm(false);
     }
   };
-
-  // const toggleMinimizeSmGameScreen = () => {
-  //   setMinimizeSm(!minimizeSm);
-
-  //   if (!minimizeSm) {
-  //     setMinimizeMed(true);
-  //   }
-  // };
 
   return (
     <div className="main-component">
@@ -79,33 +64,6 @@ const MainComponent = () => {
             hideBotChat={minimizeMed && availableWidth >= mobileWidthBreakpoint}
           />
 
-
-          <div className='flex w-full'>
-            <div className="volume-button-style">
-              <Button>
-                <Volume2Icon />
-              </Button>
-            </div>
-
-            <div className="expand-min-options">
-              {availableWidth > mobileWidthBreakpoint && (
-                <Button onClick={toggleMinimizeMedGameScreen}>
-                  {minimizeMed && <ExpandBoxIcon />}
-                  {!minimizeMed && <CloseIcon />}
-                </Button>
-              )}
-
-              {availableWidth <= mobileWidthBreakpoint && (
-                <Button
-                  onClick={() => {
-                    setExpandFullScreen(!expandFullScreen);
-                  }}
-                >
-                  <ExpandV2Icon />
-                </Button>
-              )}
-            </div>
-          </div>
         </div>
         <div
           className={cx('space-content-desktop', {

@@ -93,8 +93,7 @@
   .game-screen-bot-chat {
     @apply w-full p-[24px] pt-0 bottom-0 right-0;
   }
-
   .game-screen-chat-stream {
-    max-height: 300px;
+    max-height: 100dvh;
   }
 }

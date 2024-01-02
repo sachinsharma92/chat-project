@@ -5,7 +5,7 @@
 }
 
 .space-content-header {
-  @apply relative flex justify-start items-start w-full sm:mt-[24px];
+  @apply relative flex justify-start items-start w-full sm:mt-[24px] gap-1 p-[4px];
 }
 
 .space-content-avatar {
@@ -85,16 +85,17 @@
 }
 
 .space-name {
-  color: #000;
-  font-size: 32px;
+  color: white;
+  font-size: 10px;
   font-style: normal;
-  font-weight: 700;
+  font-weight: 500;
   margin: 0;
   padding: 0;
 }
 
 .subscribe {
-  @apply relative h-[40px] w-[40px] rounded-[80px] border;
+  @apply relative h-[22px] w-[61px] text-black text-xs uppercase;
+  background-color: white !important;
 }
 
 .share {
@@ -133,7 +134,7 @@
 }
 
 .space-content-header-main {
-  @apply flex gap-3 items-center;
+  @apply flex gap-3 items-center h-[36px];
 }
 
 @media screen and (max-width: 767px) {
@@ -167,9 +168,9 @@
   }
 
   .space-name {
-    font-size: 24px;
+    font-size: 10px;
     font-style: normal;
-    font-weight: 700;
+    font-weight: 500;
     line-height: 130%;
     margin: 0;
   }
