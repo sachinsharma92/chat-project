@@ -99,7 +99,7 @@ const GameScreenBotChat = () => {
     <div className="game-screen-bot-chat">
       <div className="game-screen-bot-chat-content">
         <div className="game-screen-chat-stream" ref={chatStreamDomRef}>
-          <ul>
+          <ul className='px-4'>
             {map(sanitizedChatMessages, message => {
               const key = `${message?.id}`;
               const isBot = message?.role === OpenAIRoles.assistant;
@@ -130,7 +130,7 @@ const GameScreenBotChat = () => {
             )}
           </ul>
 
-          <div className="absolute top-[8px] w-full flex justify-end items-center box-border p-0 pr-[2px] mb-[8px]">
+          {/* <div className="absolute top-[8px] w-full flex justify-end items-center box-border p-0 pr-[2px] mb-[8px]">
             <Button
               className="game-screen-bot-chat-reset-chat"
               onClick={onResetChat}
@@ -139,7 +139,7 @@ const GameScreenBotChat = () => {
               <ResetIcon />
               <p>Reset Chat</p>
             </Button>
-          </div>
+          </div> */}
         </div>
 
         <form

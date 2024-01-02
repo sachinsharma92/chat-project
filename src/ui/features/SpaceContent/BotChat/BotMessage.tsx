@@ -24,11 +24,11 @@ const BotMessage = (
   return (
     <div className={cn('bot-message-container', className)}>
       <div className="bot-message-avatar">
-        <Avatar src={assistantDisplayImage} name={displayName} />
+        <Avatar src={assistantDisplayImage} name={displayName} className="rounded-none" />
       </div>
       <div className="bot-message-text">
-        <p>{displayName}</p>
-        {message && <p>{message}</p>}
+        {/* <p>{displayName}</p> */}
+        {message && <p className='msg-box'>{message} sasas sasa ss sasa sasa sa sas</p>}
         {!message && (
           <p className="bot-message-loading">
             <EllipseIcon height={'10px'} width={'10px'} />
