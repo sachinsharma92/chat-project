@@ -35,13 +35,14 @@ const MainComponent = () => {
 
   return (
     <div className="main-component">
-      <div className={cx('header-nav', { 'space-content-hide': !minimizeMed })}>
+      {/* <div className={cx('header-nav', { 'space-content-hide': !minimizeMed })}>
         <AppNavigation />
-      </div>
+      </div> */}
       <div
         className={cx('main-component-content', {
           'fullWidthStyle': minimizeMed,
         })}>
+
         <div className={cx('space-content-mobile', { 'space-content': minimizeMed })}>
           <SpaceContent />
         </div>

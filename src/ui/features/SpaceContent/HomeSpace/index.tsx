@@ -89,7 +89,7 @@ const HomeSpace = () => {
           {!botChatIsLoading && <p>{greeting}</p>}
         </div>
 
-        <div className="cta-chat-input-container">
+        <div className="cta-chat-input-container ">
           <Button className="attach-file">
             <FileIcon />
           </Button>

@@ -14,7 +14,7 @@
 }
 
 .main-component-content {
-  @apply flex justify-between items-center h-full;
+  @apply flex justify-between items-center;
 }
 
 .fullWidthStyle {
@@ -79,14 +79,14 @@
 }
 
 .share-button-style {
-  @apply flex justify-center items-center top-[16px] left-[16px] w-8 h-8 text-white;
+  @apply flex justify-center items-center top-[16px] left-[16px] w-9 h-9 text-white;
 
   gap: 8px;
   background: rgba(0, 0, 0, 1);
 }
 
 .expand-min-options {
-  @apply flex justify-center items-center top-[16px] right-[16px] w-8 h-8;
+  @apply flex justify-center items-center top-[16px] right-[16px] w-9 h-9;
 
   gap: 8px;
   background: rgba(0, 0, 0, 1);

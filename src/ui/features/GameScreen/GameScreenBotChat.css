@@ -1,5 +1,5 @@
 .game-screen-bot-chat {
-  @apply absolute flex items-start justify-end w-[300px] h-full right-[24px] bottom-[24px] p-0 box-border;
+  @apply absolute flex items-start justify-end h-full p-0 bottom-0;
 
   flex-direction: column;
 }
@@ -39,29 +39,39 @@
 }
 
 .game-screen-chat-input-container {
-  @apply relative flex justify-between w-full items-center h-[48px] rounded-[48px] pr-[8px] pl-[16px] box-border;
-
-  border: 1px solid #e5e5e5;
-  background: #fff;
+  @apply relative flex justify-between w-full items-center h-[102px] bg-black flex-col gap-3 py-4;
+  border-radius: 10px 10px 0 0;
+  justify-content: center;
 }
 
-.game-screen-chat-input-container > input {
-  @apply relative;
-
-  max-width: calc(100% - 80px);
+.game-screen-chat-input-container input {
+  @apply relative px-3;
   width: 100%;
   background: transparent;
+  border: 1px solid rgba(256, 256, 256, 0.5);
+  height: 36px;
+}
+
+.suggestion-section {
+  @apply pl-4 flex gap-1 flex-nowrap overflow-x-scroll;
+}
+
+.suggestion-section .suggestion {
+  @apply text-white whitespace-nowrap px-3 text-sm;
+  border: 1px solid rgba(256, 256, 256, 0.5);
+  height: 22px;
 }
 
 .game-screen-attach-file {
   @apply relative flex justify-center items-center h-[30px] w-[30px];
 }
 
-.game-screen-mic {
-  @apply relative flex justify-center items-center h-[36px] w-[36px] p-0 rounded-[500px] bg-[#000];
+.chat-btn {
+  @apply relative flex justify-center items-center h-[36px] min-w-[36px] p-0 bg-[#000];
+  border: 1px solid rgba(256, 256, 256, 0.5);
 }
 
-.game-screen-mic > svg > path {
+.chat-btn > svg > path {
   fill: #fff;
 }
 
@@ -91,7 +101,7 @@
 
 @media screen and (max-width: 720px) {
   .game-screen-bot-chat {
-    @apply w-full p-[24px] pt-0 bottom-0 right-0;
+    @apply w-full;
   }
   .game-screen-chat-stream {
     max-height: 100dvh;

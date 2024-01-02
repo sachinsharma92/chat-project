@@ -1,18 +1,18 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
-import { FileIcon, Microphone, ResetIcon } from '@/icons';
-import { useBotData } from '@/store/App';
-import { useContext, useEffect, useRef, useState } from 'react';
-import { map } from 'lodash';
-import { OpenAIRoles } from '@/types';
-import { ChatBotStateContext } from '@/store/ChatBotProvider';
 import { useBotChat } from '@/hooks/useBotChat';
+import { Microphone, MoreIcon, ResetIcon } from '@/icons';
+import { useBotData } from '@/store/App';
+import { ChatBotStateContext } from '@/store/ChatBotProvider';
+import { OpenAIRoles } from '@/types';
+import { map } from 'lodash';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
-import BotMessage from '../SpaceContent/BotChat/BotMessage';
-import UserMessage from '../SpaceContent/BotChat/UserMessage';
 import Button from '@/components/common/Button';
 import TextInput from '@/components/common/TextInput';
+import BotMessage from '../SpaceContent/BotChat/BotMessage';
+import UserMessage from '../SpaceContent/BotChat/UserMessage';
 
 import './GameScreenBotChat.css';
 
@@ -144,21 +144,41 @@ const GameScreenBotChat = () => {
 
         <form
           onSubmit={handleSubmit(handleSendChat)}
-          className="game-screen-chat-input-container"
+          className="game-screen-chat-input-container z-50"
         >
-          <Button className="game-screen-attach-file">
-            <FileIcon />
-          </Button>
-          <TextInput
-            {...register('message', {
-              required: false,
-            })}
-            placeholder="Message...."
-            className="chat-form-input"
-          />
-          <Button className="game-screen-mic">
-            <Microphone />
-          </Button>
+          <div className='suggestion-section'>
+            <button className="suggestion">
+              Yeah I mean I guess...
+            </button>
+            <button className="suggestion">
+              Yeah I mean I guess...
+            </button>
+            <button className="suggestion">
+              Yeah I mean I guess...
+            </button>
+            <button className="suggestion">
+              Yeah I mean I guess...
+            </button>
+            <button className="suggestion">
+              Yeah I mean I guess...
+            </button>
+          </div>
+
+          <div className='flex w-full gap-1 px-4'>
+            <TextInput
+              {...register('message', {
+                required: false,
+              })}
+              placeholder="Message...."
+              className="chat-form-input text-xs"
+            />
+            <Button className="chat-btn">
+              <Microphone />
+            </Button>
+            <Button className="chat-btn">
+              <MoreIcon />
+            </Button>
+          </div>
         </form>
       </div>
     </div>

@@ -43,4 +43,4 @@ export { default as VerifyIcon } from './VerifyIcon';
 export { default as Volume2Icon } from './Volume2Icon';
 export { default as CloseIcon } from './CloseIcon';
 export { default as UnionIcon } from './UnionIcon';
-
+export { default as MoreIcon } from './MoreIcon';
