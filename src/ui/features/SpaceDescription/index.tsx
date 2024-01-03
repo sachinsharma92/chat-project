@@ -1,8 +1,11 @@
+'use client';
+
 import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { useSelectedSpace } from '@/hooks/useSelectedSpace';
+
 import './SpaceDescription.css';
 import Button from '@/components/common/Button';
 import Avatar from '@/components/common/Avatar/Avatar';
-import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 
 type SpaceDescriptionProps = {
   text: string;
@@ -15,6 +18,8 @@ const SpaceDescription = (props: SpaceDescriptionProps) => {
   const textRef = useRef<HTMLParagraphElement | null>(null);
   const { spaceInfo } = useSelectedSpace();
 
+  const spaceHost = useMemo(() => spaceInfo?.host, [spaceInfo]);
+
   useEffect(() => {
     if (textRef?.current) {
       const { scrollHeight, clientHeight } = textRef.current;
@@ -23,7 +28,6 @@ const SpaceDescription = (props: SpaceDescriptionProps) => {
       }
     }
   }, [text]);
-
 
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);
@@ -58,25 +62,25 @@ const SpaceDescription = (props: SpaceDescriptionProps) => {
         )}
       </div>
 
-      <div className='flex gap-3 mt-4'>
-        <Button className='tag-style'>Female</Button>
-        <Button className='tag-style'>Anime</Button>
-        <Button className='tag-style'>Hero</Button>
+      <div className="flex gap-3 mt-4">
+        <Button className="tag-style">Female</Button>
+        <Button className="tag-style">Anime</Button>
+        <Button className="tag-style">Hero</Button>
       </div>
 
       <div className="info-section">
-        <div className='info-item flex gap-3 items-center'>
+        <div className="info-item flex gap-3 items-center">
           <Avatar height={40} width={40} src={botDisplayImage} />
           <div>
             <h4>Created by</h4>
-            <p>Shin-Chan</p>
+            <p> {`${spaceHost?.displayName}`}</p>
           </div>
         </div>
-        <div className='info-item'>
+        <div className="info-item">
           <h4>Messages</h4>
           <p>241k</p>
         </div>
-        <div className='info-item hidden md:block'>
+        <div className="info-item hidden md:block">
           <h4>Users</h4>
           <p>2.1k</p>
         </div>
