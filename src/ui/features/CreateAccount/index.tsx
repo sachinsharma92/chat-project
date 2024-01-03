@@ -3,7 +3,7 @@ import TextInput from '@/components/common/TextInput';
 import Link from 'next/link';
 
 import { FC } from 'react';
-import './SpaceDescription.css';
+import './createAccount.css';
 
 interface CreateAccountProps {
   closeHandler?: () => void;
@@ -12,7 +12,7 @@ interface CreateAccountProps {
 
 const CreateAccount: FC<CreateAccountProps> = ({ closeHandler }) => {
   return (
-    <div className='create-account bg-black p-4 w-full mt-4'>
+    <div className='create-account bg-black p-4 w-full'>
       <div className='flex justify-between'>
         <h4 className="text-xs uppercase text-white">Create Account</h4>
         <Button className="text-xs text-white p-0" onClick={closeHandler}>
@@ -42,6 +42,8 @@ const CreateAccount: FC<CreateAccountProps> = ({ closeHandler }) => {
           Login
         </Button>
       </form>
+
+      <div className="h-[0.5px] bg-[#D9D9D9] mt-3 mb-4" />
 
       <div className='flex justify-center items-center'>
         <p className="text-white text-xs">By proceeding, you agree to the <Link href="/" className="underline">Privacy Policy</Link> & <Link href="/" className="underline">Terms of Service</Link></p>

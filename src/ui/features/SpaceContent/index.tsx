@@ -93,22 +93,22 @@ const SpaceContent = () => {
           </div>
         )}
 
-        <div className="bg-black h-[22px] flex justify-center items-center text-xs w-full">
-          <Button
-            onClick={() => setGiftSelect(!isGiftSelect)}
-            className="text-white uppercase"
-          >
-            Gift
-          </Button>
-        </div>
+        <Button
+          onClick={() => setGiftSelect(!isGiftSelect)}
+          className="text-white uppercase bg-black h-[22px] flex justify-center items-center text-xs w-full"
+        >
+          Gift
+        </Button>
       </div>
 
+      {/* Create Account component here */}
       {isCreateAccount && (
         <CreateAccount
           closeHandler={() => setCreateAccount(!isCreateAccount)}
         />
       )}
 
+      {/* Gift component here */}
       {isGiftSelect && (
         <GiftCard closeHandler={() => setGiftSelect(!isGiftSelect)} />
       )}

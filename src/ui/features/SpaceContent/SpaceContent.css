@@ -1,7 +1,6 @@
 .space-content-container {
   @apply relative min-h-full w-full;
-
-  height: 100%;
+  min-height: 100vh;
 }
 
 .space-content-header {

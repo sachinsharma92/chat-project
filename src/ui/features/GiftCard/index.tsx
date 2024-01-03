@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import Button from '@/components/common/Button';
 
-import './SpaceDescription.css';
+import './giftCard.css';
 
 interface GiftCardProps {
   closeHandler?: () => void;
@@ -16,10 +16,11 @@ const GiftCard: FC<GiftCardProps> = ({ closeHandler }) => {
     'teddy bear — $25',
     'dinner — $50',
     'bag — $100',
+    'ring — $200',
     'custom video — $250',
   ];
   return (
-    <div className="gift-card bg-black p-4 w-full mt-4">
+    <div className="gift-card bg-black p-4 w-full mt-4 absolute bottom-0">
       <div className="flex justify-between">
         <h4 className="text-xs uppercase text-white">Gift</h4>
         <Button className="text-xs text-white p-0" onClick={closeHandler}>
