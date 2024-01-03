@@ -31,7 +31,7 @@ const GameScreenBotChat = () => {
 
   const chatStreamDomRef = useRef<any>(null);
 
-  const { chatMessages: sanitizedChatMessages, resetChat } = useBotChat();
+  const { chatMessages: sanitizedChatMessages } = useBotChat();
 
   const handleSendChat = (data: any) => {
     const message = data?.message;
