@@ -93,6 +93,11 @@
   padding: 0;
 }
 
+.space-name svg {
+  scale: 0.9;
+  margin-left: -2px;
+}
+
 .subscribe {
   @apply relative h-[22px] w-[61px] text-black text-xs uppercase;
   background-color: white !important;

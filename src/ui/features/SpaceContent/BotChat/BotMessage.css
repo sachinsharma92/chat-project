@@ -14,7 +14,7 @@
 .bot-message-text .msg-box {
   display: flex;
   padding: 8px;
-  align-items: flex-start;
+  align-items: flex-end;
   flex: 1 0 0;
   color: white;
   text-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.8);
@@ -30,6 +30,10 @@
   @apply relative flex justify-center items-center box-border ml-[4px];
 
   gap: 4px;
+}
+
+.bot-message-text .msg-box svg > path {
+  fill: white;
 }
 
 .bot-message-loading > svg > circle {

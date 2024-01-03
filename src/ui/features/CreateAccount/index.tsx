@@ -2,15 +2,20 @@ import Button from '@/components/common/Button';
 import TextInput from '@/components/common/TextInput';
 import Link from 'next/link';
 
+import { FC } from 'react';
 import './SpaceDescription.css';
 
-const CreateAccount = () => {
+interface CreateAccountProps {
+  closeHandler?: () => void;
+}
 
+
+const CreateAccount: FC<CreateAccountProps> = ({ closeHandler }) => {
   return (
     <div className='create-account bg-black p-4 w-full mt-4'>
       <div className='flex justify-between'>
         <h4 className="text-xs uppercase text-white">Create Account</h4>
-        <Button className="text-xs text-white p-0">
+        <Button className="text-xs text-white p-0" onClick={closeHandler}>
           Close
         </Button>
       </div>

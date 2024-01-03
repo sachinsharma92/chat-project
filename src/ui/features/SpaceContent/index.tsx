@@ -1,17 +1,16 @@
 'use client';
+import Button from '@/components/common/Button';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import { ExpandV2Icon, UnionIcon } from '@/icons';
-import { useAppStore } from '@/store/App';
 import { head } from 'lodash';
-import { useMemo, useState } from 'react';
-
-import Button from '@/components/common/Button';
 import dynamic from 'next/dynamic';
-
+import { useMemo, useState } from 'react';
 import CreateAccount from '../CreateAccount';
-import SpaceDescription from '../SpaceDescription';
-import './SpaceContent.css';
 import GiftCard from '../GiftCard';
+import SpaceDescription from '../SpaceDescription';
+
+import { TriangleDownIcon, TriangleUpIcon } from '@radix-ui/react-icons';
+import './SpaceContent.css';
 
 const HomeSpace = dynamic(() => import('./HomeSpace'), { ssr: false });
 
@@ -19,12 +18,7 @@ const SpaceContent = () => {
   const { spaceInfo } = useSelectedSpace();
   const [isCreateAccount, setCreateAccount] = useState(false);
   const [isGiftSelect, setGiftSelect] = useState(false);
-
-
-  const [spaceContentTab, setSpaceContentTab] = useAppStore(state => [
-    state.spaceContentTab,
-    state.setSpaceContentTab,
-  ]);
+  const [isInfoSection, setInfoSection] = useState(false);
 
   const spaceBotInfo = useMemo(() => head(spaceInfo?.bots), [spaceInfo]);
 
@@ -46,24 +40,36 @@ const SpaceContent = () => {
   return (
     <div className="space-content-container">
       <div className="space-content-header p-4">
-        <div className='flex gap-1 w-full'>
+        <div className="flex gap-1 w-full">
           <div className="space-content-header-right flex justify-between items-center bg-black w-full pr-2 pl-[2px]">
-            <div className='space-content-header-main'>
+            <div className="space-content-header-main">
               <div className="w-8 h-8 overflow-hidden">
                 <img
-                  src={spaceBotInfo?.background || '/assets/botnet-avatar-bg.jpg'}
+                  src={
+                    spaceBotInfo?.background || '/assets/botnet-avatar-bg.jpg'
+                  }
                   alt="Background preview"
                 />
               </div>
               <div>
-                <p className="space-name">{spaceName}</p>
+                <Button
+                  onClick={() => setInfoSection(!isInfoSection)}
+                  className="space-name p-0"
+                >
+                  {spaceName} {!isInfoSection ? <TriangleDownIcon /> : <TriangleUpIcon />}
+                </Button>
                 <p className="text-xs text-white">20.1k Followers</p>
               </div>
             </div>
-            <Button className="subscribe" onClick={() => setCreateAccount(!isCreateAccount)}>Follow</Button>
+            <Button
+              className="subscribe"
+              onClick={() => setCreateAccount(!isCreateAccount)}
+            >
+              Follow
+            </Button>
           </div>
-          <div className='flex gap-1'>
-            <div className='share-button-style'>
+          <div className="flex gap-1">
+            <div className="share-button-style">
               <Button>
                 <UnionIcon />
               </Button>
@@ -77,29 +83,37 @@ const SpaceContent = () => {
           </div>
         </div>
 
-        <div className='info-card bg-black p-2 w-full'>
-          <div className='flex justify-between'>
-            <h4 className="text-xs uppercase text-white">About</h4>
-            <Button className="text-xs text-white p-0">
-              Close
-            </Button>
+        {isInfoSection && (
+          <div className="info-card bg-black p-2 w-full">
+            <div className="flex justify-between">
+              <h4 className="text-xs uppercase text-white">About</h4>
+              <Button className="text-xs text-white p-0">Close</Button>
+            </div>
+            <SpaceDescription text={spaceDescription} />
           </div>
-          <SpaceDescription text={spaceDescription} />
-        </div>
+        )}
 
-        <div className='bg-black h-[22px] flex justify-center items-center text-xs w-full'>
-          <Button onClick={() => setGiftSelect(!isGiftSelect)} className='text-white uppercase'>
+        <div className="bg-black h-[22px] flex justify-center items-center text-xs w-full">
+          <Button
+            onClick={() => setGiftSelect(!isGiftSelect)}
+            className="text-white uppercase"
+          >
             Gift
           </Button>
         </div>
       </div>
 
-      {isCreateAccount && <CreateAccount />}
+      {isCreateAccount && (
+        <CreateAccount
+          closeHandler={() => setCreateAccount(!isCreateAccount)}
+        />
+      )}
 
-      {isGiftSelect && <GiftCard />}
+      {isGiftSelect && (
+        <GiftCard closeHandler={() => setGiftSelect(!isGiftSelect)} />
+      )}
 
       <HomeSpace />
-
     </div>
   );
 };

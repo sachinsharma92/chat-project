@@ -62,12 +62,12 @@ const SpaceDescription = (props: SpaceDescriptionProps) => {
         </div>
 
         <div className='text-white'>
-          <h4 className="text-xs font-medium">241K</h4>
+          <h4 className="text-xs font-medium uppercase">231.2k</h4>
           <p className='text-xs'>Messages</p>
         </div>
 
         <div className='text-white'>
-          <h4 className="text-xs font-medium">2.1K</h4>
+          <h4 className="text-xs font-medium uppercase">231.2k</h4>
           <p className='text-xs'>Users</p>
         </div>
       </div>

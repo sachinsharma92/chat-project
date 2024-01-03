@@ -94,7 +94,6 @@ const HomeSpace = () => {
             <FileIcon />
           </Button>
           <TextInput
-            className="cta-chat-input-container-text-input"
             {...register('message', {
               required: false,
             })}

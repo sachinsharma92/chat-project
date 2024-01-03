@@ -1,12 +1,12 @@
 'use client';
 
 import { useBotChat } from '@/hooks/useBotChat';
-import { Microphone, MoreIcon, ResetIcon } from '@/icons';
+import { Microphone, MoreIcon } from '@/icons';
 import { useBotData } from '@/store/App';
 import { ChatBotStateContext } from '@/store/ChatBotProvider';
 import { OpenAIRoles } from '@/types';
 import { map } from 'lodash';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 
 import Button from '@/components/common/Button';
@@ -28,8 +28,6 @@ const GameScreenBotChat = () => {
       state.recentBotChat,
       state.chatRoom,
     ]);
-
-  const [resettingChat, setResettingChat] = useState(false);
 
   const chatStreamDomRef = useRef<any>(null);
 
@@ -60,24 +58,6 @@ const GameScreenBotChat = () => {
     setValue('message', '');
   };
 
-  /**
-   * Clear chat array
-   */
-  const onResetChat = async () => {
-    try {
-      if (resettingChat) {
-        return;
-      }
-
-      setResettingChat(true);
-
-      await resetChat();
-    } catch {
-    } finally {
-      setResettingChat(false);
-    }
-  };
-
   /** Scroll on new chat */
   useEffect(() => {
     /** Scroll stream chat down bottom  */
@@ -95,11 +75,20 @@ const GameScreenBotChat = () => {
     scrollChatToBottom();
   }, [botRoomIsResponding, sanitizedChatMessages, recentBotChat]);
 
+  const badgeData = [
+    'Yeah I mean I guess...',
+    'Yeah I mean I guess...',
+    'Yeah I mean I guess...',
+    'Yeah I mean I guess...',
+    'Yeah I mean I guess...',
+    'Yeah I mean I guess...',
+  ];
+
   return (
     <div className="game-screen-bot-chat">
       <div className="game-screen-bot-chat-content">
         <div className="game-screen-chat-stream" ref={chatStreamDomRef}>
-          <ul className='px-4'>
+          <ul className="px-4">
             {map(sanitizedChatMessages, message => {
               const key = `${message?.id}`;
               const isBot = message?.role === OpenAIRoles.assistant;
@@ -129,48 +118,27 @@ const GameScreenBotChat = () => {
               </>
             )}
           </ul>
-
-          {/* <div className="absolute top-[8px] w-full flex justify-end items-center box-border p-0 pr-[2px] mb-[8px]">
-            <Button
-              className="game-screen-bot-chat-reset-chat"
-              onClick={onResetChat}
-              isLoading={resettingChat}
-            >
-              <ResetIcon />
-              <p>Reset Chat</p>
-            </Button>
-          </div> */}
         </div>
 
         <form
           onSubmit={handleSubmit(handleSendChat)}
           className="game-screen-chat-input-container z-50"
         >
-          <div className='suggestion-section'>
-            <button className="suggestion">
-              Yeah I mean I guess...
-            </button>
-            <button className="suggestion">
-              Yeah I mean I guess...
-            </button>
-            <button className="suggestion">
-              Yeah I mean I guess...
-            </button>
-            <button className="suggestion">
-              Yeah I mean I guess...
-            </button>
-            <button className="suggestion">
-              Yeah I mean I guess...
-            </button>
+          <div className="suggestion-section">
+            {badgeData.map((items, index) => (
+              <button key={index} className="suggestion">
+                {items}
+              </button>
+            ))}
           </div>
 
-          <div className='flex w-full gap-1 px-4'>
+          <div className="flex w-full gap-1 px-4">
             <TextInput
               {...register('message', {
                 required: false,
               })}
               placeholder="Message...."
-              className="chat-form-input text-xs"
+              className="chat-form-input text-xs uppercase"
             />
             <Button className="chat-btn">
               <Microphone />

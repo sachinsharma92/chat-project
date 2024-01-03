@@ -1,51 +1,46 @@
+import { FC } from 'react';
 import Button from '@/components/common/Button';
 
 import './SpaceDescription.css';
 
-const GiftCard = () => {
+interface GiftCardProps {
+  closeHandler?: () => void;
+}
 
+const GiftCard: FC<GiftCardProps> = ({ closeHandler }) => {
+  const inputText = [
+    'candy — $1',
+    'rose — $3',
+    'coffee — $5',
+    'drink — $10',
+    'teddy bear — $25',
+    'dinner — $50',
+    'bag — $100',
+    'ring — $200',
+    'custom video — $250',
+  ];
   return (
-    <div className='gift-card bg-black p-4 w-full mt-4'>
-      <div className='flex justify-between'>
+    <div className="gift-card bg-black p-4 w-full mt-4">
+      <div className="flex justify-between">
         <h4 className="text-xs uppercase text-white">Gift</h4>
-        <Button className="text-xs text-white p-0">
+        <Button className="text-xs text-white p-0" onClick={closeHandler}>
           Close
         </Button>
       </div>
 
       <form action="" className="flex flex-col gap-1 mt-4">
-        <Button className="text-input text-sm uppercase">
-          candy — $1
-        </Button>
-        <Button className="text-input text-sm uppercase">
-          rose — $3
-        </Button>
-        <Button className="text-input text-sm uppercase">
-          coffee — $5
-        </Button>
-        <Button className="text-input text-sm uppercase">
-          drink — $10
-        </Button>
-        <Button className="text-input text-sm uppercase">
-          teddy bear — $25
-        </Button>
-        <Button className="text-input text-sm uppercase">
-          dinner — $50
-        </Button>
-        <Button className="text-input text-sm uppercase">
-          bag — $100
-        </Button>
-        <Button className="text-input text-sm uppercase">
-          ring — $200
-        </Button>
-        <Button className="text-input text-sm uppercase">
-          custom video — $250
-        </Button>
+        {inputText.map((items, index) => (
+          <Button key={index} className="text-input text-sm uppercase">
+            {items}
+          </Button>
+        ))}
         <Button className="text-[22px] bg-white rounded-full font-bold h-[36px] mt-3">
           Pay
         </Button>
-        <div className='flex justify-center items-center'>
-          <p className="text-white text-xs">proceeds go to bot | satisfaction guaranteed</p>
+        <div className="flex justify-center items-center">
+          <p className="text-white text-xs">
+            proceeds go to bot | satisfaction guaranteed
+          </p>
         </div>
       </form>
     </div>
