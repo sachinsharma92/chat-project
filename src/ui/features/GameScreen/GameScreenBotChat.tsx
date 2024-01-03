@@ -137,8 +137,8 @@ const GameScreenBotChat = () => {
               {...register('message', {
                 required: false,
               })}
-              placeholder="Message...."
-              className="chat-form-input text-xs uppercase"
+              placeholder="MESSAGE...."
+              className="chat-form-input text-xs"
             />
             <Button className="chat-btn">
               <Microphone />
