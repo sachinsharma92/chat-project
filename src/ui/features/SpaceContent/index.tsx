@@ -8,6 +8,8 @@ import { useMemo } from 'react';
 import Button from '@/components/common/Button';
 import dynamic from 'next/dynamic';
 
+import CreateAccount from '../CreateAccount';
+import SpaceDescription from '../SpaceDescription';
 import './SpaceContent.css';
 
 const HomeSpace = dynamic(() => import('./HomeSpace'), { ssr: false });
@@ -39,7 +41,7 @@ const SpaceContent = () => {
 
   return (
     <div className="space-content-container">
-      <div className="space-content-header">
+      <div className="space-content-header p-4">
         <div className='flex gap-1 w-full'>
           <div className="space-content-header-right flex justify-between items-center bg-black w-full pr-2 pl-[2px]">
             <div className='space-content-header-main'>
@@ -71,17 +73,24 @@ const SpaceContent = () => {
           </div>
         </div>
 
+        <div className='info-card bg-black p-2 w-full'>
+          <div className='flex justify-between'>
+            <h4 className="text-xs uppercase text-white">About</h4>
+            <Button className="text-xs text-white p-0">
+              Close
+            </Button>
+          </div>
+          <SpaceDescription text={spaceDescription} />
+        </div>
 
-        <div className='bg-black h-[22px] flex justify-center items-center text-xs mt-1 w-full'>
+        <div className='bg-black h-[22px] flex justify-center items-center text-xs w-full'>
           <Button className='text-white uppercase'>
             Gift
           </Button>
         </div>
       </div>
 
-      {/* <div className="space-description-mobile">
-        <SpaceDescription text={spaceDescription} />
-      </div> */}
+      <CreateAccount />
 
       <HomeSpace />
 

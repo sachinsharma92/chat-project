@@ -1,5 +1,5 @@
 .avatar-layout {
-  @apply flex justify-center items-center h-full w-full box-border p-0 rounded-[100%] overflow-hidden bg-[#000];
+  @apply flex justify-center items-center h-full w-full box-border p-0 overflow-hidden bg-[#000];
 }
 
 .avatar-layout > p {

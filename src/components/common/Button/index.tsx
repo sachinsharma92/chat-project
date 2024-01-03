@@ -16,7 +16,7 @@ interface VariantProps {
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps {
+  VariantProps {
   asChild?: boolean;
 }
 
@@ -40,9 +40,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       type={type || 'button'}
       aria-label={ariaLabel}
       className={cn(
-        className,
+
         'relative flex items-center justify-center p-[4px] overflow-hidden outline-none',
-        `${variant === 'primary' ? ' primary-button' : ''}`,
+        `${variant === 'primary' ? ' primary-button' : ''}`, className,
       )}
       {...props}
     >

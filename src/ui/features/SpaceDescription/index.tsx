@@ -1,8 +1,7 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
-import './SpaceDescription.css';
-import Button from '@/components/common/Button';
-import Avatar from '@/components/common/Avatar/Avatar';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
+import { BotnetIcon } from '@/icons';
+import { useEffect, useRef, useState } from 'react';
+import './SpaceDescription.css';
 
 type SpaceDescriptionProps = {
   text: string;
@@ -33,17 +32,10 @@ const SpaceDescription = (props: SpaceDescriptionProps) => {
     maxHeight: isExpanded ? 'none' : '4.5em', // Adjust based on line-height and desired max lines
     overflow: 'hidden',
   };
-
-  const botDisplayImage = useMemo(
-    () =>
-      spaceInfo?.image || spaceInfo?.host?.image || '/assets/aibotavatar.png',
-    [spaceInfo],
-  );
-
   return (
     <div className="space-description-container">
       <div>
-        <p ref={textRef} style={style}>
+        <p ref={textRef} style={style} className='text-white text-sm my-2'>
           {text}
         </p>
 
@@ -58,27 +50,25 @@ const SpaceDescription = (props: SpaceDescriptionProps) => {
         )}
       </div>
 
-      <div className='flex gap-3 mt-4'>
-        <Button className='tag-style'>Female</Button>
-        <Button className='tag-style'>Anime</Button>
-        <Button className='tag-style'>Hero</Button>
-      </div>
-
-      <div className="info-section">
-        <div className='info-item flex gap-3 items-center'>
-          <Avatar height={40} width={40} src={botDisplayImage} />
-          <div>
-            <h4>Created by</h4>
-            <p>Shin-Chan</p>
+      <div className="info-section flex gap-9">
+        <div className='info-item flex gap-3 items-start'>
+          <div className="bg-white min-w-[22px] h-22 min-h-[22px] flex justify-center items-center mt-[2px]">
+            <BotnetIcon width={15} />
+          </div>
+          <div className='text-white'>
+            <h4 className="text-xs font-medium">BOTNET</h4>
+            <p className='text-xs'>Creator</p>
           </div>
         </div>
-        <div className='info-item'>
-          <h4>Messages</h4>
-          <p>241k</p>
+
+        <div className='text-white'>
+          <h4 className="text-xs font-medium">241K</h4>
+          <p className='text-xs'>Messages</p>
         </div>
-        <div className='info-item hidden md:block'>
-          <h4>Users</h4>
-          <p>2.1k</p>
+
+        <div className='text-white'>
+          <h4 className="text-xs font-medium">2.1K</h4>
+          <p className='text-xs'>Users</p>
         </div>
       </div>
     </div>

@@ -11,21 +11,13 @@
   border-radius: 0;
 }
 
-.bot-message-text > p:nth-child(1) {
-  box-sizing: border-box;
-  color: #666;
-  font-size: 10px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-}
-
 .bot-message-text .msg-box {
   display: flex;
   padding: 8px;
   align-items: flex-start;
   flex: 1 0 0;
-  color: #000;
+  color: white;
+  text-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.8);
   margin-top: 4px;
   font-size: 14px;
   font-style: normal;

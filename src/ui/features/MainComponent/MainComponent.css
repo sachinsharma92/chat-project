@@ -161,10 +161,6 @@
     @apply relative flex w-full box-border pb-[20px];
   }
 
-  .space-content {
-    padding: 4px 8px 0 16px;
-  }
-
   .game-content {
     height: 100dvh;
     position: fixed;
@@ -186,15 +182,15 @@
     overflow: hidden;
   }
 
-  .space-content {
-    padding: 16px 16px 0;
-  }
-
   .fullWidthStyle {
     padding-right: 0;
   }
 
   .main-component-content {
     margin-top: 0;
+  }
+
+  .space-content {
+    padding: 0;
   }
 }

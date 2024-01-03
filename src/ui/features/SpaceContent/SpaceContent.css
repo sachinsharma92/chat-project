@@ -185,6 +185,13 @@
     @apply hidden h-[0] overflow-hidden;
   } */
 
+  .text-input {
+    @apply relative px-3 h-[36px] text-xs text-white;
+    width: 100%;
+    background: transparent;
+    border: 0.5px solid rgba(256, 256, 256, 0.5);
+  }
+
   .space-description-mobile {
     @apply relative flex w-full justify-start items-start mt-[16px];
 
