@@ -43,7 +43,7 @@ const SpaceContent: FC<SpaceContentProps> = ({ expandHandler }) => {
   }, [spaceInfo]);
 
   return (
-    <div className={`space-content-container ${isGiftSelect && 'gift-popup-style'}`}>
+    <div className={`space-content-container ${isGiftSelect && 'popup-style' || isCreateAccount && 'popup-style'}`}>
       <div className="space-content-header p-4">
         <div className="flex gap-1 w-full">
           <div className="space-content-header-right flex justify-between items-center bg-black w-full pr-2 pl-[2px]">
