@@ -9,7 +9,7 @@ const CreateAccount = () => {
   return (
     <div className='create-account bg-black p-4 w-full mt-4'>
       <div className='flex justify-between'>
-        <h4 className="text-xs uppercase text-white">About</h4>
+        <h4 className="text-xs uppercase text-white">Create Account</h4>
         <Button className="text-xs text-white p-0">
           Close
         </Button>

@@ -35,7 +35,6 @@
   @apply relative h-full box-border;
 
   width: calc(50% - 20px);
-  overflow: hidden;
 }
 
 .card-game-content {

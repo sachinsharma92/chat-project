@@ -3,7 +3,7 @@ import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import { ExpandV2Icon, UnionIcon } from '@/icons';
 import { useAppStore } from '@/store/App';
 import { head } from 'lodash';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import Button from '@/components/common/Button';
 import dynamic from 'next/dynamic';
@@ -11,11 +11,15 @@ import dynamic from 'next/dynamic';
 import CreateAccount from '../CreateAccount';
 import SpaceDescription from '../SpaceDescription';
 import './SpaceContent.css';
+import GiftCard from '../GiftCard';
 
 const HomeSpace = dynamic(() => import('./HomeSpace'), { ssr: false });
 
 const SpaceContent = () => {
   const { spaceInfo } = useSelectedSpace();
+  const [isCreateAccount, setCreateAccount] = useState(false);
+  const [isGiftSelect, setGiftSelect] = useState(false);
+
 
   const [spaceContentTab, setSpaceContentTab] = useAppStore(state => [
     state.spaceContentTab,
@@ -56,7 +60,7 @@ const SpaceContent = () => {
                 <p className="text-xs text-white">20.1k Followers</p>
               </div>
             </div>
-            <Button className="subscribe">Follow</Button>
+            <Button className="subscribe" onClick={() => setCreateAccount(!isCreateAccount)}>Follow</Button>
           </div>
           <div className='flex gap-1'>
             <div className='share-button-style'>
@@ -84,13 +88,15 @@ const SpaceContent = () => {
         </div>
 
         <div className='bg-black h-[22px] flex justify-center items-center text-xs w-full'>
-          <Button className='text-white uppercase'>
+          <Button onClick={() => setGiftSelect(!isGiftSelect)} className='text-white uppercase'>
             Gift
           </Button>
         </div>
       </div>
 
-      <CreateAccount />
+      {isCreateAccount && <CreateAccount />}
+
+      {isGiftSelect && <GiftCard />}
 
       <HomeSpace />
 
