@@ -16,7 +16,6 @@ const GiftCard: FC<GiftCardProps> = ({ closeHandler }) => {
     'teddy bear — $25',
     'dinner — $50',
     'bag — $100',
-    'ring — $200',
     'custom video — $250',
   ];
   return (
@@ -34,11 +33,11 @@ const GiftCard: FC<GiftCardProps> = ({ closeHandler }) => {
             {items}
           </Button>
         ))}
-        <Button className="text-[22px] bg-white rounded-full font-bold h-[36px] mt-3">
+        <Button className="text-[22px] bg-white rounded-full font-bold h-[36px] mt-3 text-black">
           Pay
         </Button>
-        <div className="flex justify-center items-center">
-          <p className="text-white text-xs">
+        <div className="flex justify-center items-center mt-3">
+          <p className="text-white text-xs uppercase">
             proceeds go to bot | satisfaction guaranteed
           </p>
         </div>
