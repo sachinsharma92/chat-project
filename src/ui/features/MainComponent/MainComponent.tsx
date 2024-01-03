@@ -4,11 +4,10 @@ import { mobileWidthBreakpoint } from '@/constants';
 import { useWindowResize } from '@/hooks';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import { head } from 'lodash';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import cx from 'classnames';
 import dynamic from 'next/dynamic';
-import AppNavigation from '../AppNavigation';
 import './MainComponent.css';
 
 const SpaceContent = dynamic(() => import('../SpaceContent'));
@@ -17,27 +16,24 @@ const GameScreen = dynamic(() => import('../GameScreen'));
 const MainComponent = () => {
   const { availableWidth } = useWindowResize();
 
-  const [minimizeMed, setMinimizeMed] = useState(true);
-  const [minimizeSm, setMinimizeSm] = useState(false);
-  const [expandFullScreen, setExpandFullScreen] = useState(false);
+  // const [minimizeMed, setMinimizeMed] = useState(true);
+  // const [minimizeSm, setMinimizeSm] = useState(false);
+  // const [expandFullScreen, setExpandFullScreen] = useState(false);
 
   const { spaceInfo } = useSelectedSpace();
 
   const spaceBotInfo = useMemo(() => head(spaceInfo?.bots), [spaceInfo]);
 
-  const toggleMinimizeMedGameScreen = () => {
-    setMinimizeMed(!minimizeMed);
+  // const toggleMinimizeMedGameScreen = () => {
+  //   setMinimizeMed(!minimizeMed);
 
-    if (!minimizeMed) {
-      setMinimizeSm(false);
-    }
-  };
+  //   if (!minimizeMed) {
+  //     setMinimizeSm(false);
+  //   }
+  // };
 
   return (
     <div className="main-component">
-      {/* <div className={cx('header-nav', { 'space-content-hide': !minimizeMed })}>
-        <AppNavigation />
-      </div> */}
       <div
         className={cx('main-component-content', {
           'fullWidthStyle': minimizeMed,
