@@ -1,6 +1,6 @@
 'use client';
 
-import { InterTight } from '@/app/fonts';
+import { atlasGrotesk } from '@/app/fonts';
 import { useForm } from 'react-hook-form';
 import { useEffect, useMemo, useState } from 'react';
 import { AIIcon } from '@/icons';
@@ -125,7 +125,7 @@ const Appearance = () => {
     }
   };
 
-  const onSaveAvatar = () => {};
+  const onSaveAvatar = () => { };
 
   const errorMessage = useMemo(
     () => errors?.background?.message?.toString(),
@@ -143,7 +143,7 @@ const Appearance = () => {
 
   return (
     <div className="creator-appearance">
-      <h1 className={InterTight.className}> Appearance </h1>
+      <h1 className={atlasGrotesk.className}> Appearance </h1>
 
       <form onSubmit={handleSubmit(onSaveBackground)}>
         <section>

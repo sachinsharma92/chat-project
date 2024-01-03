@@ -1,6 +1,6 @@
 'use client';
 
-import { Inter } from '@/app/fonts';
+import { atlasGrotesk } from '@/app/fonts';
 import TextInput from '@/components/common/TextInput';
 import cx from 'classnames';
 import Button from '@/components/common/Button';
@@ -236,7 +236,7 @@ const CustomAuth = (props: { defaultSection?: AuthSection }) => {
       </div>
       <div className="custom-auth-right">
         <div className="auth-content">
-          <div className={cx('get-started-label', Inter.className)}>
+          <div className={cx('get-started-label', atlasGrotesk.className)}>
             {authSectionPick === AuthSection.entry && <h1> Get Started </h1>}
             {authSectionPick === AuthSection.login && <h1> Log In </h1>}
             {authSectionPick === AuthSection['sign-up'] && <h1> Sign Up </h1>}
@@ -255,15 +255,15 @@ const CustomAuth = (props: { defaultSection?: AuthSection }) => {
             />
             {(authSectionPick === AuthSection.login ||
               authSectionPick === AuthSection['sign-up']) && (
-              <TextInput
-                placeholder={'Your password'}
-                className="auth-input auth-password"
-                type={'password'}
-                {...register('password', {
-                  required: 'Password is required',
-                })}
-              />
-            )}
+                <TextInput
+                  placeholder={'Your password'}
+                  className="auth-input auth-password"
+                  type={'password'}
+                  {...register('password', {
+                    required: 'Password is required',
+                  })}
+                />
+              )}
 
             {!isEmpty(errorMessage) && (
               <div className="error-message">
@@ -302,15 +302,15 @@ const CustomAuth = (props: { defaultSection?: AuthSection }) => {
 
               {(authSectionPick === AuthSection.login ||
                 authSectionPick === AuthSection['sign-up']) && (
-                <Button
-                  type="submit"
-                  className="submit-button"
-                  ariaLabel="Submit"
-                  isLoading={authIsLoading || submitted}
-                >
-                  Submit
-                </Button>
-              )}
+                  <Button
+                    type="submit"
+                    className="submit-button"
+                    ariaLabel="Submit"
+                    isLoading={authIsLoading || submitted}
+                  >
+                    Submit
+                  </Button>
+                )}
             </div>
           </form>
 

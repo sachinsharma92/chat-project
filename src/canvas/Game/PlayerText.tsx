@@ -1,4 +1,4 @@
-import { Inter } from '@/app/fonts';
+import { atlasGrotesk } from '@/app/fonts';
 import { Html } from '@react-three/drei';
 import { Object3D, Group } from 'three';
 import { isEmpty } from 'lodash';
@@ -25,7 +25,7 @@ const PlayerText = forwardRef(
             }}
           >
             <div className="player-message">
-              <p className={Inter.className}> {message}</p>
+              <p className={atlasGrotesk.className}> {message}</p>
             </div>
           </Html>
         )}
