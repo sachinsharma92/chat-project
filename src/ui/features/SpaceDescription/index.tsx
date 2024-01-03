@@ -1,4 +1,3 @@
-import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import { BotnetIcon } from '@/icons';
 import { useEffect, useRef, useState } from 'react';
 import './SpaceDescription.css';
@@ -12,7 +11,6 @@ const SpaceDescription = (props: SpaceDescriptionProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [canExpand, setCanExpand] = useState(false);
   const textRef = useRef<HTMLParagraphElement | null>(null);
-  const { spaceInfo } = useSelectedSpace();
 
   useEffect(() => {
     if (textRef?.current) {

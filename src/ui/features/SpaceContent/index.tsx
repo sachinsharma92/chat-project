@@ -4,7 +4,7 @@ import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import { ExpandV2Icon, UnionIcon } from '@/icons';
 import { head } from 'lodash';
 import dynamic from 'next/dynamic';
-import { useMemo, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import CreateAccount from '../CreateAccount';
 import GiftCard from '../GiftCard';
 import SpaceDescription from '../SpaceDescription';
@@ -14,7 +14,12 @@ import './SpaceContent.css';
 
 const HomeSpace = dynamic(() => import('./HomeSpace'), { ssr: false });
 
-const SpaceContent = () => {
+
+interface SpaceContentProps {
+  expandHandler?: () => void;
+}
+
+const SpaceContent: FC<SpaceContentProps> = ({ expandHandler }) => {
   const { spaceInfo } = useSelectedSpace();
   const [isCreateAccount, setCreateAccount] = useState(false);
   const [isGiftSelect, setGiftSelect] = useState(false);
@@ -38,7 +43,7 @@ const SpaceContent = () => {
   }, [spaceInfo]);
 
   return (
-    <div className="space-content-container">
+    <div className={`space-content-container ${isGiftSelect && 'gift-popup-style'}`}>
       <div className="space-content-header p-4">
         <div className="flex gap-1 w-full">
           <div className="space-content-header-right flex justify-between items-center bg-black w-full pr-2 pl-[2px]">
@@ -76,7 +81,7 @@ const SpaceContent = () => {
             </div>
 
             <div className="expand-min-options">
-              <Button>
+              <Button onClick={expandHandler}>
                 <ExpandV2Icon />
               </Button>
             </div>

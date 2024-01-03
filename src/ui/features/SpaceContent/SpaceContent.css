@@ -1,5 +1,9 @@
 .space-content-container {
   @apply relative min-h-full w-full;
+  height: 100%;
+}
+
+.gift-popup-style {
   min-height: 100vh;
 }
 

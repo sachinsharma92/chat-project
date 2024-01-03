@@ -15,22 +15,21 @@ const GameScreen = dynamic(() => import('../GameScreen'));
 
 const MainComponent = () => {
   const { availableWidth } = useWindowResize();
-
   const [minimizeMed, setMinimizeMed] = useState(true);
   const [minimizeSm, setMinimizeSm] = useState(false);
-  const [expandFullScreen, setExpandFullScreen] = useState(false);
+  const [expandFullScreen] = useState(false);
 
   const { spaceInfo } = useSelectedSpace();
 
   const spaceBotInfo = useMemo(() => head(spaceInfo?.bots), [spaceInfo]);
 
-  // const toggleMinimizeMedGameScreen = () => {
-  //   setMinimizeMed(!minimizeMed);
+  const toggleMinimizeMedGameScreen = () => {
+    setMinimizeMed(!minimizeMed);
 
-  //   if (!minimizeMed) {
-  //     setMinimizeSm(false);
-  //   }
-  // };
+    if (!minimizeMed) {
+      setMinimizeSm(false);
+    }
+  };
 
   return (
     <div className="main-component">
@@ -40,7 +39,7 @@ const MainComponent = () => {
         })}>
 
         <div className={cx('space-content-mobile', { 'space-content': minimizeMed })}>
-          <SpaceContent />
+          <SpaceContent expandHandler={toggleMinimizeMedGameScreen} />
         </div>
 
         <div
