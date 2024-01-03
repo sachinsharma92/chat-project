@@ -92,7 +92,7 @@ const SpaceContent: FC<SpaceContentProps> = ({ expandHandler }) => {
           <div className="info-card bg-black p-2 w-full">
             <div className="flex justify-between">
               <h4 className="text-xs uppercase text-white">About</h4>
-              <Button className="text-xs text-white p-0">Close</Button>
+              <Button className="text-xs text-white p-0" onClick={() => setInfoSection(!isInfoSection)}>Close</Button>
             </div>
             <SpaceDescription text={spaceDescription} />
           </div>
