@@ -10,7 +10,7 @@ import {
 } from '@/lib/utils/routes';
 import camelCaseKeys from 'camelcase-keys';
 import { head, last, toString } from 'lodash';
-import { applyApiRoutesAuth } from '../bot-chat/route';
+import { applyApiRoutesAuth } from '@/lib/supabase';
 // import axios from 'axios';
 
 export type TuneGPTBodyRequest = {

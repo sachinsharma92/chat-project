@@ -5,8 +5,7 @@ dotenv.config({ path: `.env.local` });
 
 import FormData from 'form-data';
 import axios from 'axios';
-import { isEmpty, last, toString, trim } from 'lodash';
-import { applyApiRoutesAuth } from '../bot-chat/route';
+import { isEmpty, last, toString, trim } from 'lodash'; 
 import {
   returnApiUnauthorizedError,
   returnCommonStatusError,
@@ -15,7 +14,7 @@ import {
   getElevenLabsAddVoicesApiBaseUrl,
   getElevenLabsApiKey,
 } from '@/lib/elevenlabs';
-import { updateSpaceBotProfilePropertiesById } from '@/lib/supabase';
+import { applyApiRoutesAuth, updateSpaceBotProfilePropertiesById } from '@/lib/supabase';
 import { CloneVoiceBodyRequest } from '@/types';
 
 // export const config = {

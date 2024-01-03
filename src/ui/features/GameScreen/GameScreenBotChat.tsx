@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { FileIcon, Microphone, ResetIcon } from '@/icons';
 import { useBotData } from '@/store/App';
 import { useContext, useEffect, useRef, useState } from 'react';
-import { map } from 'lodash';
+import { map, trimStart } from 'lodash';
 import { OpenAIRoles } from '@/types';
 import { ChatBotStateContext } from '@/store/ChatBotProvider';
 import { useBotChat } from '@/hooks/useBotChat';
@@ -15,6 +15,7 @@ import Button from '@/components/common/Button';
 import TextInput from '@/components/common/TextInput';
 
 import './GameScreenBotChat.css';
+import SpeechToText from '@/components/common/SpeechToText';
 
 const GameScreenBotChat = () => {
   const { handleSubmit, setValue, register } = useForm();
@@ -33,12 +34,24 @@ const GameScreenBotChat = () => {
 
   const chatStreamDomRef = useRef<any>(null);
 
-  const { chatMessages: sanitizedChatMessages, resetChat } = useBotChat();
+  const {
+    chatMessages: sanitizedChatMessages,
+    isLoading,
+    resetChat,
+  } = useBotChat();
+
+  const [isRecording, setIsRecording] = useState(false);
 
   const handleSendChat = (data: any) => {
     const message = data?.message;
 
-    if (!message || botRoomIsResponding || !chatRoom) {
+    if (
+      !message ||
+      botRoomIsResponding ||
+      !chatRoom ||
+      isLoading ||
+      isRecording
+    ) {
       return;
     }
 
@@ -146,19 +159,43 @@ const GameScreenBotChat = () => {
           onSubmit={handleSubmit(handleSendChat)}
           className="game-screen-chat-input-container"
         >
-          <Button className="game-screen-attach-file">
-            <FileIcon />
-          </Button>
-          <TextInput
-            {...register('message', {
-              required: false,
-            })}
-            placeholder="Message...."
-            className="chat-form-input"
-          />
-          <Button className="game-screen-mic">
-            <Microphone />
-          </Button>
+          {!isRecording && (
+            <>
+              <Button className="game-screen-attach-file">
+                <FileIcon />
+              </Button>
+              <TextInput
+                {...register('message', {
+                  required: false,
+                })}
+                placeholder="Message...."
+                className="chat-form-input"
+              />
+
+              <Button
+                className="game-screen-mic"
+                onClick={() => {
+                  if (isLoading) {
+                    return;
+                  }
+
+                  setValue('message', '');
+                  setIsRecording(true);
+                }}
+                isDisabled={botRoomIsResponding || isLoading}
+                disabled={botRoomIsResponding}
+              >
+                <Microphone />
+              </Button>
+            </>
+          )}
+
+          {isRecording && (
+            <SpeechToText
+              stopRecording={() => setIsRecording(false)}
+              consumeText={text => setValue('message', trimStart(text))}
+            />
+          )}
         </form>
       </div>
     </div>

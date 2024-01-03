@@ -1,0 +1,30 @@
+.speech-to-text {
+  @apply relative flex justify-between items-center w-full h-full box-border;
+}
+
+.speech-to-text-left,
+.speech-to-text-right {
+  @apply relative flex justify-center items-center box-border;
+}
+
+.speech-to-text-stop {
+  @apply relative flex h-[40px] w-[40px] justify-center items-center box-border;
+
+  background: #000;
+  border-radius: 50%;
+}
+
+.speech-to-text-stop > svg {
+  background: #fff;
+}
+
+.speech-to-text-stop > svg > path {
+  fill: #fff;
+}
+
+.speech-to-text-time {
+  @apply relative mr-[16px] box-border;
+
+  font-size: 16px;
+  font-weight: 500;
+}
