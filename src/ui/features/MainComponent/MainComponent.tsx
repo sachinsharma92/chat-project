@@ -4,7 +4,7 @@ import { mobileWidthBreakpoint } from '@/constants';
 import { useWindowResize } from '@/hooks';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import { head } from 'lodash';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import cx from 'classnames';
 import dynamic from 'next/dynamic';
@@ -16,9 +16,9 @@ const GameScreen = dynamic(() => import('../GameScreen'));
 const MainComponent = () => {
   const { availableWidth } = useWindowResize();
 
-  // const [minimizeMed, setMinimizeMed] = useState(true);
-  // const [minimizeSm, setMinimizeSm] = useState(false);
-  // const [expandFullScreen, setExpandFullScreen] = useState(false);
+  const [minimizeMed, setMinimizeMed] = useState(true);
+  const [minimizeSm, setMinimizeSm] = useState(false);
+  const [expandFullScreen, setExpandFullScreen] = useState(false);
 
   const { spaceInfo } = useSelectedSpace();
 
