@@ -9,7 +9,7 @@
   @apply relative px-3 h-[36px] text-xs text-black;
   width: 100%;
   border: 0.5px solid white;
-  background: white;
+  background-color: white !important;
 }
 
 .gift-card {
