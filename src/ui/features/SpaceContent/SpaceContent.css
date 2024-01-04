@@ -88,10 +88,6 @@
 }
 
 .space-name {
-  color: white;
-  font-size: 10px;
-  font-style: normal;
-  font-weight: 500;
   margin: 0;
   padding: 0;
 }
@@ -102,7 +98,7 @@
 }
 
 .subscribe {
-  @apply relative h-[22px] w-[61px] text-black text-xs uppercase;
+  @apply relative h-[22px] w-[61px] text-black text-xs uppercase p-0 pt-[2px];
   background-color: white !important;
 }
 
@@ -175,14 +171,6 @@
     font-size: 12px;
   }
 
-  .space-name {
-    font-size: 10px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 130%;
-    margin: 0;
-  }
-
   .space-content-avatar {
     height: 40px;
     width: 40px;
@@ -194,10 +182,10 @@
   } */
 
   .text-input {
-    @apply relative px-3 h-[36px] text-xs text-white;
+    @apply relative px-3 h-[36px] text-xs text-white placeholder-white placeholder:uppercase;
     width: 100%;
     background: transparent;
-    border: 0.5px solid rgba(256, 256, 256, 0.5);
+    border: 0.5px solid white;
   }
 
   .space-description-mobile {

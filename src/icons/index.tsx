@@ -44,3 +44,4 @@ export { default as Volume2Icon } from './Volume2Icon';
 export { default as CloseIcon } from './CloseIcon';
 export { default as UnionIcon } from './UnionIcon';
 export { default as MoreIcon } from './MoreIcon';
+export { default as MicrophoneIcon } from './MicrophoneIcon';

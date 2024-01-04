@@ -48,7 +48,7 @@
   @apply relative px-3;
   width: 100%;
   background: transparent;
-  border: 0.5px solid rgba(256, 256, 256, 0.5);
+  border: 0.5px solid white;
   height: 36px;
 }
 
@@ -63,8 +63,8 @@
 }
 
 .suggestion-section .suggestion {
-  @apply text-white whitespace-nowrap px-3 text-sm;
-  border: 0.5px solid rgba(256, 256, 256, 0.5);
+  @apply text-white whitespace-nowrap px-3 text-sm font-light;
+  border: 0.5px solid white;
   height: 22px;
 }
 
@@ -74,7 +74,7 @@
 
 .chat-btn {
   @apply relative flex justify-center items-center h-[36px] min-w-[36px] p-0 bg-[#000];
-  border: 0.5px solid rgba(256, 256, 256, 0.5);
+  border: 0.5px solid white;
 }
 
 .chat-btn > svg > path {

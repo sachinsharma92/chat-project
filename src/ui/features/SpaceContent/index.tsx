@@ -59,11 +59,11 @@ const SpaceContent: FC<SpaceContentProps> = ({ expandHandler }) => {
               <div>
                 <Button
                   onClick={() => setInfoSection(!isInfoSection)}
-                  className="space-name p-0"
+                  className="space-name p-0 uppercase text-xs text-white font-medium"
                 >
                   {spaceName} {!isInfoSection ? <TriangleDownIcon /> : <TriangleUpIcon />}
                 </Button>
-                <p className="text-xs text-white">20.1k Followers</p>
+                <p className="text-xs text-white leading-3 font-light">20.1k Followers</p>
               </div>
             </div>
             <Button

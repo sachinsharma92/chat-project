@@ -1,7 +1,7 @@
 'use client';
 
 import { useBotChat } from '@/hooks/useBotChat';
-import { Microphone, MoreIcon } from '@/icons';
+import { MicrophoneIcon, MoreIcon } from '@/icons';
 import { useBotData } from '@/store/App';
 import { ChatBotStateContext } from '@/store/ChatBotProvider';
 import { OpenAIRoles } from '@/types';
@@ -137,11 +137,11 @@ const GameScreenBotChat = () => {
               {...register('message', {
                 required: false,
               })}
-              placeholder="MESSAGE...."
+              placeholder="Message...."
               className="chat-form-input text-xs"
             />
             <Button className="chat-btn">
-              <Microphone />
+              <MicrophoneIcon />
             </Button>
             <Button className="chat-btn">
               <MoreIcon />

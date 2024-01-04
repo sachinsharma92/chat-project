@@ -9,18 +9,37 @@ interface GiftCardProps {
 
 const GiftCard: FC<GiftCardProps> = ({ closeHandler }) => {
   const inputText = [
-    'candy — $1',
-    'rose — $3',
-    'coffee — $5',
-    'drink — $10',
-    'teddy bear — $25',
-    'dinner — $50',
-    'bag — $100',
-    'ring — $200',
-    'custom video — $250',
+    {
+      active: 'btn-active',
+      btnText: 'candy — $1'
+    },
+    {
+      btnText: 'rose — $3'
+    },
+    {
+      btnText: 'coffee — $5'
+    },
+    {
+      btnText: 'drink — $10'
+    },
+    {
+      btnText: 'teddy bear — $25'
+    },
+    {
+      btnText: 'dinner — $50'
+    },
+    {
+      btnText: 'bag — $100'
+    },
+    {
+      btnText: 'ring — $200'
+    },
+    {
+      btnText: 'custom video — $250'
+    },
   ];
   return (
-    <div className="gift-card bg-black p-4 w-full mt-4 absolute bottom-0">
+    <div className="gift-card bg-black p-4 w-full mt-4 absolute bottom-0 rounded-t-[10px]">
       <div className="flex justify-between">
         <h4 className="text-xs uppercase text-white">Gift</h4>
         <Button className="text-xs text-white p-0" onClick={closeHandler}>
@@ -30,11 +49,11 @@ const GiftCard: FC<GiftCardProps> = ({ closeHandler }) => {
 
       <form action="" className="flex flex-col gap-1 mt-4">
         {inputText.map((items, index) => (
-          <Button key={index} className="text-input text-sm uppercase">
-            {items}
+          <Button key={index} className={`text-sm uppercase ${items.active ? 'btn-active' : 'btn-gift'}`}>
+            {items.btnText}
           </Button>
         ))}
-        <Button className="text-[22px] bg-white rounded-full font-bold h-[36px] mt-3 text-black">
+        <Button className="text-[22px] bg-white rounded-full font-bold h-[36px] mt-[74px] text-black">
           Pay
         </Button>
         <div className="flex justify-center items-center mt-3">

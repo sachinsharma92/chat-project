@@ -6,12 +6,12 @@ export const atlasGrotesk = localFont({
   src: [
     {
       path: '../../public/fonts/AtlasGrotesk-Thin.otf',
-      weight: '100',
+      weight: '200',
       style: 'normal',
     },
     {
       path: '../../public/fonts/AtlasGrotesk-Light.otf',
-      weight: '200',
+      weight: '300',
       style: 'normal',
     },
     {

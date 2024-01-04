@@ -38,7 +38,7 @@ const CreateAccount: FC<CreateAccountProps> = ({ closeHandler }) => {
           Create Account
         </Button>
 
-        <Button className="text-white p-0 h-[36px] underline text-sm">
+        <Button className="text-white p-0 h-[36px] underline text-xs">
           Login
         </Button>
       </form>
@@ -46,7 +46,7 @@ const CreateAccount: FC<CreateAccountProps> = ({ closeHandler }) => {
       <div className="h-[0.5px] bg-[#D9D9D9] mt-3 mb-4" />
 
       <div className='flex justify-center items-center'>
-        <p className="text-white text-xs">By proceeding, you agree to the <Link href="/" className="underline">Privacy Policy</Link> & <Link href="/" className="underline">Terms of Service</Link></p>
+        <p className="text-white text-xs">By proceeding, you agree to the <Link href="/" className="underline font-normal">Privacy Policy</Link> & <Link href="/" className="underline font-normal">Terms of Service</Link></p>
       </div>
     </div>
   );
