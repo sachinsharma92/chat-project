@@ -104,6 +104,10 @@
   background-color: white !important;
 }
 
+.transition-btn {
+  transition: all 0.5s ease-in-out;
+}
+
 .share {
   @apply relative h-[40px] box-border rounded-[80px];
 

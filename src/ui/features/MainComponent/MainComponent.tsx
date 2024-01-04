@@ -4,7 +4,7 @@ import { mobileWidthBreakpoint } from '@/constants';
 import { useWindowResize } from '@/hooks';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import { head } from 'lodash';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 
 import cx from 'classnames';
 import dynamic from 'next/dynamic';
@@ -14,6 +14,9 @@ const SpaceContent = dynamic(() => import('../SpaceContent'));
 const GameScreen = dynamic(() => import('../GameScreen'));
 
 const MainComponent = () => {
+  const refMainComponent = useRef(null);
+  const [isFullScreen, setFullScreen] = useState(false);
+
   const { availableWidth } = useWindowResize();
   const [minimizeMed, setMinimizeMed] = useState(true);
   const [minimizeSm, setMinimizeSm] = useState(false);
@@ -31,15 +34,41 @@ const MainComponent = () => {
     }
   };
 
+  const fullScreenToggle = () => {
+    const screenControl = refMainComponent.current;
+
+    if (screenControl) {
+      if (screenControl.requestFullscreen) {
+        screenControl.requestFullscreen();
+        setFullScreen(true);
+      } else if (screenControl.mozRequestFullScreen) {
+        screenControl.mozRequestFullScreen();     // Firefox
+        setFullScreen(true);
+      } else if (screenControl.webkitRequestFullscreen) {
+        screenControl.webkitRequestFullscreen();  // Safari
+        setFullScreen(true);
+      } else if (screenControl.msRequestFullscreen) {
+        screenControl.msRequestFullscreen();      // IE/Edge
+        setFullScreen(true);
+      }
+    }
+
+    if (document.fullscreenElement) {
+      document.exitFullscreen()
+      setFullScreen(false);
+    }
+  }
+
+
   return (
-    <div className="main-component">
+    <div className="main-component" ref={refMainComponent}>
       <div
         className={cx('main-component-content', {
           'fullWidthStyle': minimizeMed,
         })}>
 
         <div className={cx('space-content-mobile', { 'space-content': minimizeMed })}>
-          <SpaceContent expandHandler={toggleMinimizeMedGameScreen} />
+          <SpaceContent isFullScreen={isFullScreen} fullScreenHandler={fullScreenToggle} />
         </div>
 
         <div
@@ -68,7 +97,7 @@ const MainComponent = () => {
             'space-content': minimizeMed
           })}
         >
-          <SpaceContent />
+          <SpaceContent isFullScreen={isFullScreen} fullScreenHandler={toggleMinimizeMedGameScreen} />
         </div>
       </div>
     </div>

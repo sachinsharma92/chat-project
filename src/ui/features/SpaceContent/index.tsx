@@ -1,7 +1,7 @@
 'use client';
 import Button from '@/components/common/Button';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
-import { ExpandV2Icon, UnionIcon } from '@/icons';
+import { CloseIcon, ExpandV2Icon, UnionIcon } from '@/icons';
 import { head } from 'lodash';
 import dynamic from 'next/dynamic';
 import { FC, useMemo, useState } from 'react';
@@ -16,10 +16,11 @@ const HomeSpace = dynamic(() => import('./HomeSpace'), { ssr: false });
 
 
 interface SpaceContentProps {
-  expandHandler?: () => void;
+  fullScreenHandler?: () => void;
+  isFullScreen: boolean;
 }
 
-const SpaceContent: FC<SpaceContentProps> = ({ expandHandler }) => {
+const SpaceContent: FC<SpaceContentProps> = ({ fullScreenHandler, isFullScreen }) => {
   const { spaceInfo } = useSelectedSpace();
   const [isCreateAccount, setCreateAccount] = useState(false);
   const [isGiftSelect, setGiftSelect] = useState(false);
@@ -59,7 +60,7 @@ const SpaceContent: FC<SpaceContentProps> = ({ expandHandler }) => {
               </div>
               <div>
                 <Button
-                  onClick={() => setInfoSection(!isInfoSection)}
+                  onClick={() => setInfoSection(true)}
                   className="space-name p-0 uppercase text-xs text-white font-medium"
                 >
                   {spaceName} {!isInfoSection ? <TriangleDownIcon /> : <TriangleUpIcon />}
@@ -68,8 +69,8 @@ const SpaceContent: FC<SpaceContentProps> = ({ expandHandler }) => {
               </div>
             </div>
             <Button
-              className="subscribe"
-              onClick={() => setCreateAccount(!isCreateAccount)}
+              className="subscribe transition-btn hover:opacity-60"
+              onClick={() => setCreateAccount(true)}
             >
               Follow
             </Button>
@@ -82,8 +83,8 @@ const SpaceContent: FC<SpaceContentProps> = ({ expandHandler }) => {
             </div>
 
             <div className="expand-min-options">
-              <Button onClick={expandHandler}>
-                <ExpandV2Icon />
+              <Button onClick={fullScreenHandler}>
+                {!isFullScreen ? <ExpandV2Icon /> : <CloseIcon />}
               </Button>
             </div>
           </div>
@@ -93,15 +94,15 @@ const SpaceContent: FC<SpaceContentProps> = ({ expandHandler }) => {
           <div className="info-card bg-black p-2 w-full">
             <div className="flex justify-between">
               <h4 className="text-xs uppercase text-white">About</h4>
-              <Button className="text-xs text-white p-0" onClick={() => setInfoSection(!isInfoSection)}>Close</Button>
+              <Button className="text-xs text-white p-0" onClick={() => setInfoSection(false)}>Close</Button>
             </div>
             <SpaceDescription text={spaceDescription} />
           </div>
         )}
 
         {!isGiftSelect && <Button
-          onClick={() => setGiftSelect(!isGiftSelect)}
-          className="text-white uppercase bg-black h-[22px] flex justify-center items-center text-xs w-full"
+          onClick={() => setGiftSelect(true)}
+          className="text-white uppercase bg-black h-[22px] flex justify-center items-center text-xs w-full hover:opacity-60 transition-btn"
         >
           Gift
         </Button>}
@@ -110,13 +111,13 @@ const SpaceContent: FC<SpaceContentProps> = ({ expandHandler }) => {
       {/* Create Account component here */}
       {isCreateAccount && (
         <CreateAccount
-          closeHandler={() => setCreateAccount(!isCreateAccount)}
+          closeHandler={() => setCreateAccount(false)}
         />
       )}
 
       {/* Gift component here */}
       {isGiftSelect && (
-        <GiftCard closeHandler={() => setGiftSelect(!isGiftSelect)} />
+        <GiftCard closeHandler={() => setGiftSelect(false)} />
       )}
 
       <HomeSpace />
