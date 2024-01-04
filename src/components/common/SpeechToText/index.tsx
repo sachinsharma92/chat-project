@@ -10,10 +10,11 @@ import {
 import { blobToBase64 } from '@/lib/utils';
 import { Tooltip } from '@radix-ui/react-tooltip';
 import { useAuth } from '@/hooks';
+import { SpeechToTextApiBodyRequest } from '@/app/api/speech-to-text/route';
 
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import './SpeechToText.css';
-import { SpeechToTextApiBodyRequest } from '@/app/api/speech-to-text/route';
+import AnimatedAudioWave from '../AnimatedAudioWave';
 
 export type SpeechToTextComponentProps = {
   stopRecording: () => void;
@@ -29,7 +30,7 @@ export type SpeechToTextComponentProps = {
 const SpeechToText = (props: SpeechToTextComponentProps) => {
   const { stopRecording, consumeText } = props;
 
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<NodeJS.Timeout | number | null>(null);
 
   const [time, setTime] = useState<number>(0);
 
@@ -47,6 +48,10 @@ const SpeechToText = (props: SpeechToTextComponentProps) => {
 
   const handleStopClick = useCallback(async () => {
     try {
+      if (transcribing) {
+        return;
+      }
+
       if (mediaRecorderRef.current) {
         mediaRecorderRef.current.stop();
       }
@@ -62,7 +67,7 @@ const SpeechToText = (props: SpeechToTextComponentProps) => {
     } catch (err: any) {
       console.log('handleStopClick() err:', err?.message);
     }
-  }, [recordingError, stopRecording]);
+  }, [transcribing, recordingError, stopRecording]);
 
   const startTimer = useCallback(() => {
     if (timerRef.current !== null) {
@@ -70,14 +75,17 @@ const SpeechToText = (props: SpeechToTextComponentProps) => {
     }
 
     timerRef.current = setInterval(() => {
-      setTime(prevTime => prevTime + 1);
-
-      if (time > 30) {
+      setTime(prevTime => {
         // max 30 seconds record
-        handleStopClick();
-      }
+
+        if (prevTime >= 30) {
+          handleStopClick();
+        }
+
+        return prevTime + 1;
+      });
     }, 1000);
-  }, [time, handleStopClick]);
+  }, [handleStopClick]);
 
   const startRecording = useCallback(async () => {
     try {
@@ -138,9 +146,7 @@ const SpeechToText = (props: SpeechToTextComponentProps) => {
   }, [userId, startTimer, stopRecording, consumeText]);
 
   const stopTimer = () => {
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-    }
+    clearInterval(timerRef.current as number);
 
     setTime(0); // Reset time when stopping the recording
   };
@@ -166,11 +172,27 @@ const SpeechToText = (props: SpeechToTextComponentProps) => {
     startRecording();
   }, [startRecording]);
 
+  /**
+   * Clean up stream tracks
+   */
+  useEffect(() => {
+    return () => {
+      if (mediaRecorderRef.current) {
+        mediaRecorderRef.current?.stream
+          .getTracks()
+          .forEach(track => track?.stop());
+      }
+
+      clearInterval(timerRef.current as number);
+    };
+  }, []);
+
   return (
     <TooltipProvider>
       <div className="speech-to-text">
         <div className="speech-to-text-left">
           {transcribing && <LoadingSpinner width={20} />}
+          {!transcribing && <AnimatedAudioWave />}
         </div>
         <div className="speech-to-text-right">
           {!transcribing && (
@@ -181,6 +203,7 @@ const SpeechToText = (props: SpeechToTextComponentProps) => {
             <TooltipTrigger
               className="speech-to-text-stop"
               onClick={() => handleStopClick()}
+              disabled={transcribing}
             >
               <StopIcon />
             </TooltipTrigger>

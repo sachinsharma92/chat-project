@@ -7,6 +7,10 @@
   @apply relative flex justify-center items-center box-border;
 }
 
+.speech-to-text-left {
+  @apply pl-[8px];
+}
+
 .speech-to-text-stop {
   @apply relative flex h-[40px] w-[40px] justify-center items-center box-border;
 
