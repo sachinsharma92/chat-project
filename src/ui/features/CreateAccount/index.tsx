@@ -46,9 +46,9 @@ const CreateAccount: FC<CreateAccountProps> = ({ closeHandler }) => {
       <div className="h-[0.5px] bg-[#D9D9D9] mt-3 mb-4" />
 
       <div className='flex justify-center items-center'>
-        <p className="text-white text-xs">By proceeding, you agree to the <Link href="/" className="underline font-normal">Privacy Policy</Link> & <Link href="/" className="underline font-normal">Terms of Service</Link></p>
+        <p className="text-white text-xs">By proceeding, you agree to the <Link href="/" className="underline font-normal hover:opacity-70 hover:text-white">Privacy Policy</Link> & <Link href="/" className="underline font-normal hover:opacity-70 hover:text-white">Terms of Service</Link></p>
       </div>
-    </div>
+    </div >
   );
 };
 

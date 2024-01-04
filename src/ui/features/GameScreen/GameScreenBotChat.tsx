@@ -1,7 +1,7 @@
 'use client';
 
 import { useBotChat } from '@/hooks/useBotChat';
-import { MicrophoneIcon, MoreIcon } from '@/icons';
+import { MicrophoneIcon } from '@/icons';
 import { useBotData } from '@/store/App';
 import { ChatBotStateContext } from '@/store/ChatBotProvider';
 import { OpenAIRoles } from '@/types';
@@ -14,6 +14,7 @@ import TextInput from '@/components/common/TextInput';
 import BotMessage from '../SpaceContent/BotChat/BotMessage';
 import UserMessage from '../SpaceContent/BotChat/UserMessage';
 
+import BottomDropdown from '../BottomDropdown/BottomDropdown';
 import './GameScreenBotChat.css';
 
 const GameScreenBotChat = () => {
@@ -143,9 +144,7 @@ const GameScreenBotChat = () => {
             <Button className="chat-btn">
               <MicrophoneIcon />
             </Button>
-            <Button className="chat-btn">
-              <MoreIcon />
-            </Button>
+            <BottomDropdown />
           </div>
         </form>
       </div>

@@ -1,0 +1,45 @@
+.bottom-dropdown-menu {
+  @apply mr-[16px] box-border;
+
+  font-weight: unset;
+}
+
+.bottom-dropdown-menu > ul {
+  list-style: none;
+  list-style-type: none;
+  font-weight: 500;
+}
+
+.bottom-dropdown-menu > ul > li {
+  width: 100%;
+  max-width: 100%;
+  font-weight: 500;
+}
+
+.bottom-dropdown-menu > ul > li > button {
+  font-weight: unset;
+  min-width: 100%;
+  justify-content: flex-start;
+}
+
+.bottom-dropdown-menu > ul > li > button > p {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.bottom-dropdown-popover {
+  padding: 8px;
+  border-radius: 2px;
+  min-width: 140px;
+}
+
+.bottom-dropdown-popover .bottom-dropdown-menu {
+  margin-right: 0;
+}
+
+.bottom-dropdown-popover .popover-close {
+  top: 0;
+  right: 0;
+}

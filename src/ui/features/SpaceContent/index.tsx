@@ -54,6 +54,7 @@ const SpaceContent: FC<SpaceContentProps> = ({ expandHandler }) => {
                     spaceBotInfo?.background || '/assets/botnet-avatar-bg.jpg'
                   }
                   alt="Background preview"
+                  className='h-full'
                 />
               </div>
               <div>
