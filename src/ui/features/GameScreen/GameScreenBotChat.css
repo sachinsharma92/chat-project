@@ -66,6 +66,7 @@
   @apply text-white whitespace-nowrap px-3 text-sm font-light;
   border: 0.5px solid white;
   height: 22px;
+  line-height: 22px;
 }
 
 .game-screen-attach-file {

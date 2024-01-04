@@ -55,18 +55,18 @@ const SpaceDescription = (props: SpaceDescriptionProps) => {
           </div>
           <div className='text-white'>
             <h4 className="text-xs font-medium">BOTNET</h4>
-            <p className='text-xs'>Creator</p>
+            <p className='text-xs font-light'>Creator</p>
           </div>
         </div>
 
         <div className='text-white'>
           <h4 className="text-xs font-medium uppercase">231.2k</h4>
-          <p className='text-xs'>Messages</p>
+          <p className='text-xs font-light'>Messages</p>
         </div>
 
         <div className='text-white'>
           <h4 className="text-xs font-medium uppercase">231.2k</h4>
-          <p className='text-xs'>Users</p>
+          <p className='text-xs font-light'>Users</p>
         </div>
       </div>
     </div>
