@@ -1,19 +1,18 @@
 'use client';
 
 import { useBotChat } from '@/hooks/useBotChat';
-import { MicrophoneIcon } from '@/icons';
+import { MicrophoneIcon, StopIcon } from '@/icons';
 import { useBotData } from '@/store/App';
 import { ChatBotStateContext } from '@/store/ChatBotProvider';
 import { OpenAIRoles } from '@/types';
 import { map } from 'lodash';
-import { useContext, useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import Button from '@/components/common/Button';
 import TextInput from '@/components/common/TextInput';
 import BotMessage from '../SpaceContent/BotChat/BotMessage';
 import UserMessage from '../SpaceContent/BotChat/UserMessage';
-
 import BottomDropdown from '../BottomDropdown/BottomDropdown';
 import './GameScreenBotChat.css';
 
@@ -21,6 +20,7 @@ const GameScreenBotChat = () => {
   const { handleSubmit, setValue, register } = useForm();
 
   const { sendChat } = useContext(ChatBotStateContext);
+  const [isRecordingActive, setRecordingActive] = useState(false)
 
   const [botRoomIsResponding, recentUserChat, recentBotChat, chatRoom] =
     useBotData(state => [
@@ -141,9 +141,11 @@ const GameScreenBotChat = () => {
               placeholder="Message...."
               className="chat-form-input text-xs"
             />
-            <Button className="chat-btn">
+            {isRecordingActive ? <Button className="chat-btn" onClick={() => setRecordingActive(false)}>
+              <StopIcon />
+            </Button> : <Button className="chat-btn" onClick={() => setRecordingActive(true)}>
               <MicrophoneIcon />
-            </Button>
+            </Button>}
             <BottomDropdown />
           </div>
         </form>

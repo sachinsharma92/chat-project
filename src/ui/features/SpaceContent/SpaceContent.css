@@ -95,6 +95,8 @@
 .space-name svg {
   scale: 0.9;
   margin-left: -2px;
+  top: -2px;
+  position: relative;
 }
 
 .subscribe {

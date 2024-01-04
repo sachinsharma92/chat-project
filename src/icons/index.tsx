@@ -45,3 +45,4 @@ export { default as CloseIcon } from './CloseIcon';
 export { default as UnionIcon } from './UnionIcon';
 export { default as MoreIcon } from './MoreIcon';
 export { default as MicrophoneIcon } from './MicrophoneIcon';
+export { default as StopIcon } from './StopIcon';

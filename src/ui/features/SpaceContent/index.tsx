@@ -99,12 +99,12 @@ const SpaceContent: FC<SpaceContentProps> = ({ expandHandler }) => {
           </div>
         )}
 
-        <Button
+        {!isGiftSelect && <Button
           onClick={() => setGiftSelect(!isGiftSelect)}
           className="text-white uppercase bg-black h-[22px] flex justify-center items-center text-xs w-full"
         >
           Gift
-        </Button>
+        </Button>}
       </div>
 
       {/* Create Account component here */}

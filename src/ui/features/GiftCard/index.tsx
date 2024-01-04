@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import Button from '@/components/common/Button';
 
 import './GiftCard.css';
@@ -8,34 +8,34 @@ interface GiftCardProps {
 }
 
 const GiftCard: FC<GiftCardProps> = ({ closeHandler }) => {
+  const [selectedGift, setSelectedGift] = useState(0);
   const inputText = [
     {
-      active: 'btn-active',
-      btnText: 'candy — $1'
+      btnText: 'candy — $1',
     },
     {
-      btnText: 'rose — $3'
+      btnText: 'rose — $3',
     },
     {
-      btnText: 'coffee — $5'
+      btnText: 'coffee — $5',
     },
     {
-      btnText: 'drink — $10'
+      btnText: 'drink — $10',
     },
     {
-      btnText: 'teddy bear — $25'
+      btnText: 'teddy bear — $25',
     },
     {
-      btnText: 'dinner — $50'
+      btnText: 'dinner — $50',
     },
     {
-      btnText: 'bag — $100'
+      btnText: 'bag — $100',
     },
     {
-      btnText: 'ring — $200'
+      btnText: 'ring — $200',
     },
     {
-      btnText: 'custom video — $250'
+      btnText: 'custom video — $250',
     },
   ];
   return (
@@ -49,33 +49,15 @@ const GiftCard: FC<GiftCardProps> = ({ closeHandler }) => {
 
       <form action="" className="flex flex-col gap-1 mt-4">
         {inputText.map((items, index) => (
-          <Button key={index} className={`text-sm uppercase ${items.active ? 'btn-active' : 'btn-gift'}`}>
+          <Button
+            key={index}
+            onClick={() => setSelectedGift(index)}
+            className={`text-sm uppercase ${index === selectedGift ? 'btn-active' : 'btn-gift'
+              }`}
+          >
             {items.btnText}
           </Button>
         ))}
-
-        {/* <div className="grid w-[10rem] grid-cols-1 gap-2 rounded-xl bg-gray-200 p-2">
-          <div>
-            <input type="radio" name="option" id="1" value="1" className="peer hidden" checked />
-            <label htmlFor="1" className="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">1</label>
-          </div>
-
-          <div>
-            <input type="radio" name="option" id="2" value="2" className="peer hidden" />
-            <label htmlFor="2" className="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">2</label>
-          </div>
-
-          <div>
-            <input type="radio" name="option" id="3" value="3" className="peer hidden" />
-            <label htmlFor="3" className="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">3</label>
-          </div>
-
-          <div>
-            <input type="radio" name="option" id="4" value="3" className="peer hidden" />
-            <label htmlFor="4" className="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white">4</label>
-          </div>
-        </div> */}
-
         <Button className="text-[22px] bg-white rounded-full font-bold h-[36px] mt-[74px] text-black">
           Pay
         </Button>
