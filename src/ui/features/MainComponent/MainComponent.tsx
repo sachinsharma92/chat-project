@@ -1,5 +1,4 @@
 'use client';
-
 import { mobileWidthBreakpoint } from '@/constants';
 import { useWindowResize } from '@/hooks';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
@@ -14,7 +13,7 @@ const SpaceContent = dynamic(() => import('../SpaceContent'));
 const GameScreen = dynamic(() => import('../GameScreen'));
 
 const MainComponent = () => {
-  const refMainComponent = useRef<HTMLInputElement>(null);
+  const refMainComponent = useRef(null);
   const [isFullScreen, setFullScreen] = useState(false);
 
   const { availableWidth } = useWindowResize();
@@ -36,7 +35,6 @@ const MainComponent = () => {
 
   const fullScreenToggle = () => {
     const screenControl = refMainComponent.current;
-
     if (screenControl) {
       if (screenControl.requestFullscreen) {
         screenControl.requestFullscreen();
