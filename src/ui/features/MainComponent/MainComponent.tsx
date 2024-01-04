@@ -14,7 +14,7 @@ const SpaceContent = dynamic(() => import('../SpaceContent'));
 const GameScreen = dynamic(() => import('../GameScreen'));
 
 const MainComponent = () => {
-  const refMainComponent = useRef(null);
+  const refMainComponent = useRef<HTMLInputElement>(null);
   const [isFullScreen, setFullScreen] = useState(false);
 
   const { availableWidth } = useWindowResize();
@@ -45,7 +45,7 @@ const MainComponent = () => {
         screenControl.mozRequestFullScreen();     // Firefox
         setFullScreen(true);
       } else if (screenControl.webkitRequestFullscreen) {
-        screenControl.webkitRequestFullscreen();  // Safari
+        screenControl.webkitRequestFullScreen();  // Safari
         setFullScreen(true);
       } else if (screenControl.msRequestFullscreen) {
         screenControl.msRequestFullscreen();      // IE/Edge
