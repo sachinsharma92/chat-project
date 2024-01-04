@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import Button from '@/components/common/Button';
 
-import './GiftCard.css';
+import './GiftCardStyle.css';
 
 interface GiftCardProps {
   closeHandler?: () => void;
