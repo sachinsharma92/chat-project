@@ -12,5 +12,9 @@
   background: white;
 }
 
+.gift-card {
+  height: calc(100vh - 100px);
+}
+
 @media screen and (max-width: 767px) {
 }
