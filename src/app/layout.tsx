@@ -1,9 +1,9 @@
 import './globals.css';
 
-import { ReactNode } from 'react';
-import type { Metadata } from 'next';
-import { atlasGrotesk } from './fonts';
 import { Toaster } from '@/components/ui/toaster';
+import type { Metadata } from 'next';
+import { ReactNode } from 'react';
+import { atlasGrotesk } from './fonts';
 
 import Script from 'next/script';
 import ProvidersContainer from './providersContainer';
@@ -14,8 +14,9 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
+
   return (
-    <html lang="en" className={atlasGrotesk.className}>
+    <html lang="en" className={`${atlasGrotesk.className}`}>
       <head>
         <Script src="/google-tag-manager.js" />
 

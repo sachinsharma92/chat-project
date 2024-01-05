@@ -33,7 +33,7 @@ const SpaceDescription = (props: SpaceDescriptionProps) => {
   return (
     <div className="space-description-container">
       <div>
-        <p ref={textRef} style={style} className='text-white text-sm mt-2 mb-3'>
+        <p ref={textRef} style={style} className='text-black dark:text-white text-sm mt-2 mb-3'>
           {text}
         </p>
 
@@ -50,21 +50,21 @@ const SpaceDescription = (props: SpaceDescriptionProps) => {
 
       <div className="info-section flex gap-9 justify-between">
         <div className='info-item flex gap-3 items-start'>
-          <div className="bg-white min-w-[22px] h-22 min-h-[22px] flex justify-center items-center mt-[2px]">
-            <BotnetIcon width={15} />
+          <div className="bg-black dark:bg-white min-w-[22px] h-22 min-h-[22px] flex justify-center items-center mt-[2px]">
+            <BotnetIcon className="fill-white dark:fill-black" width={15} />
           </div>
-          <div className='text-white'>
+          <div className='text-black dark:text-white'>
             <h4 className="text-xs font-medium">BOTNET</h4>
             <p className='text-xs font-light'>Creator</p>
           </div>
         </div>
 
-        <div className='text-white'>
+        <div className='text-black dark:text-white'>
           <h4 className="text-xs font-medium uppercase">231.2k</h4>
           <p className='text-xs font-light'>Messages</p>
         </div>
 
-        <div className='text-white'>
+        <div className='text-black dark:text-white'>
           <h4 className="text-xs font-medium uppercase">231.2k</h4>
           <p className='text-xs font-light'>Users</p>
         </div>

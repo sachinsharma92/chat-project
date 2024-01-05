@@ -1,15 +1,16 @@
 .btn-gift {
-  @apply relative px-3 h-[36px] text-xs text-white;
+  @apply relative px-3 h-[36px] text-xs text-black dark:text-white border-[#D9D9D9] dark:border-white;
   width: 100%;
   background: transparent;
-  border: 0.5px solid white;
+  border-width: 0.5px;
+  border-style: solid;
 }
 
 .btn-active {
-  @apply relative px-3 h-[36px] text-xs text-black;
+  @apply relative px-3 h-[36px] text-xs text-white dark:text-black border-[#D9D9D9] dark:border-[white] bg-black dark:bg-white;
   width: 100%;
-  border: 0.5px solid white;
-  background-color: white !important;
+  border-width: 0.5px;
+  border-style: solid;
 }
 
 .gift-card {

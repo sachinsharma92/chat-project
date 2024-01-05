@@ -1,7 +1,7 @@
 'use client';
 import Button from '@/components/common/Button';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
-import { CloseIcon, ExpandV2Icon, UnionIcon } from '@/icons';
+import { BotnetIcon, CloseIcon, ExpandV2Icon, UnionIcon } from '@/icons';
 import { head } from 'lodash';
 import dynamic from 'next/dynamic';
 import { FC, useMemo, useState } from 'react';
@@ -61,7 +61,10 @@ const SpaceContent: FC<SpaceContentProps> = ({ fullScreenHandler, isFullScreen }
     <div className={`space-content-container ${isGiftSelect && 'popup-style' || isCreateAccount && 'popup-style'}`}>
       <div className="space-content-header p-4">
         <div className="flex gap-1 w-full">
-          <div className="space-content-header-right flex justify-between items-center bg-black w-full pr-2 pl-[2px]">
+          <div className="bg-white dark:bg-black min-w-[36px] h-9 max-h-[36px] flex justify-center items-center border border-black dark:border-0 button-svg-theme">
+            <BotnetIcon width={18} className="fill-black dark:fill-white" />
+          </div>
+          <div className="space-content-header-right flex justify-between items-center bg-white dark:bg-black w-full p-[2px] pr-2 border border-black dark:border-0">
             <div className="space-content-header-main">
               <div className="w-8 h-8 overflow-hidden">
                 <img
@@ -75,11 +78,11 @@ const SpaceContent: FC<SpaceContentProps> = ({ fullScreenHandler, isFullScreen }
               <div>
                 <Button
                   onClick={() => setInfoSection(true)}
-                  className="space-name p-0 uppercase text-xs text-white font-medium"
+                  className="space-name p-0 uppercase text-xs text-black dark:text-white font-medium"
                 >
                   {spaceName} {!isInfoSection ? <TriangleDownIcon /> : <TriangleUpIcon />}
                 </Button>
-                <p className="text-xs text-white leading-3 font-light">20.1k Followers</p>
+                <p className="text-xs text-black dark:text-white leading-3 font-light">20.1k Followers</p>
               </div>
             </div>
             <Button
@@ -89,37 +92,57 @@ const SpaceContent: FC<SpaceContentProps> = ({ fullScreenHandler, isFullScreen }
               Follow
             </Button>
           </div>
+
           <div className="flex gap-1">
             <div className="share-button-style">
-              <Button onClick={shareScreenToggle}>
-                <UnionIcon />
+              <Button onClick={shareScreenToggle} className="button-svg-theme">
+                <UnionIcon className="fill-black dark:fill-white" />
               </Button>
             </div>
 
-            <div className="expand-min-options">
-              <Button onClick={fullScreenHandler}>
-                {!isFullScreen ? <ExpandV2Icon /> : <CloseIcon />}
+            <div className="expand-min-options" >
+              <Button onClick={fullScreenHandler} className="button-svg-theme">
+                {!isFullScreen ? <ExpandV2Icon className="fill-black dark:fill-white" /> : <CloseIcon className="fill-black dark:fill-white" />}
               </Button>
             </div>
           </div>
         </div>
 
+        {/* About Section */}
         {isInfoSection && (
-          <div className="info-card bg-black p-2 w-full">
+          <div className="info-card bg-white dark:bg-black p-2 w-full">
             <div className="flex justify-between">
-              <h4 className="text-xs uppercase text-white">About</h4>
-              <Button className="text-xs text-white p-0" onClick={() => setInfoSection(false)}>Close</Button>
+              <h4 className="text-xs uppercase text-black dark:text-white">About</h4>
+              <Button className="text-xs text-black dark:text-white p-0" onClick={() => setInfoSection(false)}>Close</Button>
             </div>
             <SpaceDescription text={spaceDescription} />
           </div>
         )}
 
-        {!isGiftSelect && <Button
-          onClick={() => setGiftSelect(true)}
-          className="text-white uppercase bg-black h-[22px] flex justify-center items-center text-xs w-full hover:opacity-60 transition-btn"
-        >
-          Gift
-        </Button>}
+
+        <div className='flex w-full gap-1'>
+          <Button
+            onClick={() => setGiftSelect(true)}
+            className="text-black dark:text-white uppercase bg-white dark:bg-black border border-black h-[22px] flex justify-center items-center text-xs w-full hover:opacity-60 transition-btn"
+          >
+            Chat
+          </Button>
+          <Button
+            onClick={() => setGiftSelect(true)}
+            className="text-black dark:text-white uppercase bg-white dark:bg-black border border-black h-[22px] flex justify-center items-center text-xs w-full hover:opacity-60 transition-btn"
+          >
+            <span className="w-1 h-1 bg-black dark:bg-white rounded-full mr-1"></span>
+            <div className="flex align-top gap-[2px]">LIVE <span className="align-sub text-[8px]"> 231</span></div>
+          </Button>
+          <Button
+            onClick={() => setGiftSelect(true)}
+            className="text-black dark:text-white uppercase bg-white dark:bg-black border border-black h-[22px] flex justify-center items-center text-xs w-full hover:opacity-60 transition-btn"
+          >
+            Gift
+          </Button>
+
+
+        </div>
       </div>
 
       {/* Create Account component here */}

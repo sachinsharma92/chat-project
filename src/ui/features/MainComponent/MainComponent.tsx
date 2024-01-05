@@ -3,7 +3,7 @@ import { mobileWidthBreakpoint } from '@/constants';
 import { useWindowResize } from '@/hooks';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import { head } from 'lodash';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import cx from 'classnames';
 import dynamic from 'next/dynamic';
@@ -58,8 +58,28 @@ const MainComponent = () => {
   }
 
 
+  const [theme, setTheme] = useState('')
+
+  useEffect(() => {
+    let isDark = typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches
+
+    if (isDark) {
+      setTheme('dark')
+    }
+    else {
+      setTheme('')
+    }
+
+
+    console.log(isDark, 'check dark msss');
+
+  }, [])
+
+
+
   return (
-    <div className="main-component" ref={refMainComponent}>
+    <div className={`main-component ${theme}`} ref={refMainComponent}>
       <div
         className={cx('main-component-content', {
           'fullWidthStyle': minimizeMed,

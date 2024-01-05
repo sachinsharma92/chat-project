@@ -39,10 +39,10 @@ const GiftCard: FC<GiftCardProps> = ({ closeHandler }) => {
     },
   ];
   return (
-    <div className="gift-card bg-black p-4 w-full mt-4 absolute bottom-0 rounded-t-[10px]">
+    <div className="gift-card bg-white dark:bg-black p-4 w-full mt-4 absolute bottom-0 rounded-t-[10px]">
       <div className="flex justify-between">
-        <h4 className="text-xs uppercase text-white">Gift</h4>
-        <Button className="text-xs text-white p-0" onClick={closeHandler}>
+        <h4 className="text-xs uppercase text-black dark:text-white">Gift</h4>
+        <Button className="text-xs text-black dark:text-white p-0" onClick={closeHandler}>
           Close
         </Button>
       </div>
@@ -58,11 +58,11 @@ const GiftCard: FC<GiftCardProps> = ({ closeHandler }) => {
             {items.btnText}
           </Button>
         ))}
-        <Button className="text-[22px] bg-white rounded-full font-bold h-[36px] mt-[74px] text-black">
+        <Button className="text-[22px] bg-black dark:bg-white rounded-full font-bold h-[36px] mt-[74px] text-white dark:text-black">
           Pay
         </Button>
         <div className="flex justify-center items-center mt-3">
-          <p className="text-white text-xs uppercase">
+          <p className="text-black dark:text-white text-xs uppercase">
             proceeds go to bot | satisfaction guaranteed
           </p>
         </div>
