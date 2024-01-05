@@ -11,9 +11,9 @@ import { useForm } from 'react-hook-form';
 
 import Button from '@/components/common/Button';
 import TextInput from '@/components/common/TextInput';
+import BottomDropdown from '../BottomDropdown/BottomDropdown';
 import BotMessage from '../SpaceContent/BotChat/BotMessage';
 import UserMessage from '../SpaceContent/BotChat/UserMessage';
-import BottomDropdown from '../BottomDropdown/BottomDropdown';
 import './GameScreenBotChat.css';
 
 const GameScreenBotChat = () => {
@@ -33,7 +33,7 @@ const GameScreenBotChat = () => {
 
   const chatStreamDomRef = useRef<any>(null);
 
-  const { chatMessages: sanitizedChatMessages, isLoading,
+  const { chatMessages: sanitizedChatMessages,
     resetChat, } = useBotChat();
 
   const handleSendChat = (data: any) => {
