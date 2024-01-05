@@ -43,6 +43,20 @@ const SpaceContent: FC<SpaceContentProps> = ({ fullScreenHandler, isFullScreen }
     );
   }, [spaceInfo]);
 
+
+  const shareScreenToggle = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: 'Good India',
+        url: 'https://www.google.com/',
+      }).then(() => console.log('check then success')).catch((e) => console.log(e))
+    }
+    else {
+      console.log('sharing not support');
+
+    }
+  }
+
   return (
     <div className={`space-content-container ${isGiftSelect && 'popup-style' || isCreateAccount && 'popup-style'}`}>
       <div className="space-content-header p-4">
@@ -77,7 +91,7 @@ const SpaceContent: FC<SpaceContentProps> = ({ fullScreenHandler, isFullScreen }
           </div>
           <div className="flex gap-1">
             <div className="share-button-style">
-              <Button>
+              <Button onClick={shareScreenToggle}>
                 <UnionIcon />
               </Button>
             </div>

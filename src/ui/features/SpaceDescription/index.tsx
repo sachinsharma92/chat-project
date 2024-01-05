@@ -33,7 +33,7 @@ const SpaceDescription = (props: SpaceDescriptionProps) => {
   return (
     <div className="space-description-container">
       <div>
-        <p ref={textRef} style={style} className='text-white text-sm my-2'>
+        <p ref={textRef} style={style} className='text-white text-sm mt-2 mb-3'>
           {text}
         </p>
 
@@ -48,7 +48,7 @@ const SpaceDescription = (props: SpaceDescriptionProps) => {
         )}
       </div>
 
-      <div className="info-section flex gap-9">
+      <div className="info-section flex gap-9 justify-between">
         <div className='info-item flex gap-3 items-start'>
           <div className="bg-white min-w-[22px] h-22 min-h-[22px] flex justify-center items-center mt-[2px]">
             <BotnetIcon width={15} />

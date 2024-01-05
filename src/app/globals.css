@@ -365,6 +365,15 @@ template {
   display: none;
 }
 
+.rws-container {
+  width: 100% !important;
+}
+
+.rws-header {
+  font-size: 12px !important;
+  text-transform: uppercase;
+}
+
 @media screen and (max-width: 720px) {
   #root {
     @apply h-full w-full bottom-0 left-0 right-0;

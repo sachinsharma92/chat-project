@@ -33,12 +33,15 @@ const BotMessage = (
       </div>
       <div className="bot-message-text">
         {message && (
-          <p className="msg-box">
-            {message}{' '}
-            <Button className=" max-h-5 min-w-[44px] flex bg-black items-center px-[6px] text-xs gap-[3px] py-[4px] font-light">
-              <PlayIcon /> 0:03
+          <div className="msg-box">
+            <p>
+              {message}
+            </p>
+            <Button className="max-h-5 min-w-[44px] flex bg-black items-center px-[6px] text-xs gap-[3px] py-[4px] font-light self-end">
+              <PlayIcon width={5.47} height={6} /> 0:03
             </Button>
-          </p>
+          </div>
+
         )}
         {!message && (
           <p className="bot-message-loading">

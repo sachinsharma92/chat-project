@@ -21,7 +21,7 @@ const UserMessage = (props: Partial<ChatMessageProps>) => {
       <div className="bot-message-avatar">
         <Avatar src={assistantDisplayImage} name={displayName} className="rounded-none" />
       </div>
-      <p>{message}</p>
+      <p className="msg-box">{message}</p>
     </div>
   );
 };

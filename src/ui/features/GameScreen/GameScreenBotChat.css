@@ -1,11 +1,11 @@
 .game-screen-bot-chat {
-  @apply absolute flex items-start justify-end h-full p-0 bottom-0;
+  @apply absolute flex items-start justify-end p-0 bottom-0;
 
   flex-direction: column;
 }
 
 .game-screen-bot-chat-content {
-  @apply relative flex justify-end items-start w-full h-full;
+  @apply relative flex justify-end items-start w-full;
 
   flex-direction: column;
 }
