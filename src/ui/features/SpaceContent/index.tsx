@@ -122,13 +122,11 @@ const SpaceContent: FC<SpaceContentProps> = ({ fullScreenHandler, isFullScreen }
 
         <div className='flex w-full gap-1'>
           <Button
-            onClick={() => setGiftSelect(true)}
             className="text-black dark:text-white uppercase bg-white dark:bg-black border border-black h-[22px] flex justify-center items-center text-xs w-full hover:opacity-60 transition-btn"
           >
             Chat
           </Button>
           <Button
-            onClick={() => setGiftSelect(true)}
             className="text-black dark:text-white uppercase bg-white dark:bg-black border border-black h-[22px] flex justify-center items-center text-xs w-full hover:opacity-60 transition-btn"
           >
             <span className="w-1 h-1 bg-black dark:bg-white rounded-full mr-1"></span>
