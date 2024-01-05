@@ -5,10 +5,14 @@ import Button from '@/components/common/Button';
 import Popover from '@/components/common/Popover';
 
 import { MoreIcon } from '@/icons';
+import { FC } from 'react';
 import './BottomDropdown.css';
 
-const BottomDropdown = () => {
+interface BottomDropdownProps {
+  resetHandler?: () => void;
+}
 
+const BottomDropdown: FC<BottomDropdownProps> = ({ resetHandler }) => {
   return (
     <Popover
       trigger={
@@ -22,7 +26,7 @@ const BottomDropdown = () => {
       <div className="bottom-dropdown-menu">
         <ul>
           <li>
-            <Button className='p-0'>
+            <Button className='p-0' onClick={resetHandler} asChild>
               <p>Reset chat</p>
             </Button>
           </li>

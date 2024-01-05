@@ -21,6 +21,7 @@ const GameScreenBotChat = () => {
 
   const { sendChat } = useContext(ChatBotStateContext);
   const [isRecordingActive, setRecordingActive] = useState(false)
+  const [resettingChat, setResettingChat] = useState(false);
 
   const [botRoomIsResponding, recentUserChat, recentBotChat, chatRoom] =
     useBotData(state => [
@@ -32,7 +33,8 @@ const GameScreenBotChat = () => {
 
   const chatStreamDomRef = useRef<any>(null);
 
-  const { chatMessages: sanitizedChatMessages } = useBotChat();
+  const { chatMessages: sanitizedChatMessages, isLoading,
+    resetChat, } = useBotChat();
 
   const handleSendChat = (data: any) => {
     const message = data?.message;
@@ -57,6 +59,24 @@ const GameScreenBotChat = () => {
 
     sendChat(message);
     setValue('message', '');
+  };
+
+  /**
+ * Clear chat array
+ */
+  const onResetChat = async () => {
+    try {
+      if (resettingChat) {
+        return;
+      }
+
+      setResettingChat(true);
+
+      await resetChat();
+    } catch {
+    } finally {
+      setResettingChat(false);
+    }
   };
 
   /** Scroll on new chat */
@@ -146,7 +166,7 @@ const GameScreenBotChat = () => {
             </Button> : <Button className="chat-btn" onClick={() => setRecordingActive(true)}>
               <MicrophoneIcon />
             </Button>}
-            <BottomDropdown />
+            <BottomDropdown resetHandler={onResetChat} />
           </div>
         </form>
       </div>

@@ -45,9 +45,9 @@ const BotMessage = (
         )}
         {!message && (
           <p className="bot-message-loading">
-            <EllipseIcon height={'10px'} width={'10px'} />
-            <EllipseIcon height={'10px'} width={'10px'} />
-            <EllipseIcon height={'10px'} width={'10px'} />
+            <EllipseIcon height={'8px'} width={'8px'} />
+            <EllipseIcon height={'8px'} width={'8px'} />
+            <EllipseIcon height={'8px'} width={'8px'} />
           </p>
         )}
       </div>

@@ -44,16 +44,16 @@ const SpaceContent: FC<SpaceContentProps> = ({ fullScreenHandler, isFullScreen }
   }, [spaceInfo]);
 
 
+  // Sharing Sheet code
   const shareScreenToggle = () => {
     if (navigator.share) {
       navigator.share({
-        title: 'Good India',
-        url: 'https://www.google.com/',
-      }).then(() => console.log('check then success')).catch((e) => console.log(e))
+        title: 'Botnet',
+        url: 'https://botnet.com/',
+      }).then(() => console.log('Share Successfully')).catch((e) => console.log(e))
     }
     else {
       console.log('sharing not support');
-
     }
   }
 
