@@ -6,8 +6,8 @@ import * as RadixPopover from '@radix-ui/react-popover';
 import './Popover.css';
 
 const Popover = (props: {
-  setPopoverToggle: (open: boolean) => void;
-  isOpen: boolean;
+  setPopoverToggle?: (open: boolean) => void;
+  isOpen?: boolean;
   trigger: ReactNode;
   children?: ReactNode;
   ariaLabel?: string;
