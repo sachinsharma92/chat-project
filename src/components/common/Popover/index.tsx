@@ -6,16 +6,18 @@ import * as RadixPopover from '@radix-ui/react-popover';
 import './Popover.css';
 
 const Popover = (props: {
+  setPopoverToggle: (open: boolean) => void;
+  isOpen: boolean;
   trigger: ReactNode;
   children?: ReactNode;
   ariaLabel?: string;
   className?: string;
   side?: 'left' | 'right' | 'top' | 'bottom';
 }) => {
-  const { side, children, trigger, ariaLabel, className } = props;
+  const { side, children, trigger, ariaLabel, className, isOpen, setPopoverToggle } = props;
 
   return (
-    <RadixPopover.Root>
+    <RadixPopover.Root open={isOpen} onOpenChange={(open) => setPopoverToggle(open)}>
       <RadixPopover.Trigger
         asChild
         {...(!isEmpty(ariaLabel) && { 'aria-label': `${ariaLabel}` })}

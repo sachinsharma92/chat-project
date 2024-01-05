@@ -166,6 +166,7 @@ const GameScreenBotChat = () => {
             </Button> : <Button className="chat-btn" onClick={() => setRecordingActive(true)}>
               <MicrophoneIcon />
             </Button>}
+
             <BottomDropdown resetHandler={onResetChat} />
           </div>
         </form>

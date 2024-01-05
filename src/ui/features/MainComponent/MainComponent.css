@@ -78,22 +78,16 @@
 }
 
 .share-button-style {
-  @apply flex justify-center items-center top-[16px] left-[16px] w-9 h-9 text-white;
-
-  gap: 8px;
-  background: rgba(0, 0, 0, 1);
+  @apply flex justify-center items-center w-9 h-9 text-white hover:opacity-70 gap-2 bg-black cursor-pointer;
 }
 
 .expand-min-options {
-  @apply flex justify-center items-center top-[16px] right-[16px] w-9 h-9;
-
-  gap: 8px;
-  background: rgba(0, 0, 0, 1);
+  @apply flex justify-center items-center w-9 h-9 hover:opacity-70 rounded-none gap-2 bg-black cursor-pointer;
 }
 
 .expand-min-options > button,
 .volume-button-style > button {
-  @apply relative flex justify-center items-center h-[40px] w-[40px] p-[4px] box-border rounded-[500px];
+  @apply relative flex justify-center items-center h-[40px] w-[40px] p-[4px] box-border rounded-[500px] hover:opacity-60;
 
   background: rgba(0, 0, 0, 0.24);
 }
