@@ -143,7 +143,7 @@
 }
 
 .space-content-header-main {
-  @apply flex gap-2 items-center h-[36px];
+  @apply flex gap-2 items-center;
 }
 
 .button-svg-theme {

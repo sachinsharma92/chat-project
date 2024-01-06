@@ -11,7 +11,7 @@ const UserMessage = (props: Partial<ChatMessageProps>) => {
   const { spaceInfo } = useSelectedSpace();
   const assistantDisplayImage = useMemo(
     () =>
-      spaceInfo?.image || spaceInfo?.host?.image || '/assets/camp-tonari.png',
+      spaceInfo?.image || spaceInfo?.host?.image || '/assets/default-user.svg',
     [spaceInfo],
   );
   const displayName = useMemo(() => spaceInfo?.host?.displayName, [spaceInfo]);

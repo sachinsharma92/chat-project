@@ -12,8 +12,8 @@
 }
 
 .bot-message-text .msg-box {
-  display: flex;
-  padding: 2px 8px;
+  display: inline-block;
+  padding: 2px 2px 2px 8px;
   align-items: center;
   flex: 1 0 0;
   color: white;

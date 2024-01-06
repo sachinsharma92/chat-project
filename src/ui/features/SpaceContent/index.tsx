@@ -66,13 +66,13 @@ const SpaceContent: FC<SpaceContentProps> = ({ fullScreenHandler, isFullScreen }
           </div>
           <div className="space-content-header-right flex justify-between items-center bg-white dark:bg-black w-full p-[2px] pr-2 border border-black dark:border-0">
             <div className="space-content-header-main">
-              <div className="w-8 h-8 overflow-hidden">
+              <div className="w-[30px] h-[30px]">
                 <img
                   src={
                     spaceBotInfo?.background || '/assets/botnet-avatar-bg.jpg'
                   }
                   alt="Background preview"
-                  className='h-full'
+                  className='h-full w-full'
                 />
               </div>
               <div>
@@ -122,19 +122,18 @@ const SpaceContent: FC<SpaceContentProps> = ({ fullScreenHandler, isFullScreen }
 
         <div className='flex w-full gap-1'>
           <Button
-            className="text-black dark:text-white uppercase bg-white dark:bg-black border border-black h-[22px] flex justify-center items-center text-xs w-full hover:opacity-60 transition-btn leading-[22px]"
+            className="text-black dark:text-white uppercase bg-white dark:bg-black border border-black h-[22px] text-xs w-full hover:opacity-60 transition-btn leading-[1.5] inline-block"
           >
             Chat
           </Button>
           <Button
-            className="text-black dark:text-white uppercase bg-white dark:bg-black border border-black h-[22px] flex justify-center items-center text-xs w-full hover:opacity-60 transition-btn leading-[22px]"
+            className="text-black dark:text-white uppercase bg-white dark:bg-black border border-black h-[22px] text-xs w-full hover:opacity-60 transition-btn leading-[1.5] inline-block"
           >
-            <span className="w-1 h-1 bg-black dark:bg-white rounded-full mr-1"></span>
-            <div className="flex align-top gap-[2px]">LIVE <span className="align-sub text-[8px]"> 231</span></div>
+            <div className="flex justify-center items-top gap-[2px]"> <span className="w-1 h-1 bg-black dark:bg-white rounded-full relative top-[4.5px] mr-[1px]" /> LIVE <span className="align-sub text-[8px]"> 231</span></div>
           </Button>
           <Button
             onClick={() => setGiftSelect(true)}
-            className="text-black dark:text-white uppercase bg-white dark:bg-black border border-black h-[22px] flex justify-center items-center text-xs w-full hover:opacity-60 transition-btn leading-[22px]"
+            className="text-black dark:text-white uppercase bg-white dark:bg-black border border-black h-[22px] text-xs w-full hover:opacity-60 transition-btn leading-[1.5] inline-block"
           >
             Gift
           </Button>

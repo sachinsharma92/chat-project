@@ -1,20 +1,21 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { StopIcon } from '@radix-ui/react-icons';
+import { SpeechToTextApiBodyRequest } from '@/app/api/speech-to-text/route';
 import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { useAuth } from '@/hooks';
 import { blobToBase64 } from '@/lib/utils';
 import { Tooltip } from '@radix-ui/react-tooltip';
-import { useAuth } from '@/hooks';
-import { SpeechToTextApiBodyRequest } from '@/app/api/speech-to-text/route';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import LoadingSpinner from '@/components/common/LoadingSpinner';
+// import AnimatedAudioWave from '../AnimatedAudioWave';
+
 import './SpeechToText.css';
-import AnimatedAudioWave from '../AnimatedAudioWave';
+import { StopIcon } from '@/icons';
 
 export type SpeechToTextComponentProps = {
   stopRecording: () => void;
@@ -99,12 +100,18 @@ const SpeechToText = (props: SpeechToTextComponentProps) => {
         // @ts-ignore
         chunks.current.push(ev.data);
       };
+      mediaRecorderRef.current.onstart = (e) => {
+        console.log(e, 'check e');
+      }
+      // const recordedUrl = URL.createObjectURL(stream)
+      // console.log(recordedUrl, 'check recordedUrl');
       mediaRecorderRef.current.onstop = async () => {
         try {
           setTranscribing(true);
 
           const audioBlob = new Blob(chunks.current, { type: 'audio/wav' });
           const b64 = await blobToBase64(audioBlob);
+
           const bodyProps: SpeechToTextApiBodyRequest = {
             userId,
             audio: b64 as string,
@@ -187,19 +194,20 @@ const SpeechToText = (props: SpeechToTextComponentProps) => {
     };
   }, []);
 
+
+
   return (
     <TooltipProvider>
       <div className="speech-to-text">
         <div className="speech-to-text-left">
           {transcribing && <LoadingSpinner width={20} />}
-          {!transcribing && <AnimatedAudioWave />}
+          {/* {!transcribing && <AnimatedAudioWave />} */}
 
           {!transcribing && (
             <p className="speech-to-text-time">{formatTime(time)}</p>
           )}
         </div>
         <div className="speech-to-text-right">
-
           <Tooltip>
             <TooltipTrigger
               className="chat-btn"

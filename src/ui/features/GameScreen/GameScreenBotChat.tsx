@@ -12,12 +12,18 @@ import { useForm } from 'react-hook-form';
 import Button from '@/components/common/Button';
 import SpeechToText from '@/components/common/SpeechToText';
 import TextInput from '@/components/common/TextInput';
+import WaveSurfer from "wavesurfer.js";
+import RecordPlugin from "wavesurfer.js/dist/plugins/record";
 import BottomDropdown from '../BottomDropdown/BottomDropdown';
 import BotMessage from '../SpaceContent/BotChat/BotMessage';
 import UserMessage from '../SpaceContent/BotChat/UserMessage';
+
 import './GameScreenBotChat.css';
 
 const GameScreenBotChat = () => {
+  const [record, setRecord] = useState();
+  let wavesurfer;
+
   const { handleSubmit, setValue, register } = useForm();
 
   const { sendChat } = useContext(ChatBotStateContext);
@@ -116,6 +122,40 @@ const GameScreenBotChat = () => {
     'Yeah I mean I guess...',
   ];
 
+
+  const createWaveSurfer = () => {
+    if (wavesurfer) { wavesurfer.destroy() }
+
+    wavesurfer = WaveSurfer.create({
+      container: "#wave",
+      waveColor: "white",
+      progressColor: "green",
+      barWidth: 2,
+      barGap: 5,
+      barRadius: 20,
+      height: 20,
+      audioRate: 10
+    });
+
+    const recordTest = wavesurfer.registerPlugin(
+      RecordPlugin.create({ scrollingWaveform: false })
+    );
+    setRecord(recordTest)
+  };
+
+  const handleRecord = () => {
+    if (record) {
+      record.startRecording()
+    }
+    console.log(record, 'check record');
+  };
+
+  useEffect(() => {
+    createWaveSurfer();
+  }, []);
+
+
+
   return (
     <div className="game-screen-bot-chat">
       <div className="game-screen-bot-chat-content">
@@ -164,9 +204,7 @@ const GameScreenBotChat = () => {
             ))}
           </div>
 
-
           <div className="flex w-full gap-1 px-4">
-
             <div className='flex relative gap-1 w-full'>
               {!isRecording && (
                 <>
@@ -177,22 +215,23 @@ const GameScreenBotChat = () => {
                     placeholder="Message...."
                     className="chat-form-input text-xs"
                   />
+                  <div onClick={handleRecord}>
+                    <Button
+                      className="chat-btn"
+                      onClick={() => {
+                        if (isLoading) {
+                          return;
+                        }
 
-                  <Button
-                    className="chat-btn"
-                    onClick={() => {
-                      if (isLoading) {
-                        return;
-                      }
-
-                      setValue('message', '');
-                      setIsRecording(true);
-                    }}
-                    isDisabled={botRoomIsResponding || isLoading}
-                    disabled={botRoomIsResponding}
-                  >
-                    <MicrophoneIcon />
-                  </Button>
+                        setValue('message', '');
+                        setIsRecording(true);
+                      }}
+                      isDisabled={botRoomIsResponding || isLoading}
+                      disabled={botRoomIsResponding}
+                    >
+                      <MicrophoneIcon />
+                    </Button>
+                  </div>
                 </>
               )}
 
@@ -202,6 +241,7 @@ const GameScreenBotChat = () => {
                   consumeText={text => setValue('message', trimStart(text))}
                 />
               )}
+              <div id='wave' className="h-[23px] absolute w-[100px] top-[5px] left-[10px] z-50 bg-black" />
             </div>
             <BottomDropdown resetHandler={onResetChat} />
           </div>
