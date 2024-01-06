@@ -1,0 +1,36 @@
+.speech-to-text {
+  @apply bg-black gap-1 absolute flex justify-between w-full;
+  width: 100%;
+}
+
+.speech-to-text-left,
+.speech-to-text-right {
+  @apply relative flex justify-center items-center box-border;
+}
+
+.speech-to-text-left {
+  @apply bg-black w-full flex justify-between h-[36px] text-xs text-white placeholder-white placeholder:uppercase border-[#D9D9D9] dark:border-white;
+  border-width: 0.5px;
+  border-style: solid;
+}
+
+.speech-to-text-stop {
+  @apply bg-black relative flex h-[40px] w-[40px] justify-center items-center box-border;
+
+  border-radius: 50%;
+}
+
+.speech-to-text-stop > svg {
+  background: #fff;
+}
+
+.speech-to-text-stop > svg > path {
+  fill: #fff;
+}
+
+.speech-to-text-time {
+  @apply relative mr-[16px] box-border;
+
+  font-size: 16px;
+  font-weight: 500;
+}

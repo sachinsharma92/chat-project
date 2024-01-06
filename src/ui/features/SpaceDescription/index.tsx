@@ -1,6 +1,9 @@
+'use client';
 import { BotnetIcon } from '@/icons';
 import { useEffect, useRef, useState } from 'react';
+
 import './SpaceDescription.css';
+
 
 type SpaceDescriptionProps = {
   text: string;
@@ -20,7 +23,6 @@ const SpaceDescription = (props: SpaceDescriptionProps) => {
       }
     }
   }, [text]);
-
 
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);

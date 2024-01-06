@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 
 dotenv.config({ path: `.env.local` });
 
-import { getSpaceBotById } from '@/lib/supabase';
+import { applyApiRoutesAuth, getSpaceBotById } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 import { getOpenAI } from '@/lib/openai';
 import {
@@ -21,7 +21,6 @@ import {
   returnApiUnauthorizedError,
   returnCommonStatusError,
 } from '@/lib/utils/routes';
-import { applyApiRoutesAuth } from '../bot-chat/route';
 import {
   getUserContextById,
   insertNewUserCloneContext,
@@ -49,8 +48,6 @@ export interface GenerateEmbeddingsResponse {
   payload?: IUserContext;
   contextEmbeddingsIds?: string[];
 }
-
-export const openAIEmbeddingModel = 'text-embedding-ada-002';
 
 async function processPDF(stream: Readable) {
   const chunks = [];
@@ -82,6 +79,7 @@ async function processText(stream: Readable) {
  */
 export async function POST(request: Request) {
   try {
+    const openAIEmbeddingModel = 'text-embedding-ada-002';
     const headers = request.headers;
     const authorization = headers.get('Authorization');
     const refreshToken = headers.get('X-RefreshToken') as string;

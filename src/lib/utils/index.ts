@@ -3,7 +3,7 @@
 import { appRoutes, updatePasswordRoutes } from '@/constants';
 import { AxiosResponse } from 'axios';
 import { type ClassValue, clsx } from 'clsx';
-import { filter, includes, isEmpty } from 'lodash';
+import { filter, includes, isEmpty, split, toString } from 'lodash';
 import { twMerge } from 'tailwind-merge';
 
 export function timeout(ms: number) {
@@ -85,4 +85,24 @@ export function convertURIToBinary(base64: string) {
   }
 
   return arr;
+}
+
+export function blobToBase64(blob: Blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = function (event) {
+      const base64data = split(toString(event?.target?.result), ',')[1];
+
+      resolve(base64data);
+    };
+
+    // Define what happens in case of error
+    reader.onerror = function (error) {
+      reject(error);
+    };
+
+    // Read the blob as DataURL (base64)
+    reader.readAsDataURL(blob);
+  });
 }

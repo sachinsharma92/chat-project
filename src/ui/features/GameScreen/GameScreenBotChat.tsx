@@ -1,15 +1,16 @@
 'use client';
 
 import { useBotChat } from '@/hooks/useBotChat';
-import { MicrophoneIcon, StopIcon } from '@/icons';
+import { MicrophoneIcon } from '@/icons';
 import { useBotData } from '@/store/App';
 import { ChatBotStateContext } from '@/store/ChatBotProvider';
 import { OpenAIRoles } from '@/types';
-import { map } from 'lodash';
+import { map, trimStart } from 'lodash';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import Button from '@/components/common/Button';
+import SpeechToText from '@/components/common/SpeechToText';
 import TextInput from '@/components/common/TextInput';
 import BottomDropdown from '../BottomDropdown/BottomDropdown';
 import BotMessage from '../SpaceContent/BotChat/BotMessage';
@@ -20,7 +21,6 @@ const GameScreenBotChat = () => {
   const { handleSubmit, setValue, register } = useForm();
 
   const { sendChat } = useContext(ChatBotStateContext);
-  const [isRecordingActive, setRecordingActive] = useState(false)
   const [resettingChat, setResettingChat] = useState(false);
 
   const [botRoomIsResponding, recentUserChat, recentBotChat, chatRoom] =
@@ -33,13 +33,24 @@ const GameScreenBotChat = () => {
 
   const chatStreamDomRef = useRef<any>(null);
 
-  const { chatMessages: sanitizedChatMessages,
-    resetChat, } = useBotChat();
+  const {
+    chatMessages: sanitizedChatMessages,
+    isLoading,
+    resetChat,
+  } = useBotChat();
+
+  const [isRecording, setIsRecording] = useState(false);
 
   const handleSendChat = (data: any) => {
     const message = data?.message;
 
-    if (!message || botRoomIsResponding || !chatRoom) {
+    if (
+      !message ||
+      botRoomIsResponding ||
+      !chatRoom ||
+      isLoading ||
+      isRecording
+    ) {
       return;
     }
 
@@ -153,20 +164,45 @@ const GameScreenBotChat = () => {
             ))}
           </div>
 
-          <div className="flex w-full gap-1 px-4">
-            <TextInput
-              {...register('message', {
-                required: false,
-              })}
-              placeholder="Message...."
-              className="chat-form-input text-xs"
-            />
-            {isRecordingActive ? <Button className="chat-btn" onClick={() => setRecordingActive(false)}>
-              <StopIcon />
-            </Button> : <Button className="chat-btn" onClick={() => setRecordingActive(true)}>
-              <MicrophoneIcon />
-            </Button>}
 
+          <div className="flex w-full gap-1 px-4">
+
+            <div className='flex relative gap-1 w-full'>
+              {!isRecording && (
+                <>
+                  <TextInput
+                    {...register('message', {
+                      required: false,
+                    })}
+                    placeholder="Message...."
+                    className="chat-form-input text-xs"
+                  />
+
+                  <Button
+                    className="chat-btn"
+                    onClick={() => {
+                      if (isLoading) {
+                        return;
+                      }
+
+                      setValue('message', '');
+                      setIsRecording(true);
+                    }}
+                    isDisabled={botRoomIsResponding || isLoading}
+                    disabled={botRoomIsResponding}
+                  >
+                    <MicrophoneIcon />
+                  </Button>
+                </>
+              )}
+
+              {isRecording && (
+                <SpeechToText
+                  stopRecording={() => setIsRecording(false)}
+                  consumeText={text => setValue('message', trimStart(text))}
+                />
+              )}
+            </div>
             <BottomDropdown resetHandler={onResetChat} />
           </div>
         </form>

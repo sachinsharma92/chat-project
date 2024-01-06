@@ -1,14 +1,11 @@
 'use client';
 
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
-import {
-  FileIcon,
-  Microphone
-} from '@/icons';
+import { FileIcon, Microphone } from '@/icons';
 import { useAppStore, useBotData } from '@/store/App';
 import { SpaceContentTabEnum } from '@/types';
-import { head } from 'lodash';
-import { useContext, useMemo } from 'react';
+import { head, trimStart } from 'lodash';
+import { useContext, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useBotChat } from '../../../../hooks/useBotChat';
 
@@ -18,6 +15,7 @@ import TextInput from '@/components/common/TextInput';
 import SpaceDescription from '../../SpaceDescription';
 import SpaceLinks from '../../SpaceLinks';
 
+import SpeechToText from '@/components/common/SpeechToText';
 import { ChatBotStateContext } from '@/store/ChatBotProvider';
 import './HomeSpace.css';
 
@@ -28,6 +26,8 @@ const HomeSpace = () => {
   const [botRoomIsResponding] = useBotData(state => [
     state.botRoomIsResponding,
   ]);
+
+  const [isRecording, setIsRecording] = useState(false);
 
   const { isLoading: botChatIsLoading } = useBotChat();
   const { sendChat } = useContext(ChatBotStateContext);
@@ -59,7 +59,7 @@ const HomeSpace = () => {
   const switchToChat = (data: any) => {
     const message = data?.message;
 
-    if (!message || botChatIsLoading) {
+    if (!message || botChatIsLoading || isRecording) {
       return;
     }
 
@@ -89,24 +89,49 @@ const HomeSpace = () => {
           {!botChatIsLoading && <p>{greeting}</p>}
         </div>
 
-        <div className="cta-chat-input-container ">
-          <Button className="attach-file">
-            <FileIcon />
-          </Button>
-          <TextInput
-            {...register('message', {
-              required: false,
-            })}
-            placeholder="Message...."
-            // @ts-ignore
-            maxLength={120}
-          />
-          <Button className="mic">
-            <Microphone />
-          </Button>
+        <div className="cta-chat-input-container">
+          {!isRecording && (
+            <>
+              <Button className="attach-file">
+                <FileIcon />
+              </Button>
+              <TextInput
+                className="cta-chat-input-container-text-input"
+                {...register('message', {
+                  required: false,
+                })}
+                placeholder="Message...."
+                // @ts-ignore
+                maxLength={120}
+              />
+              <Button
+                className="mic"
+                onClick={() => {
+                  if (botChatIsLoading || botRoomIsResponding) {
+                    return;
+                  }
+
+                  setValue('message', '');
+                  setIsRecording(true);
+                }}
+                isDisabled={botRoomIsResponding || botChatIsLoading}
+              >
+                <Microphone />
+              </Button>
+            </>
+          )}
+
+          {isRecording && (
+            <SpeechToText
+              stopRecording={() => setIsRecording(false)}
+              consumeText={text => setValue('message', trimStart(text))}
+            />
+          )}
         </div>
 
-        <div className='bg-[#f5f5f5] rounded-xl mt-4 py-2 text-center text-black font-semibold'>Botnet is free to use during the public beta</div>
+        <div className="bg-[#f5f5f5] rounded-xl mt-4 py-2 text-center text-black font-semibold">
+          Botnet is free to use during the public beta
+        </div>
       </form>
     </>
   );

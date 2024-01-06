@@ -4,7 +4,7 @@ import { EyeOpenIcon, FileIcon, Microphone, ResetIcon } from '@/icons';
 import { useForm } from 'react-hook-form';
 import { useBotData } from '@/store/App';
 import { useContext, useEffect, useRef, useState } from 'react';
-import { map } from 'lodash';
+import { map, trimStart } from 'lodash';
 import { OpenAIRoles } from '@/types';
 import { ChatBotStateContext } from '@/store/ChatBotProvider';
 import { useBotChat } from '@/hooks/useBotChat';
@@ -14,6 +14,7 @@ import Button from '@/components/common/Button';
 import BotMessage from './BotMessage';
 import UserMessage from './UserMessage';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
+import SpeechToText from '@/components/common/SpeechToText';
 
 import './BotChat.css';
 
@@ -38,12 +39,14 @@ const BotChat = () => {
 
   const [resettingChat, setResettingChat] = useState(false);
 
+  const [isRecording, setIsRecording] = useState(false);
+
   const chatStreamDomRef = useRef<any>(null);
 
   const handleChat = async (data: any) => {
     const message = data?.message;
 
-    if (!message || resettingChat || botRoomIsResponding) {
+    if (!message || resettingChat || botRoomIsResponding || isRecording) {
       return;
     }
 
@@ -154,21 +157,44 @@ const BotChat = () => {
           onSubmit={handleSubmit(handleChat)}
           className="chat-input-container"
         >
-          <Button className="attach-file">
-            <FileIcon />
-          </Button>
-          <TextInput
-            {...register('message', {
-              required: false,
-            })}
-            placeholder="Message...."
-            className="chat-form-input"
-            // @ts-ignore
-            maxLength={120}
-          />
-          <Button className="mic">
-            <Microphone />
-          </Button>
+          {!isRecording && (
+            <>
+              <Button className="attach-file">
+                <FileIcon />
+              </Button>
+              <TextInput
+                {...register('message', {
+                  required: false,
+                })}
+                placeholder="Message...."
+                className="chat-form-input"
+                // @ts-ignore
+                maxLength={120}
+              />
+              <Button
+                className="mic"
+                onClick={() => {
+                  if (isLoading) {
+                    return;
+                  }
+
+                  setValue('message', '');
+                  setIsRecording(true);
+                }}
+                isDisabled={botRoomIsResponding || isLoading}
+                disabled={botRoomIsResponding}
+              >
+                <Microphone />
+              </Button>
+            </>
+          )}
+
+          {isRecording && (
+            <SpeechToText
+              stopRecording={() => setIsRecording(false)}
+              consumeText={text => setValue('message', trimStart(text))}
+            />
+          )}
         </form>
       )}
 

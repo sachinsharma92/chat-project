@@ -8,9 +8,9 @@ import {
   returnCommonStatusError,
 } from '@/lib/utils/routes';
 import { getOpenAI } from '@/lib/openai';
-import { applyApiRoutesAuth } from '../bot-chat/route';
 import { last, toString } from 'lodash';
 import axios from 'axios';
+import { applyApiRoutesAuth } from '@/lib/supabase';
 
 export interface GenerateBackgroundPostResponse {
   url: string;

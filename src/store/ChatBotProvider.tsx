@@ -389,7 +389,8 @@ const ChatBotProvider = (props: { children?: ReactNode }) => {
       connectingChatroom ||
       chatRoom ||
       !botServerColyseusClient ||
-      authIsLoading
+      authIsLoading ||
+      !userId
     ) {
       return;
     }
@@ -495,7 +496,12 @@ const ChatBotProvider = (props: { children?: ReactNode }) => {
    */
   useEffect(() => {
     const init = () => {
-      if (botServerColyseusClient || !spaceId || (authIsLoading && !email)) {
+      if (
+        botServerColyseusClient ||
+        !spaceId ||
+        (authIsLoading && !email) ||
+        !userId
+      ) {
         return;
       }
 
@@ -523,6 +529,7 @@ const ChatBotProvider = (props: { children?: ReactNode }) => {
 
     init();
   }, [
+    userId,
     spaceId,
     botServerColyseusClient,
     authIsLoading,
