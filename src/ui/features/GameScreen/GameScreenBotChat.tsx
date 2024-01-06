@@ -13,7 +13,7 @@ import Button from '@/components/common/Button';
 import SpeechToText from '@/components/common/SpeechToText';
 import TextInput from '@/components/common/TextInput';
 import WaveSurfer from "wavesurfer.js";
-import RecordPlugin from "wavesurfer.js/dist/plugins/record";
+import RecordPlugin from "wavesurfer.js/dist/plugins/record.js";
 import BottomDropdown from '../BottomDropdown/BottomDropdown';
 import BotMessage from '../SpaceContent/BotChat/BotMessage';
 import UserMessage from '../SpaceContent/BotChat/UserMessage';
