@@ -144,7 +144,9 @@ const GameScreenBotChat = () => {
 
   const handleRecord = () => {
     if (record) {
+      // @ts-ignore: Unreachable code error
       record.startRecording()
+
     }
     console.log(record, 'check record');
   };
