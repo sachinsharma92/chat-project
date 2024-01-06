@@ -1,5 +1,5 @@
 .user-message {
-  @apply relative flex justify-end items-end gap-1;
+  @apply relative flex justify-start items-end gap-1;
 }
 
 .user-message > .msg-box {

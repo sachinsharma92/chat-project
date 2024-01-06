@@ -15,6 +15,7 @@ const GameScreen = dynamic(() => import('../GameScreen'));
 const MainComponent = () => {
   const refMainComponent = useRef(null);
   const [isFullScreen, setFullScreen] = useState(false);
+  const [theme, setTheme] = useState('')
 
   const { availableWidth } = useWindowResize();
   const [minimizeMed, setMinimizeMed] = useState(true);
@@ -57,25 +58,16 @@ const MainComponent = () => {
     }
   }
 
-
-  const [theme, setTheme] = useState('')
-
   useEffect(() => {
-    let isDark = typeof window.matchMedia === 'function' &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches
-
-    if (isDark) {
-      setTheme('dark')
-    }
-    else {
-      setTheme('')
-    }
-
-
-    console.log(isDark, 'check dark msss');
-
+    window.matchMedia('(prefers-color-scheme: dark)')
+      .addEventListener('change', ({ matches }) => {
+        if (matches) {
+          setTheme('dark')
+        } else {
+          setTheme('')
+        }
+      })
   }, [])
-
 
 
   return (

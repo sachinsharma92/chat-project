@@ -122,19 +122,19 @@ const SpaceContent: FC<SpaceContentProps> = ({ fullScreenHandler, isFullScreen }
 
         <div className='flex w-full gap-1'>
           <Button
-            className="text-black dark:text-white uppercase bg-white dark:bg-black border border-black h-[22px] flex justify-center items-center text-xs w-full hover:opacity-60 transition-btn"
+            className="text-black dark:text-white uppercase bg-white dark:bg-black border border-black h-[22px] flex justify-center items-center text-xs w-full hover:opacity-60 transition-btn leading-[22px]"
           >
             Chat
           </Button>
           <Button
-            className="text-black dark:text-white uppercase bg-white dark:bg-black border border-black h-[22px] flex justify-center items-center text-xs w-full hover:opacity-60 transition-btn"
+            className="text-black dark:text-white uppercase bg-white dark:bg-black border border-black h-[22px] flex justify-center items-center text-xs w-full hover:opacity-60 transition-btn leading-[22px]"
           >
             <span className="w-1 h-1 bg-black dark:bg-white rounded-full mr-1"></span>
             <div className="flex align-top gap-[2px]">LIVE <span className="align-sub text-[8px]"> 231</span></div>
           </Button>
           <Button
             onClick={() => setGiftSelect(true)}
-            className="text-black dark:text-white uppercase bg-white dark:bg-black border border-black h-[22px] flex justify-center items-center text-xs w-full hover:opacity-60 transition-btn"
+            className="text-black dark:text-white uppercase bg-white dark:bg-black border border-black h-[22px] flex justify-center items-center text-xs w-full hover:opacity-60 transition-btn leading-[22px]"
           >
             Gift
           </Button>
