@@ -1,5 +1,4 @@
 'use client';
-
 import { useBotChat } from '@/hooks/useBotChat';
 import { MicrophoneIcon } from '@/icons';
 import { useBotData } from '@/store/App';

@@ -146,6 +146,7 @@ const SpaceContent: FC<SpaceContentProps> = ({ fullScreenHandler, isFullScreen }
       {isCreateAccount && (
         <CreateAccount
           closeHandler={() => setCreateAccount(false)}
+          overlayHandler={() => setCreateAccount(false)}
         />
       )}
 

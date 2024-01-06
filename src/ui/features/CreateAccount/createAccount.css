@@ -1,6 +1,28 @@
 .create-account {
+  @apply border-black dark:border-transparent;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 2;
+  border-width: 0.5px;
+  border-style: solid;
+}
+
+.create-account-btn {
+  @apply mt-3 text-sm focus:bg-black dark:focus:bg-white focus:text-white dark:focus:text-black relative px-3 h-[36px] text-black dark:text-white border-black dark:border-white;
+  width: 100%;
+  background: transparent;
+  border-width: 0.5px;
+  border-style: solid;
+}
+
+.create-popup::before {
+  background: rgba(256, 256, 256, 0.5);
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  content: '';
+  z-index: 1;
+  top: 0;
 }
