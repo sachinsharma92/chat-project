@@ -1,0 +1,30 @@
+.ReactModal__Overlay {
+  background-color: rgba(256, 256, 256, 0.4) !important;
+  display: flex;
+  width: 100%;
+  position: fixed;
+  inset: 0px;
+}
+
+.modal-center {
+  align-items: center;
+}
+
+.modal-end {
+  align-items: flex-end;
+}
+
+.dialog-section {
+  animation: contentShow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 100%;
+}
+
+@keyframes contentShow {
+  from {
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

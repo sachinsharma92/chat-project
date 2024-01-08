@@ -3,10 +3,6 @@
   height: 100%;
 }
 
-.popup-style {
-  min-height: 100vh;
-}
-
 .space-content-header {
   @apply relative flex justify-start items-start w-full sm:mt-[24px] gap-1 flex-col;
 }

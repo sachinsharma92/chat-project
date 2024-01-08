@@ -1,4 +1,6 @@
 'use client';
+
+
 import Button from '@/components/common/Button';
 import Popover from '@/components/common/Popover';
 
@@ -8,10 +10,9 @@ import './BottomDropdown.css';
 
 interface BottomDropdownProps {
   resetHandler?: () => void;
-  hideChatHandler?: () => void;
 }
 
-const BottomDropdown: FC<BottomDropdownProps> = ({ resetHandler, hideChatHandler }) => {
+const BottomDropdown: FC<BottomDropdownProps> = ({ resetHandler }) => {
   const [popoverToggle, setPopoverToggle] = useState(false);
 
   const resetHandlerFnc = () => {
@@ -36,11 +37,6 @@ const BottomDropdown: FC<BottomDropdownProps> = ({ resetHandler, hideChatHandler
           <li>
             <Button className='p-0' onClick={resetHandlerFnc}>
               <p>Reset chat</p>
-            </Button>
-          </li>
-          <li>
-            <Button className='p-0' onClick={hideChatHandler}>
-              <p>Hide chat</p>
             </Button>
           </li>
         </ul>

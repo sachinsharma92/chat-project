@@ -1,0 +1,11 @@
+.login-account {
+  @apply border-black dark:border-transparent w-full;
+}
+
+.login-account-btn {
+  @apply mt-3 text-sm focus:bg-black dark:focus:bg-white focus:text-white dark:focus:text-black relative px-3 h-[36px] text-black dark:text-white border-black dark:border-white;
+  width: 100%;
+  background: transparent;
+  border-width: 0.5px;
+  border-style: solid;
+}
