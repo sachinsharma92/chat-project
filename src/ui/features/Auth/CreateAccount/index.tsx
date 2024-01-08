@@ -3,7 +3,7 @@ import TextInput from '@/components/common/TextInput';
 import Link from 'next/link';
 
 import { FC } from 'react';
-import './createAccount.css';
+import './CreateAccountStyle.css';
 
 interface CreateAccountProps {
   closeHandler?: () => void;
