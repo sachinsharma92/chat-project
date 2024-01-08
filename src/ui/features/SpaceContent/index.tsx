@@ -12,7 +12,6 @@ import SpaceDescription from '../SpaceDescription';
 import ShareSheet from '@/ui/shareSheet';
 import { TriangleDownIcon, TriangleUpIcon } from '@radix-ui/react-icons';
 import './SpaceContent.css';
-import { mobileWidthBreakpoint } from '@/constants';
 
 const HomeSpace = dynamic(() => import('./HomeSpace'), { ssr: false });
 
