@@ -1,25 +1,22 @@
 'use client';
 
-import { ChatMessageProps } from '@/types';
-import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import Avatar from '@/components/common/Avatar/Avatar';
-import { useMemo } from 'react';
+import { useBotnetAuth } from '@/store/Auth';
+import { ChatMessageProps } from '@/types';
 import './UserMessage.css';
 
 const UserMessage = (props: Partial<ChatMessageProps>) => {
   const { message } = props;
-  const { spaceInfo } = useSelectedSpace();
-  const assistantDisplayImage = useMemo(
-    () =>
-      spaceInfo?.image || spaceInfo?.host?.image || '/assets/default-user.svg',
-    [spaceInfo],
-  );
-  const displayName = useMemo(() => spaceInfo?.host?.displayName, [spaceInfo]);
+  const [image, displayName] = useBotnetAuth(state => [
+    state.image,
+    state.displayName,
+  ]);
+
 
   return (
     <div className="user-message">
       <div className="bot-message-avatar">
-        <Avatar src={assistantDisplayImage} name={displayName} className="rounded-none" />
+        <Avatar src={image || '/assets/default-user.svg'} name={displayName} className="rounded-none" />
       </div>
       <p className="msg-box">{message}</p>
     </div>

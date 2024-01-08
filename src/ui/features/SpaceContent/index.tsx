@@ -9,6 +9,7 @@ import CreateAccount from '../CreateAccount';
 import GiftCard from '../GiftCard';
 import SpaceDescription from '../SpaceDescription';
 
+import ShareSheet from '@/ui/shareSheet';
 import { TriangleDownIcon, TriangleUpIcon } from '@radix-ui/react-icons';
 import './SpaceContent.css';
 
@@ -25,6 +26,7 @@ const SpaceContent: FC<SpaceContentProps> = ({ fullScreenHandler, isFullScreen }
   const [isCreateAccount, setCreateAccount] = useState(false);
   const [isGiftSelect, setGiftSelect] = useState(false);
   const [isInfoSection, setInfoSection] = useState(false);
+  const [isShareSheet, setShareSheet] = useState(false);
 
   const spaceBotInfo = useMemo(() => head(spaceInfo?.bots), [spaceInfo]);
 
@@ -58,7 +60,7 @@ const SpaceContent: FC<SpaceContentProps> = ({ fullScreenHandler, isFullScreen }
   }
 
   return (
-    <div className={`space-content-container ${isGiftSelect && 'popup-style' || isCreateAccount && 'popup-style'}`}>
+    <div className={`space-content-container ${isGiftSelect && 'popup-style' || isCreateAccount && 'popup-style' || isShareSheet && 'popup-style'}`}>
       <div className="space-content-header p-4">
         <div className="flex gap-1 w-full">
           <div className="bg-white dark:bg-black min-w-[36px] h-9 max-h-[36px] flex justify-center items-center border border-black dark:border-0 button-svg-theme">
@@ -150,9 +152,17 @@ const SpaceContent: FC<SpaceContentProps> = ({ fullScreenHandler, isFullScreen }
         />
       )}
 
+      {isShareSheet && < ShareSheet
+        closeHandler={() => setShareSheet(false)}
+        overlayHandler={() => setShareSheet(false)} />
+      }
+
       {/* Gift component here */}
       {isGiftSelect && (
-        <GiftCard closeHandler={() => setGiftSelect(false)} />
+        <GiftCard
+          closeHandler={() => setGiftSelect(false)}
+          overlayHandler={() => setGiftSelect(false)}
+        />
       )}
 
       <HomeSpace />

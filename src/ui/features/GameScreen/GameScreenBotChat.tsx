@@ -137,7 +137,7 @@ const GameScreenBotChat = () => {
     });
 
     const recordTest = wavesurfer.registerPlugin(
-      RecordPlugin.create({ scrollingWaveform: false })
+      RecordPlugin.create({ scrollingWaveform: true })
     );
     setRecord(recordTest)
   };
@@ -152,6 +152,9 @@ const GameScreenBotChat = () => {
   };
 
   useEffect(() => {
+    // if (isRecording) {
+    //   createWaveSurfer();
+    // }
     createWaveSurfer();
   }, []);
 
@@ -242,7 +245,7 @@ const GameScreenBotChat = () => {
                   consumeText={text => setValue('message', trimStart(text))}
                 />
               )}
-              <div id='wave' className="h-[23px] absolute w-[100px] top-[5px] left-[10px] z-50 bg-black" />
+              <div id='wave' className="h-[23px] absolute w-[82%] top-[5px] left-[10px] z-50 bg-black" />
             </div>
             <BottomDropdown resetHandler={onResetChat} />
           </div>

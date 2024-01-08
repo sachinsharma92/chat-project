@@ -46,3 +46,5 @@ export { default as UnionIcon } from './UnionIcon';
 export { default as MoreIcon } from './MoreIcon';
 export { default as MicrophoneIcon } from './MicrophoneIcon';
 export { default as StopIcon } from './StopIcon';
+export { default as RedditIcon } from './RedditIcon';
+export { default as FacebookIcon } from './FacebookIcon';
