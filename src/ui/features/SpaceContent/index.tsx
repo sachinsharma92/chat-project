@@ -176,10 +176,10 @@ const SpaceContent: FC<SpaceContentProps> = ({
 
         {/* Header Buttons */}
         <div className="flex w-full gap-1">
-          <Button className="text-black dark:text-white uppercase bg-white dark:bg-black border border-black h-[22px] text-xs w-full hover:opacity-60 transition-btn leading-[1.5] inline-block">
+          <Button className="text-black dark:text-white uppercase bg-white dark:bg-black border border-black h-[22px] text-xs w-full hover:opacity-60 transition-btn leading-[1.3] inline-block">
             Chat
           </Button>
-          <Button className="text-black dark:text-white uppercase bg-white dark:bg-black border border-black h-[22px] text-xs w-full hover:opacity-60 transition-btn leading-[1.5] inline-block">
+          <Button className="text-black dark:text-white uppercase bg-white dark:bg-black border border-black h-[22px] text-xs w-full hover:opacity-60 transition-btn leading-[1.3] inline-block">
             <div className="flex justify-center items-top gap-[2px]">
               {' '}
               <span className="w-1 h-1 bg-black dark:bg-white rounded-full relative top-[4.5px] mr-[1px]" />{' '}
@@ -188,7 +188,7 @@ const SpaceContent: FC<SpaceContentProps> = ({
           </Button>
           <Button
             onClick={() => setGiftSelect(true)}
-            className="text-black dark:text-white uppercase bg-white dark:bg-black border border-black h-[22px] text-xs w-full hover:opacity-60 transition-btn leading-[1.5] inline-block"
+            className="text-black dark:text-white uppercase bg-white dark:bg-black border border-black h-[22px] text-xs w-full hover:opacity-60 transition-btn leading-[1.3] inline-block"
           >
             Gift
           </Button>

@@ -96,7 +96,7 @@
 }
 
 .subscribe {
-  @apply relative h-[22px] w-[61px] text-white dark:text-black text-xs uppercase p-0 pt-[2px] !bg-black dark:!bg-white;
+  @apply relative h-[22px] w-[61px] text-white dark:text-black text-xs uppercase p-0 !bg-black dark:!bg-white;
 }
 
 .transition-btn {
