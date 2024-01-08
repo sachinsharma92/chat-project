@@ -14,7 +14,6 @@ import WaveSurfer from "wavesurfer.js";
 import RecordPlugin from "wavesurfer.js/dist/plugins/record.js";
 
 import LoadingSpinner from '@/components/common/LoadingSpinner';
-// import AnimatedAudioWave from '../AnimatedAudioWave';
 
 import { StopIcon } from '@/icons';
 import './SpeechToText.css';
@@ -35,8 +34,6 @@ const SpeechToText = (props: SpeechToTextComponentProps) => {
   let wavesurfer, record;
 
   const timerRef = useRef<NodeJS.Timeout | number | null>(null);
-
-  const [time, setTime] = useState<number>(0);
 
   const isRecordingRef = useRef(false);
 
@@ -60,8 +57,6 @@ const SpeechToText = (props: SpeechToTextComponentProps) => {
         mediaRecorderRef.current.stop();
       }
 
-      stopTimer();
-
       if (recordingError) {
         stopRecording();
         console.log('stopRecording()');
@@ -72,24 +67,6 @@ const SpeechToText = (props: SpeechToTextComponentProps) => {
       console.log('handleStopClick() err:', err?.message);
     }
   }, [transcribing, recordingError, stopRecording]);
-
-  const startTimer = useCallback(() => {
-    if (timerRef.current !== null) {
-      return;
-    }
-
-    timerRef.current = setInterval(() => {
-      setTime(prevTime => {
-        // max 30 seconds record
-
-        if (prevTime >= 30) {
-          handleStopClick();
-        }
-
-        return prevTime + 1;
-      });
-    }, 1000);
-  }, [handleStopClick]);
 
   const startRecording = useCallback(async () => {
     try {
@@ -146,34 +123,13 @@ const SpeechToText = (props: SpeechToTextComponentProps) => {
       console.log('startRecording()');
 
       isRecordingRef.current = true;
-      startTimer();
+
     } catch (err: any) {
       console.log('startRecording() err:', err?.message);
 
       setRecordingError(err?.message || '');
-      stopTimer();
     }
-  }, [userId, startTimer, stopRecording, consumeText]);
-
-  const stopTimer = () => {
-    clearInterval(timerRef.current as number);
-
-    setTime(0); // Reset time when stopping the recording
-  };
-
-  /**
-   * Formats time to: MM:SS
-   * @param totalSeconds
-   * @returns
-   */
-  const formatTime = (totalSeconds: number) => {
-    const minutes = Math.floor(totalSeconds / 60);
-    const remainingSeconds = totalSeconds % 60;
-
-    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds
-      .toString()
-      .padStart(2, '0')}`;
-  };
+  }, [userId, stopRecording, consumeText]);
 
   /**
    * Auto start recording on mount
@@ -221,10 +177,7 @@ const SpeechToText = (props: SpeechToTextComponentProps) => {
   useEffect(() => {
     createWaveSurfer();
     if (record) {
-      record
-        .startRecording({})
-        .then((res) => console.log("success"))
-        .catch((e) => console.log(e, "record error"));
+      record.startRecording()
     }
   }, [record]);
 

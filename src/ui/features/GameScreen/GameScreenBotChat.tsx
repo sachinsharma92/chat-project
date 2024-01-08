@@ -75,8 +75,8 @@ const GameScreenBotChat = () => {
   };
 
   /**
- * Clear chat array
- */
+   * Clear chat array
+   */
   const onResetChat = async () => {
     try {
       if (resettingChat) {
@@ -117,42 +117,6 @@ const GameScreenBotChat = () => {
     'Yeah I mean I guess...',
     'Yeah I mean I guess...',
   ];
-
-
-  // const createWaveSurfer = () => {
-  //   if (wavesurfer) { wavesurfer.destroy() }
-
-  //   wavesurfer = WaveSurfer.create({
-  //     container: "#wave",
-  //     waveColor: "white",
-  //     progressColor: "green",
-  //     barWidth: 2,
-  //     barGap: 5,
-  //     barRadius: 20,
-  //     height: 20,
-  //     audioRate: 10
-  //   });
-
-  //   const recordTest = wavesurfer.registerPlugin(
-  //     RecordPlugin.create({ scrollingWaveform: true })
-  //   );
-  //   setRecord(recordTest)
-  // };
-
-  // const handleRecord = () => {
-  //   if (record) {
-  //     // @ts-ignore: Unreachable code error
-  //     record.startRecording()
-
-  //   }
-  //   console.log(record, 'check record');
-  // };
-
-  // useEffect(() => {
-  //   createWaveSurfer();
-  // }, []);
-
-
 
   return (
     <div className="game-screen-bot-chat">
@@ -203,7 +167,7 @@ const GameScreenBotChat = () => {
           </div>
 
           <div className="flex w-full gap-1 px-4">
-            <div className='flex relative gap-1 w-full'>
+            <div className="flex relative gap-1 w-full">
               {!isRecording && (
                 <>
                   <TextInput
@@ -239,7 +203,6 @@ const GameScreenBotChat = () => {
                   consumeText={text => setValue('message', trimStart(text))}
                 />
               )}
-
             </div>
             <BottomDropdown resetHandler={onResetChat} />
           </div>
