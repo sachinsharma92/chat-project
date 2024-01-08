@@ -11,8 +11,6 @@ import { useForm } from 'react-hook-form';
 import Button from '@/components/common/Button';
 import SpeechToText from '@/components/common/SpeechToText';
 import TextInput from '@/components/common/TextInput';
-import WaveSurfer from "wavesurfer.js";
-import RecordPlugin from "wavesurfer.js/dist/plugins/record.js";
 import BottomDropdown from '../BottomDropdown/BottomDropdown';
 import BotMessage from '../SpaceContent/BotChat/BotMessage';
 import UserMessage from '../SpaceContent/BotChat/UserMessage';
@@ -20,10 +18,9 @@ import UserMessage from '../SpaceContent/BotChat/UserMessage';
 import './GameScreenBotChat.css';
 
 const GameScreenBotChat = () => {
-  const [record, setRecord] = useState();
-  let wavesurfer;
-
   const { handleSubmit, setValue, register } = useForm();
+  // const [record, setRecord] = useState();
+  // let wavesurfer;
 
   const { sendChat } = useContext(ChatBotStateContext);
   const [resettingChat, setResettingChat] = useState(false);
@@ -122,41 +119,38 @@ const GameScreenBotChat = () => {
   ];
 
 
-  const createWaveSurfer = () => {
-    if (wavesurfer) { wavesurfer.destroy() }
+  // const createWaveSurfer = () => {
+  //   if (wavesurfer) { wavesurfer.destroy() }
 
-    wavesurfer = WaveSurfer.create({
-      container: "#wave",
-      waveColor: "white",
-      progressColor: "green",
-      barWidth: 2,
-      barGap: 5,
-      barRadius: 20,
-      height: 20,
-      audioRate: 10
-    });
+  //   wavesurfer = WaveSurfer.create({
+  //     container: "#wave",
+  //     waveColor: "white",
+  //     progressColor: "green",
+  //     barWidth: 2,
+  //     barGap: 5,
+  //     barRadius: 20,
+  //     height: 20,
+  //     audioRate: 10
+  //   });
 
-    const recordTest = wavesurfer.registerPlugin(
-      RecordPlugin.create({ scrollingWaveform: true })
-    );
-    setRecord(recordTest)
-  };
+  //   const recordTest = wavesurfer.registerPlugin(
+  //     RecordPlugin.create({ scrollingWaveform: true })
+  //   );
+  //   setRecord(recordTest)
+  // };
 
-  const handleRecord = () => {
-    if (record) {
-      // @ts-ignore: Unreachable code error
-      record.startRecording()
+  // const handleRecord = () => {
+  //   if (record) {
+  //     // @ts-ignore: Unreachable code error
+  //     record.startRecording()
 
-    }
-    console.log(record, 'check record');
-  };
+  //   }
+  //   console.log(record, 'check record');
+  // };
 
-  useEffect(() => {
-    // if (isRecording) {
-    //   createWaveSurfer();
-    // }
-    createWaveSurfer();
-  }, []);
+  // useEffect(() => {
+  //   createWaveSurfer();
+  // }, []);
 
 
 
@@ -219,7 +213,7 @@ const GameScreenBotChat = () => {
                     placeholder="Message...."
                     className="chat-form-input text-xs"
                   />
-                  <div onClick={handleRecord}>
+                  <div>
                     <Button
                       className="chat-btn"
                       onClick={() => {
@@ -245,7 +239,7 @@ const GameScreenBotChat = () => {
                   consumeText={text => setValue('message', trimStart(text))}
                 />
               )}
-              <div id='wave' className="h-[23px] absolute w-[82%] top-[5px] left-[10px] z-50 bg-black" />
+
             </div>
             <BottomDropdown resetHandler={onResetChat} />
           </div>

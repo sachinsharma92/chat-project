@@ -10,12 +10,14 @@ import { useAuth } from '@/hooks';
 import { blobToBase64 } from '@/lib/utils';
 import { Tooltip } from '@radix-ui/react-tooltip';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import WaveSurfer from "wavesurfer.js";
+import RecordPlugin from "wavesurfer.js/dist/plugins/record.js";
 
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 // import AnimatedAudioWave from '../AnimatedAudioWave';
 
-import './SpeechToText.css';
 import { StopIcon } from '@/icons';
+import './SpeechToText.css';
 
 export type SpeechToTextComponentProps = {
   stopRecording: () => void;
@@ -30,6 +32,7 @@ export type SpeechToTextComponentProps = {
  */
 const SpeechToText = (props: SpeechToTextComponentProps) => {
   const { stopRecording, consumeText } = props;
+  let wavesurfer, record;
 
   const timerRef = useRef<NodeJS.Timeout | number | null>(null);
 
@@ -195,17 +198,47 @@ const SpeechToText = (props: SpeechToTextComponentProps) => {
   }, []);
 
 
+  const createWaveSurfer = () => {
+    if (wavesurfer) { wavesurfer.destroy() }
+
+    wavesurfer = WaveSurfer.create({
+      container: "#wave",
+      waveColor: "white",
+      progressColor: "green",
+      barWidth: 2,
+      barGap: 5,
+      barRadius: 20,
+      height: 20,
+      audioRate: 10
+    });
+
+    record = wavesurfer.registerPlugin(
+      RecordPlugin.create({ scrollingWaveform: true })
+    );
+    // setRecord(recordTest)
+  };
+
+  useEffect(() => {
+    createWaveSurfer();
+    if (record) {
+      record
+        .startRecording({})
+        .then((res) => console.log("success"))
+        .catch((e) => console.log(e, "record error"));
+    }
+  }, [record]);
+
 
   return (
     <TooltipProvider>
       <div className="speech-to-text">
         <div className="speech-to-text-left">
           {transcribing && <LoadingSpinner width={20} />}
-          {/* {!transcribing && <AnimatedAudioWave />} */}
+          {!transcribing && <div id='wave' className="h-[23px] absolute w-[70vw] top-[7px] left-[10px] z-50 bg-black" />}
 
-          {!transcribing && (
+          {/* {!transcribing && (
             <p className="speech-to-text-time">{formatTime(time)}</p>
-          )}
+          )} */}
         </div>
         <div className="speech-to-text-right">
           <Tooltip>
