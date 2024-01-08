@@ -187,7 +187,7 @@ const SpeechToText = (props: SpeechToTextComponentProps) => {
       <div className="speech-to-text">
         <div className="speech-to-text-left">
           {transcribing && <LoadingSpinner width={20} />}
-          {!transcribing && <div id='wave' className="h-[23px] absolute w-[70vw] top-[7px] left-[10px] z-50 bg-black" />}
+          {!transcribing && <div id='wave' className="h-[23px] absolute w-[68vw] top-[7px] left-[10px] z-50 bg-black" />}
 
           {/* {!transcribing && (
             <p className="speech-to-text-time">{formatTime(time)}</p>

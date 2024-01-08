@@ -13,10 +13,9 @@ import {
 
 interface ShareSheetProps {
   closeHandler?: () => void;
-  overlayHandler?: () => void;
 }
 
-const ShareSheet: FC<ShareSheetProps> = ({ closeHandler, overlayHandler }) => {
+const ShareSheet: FC<ShareSheetProps> = ({ closeHandler }) => {
   const shareList = [
     {
       icon: <DiscordIcon />,
