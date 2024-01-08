@@ -12,6 +12,7 @@ import SpaceDescription from '../SpaceDescription';
 import ShareSheet from '@/ui/shareSheet';
 import { TriangleDownIcon, TriangleUpIcon } from '@radix-ui/react-icons';
 import './SpaceContent.css';
+import { mobileWidthBreakpoint } from '@/constants';
 
 const HomeSpace = dynamic(() => import('./HomeSpace'), { ssr: false });
 
@@ -27,6 +28,8 @@ const SpaceContent: FC<SpaceContentProps> = ({ fullScreenHandler, isFullScreen }
   const [isGiftSelect, setGiftSelect] = useState(false);
   const [isInfoSection, setInfoSection] = useState(false);
   const [isShareSheet, setShareSheet] = useState(false);
+
+  const [isDesktopShareModal, setDesktopShareModal] = useState(false)
 
   const spaceBotInfo = useMemo(() => head(spaceInfo?.bots), [spaceInfo]);
 
@@ -46,18 +49,43 @@ const SpaceContent: FC<SpaceContentProps> = ({ fullScreenHandler, isFullScreen }
   }, [spaceInfo]);
 
 
+  function detectMob() {
+    const toMatch = [
+      /Android/i,
+      /webOS/i,
+      /iPhone/i,
+      /iPad/i,
+      /iPod/i,
+      /BlackBerry/i,
+      /Windows Phone/i
+    ];
+
+    return toMatch.some((toMatchItem) => {
+      return navigator.userAgent.match(toMatchItem);
+    });
+  }
+
+  console.log(detectMob(), "check detectMob");
+
+
   // Sharing Sheet code
   const shareScreenToggle = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: 'Botnet',
-        url: 'https://botnet.com/',
-      }).then(() => console.log('Share Successfully')).catch((e) => console.log(e))
+    if (detectMob()) {
+      if (navigator.share) {
+        navigator.share({
+          title: 'Botnet',
+          url: 'https://botnet.com/',
+        }).then(() => console.log('Share Successfully')).catch((e) => console.log(e))
+      }
+      else {
+        console.log('sharing not support');
+      }
     }
     else {
-      console.log('sharing not support');
+      setDesktopShareModal(true)
     }
   }
+
 
   return (
     <div className={`space-content-container ${isGiftSelect && 'popup-style' || isCreateAccount && 'popup-style' || isShareSheet && 'popup-style'}`}>
@@ -152,7 +180,7 @@ const SpaceContent: FC<SpaceContentProps> = ({ fullScreenHandler, isFullScreen }
         />
       )}
 
-      {isShareSheet && < ShareSheet
+      {isDesktopShareModal && < ShareSheet
         closeHandler={() => setShareSheet(false)}
         overlayHandler={() => setShareSheet(false)} />
       }
