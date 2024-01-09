@@ -41,7 +41,7 @@ const GiftCard: FC<GiftCardProps> = ({ closeHandler }) => {
   return (
     <div className="gift-card bg-white dark:bg-black p-4 w-full mt-4 bottom-0 rounded-t-[10px] z-10">
       <div className="flex justify-between">
-        <h4 className="text-xs uppercase text-black dark:text-white">Gift</h4>
+        <h4 className="text-xs uppercase text-black dark:text-white font-medium">Gift</h4>
         <Button className="text-xs text-black dark:text-white p-0" onClick={closeHandler}>
           Close
         </Button>
@@ -52,7 +52,7 @@ const GiftCard: FC<GiftCardProps> = ({ closeHandler }) => {
           <Button
             key={index}
             onClick={() => setSelectedGift(index)}
-            className={`text-sm uppercase justify-start ${index === selectedGift ? 'btn-active' : 'btn-gift'
+            className={`text-sm capitalize justify-start ${index === selectedGift ? 'btn-active' : 'btn-gift'
               }`}
           >
             {items.btnText}

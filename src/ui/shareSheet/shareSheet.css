@@ -1,13 +1,8 @@
 .share-sheet {
   @apply border-black dark:border-transparent;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   z-index: 2;
   border-width: 0.5px;
   border-style: solid;
-  max-width: 300px;
 }
 
 .share-btn {
@@ -17,6 +12,7 @@
   border-width: 0.5px;
   border-style: solid;
   text-transform: capitalize;
+  text-align: left;
 }
 
 .share-btn:hover span {

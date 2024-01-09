@@ -55,7 +55,7 @@ const ShareSheet: FC<ShareSheetProps> = ({ closeHandler }) => {
   return (
     <div className="share-sheet bg-white dark:bg-black p-4 w-full">
       <div className="flex justify-between">
-        <h4 className="text-xs uppercase text-black dark:text-white">
+        <h4 className="text-xs uppercase text-black dark:text-white font-medium">
           Share to
         </h4>
         <Button
@@ -72,14 +72,14 @@ const ShareSheet: FC<ShareSheetProps> = ({ closeHandler }) => {
               className={`share-btn gap-2 ${item.className}`}
               href={item.linkUrl}
             >
-              <div>{item.icon}</div>
-              <span> {item.link}</span>
+              {item.icon && <div>{item.icon}</div>}
+              <span>{item.link}</span>
             </Link>
           </li>
         ))}
       </ul>
       <Button
-        className="text-xs text-black dark:text-white underline mt-4"
+        className="text-xs text-black dark:text-white underline mt-4 px-3"
         onClick={closeHandler}
       >
         Cancel

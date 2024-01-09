@@ -14,7 +14,7 @@ const CreateAccount: FC<CreateAccountProps> = ({ closeHandler, loginHandler }) =
   return (
     <div className='create-account bg-white dark:bg-black p-4 w-full'>
       <div className='flex justify-between'>
-        <h4 className="text-xs uppercase text-black dark:text-white">Create Account</h4>
+        <h4 className="text-xs uppercase text-black dark:text-white font-medium">Create Account</h4>
         <Button className="text-xs text-black dark:text-white p-0" onClick={closeHandler}>
           Close
         </Button>

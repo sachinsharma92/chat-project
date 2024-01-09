@@ -14,7 +14,7 @@ const LoginAccount: FC<CreateAccountProps> = ({ closeHandler, createHandler }) =
   return (
     <div className='login-account bg-white dark:bg-black p-4 w-full'>
       <div className='flex justify-between'>
-        <h4 className="text-xs uppercase text-black dark:text-white">Login</h4>
+        <h4 className="text-xs uppercase text-black dark:text-white font-medium">Login</h4>
         <Button className="text-xs text-black dark:text-white p-0" onClick={closeHandler}>
           Close
         </Button>
@@ -23,11 +23,7 @@ const LoginAccount: FC<CreateAccountProps> = ({ closeHandler, createHandler }) =
       <form action="" className="flex flex-col gap-1 mt-4">
         <TextInput
           className="text-input"
-          placeholder="Email"
-        />
-        <TextInput
-          className="text-input"
-          placeholder="Username"
+          placeholder="Email or Username"
         />
         <TextInput
           className="text-input"
