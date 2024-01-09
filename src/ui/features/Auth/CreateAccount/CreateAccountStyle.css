@@ -1,5 +1,7 @@
 .create-account {
   @apply border-black dark:border-transparent w-full;
+  border-width: 0.5px;
+  border-style: solid;
 }
 
 .create-account-btn {
