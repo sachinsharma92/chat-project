@@ -5,8 +5,11 @@ import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import { head } from 'lodash';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
+import Button from '@/components/common/Button';
+import { CloseIcon, ExpandV2Icon } from '@/icons';
 import cx from 'classnames';
 import dynamic from 'next/dynamic';
+import DesktopFooterLink from './DesktopFooterLink';
 import './MainComponent.css';
 
 const SpaceContent = dynamic(() => import('../SpaceContent'));
@@ -99,6 +102,15 @@ const MainComponent = () => {
             hideBotChat={minimizeMed && availableWidth >= mobileWidthBreakpoint}
           />
 
+          <Button className="btn-desktop-fullscreen-toggle">
+            {!isFullScreen ? (
+              <ExpandV2Icon className="fill-black dark:fill-white" />
+            ) : (
+              <CloseIcon className="fill-black dark:fill-white" />
+            )}
+          </Button>
+
+          <DesktopFooterLink />
         </div>
         <div
           className={cx('space-content-desktop', {

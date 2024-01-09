@@ -1,5 +1,5 @@
 .main-component {
-  @apply fixed flex w-full justify-start items-start top-0 left-0 h-full w-full box-border;
+  @apply fixed flex w-full justify-start items-start top-0 left-0 h-full sm:items-end;
 }
 
 .header-nav {
@@ -14,13 +14,12 @@
 }
 
 .main-component-content {
-  @apply flex justify-between items-center sm:h-full;
+  @apply flex justify-between items-center sm:h-full sm:gap-6 sm:items-start;
 }
 
 .fullWidthStyle {
-  @apply mt-[16px];
-  padding-right: 54px;
-  max-height: calc(100% - 38px - 16px);
+  @apply px-6;
+  max-height: calc(100% - 52px);
 }
 
 .right-sidebar {
@@ -33,12 +32,15 @@
 .game-content,
 .space-content {
   @apply relative h-full box-border;
+  width: 100%;
+}
 
-  width: calc(50% - 20px);
+.space-content-desktop {
+  min-width: 375px;
+  max-width: 375px;
 }
 
 .card-game-content {
-  border-radius: 40px;
   box-shadow: 0px 6px 20px 0px rgba(0, 0, 0, 0.15);
 }
 
@@ -52,10 +54,6 @@
 
 .game-content-max {
   width: 100%;
-}
-
-.space-content {
-  padding-left: 24px;
 }
 
 .space-content-min-sm {
@@ -82,7 +80,7 @@
 }
 
 .expand-min-options {
-  @apply flex justify-center items-center w-9 h-9 hover:opacity-70 rounded-none gap-2 bg-white dark:bg-black cursor-pointer border border-black dark:border-0;
+  @apply flex justify-center items-center w-9 h-9 hover:opacity-70 rounded-none gap-2 bg-white dark:bg-black cursor-pointer border border-black dark:border-0 sm:hidden;
 }
 
 .game-content-background {
@@ -98,6 +96,10 @@
   width: 100%;
   object-fit: cover;
   object-position: center;
+}
+
+.btn-desktop-fullscreen-toggle {
+  @apply w-9 h-9 !absolute top-4 right-4 z-10 !bg-white border border-black;
 }
 
 @media screen and (max-width: 767px) {
@@ -161,7 +163,7 @@
   }
 
   .fullWidthStyle {
-    padding-right: 0;
+    padding: 0;
   }
 
   .main-component-content {
@@ -170,5 +172,12 @@
 
   .space-content {
     padding: 0;
+  }
+}
+
+/* For Desktop */
+@media screen and (min-width: 1024px) {
+  .game-content {
+    height: calc(100% - 40px);
   }
 }

@@ -1,10 +1,10 @@
 .space-content-container {
-  @apply relative min-h-full w-full;
+  @apply relative min-h-full w-full border border-black sm:flex sm:flex-col sm:justify-between;
   height: 100%;
 }
 
 .space-content-header {
-  @apply relative flex justify-start items-start w-full sm:mt-[24px] gap-1 flex-col;
+  @apply relative flex justify-start items-start w-full gap-1 flex-col;
 }
 
 .space-content-avatar {
@@ -96,7 +96,7 @@
 }
 
 .subscribe {
-  @apply relative h-[22px] w-[61px] text-white dark:text-black text-xs uppercase p-0 !bg-black dark:!bg-white;
+  @apply relative h-[22px] sm:h-9 w-[61px] sm:w-[69px] text-white dark:text-black text-xs uppercase p-0 !bg-black dark:!bg-white;
 }
 
 .transition-btn {
@@ -156,6 +156,10 @@
   border-style: solid;
 }
 
+.action-button {
+  @apply text-black dark:text-white uppercase bg-white dark:bg-black border border-black h-[22px] sm:h-9 text-xs w-full hover:opacity-60 transition-btn leading-[1.3] inline-block;
+}
+
 @media screen and (max-width: 767px) {
   .space-content-nav {
     border-bottom: 0;
@@ -192,9 +196,9 @@
     box-sizing: border-box;
   }
 
-  /* .space-content-tabs-content {
-    @apply hidden h-[0] overflow-hidden;
-  } */
+  .space-content-container {
+    border-width: 0;
+  }
 
   .space-description-mobile {
     @apply relative flex w-full justify-start items-start mt-[16px];

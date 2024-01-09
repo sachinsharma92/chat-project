@@ -100,14 +100,14 @@ const SpaceContent: FC<SpaceContentProps> = ({
 
   return (
     <div className={`space-content-container`}>
-      <div className="space-content-header p-4">
-        <div className="flex gap-1 w-full">
-          <Button className="bg-white dark:bg-black min-w-[36px] h-9 max-h-[36px] flex justify-center items-center border border-black dark:border-0 button-svg-theme">
+      <div className="space-content-header p-4 sm:p-0">
+        <div className="flex gap-1 w-full sm:p-4 sm:border-b sm:border-black">
+          <Button className="bg-white dark:bg-black min-w-[36px] h-9 max-h-[36px] flex justify-center items-center border border-black dark:border-0 button-svg-theme sm:hidden">
             <ArrowNext />
           </Button>
-          <div className="space-content-header-right flex justify-between items-center bg-white dark:bg-black w-full p-[2px] pr-2 border border-black dark:border-0">
+          <div className="space-content-header-right flex justify-between items-center bg-white dark:bg-black w-full p-[2px] pr-2 sm:pr-0 border sm:border-none border-black dark:border-0">
             <div className="space-content-header-main">
-              <div className="w-[30px] h-[30px]">
+              <div className="w-[30px] h-[30px] sm:w-[32px] sm:h-[32px]">
                 <img
                   src={
                     spaceBotInfo?.background || '/assets/botnet-avatar-bg.jpg'
@@ -175,20 +175,19 @@ const SpaceContent: FC<SpaceContentProps> = ({
         )}
 
         {/* Header Buttons */}
-        <div className="flex w-full gap-1">
-          <Button className="text-black dark:text-white uppercase bg-white dark:bg-black border border-black h-[22px] text-xs w-full hover:opacity-60 transition-btn leading-[1.3] inline-block">
+        <div className="flex w-full gap-1 sm:border-t sm:border-b sm:border-black sm:p-4">
+          <Button className="action-button">
             Chat
           </Button>
-          <Button className="text-black dark:text-white uppercase bg-white dark:bg-black border border-black h-[22px] text-xs w-full hover:opacity-60 transition-btn leading-[1.3] inline-block">
+          <Button className="action-button">
             <div className="flex justify-center items-top gap-[2px]">
-              {' '}
               <span className="w-1 h-1 bg-black dark:bg-white rounded-full relative top-[4.5px] mr-[1px]" />{' '}
               LIVE <span className="align-sub text-[8px]"> 231</span>
             </div>
           </Button>
           <Button
             onClick={() => setGiftSelect(true)}
-            className="text-black dark:text-white uppercase bg-white dark:bg-black border border-black h-[22px] text-xs w-full hover:opacity-60 transition-btn leading-[1.3] inline-block"
+            className="action-button"
           >
             Gift
           </Button>

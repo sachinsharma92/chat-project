@@ -39,7 +39,7 @@
 }
 
 .game-screen-chat-input-container {
-  @apply relative flex justify-between w-full items-center h-[102px] bg-black flex-col gap-3 py-4;
+  @apply relative flex justify-between w-full items-center h-[102px] sm:h-auto bg-black flex-col gap-3 py-4;
   border-radius: 10px 10px 0 0;
   justify-content: center;
 }
@@ -53,7 +53,7 @@
 }
 
 .suggestion-section {
-  @apply pl-4 flex gap-1 flex-nowrap overflow-x-scroll ml-auto w-full;
+  @apply pl-4 flex gap-1 flex-nowrap overflow-x-scroll ml-auto w-full sm:flex-wrap;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }

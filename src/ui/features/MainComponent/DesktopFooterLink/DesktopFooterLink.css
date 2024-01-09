@@ -1,0 +1,11 @@
+.desktop-footer-links {
+  @apply gap-4 uppercase text-xs items-center h-10 hidden sm:flex;
+}
+
+.nav-desktop {
+  @apply flex gap-4;
+}
+
+.nav-desktop > a {
+  @apply uppercase text-xs font-normal text-black hover:text-black/60 transition-all;
+}
