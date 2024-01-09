@@ -158,7 +158,7 @@ const SpaceContent: FC<SpaceContentProps> = ({
 
         {/* About Section */}
         {isInfoSection && (
-          <div className="info-card bg-white dark:bg-black p-2 w-full">
+          <div className="info-card bg-white dark:bg-black p-2 w-full sm:border-b sm:border-black">
             <div className="flex justify-between">
               <h4 className="text-xs uppercase text-black dark:text-white">
                 About
@@ -175,7 +175,7 @@ const SpaceContent: FC<SpaceContentProps> = ({
         )}
 
         {/* Header Buttons */}
-        <div className="flex w-full gap-1 sm:border-t sm:border-b sm:border-black sm:p-4">
+        <div className="flex w-full gap-1 sm:border-b sm:border-black sm:p-4">
           <Button className="action-button">
             Chat
           </Button>
