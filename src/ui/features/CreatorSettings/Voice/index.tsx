@@ -7,13 +7,13 @@ import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useUserPrivateData } from '@/hooks/useUserPrivateData';
 import { IUserPrivateProps } from '@/types/supabase';
+import { CrossIcon } from '@/icons';
 
 import Button from '@/components/common/Button';
 import TextareaAutosize from 'react-textarea-autosize';
+import TextInput from '@/components/common/TextInput';
 import VocalSamples from './VocalSamples';
 import './Voice.css';
-import TextInput from '@/components/common/TextInput';
-import { CrossIcon } from '@/icons';
 
 const Voice = () => {
   const { spaceInfo } = useCreatorSpace();
@@ -25,7 +25,6 @@ const Voice = () => {
     watch,
     formState: { errors },
   } = useForm();
-
   const { userPrivateData, setUserPrivateData } = useUserPrivateData();
 
   const errorMessage = useMemo(

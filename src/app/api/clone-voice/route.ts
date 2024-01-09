@@ -1,11 +1,21 @@
 import { NextResponse } from 'next/server';
 import dotenv from 'dotenv';
+import FormData from 'form-data';
+import axios from 'axios';
+import fs from 'fs';
 
 dotenv.config({ path: `.env.local` });
 
-import FormData from 'form-data';
-import axios from 'axios';
-import { isEmpty, last, toString, trim } from 'lodash'; 
+import {
+  filter,
+  isEmpty,
+  isObject,
+  isString,
+  last,
+  size,
+  toString,
+  trim,
+} from 'lodash';
 import {
   returnApiUnauthorizedError,
   returnCommonStatusError,
@@ -13,28 +23,66 @@ import {
 import {
   getElevenLabsAddVoicesApiBaseUrl,
   getElevenLabsApiKey,
+  getElevenLabsEditVoiceApiBaseUrl,
 } from '@/lib/elevenlabs';
-import { applyApiRoutesAuth, updateSpaceBotProfilePropertiesById } from '@/lib/supabase';
+import {
+  applyApiRoutesAuth,
+  updateSpaceBotProfilePropertiesById,
+} from '@/lib/supabase';
 import { CloneVoiceBodyRequest } from '@/types';
+import { isDevelopment } from '@/lib/environment';
 
-// export const config = {
-//   api: {
-//     bodyparser: false, // disallow body parsing, consume as stream
-//   },
-//   runtime: 'nodejs',
+/**
+ * HOW TO HIT THIS ENDPOINT
+ */
+
+// const cloneVoiceProps: CloneVoiceBodyRequest = {
+//   fileUrls: [
+//      'your-file-url-hosted-in-supabase-here.com'
+// ],
+//   labels: { age: 'young', accent: 'british' },
+//   description: `A young Filipino in his 20s that's well taught and can speak English`,
+//   name: 'Robert Espina',
+//   spaceBotId: botId,
 // };
 
-export const runtime = 'nodejs';
+// const reqHeaders = getSupabaseAuthHeaders();
+// await APIClient.post<CloneVoiceResponse>(
+//   '/api/clone-voice',
+//   cloneVoiceProps,
+//   {
+//     headers: reqHeaders,
+//   },
+// );
 
+/**
+ * Accepts audio/mpeg/mp3 file only stored in supabase storage
+ * @param request
+ * @returns
+ */
 export async function POST(request: Request) {
   const headers = request.headers;
   const authorization = headers.get('Authorization');
   const refreshToken = headers.get('X-RefreshToken') as string;
   const accessToken = last(toString(authorization).split('BEARER ')) as string;
-  const { fileUrl, name, description, spaceBotId }: CloneVoiceBodyRequest =
-    await request.json();
+  const {
+    fileUrls,
+    name,
+    description,
+    spaceBotId,
+    voiceId,
+    labels,
+  }: CloneVoiceBodyRequest = await request.json();
   const authRes = await applyApiRoutesAuth(accessToken, refreshToken);
   const validAuth = authRes && !authRes?.error && accessToken && refreshToken;
+  const isEditing = voiceId && isString(voiceId) && !isEmpty(voiceId);
+  const sanitizedFileUrls = filter(
+    fileUrls || [],
+    url => isString(url) && !isEmpty(url),
+  );
+
+  const streams: fs.ReadStream[] = [];
+  const validUrls = [];
 
   if (!validAuth) {
     return returnApiUnauthorizedError();
@@ -44,54 +92,128 @@ export async function POST(request: Request) {
     throw new Error('Missing spaceBotId');
   }
 
-  if (!fileUrl || !fileUrl?.includes('.mp3')) {
+  if (!sanitizedFileUrls || isEmpty(sanitizedFileUrls)) {
     return returnCommonStatusError('Invalid file');
   }
 
+  if (!name) {
+    return returnCommonStatusError('Name is required.');
+  }
+
+  if (!description) {
+    return returnCommonStatusError('Description is required.');
+  }
+
+  if (isDevelopment) {
+    console.log('isEditing', isEditing, voiceId);
+  }
+
   try {
-    const elevenlabsUrl = getElevenLabsAddVoicesApiBaseUrl();
-    const fileName = `${spaceBotId}-voice.mp3`;
+    const elevenlabsUrl = isEditing
+      ? getElevenLabsEditVoiceApiBaseUrl(voiceId)
+      : getElevenLabsAddVoicesApiBaseUrl();
     const elevenLabsApiKey = getElevenLabsApiKey();
-    const mp3Response = await axios.get(fileUrl, {
-      responseType: 'stream',
-      headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
-        'Content-Type': 'application/octet-stream',
-      },
-    });
-    const chunks = [];
-
-    for await (const chunk of mp3Response.data) {
-      chunks.push(chunk);
-    }
-
     const formData = new FormData();
-    const labels = {};
 
-    if (!isEmpty(trim(description))) {
-      formData.append('description', description);
+    for (let i = 0; i < size(sanitizedFileUrls); i++) {
+      try {
+        const fileUrl = sanitizedFileUrls[i];
+        const mp3Response = await axios.get(fileUrl, {
+          responseType: 'stream',
+        });
+
+        streams.push(mp3Response.data);
+
+        formData.append('files', mp3Response.data, {
+          contentType: 'audio/mpeg',
+        });
+
+        validUrls.push(fileUrl);
+      } catch (err) {}
     }
 
-    formData.append('files', mp3Response.data, fileName);
-    formData.append('labels', JSON.stringify(labels));
-    formData.append('name', trim(name));
+    const handleStreamEnd = (stream: fs.ReadStream): Promise<void> => {
+      return new Promise(resolve => {
+        if (!stream || stream?.closed) {
+          resolve();
+          return;
+        }
 
-    const elevenLabsResponse = await axios.post(elevenlabsUrl, formData, {
-      headers: {
-        'xi-api-key': elevenLabsApiKey,
-        'Access-Control-Allow-Origin': '*',
-      },
-      validateStatus: function (status) {
-        return status >= 200 && status <= 500;
-      },
-    });
-    const elevenLabsResponseData: any = elevenLabsResponse?.data;
-    const voiceId = elevenLabsResponseData?.voiceId || '';
+        stream.once('end', () => {
+          resolve();
+        });
+        stream.once('close', () => {
+          resolve();
+        });
+      });
+    };
 
-    if (voiceId) {
+    const handleStreamsToEnd = async () => {
+      for (let i = 0; i < size(streams); i++) {
+        const stream = streams[i];
+        await handleStreamEnd(stream);
+      }
+    };
+
+    const destroyStreams = () => {
+      for (let i = 0; i < size(streams); i++) {
+        const stream = streams[i];
+
+        if (stream) {
+          stream.destroy();
+        }
+      }
+    };
+
+    formData.append('name', trim(toString(name)));
+    formData.append('description', trim(description));
+
+    if (!isEmpty(labels) && isObject(labels)) {
+      formData.append('labels', JSON.stringify(labels));
+    }
+
+    const addOrEditVoice = (): Promise<string | null | void> => {
+      return new Promise((resolve, reject) => {
+        axios
+          .post(elevenlabsUrl, formData, {
+            headers: {
+              ...formData.getHeaders(),
+              Accept: 'application/json',
+              'xi-api-key': elevenLabsApiKey,
+              'Access-Control-Allow-Origin': '*',
+            },
+            validateStatus: function (status) {
+              return status >= 200 && status <= 500;
+            },
+          })
+          .then(async elevenLabsResponse => {
+            const elevenLabsResponseData: any = elevenLabsResponse?.data;
+            const newVoiceId = toString(elevenLabsResponseData?.voice_id);
+            const errMessage =
+              // @ts-ignore
+              elevenLabsResponseData?.detail?.message ||
+              elevenLabsResponseData?.msg ||
+              elevenLabsResponseData?.message;
+
+            if (errMessage) {
+              reject(new Error(errMessage));
+              destroyStreams();
+            } else {
+              await handleStreamsToEnd();
+              destroyStreams();
+              resolve(isEditing ? voiceId : newVoiceId);
+            }
+          })
+          .catch(reject);
+      });
+    };
+
+    const latestVoiceId = await addOrEditVoice();
+
+    if (latestVoiceId) {
       const { error: updateError } = await updateSpaceBotProfilePropertiesById(
         spaceBotId,
-        { voiceId },
+        { voiceId: latestVoiceId },
       );
 
       if (updateError) {
@@ -100,27 +222,16 @@ export async function POST(request: Request) {
 
       return NextResponse.json(
         {
-          voiceId,
+          isEditing,
+          validUrls,
+          voiceId: latestVoiceId,
         },
         {
           status: 200,
         },
       );
     } else {
-      return NextResponse.json(
-        {
-          message:
-            // @ts-ignore
-            elevenLabsResponse?.detail?.message ||
-            elevenLabsResponseData?.msg ||
-            elevenLabsResponseData?.message ||
-            elevenLabsResponse?.statusText,
-        },
-
-        {
-          status: elevenLabsResponse?.status,
-        },
-      );
+      throw new Error('Empty voice id');
     }
   } catch (error: any) {
     if (process.env.NODE_ENV === 'development') {

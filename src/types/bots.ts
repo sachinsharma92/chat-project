@@ -1,10 +1,12 @@
 import { IUserContext } from '.';
 
 export interface CloneVoiceBodyRequest {
-  fileUrl: string;
+  fileUrls: string[];
   spaceBotId: string;
   name: string;
+  labels: Record<string, string>;
   description?: string;
+  voiceId?: string;
 }
 
 export interface CloneVoiceResponse {

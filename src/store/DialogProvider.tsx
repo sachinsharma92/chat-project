@@ -3,11 +3,10 @@
 import { ReactNode } from 'react';
 import { useAppStore } from './App';
 import { useBotnetAuth } from './Auth';
-import { DialogEnums, MobileDrawerEnums } from '@/types/dialog';
+import { MobileDrawerEnums } from '@/types/dialog';
 import * as Dialog from '@radix-ui/react-dialog';
 import AuthLoadingScreen from '@/ui/dialogs/AuthLoadingScreen';
 import DrawerComponent from '@/components/common/Drawer';
-import CloneAudioUpdate from '@/ui/dialogs/CloneAudioUpdate';
 
 import '@/components/common/styles/Dialog.css';
 
@@ -21,13 +20,11 @@ const DialogProvider = (props: { children?: ReactNode }) => {
   const [authLoading] = useBotnetAuth(state => [state.isLoading]);
   const [
     showDialog,
-    showDialogType,
     showMobileDrawer,
     showMobileDrawerType,
     setShowMobileDrawer,
   ] = useAppStore(state => [
     state.showDialog,
-    state.showDialogType,
     state.showMobileDrawer,
     state.showMobileDrawerType,
     state.setShowMobileDrawer,
@@ -40,9 +37,7 @@ const DialogProvider = (props: { children?: ReactNode }) => {
         <Dialog.Portal>
           <div className="dialog-overlay" />
           <Dialog.Content className="dialog-content">
-            {showDialogType === DialogEnums.cloneAudioUpdate && (
-              <CloneAudioUpdate />
-            )}
+            {/** TODO MORE DIALOG CONTENT HERE, use DialogEnums*/}
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
