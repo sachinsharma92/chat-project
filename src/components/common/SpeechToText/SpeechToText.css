@@ -1,5 +1,5 @@
 .speech-to-text {
-  @apply bg-black gap-1 absolute flex justify-between w-full;
+  @apply bg-black gap-1 absolute sm:relative flex justify-between w-full;
   width: 100%;
 }
 

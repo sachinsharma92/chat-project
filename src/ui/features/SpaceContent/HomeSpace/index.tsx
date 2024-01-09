@@ -131,7 +131,7 @@ const HomeSpace = () => {
           </div>
 
           <div className='game-screen-chat-input-container mt-4'>
-            <div className="flex relative gap-1 w-full px-4">
+            <div className={`flex relative gap-1 w-full px-4 ${isRecording && 'sm:flex-row-reverse'}`}>
               {!isRecording && (
                 <>
                   <TextInput
