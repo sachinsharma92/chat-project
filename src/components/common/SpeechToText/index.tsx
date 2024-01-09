@@ -165,7 +165,8 @@ const SpeechToText = (props: SpeechToTextComponentProps) => {
       barGap: 5,
       barRadius: 20,
       height: 20,
-      audioRate: 10
+      audioRate: 10,
+      barHeight: 10,
     });
 
     record = wavesurfer.registerPlugin(
