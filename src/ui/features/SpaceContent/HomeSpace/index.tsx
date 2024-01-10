@@ -3,9 +3,8 @@ import Button from '@/components/common/Button';
 import SpeechToText from '@/components/common/SpeechToText';
 import TextInput from '@/components/common/TextInput';
 import { MicrophoneIcon } from '@/icons';
-import { useAppStore, useBotData } from '@/store/App';
+import { useBotData } from '@/store/App';
 import { ChatBotStateContext } from '@/store/ChatBotProvider';
-import { SpaceContentTabEnum } from '@/types';
 import { head, trimStart } from 'lodash';
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -17,7 +16,6 @@ import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import './HomeSpace.css';
 
 const HomeSpace = () => {
-  const [setSpaceContentTab] = useAppStore(state => [state.setSpaceContentTab]);
   const { spaceInfo } = useSelectedSpace();
   const { isLoading: botChatIsLoading } = useBotChat();
   const { handleSubmit, setValue, register } = useForm();
