@@ -1,10 +1,9 @@
 'use client';
-import { BotnetIcon } from '@/icons';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import './SpaceDescription.css';
 import Avatar from '@/components/common/Avatar/Avatar';
 import { useSelectedSpace } from '@/hooks/useSelectedSpace';
+import './SpaceDescription.css';
 
 
 type SpaceDescriptionProps = {

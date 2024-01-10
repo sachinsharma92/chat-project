@@ -76,11 +76,11 @@ const MainComponent = () => {
 
   return (
     <div className={`main-component ${theme}`} ref={refMainComponent}>
-      <AppNavigation />
+      {!isFullScreen && <AppNavigation />}
 
       <div
         className={cx('main-component-content', {
-          'fullWidthStyle': minimizeMed,
+          'fullWidthStyle': !isFullScreen,
         })}>
 
         <div className={cx('space-content-mobile', { 'space-content': minimizeMed })}>
@@ -101,11 +101,12 @@ const MainComponent = () => {
               alt="Background preview"
             />
           </div>
+
           <GameScreen
             hideBotChat={minimizeMed && availableWidth >= mobileWidthBreakpoint}
           />
 
-          <Button className="btn-desktop-fullscreen-toggle">
+          <Button className="btn-desktop-fullscreen-toggle" onClick={fullScreenToggle}>
             {!isFullScreen ? (
               <ExpandV2Icon className="fill-black dark:fill-white" />
             ) : (
@@ -113,9 +114,10 @@ const MainComponent = () => {
             )}
           </Button>
 
-          <DesktopFooterLink />
+          {!isFullScreen && <DesktopFooterLink />}
         </div>
-        <div
+
+        {!isFullScreen && <div
           className={cx('space-content-desktop', {
             'space-content-min-sm': minimizeSm,
             'space-content-hide': !minimizeMed,
@@ -123,7 +125,7 @@ const MainComponent = () => {
           })}
         >
           <SpaceContent isFullScreen={isFullScreen} fullScreenHandler={toggleMinimizeMedGameScreen} />
-        </div>
+        </div>}
       </div>
     </div>
   );
