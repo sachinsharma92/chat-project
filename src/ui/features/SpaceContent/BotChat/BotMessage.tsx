@@ -35,7 +35,7 @@ const BotMessage = (
         {message && (
           <div className="msg-box">
             {message}
-            <Button className="max-h-5 float-right min-w-[44px] inline-flex bg-black items-center px-[6px] py-[4px] text-xs gap-[3px] font-light ml-[5px]">
+            <Button className="max-h-5 float-right min-w-[44px] inline-flex bg-black sm:bg-[#f5f5f5] items-center px-[6px] py-[4px] text-xs gap-[3px] font-light ml-[5px]">
               <PlayIcon width={5.47} height={6} /> 0:03
             </Button>
           </div>

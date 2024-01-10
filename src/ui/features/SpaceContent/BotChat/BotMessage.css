@@ -16,26 +16,39 @@
   padding: 2px 2px 2px 8px;
   align-items: center;
   flex: 1 0 0;
-  color: white;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8);
+  color: black;
   margin-top: 4px;
   font-size: 12px;
   font-weight: 300;
   line-height: 18px;
-  background: rgba(0, 0, 0, 0.64);
   gap: 0 4px;
 }
 
 .bot-message-loading {
   @apply relative flex justify-center items-center box-border ml-[4px];
-
   gap: 4px;
 }
 
 .bot-message-text .msg-box svg > path {
-  fill: white;
+  fill: black;
 }
 
 .bot-message-loading > svg > circle {
-  fill: white;
+  fill: black;
+}
+
+@media screen and (max-width: 767px) {
+  .user-message > .msg-box {
+    background: rgba(0, 0, 0, 0.64);
+    color: white;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8);
+  }
+
+  .bot-message-text .msg-box svg > path {
+    fill: white;
+  }
+
+  .bot-message-loading > svg > circle {
+    fill: white;
+  }
 }

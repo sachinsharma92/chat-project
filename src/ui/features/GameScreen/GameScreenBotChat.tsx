@@ -1,13 +1,12 @@
 'use client';
 import { useBotChat } from '@/hooks/useBotChat';
 import { MicrophoneIcon } from '@/icons';
-import { useBotData } from '@/store/App';
 import { ChatBotStateContext } from '@/store/ChatBotProvider';
 import { OpenAIRoles } from '@/types';
 import { map, trimStart } from 'lodash';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-
+import { useBotData } from '@/store/App';
 import Button from '@/components/common/Button';
 import SpeechToText from '@/components/common/SpeechToText';
 import TextInput from '@/components/common/TextInput';
@@ -19,9 +18,6 @@ import './GameScreenBotChat.css';
 
 const GameScreenBotChat = () => {
   const { handleSubmit, setValue, register } = useForm();
-  // const [record, setRecord] = useState();
-  // let wavesurfer;
-
   const { sendChat } = useContext(ChatBotStateContext);
   const [resettingChat, setResettingChat] = useState(false);
 
@@ -110,9 +106,6 @@ const GameScreenBotChat = () => {
   }, [botRoomIsResponding, sanitizedChatMessages, recentBotChat]);
 
   const badgeData = [
-    'Yeah I mean I guess...',
-    'Yeah I mean I guess...',
-    'Yeah I mean I guess...',
     'Yeah I mean I guess...',
     'Yeah I mean I guess...',
     'Yeah I mean I guess...',

@@ -14,7 +14,6 @@
   @apply relative flex items-start justify-end w-full box-border mb-[16px];
 
   flex-direction: column;
-  padding-top: 40px;
   max-height: calc(100% - 64px);
   overflow: hidden;
   overflow-y: scroll;
@@ -32,6 +31,7 @@
 
   list-style: none;
   list-style-type: none;
+  border-top: 0.5px solid #e5e5e5;
 }
 
 .game-screen-chat-stream > ul > li {
@@ -111,5 +111,6 @@
   }
   .game-screen-chat-stream {
     max-height: 100dvh;
+    padding-top: 40px;
   }
 }

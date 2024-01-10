@@ -6,11 +6,18 @@
   display: flex;
   padding: 2px 8px;
   align-items: flex-start;
-  color: white;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8);
+  background: transparent;
+  color: black;
   margin-top: 4px;
   font-size: 12px;
   font-weight: 300;
-  background: rgba(0, 0, 0, 0.64);
   line-height: 18px;
+}
+
+@media screen and (max-width: 767px) {
+  .user-message > .msg-box {
+    background: rgba(0, 0, 0, 0.64);
+    color: white;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8);
+  }
 }

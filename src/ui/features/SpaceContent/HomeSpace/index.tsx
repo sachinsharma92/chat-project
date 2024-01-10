@@ -1,47 +1,36 @@
 'use client';
-import Button from '@/components/common/Button';
-import SpeechToText from '@/components/common/SpeechToText';
-import TextInput from '@/components/common/TextInput';
+import { useBotChat } from '@/hooks/useBotChat';
 import { MicrophoneIcon } from '@/icons';
 import { useBotData } from '@/store/App';
 import { ChatBotStateContext } from '@/store/ChatBotProvider';
-import { head, trimStart } from 'lodash';
-import { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { OpenAIRoles } from '@/types';
+import { map, trimStart } from 'lodash';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useBotChat } from '../../../../hooks/useBotChat';
-import BottomDropdown from '../../BottomDropdown/BottomDropdown';
 
-import Avatar from '@/components/common/Avatar/Avatar';
-import { useSelectedSpace } from '@/hooks/useSelectedSpace';
+import Button from '@/components/common/Button';
+import SpeechToText from '@/components/common/SpeechToText';
+import TextInput from '@/components/common/TextInput';
+import BottomDropdown from '../../BottomDropdown/BottomDropdown';
+import BotMessage from '../../SpaceContent/BotChat/BotMessage';
+import UserMessage from '../../SpaceContent/BotChat/UserMessage';
+
 import './HomeSpace.css';
 
 const HomeSpace = () => {
-  const { spaceInfo } = useSelectedSpace();
-  const { isLoading: botChatIsLoading } = useBotChat();
   const { handleSubmit, setValue, register } = useForm();
+
   const { sendChat } = useContext(ChatBotStateContext);
-  const [resettingChat, setResettingChat] = useState(false);
 
-  const greeting = useMemo(() => {
-    const spaceBotInfo = head(spaceInfo?.bots);
-    const greeting = spaceBotInfo?.greeting;
-
-    return greeting || `Hi! What's on your mind?`;
-  }, [spaceInfo]);
-
-  const botDisplayImage = useMemo(
-    () =>
-      spaceInfo?.image || spaceInfo?.host?.image || '/assets/aibotavatar.png',
-    [spaceInfo],
-  );
-
-  const [botRoomIsResponding, recentBotChat, chatRoom] =
+  const [botRoomIsResponding, recentUserChat, recentBotChat, chatRoom] =
     useBotData(state => [
       state.botRoomIsResponding,
       state.recentUserChat,
       state.recentBotChat,
       state.chatRoom,
     ]);
+
+  const [resettingChat, setResettingChat] = useState(false);
 
   const chatStreamDomRef = useRef<any>(null);
 
@@ -52,6 +41,37 @@ const HomeSpace = () => {
   } = useBotChat();
 
   const [isRecording, setIsRecording] = useState(false);
+
+  const handleSendChat = (data: any) => {
+    const message = data?.message;
+
+    if (
+      !message ||
+      botRoomIsResponding ||
+      !chatRoom ||
+      isLoading ||
+      isRecording
+    ) {
+      return;
+    }
+
+    const audioElem = document.getElementById('bot-audio') as HTMLAudioElement;
+    const audioSource = document.getElementById(
+      'bot-audio-source',
+    ) as HTMLSourceElement;
+
+    if (audioElem && audioSource) {
+      // ios audio fix
+      audioSource.src =
+        'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+
+      audioElem.load();
+      audioElem.play();
+    }
+
+    sendChat(message);
+    setValue('message', '');
+  };
 
   /**
    * Clear chat array
@@ -94,66 +114,43 @@ const HomeSpace = () => {
     'Yeah I mean I guess...',
   ];
 
-  // const switchToChat = (data: any) => {
-  //   const message = data?.message;
-
-  //   if (!message || botChatIsLoading || isRecording) {
-  //     return;
-  //   }
-
-  //   setSpaceContentTab(SpaceContentTabEnum.chat);
-
-  //   if (!botRoomIsResponding) {
-  //     sendChat(message);
-  //     setValue('message', '');
-  //   }
-  // };
-
-  const handleSendChat = (data: any) => {
-    const message = data?.message;
-
-    if (
-      !message ||
-      botRoomIsResponding ||
-      !chatRoom ||
-      isLoading ||
-      isRecording
-    ) {
-      return;
-    }
-
-    const audioElem = document.getElementById('bot-audio') as HTMLAudioElement;
-    const audioSource = document.getElementById(
-      'bot-audio-source',
-    ) as HTMLSourceElement;
-
-    if (audioElem && audioSource) {
-      // ios audio fix
-      audioSource.src =
-        'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
-
-      audioElem.load();
-      audioElem.play();
-    }
-
-    sendChat(message);
-    setValue('message', '');
-  };
-
   return (
     <form onSubmit={handleSubmit(handleSendChat)}>
       <div className="flex w-full flex-col">
         <div className='flex items-center justify-center pb-2'>
           <h4 className='text-xs uppercase text-[#999]'>everything is imaginary</h4>
         </div>
-        <div className="greetings px-4">
-          <div className='border-t flex gap-3 pt-2 w-full'>
-            <div className="greetings-bot-avatar">
-              <Avatar height={32} width={32} src={botDisplayImage} />
-            </div>
-            {botChatIsLoading && <p className='msg-text'>{'. . . '}</p>}
-            {!botChatIsLoading && <p className='msg-text'>{greeting}</p>}
-          </div>
+        <div className="game-screen-chat-stream px-4" ref={chatStreamDomRef}>
+          <ul>
+            {map(sanitizedChatMessages, message => {
+              const key = `${message?.id}`;
+              const isBot = message?.role === OpenAIRoles.assistant;
+              const chat = message?.message;
+
+              return (
+                <li key={key}>
+                  {isBot && (
+                    <BotMessage
+                      message={chat}
+                      className="game-screen-chat-stream-bot-message"
+                    />
+                  )}
+                  {!isBot && <UserMessage message={chat} />}
+                </li>
+              );
+            })}
+
+            {botRoomIsResponding && (
+              <>
+                <li>
+                  <UserMessage message={recentUserChat} />
+                </li>
+                <li>
+                  <BotMessage message={recentBotChat} />
+                </li>
+              </>
+            )}
+          </ul>
         </div>
 
         <div className='game-screen-chat-input-container mt-4'>
@@ -173,7 +170,7 @@ const HomeSpace = () => {
                   <Button
                     className="chat-btn"
                     onClick={() => {
-                      if (botChatIsLoading || botRoomIsResponding) {
+                      if (isLoading) {
                         return;
                       }
 
