@@ -37,22 +37,7 @@ const HomeSpace = () => {
     [spaceInfo],
   );
 
-  const switchToChat = (data: any) => {
-    const message = data?.message;
-
-    if (!message || botChatIsLoading || isRecording) {
-      return;
-    }
-
-    setSpaceContentTab(SpaceContentTabEnum.chat);
-
-    if (!botRoomIsResponding) {
-      sendChat(message);
-      setValue('message', '');
-    }
-  };
-
-  const [botRoomIsResponding, recentBotChat] =
+  const [botRoomIsResponding, recentBotChat, chatRoom] =
     useBotData(state => [
       state.botRoomIsResponding,
       state.recentUserChat,
@@ -64,6 +49,7 @@ const HomeSpace = () => {
 
   const {
     chatMessages: sanitizedChatMessages,
+    isLoading,
     resetChat,
   } = useBotChat();
 
@@ -110,8 +96,54 @@ const HomeSpace = () => {
     'Yeah I mean I guess...',
   ];
 
+  // const switchToChat = (data: any) => {
+  //   const message = data?.message;
+
+  //   if (!message || botChatIsLoading || isRecording) {
+  //     return;
+  //   }
+
+  //   setSpaceContentTab(SpaceContentTabEnum.chat);
+
+  //   if (!botRoomIsResponding) {
+  //     sendChat(message);
+  //     setValue('message', '');
+  //   }
+  // };
+
+  const handleSendChat = (data: any) => {
+    const message = data?.message;
+
+    if (
+      !message ||
+      botRoomIsResponding ||
+      !chatRoom ||
+      isLoading ||
+      isRecording
+    ) {
+      return;
+    }
+
+    const audioElem = document.getElementById('bot-audio') as HTMLAudioElement;
+    const audioSource = document.getElementById(
+      'bot-audio-source',
+    ) as HTMLSourceElement;
+
+    if (audioElem && audioSource) {
+      // ios audio fix
+      audioSource.src =
+        'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+
+      audioElem.load();
+      audioElem.play();
+    }
+
+    sendChat(message);
+    setValue('message', '');
+  };
+
   return (
-    <form onSubmit={handleSubmit(switchToChat)}>
+    <form onSubmit={handleSubmit(handleSendChat)}>
       <div className="flex w-full flex-col">
         <div className='flex items-center justify-center pb-2'>
           <h4 className='text-xs uppercase text-[#999]'>everything is imaginary</h4>
@@ -136,6 +168,8 @@ const HomeSpace = () => {
                   })}
                   placeholder="Message...."
                   className="chat-form-input text-xs"
+                  // @ts-ignore
+                  maxLength={120}
                 />
                 <div>
                   <Button
@@ -148,7 +182,8 @@ const HomeSpace = () => {
                       setValue('message', '');
                       setIsRecording(true);
                     }}
-                    isDisabled={botRoomIsResponding || botChatIsLoading}
+                    isDisabled={botRoomIsResponding || isLoading}
+                    disabled={botRoomIsResponding}
                   >
                     <MicrophoneIcon />
                   </Button>
