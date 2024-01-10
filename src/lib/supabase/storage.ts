@@ -15,7 +15,7 @@ export const publicFolderForBotAudio = 'bot-audio';
  * @param name
  * @returns
  */
-export const uploadAvatarIamge = async (
+export const uploadAvatarImage = async (
   file: File | Blob,
   id: string,
   name: string,
@@ -34,7 +34,7 @@ export const uploadAvatarIamge = async (
     return urlData?.publicUrl;
   }
 
-  console.log('uploadAvatarIamge() err', error?.message);
+  console.log('uploadAvatarImage() err', error?.message);
 
   return '';
 };

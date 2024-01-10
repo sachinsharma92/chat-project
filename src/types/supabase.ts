@@ -11,14 +11,17 @@ export interface ICloneAudioItem {
   size: number;
 }
 
+export interface ICloneAudioProps {
+  data: ICloneAudioItem[];
+  voiceId?: string;
+  description?: string;
+  name?: string;
+  labels?: Record<string, string>;
+}
+
 export interface IUserPrivateProps {
   id: string;
-  cloneAudio: {
-    data: ICloneAudioItem[];
-    description?: string;
-    name?: string;
-    labels?: Record<string, string>;
-  };
+  cloneAudio: ICloneAudioProps;
   appearance: {
     background?: string;
     backgroundUrl?: string;

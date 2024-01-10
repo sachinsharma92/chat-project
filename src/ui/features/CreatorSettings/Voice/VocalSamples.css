@@ -10,7 +10,7 @@
 }
 
 .vocal-sample-item {
-  @apply relative w-full h-[38px] flex justify-between items-center box-border;
+  @apply relative w-full h-[38px] mt-4 flex justify-between items-center box-border;
 
   border-radius: 8px;
   border: 1px solid #e5e5e5;
@@ -28,4 +28,12 @@
   text-align: left;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.vocal-samples-max {
+  @apply relative w-[320px] box-border mt-4 mb-2;
+}
+
+.vocal-samples-max > p {
+  font-size: 14px;
 }
