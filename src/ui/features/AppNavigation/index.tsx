@@ -9,7 +9,7 @@ import cx from 'classnames';
 import { useMemo } from 'react';
 import './AppNavigation.css';
 
-const AppNavigation = () => {
+const AppNavigation = ({ setTheme }) => {
   const { spaceInfo } = useSelectedSpace();
   const botDisplayImage = useMemo(
     () =>
@@ -25,9 +25,9 @@ const AppNavigation = () => {
 
       <nav className="flex items-center gap-4">
         <div className='flex items-center text-xs gap-1'>
-          <Button className='uppercase p-0 text-black hover:opacity-60'>Light</Button>
+          <Button onClick={()=>setTheme('')} className='uppercase p-0 text-black hover:opacity-60'>Light</Button>
           /
-          <Button className='uppercase p-0 text-black hover:opacity-60'>Dark</Button>
+          <Button onClick={()=>setTheme('dark')} className='uppercase p-0 text-black hover:opacity-60'>Dark</Button>
         </div>
         <Button className='uppercase text-xs p-0 hover:opacity-60'>login</Button>
       </nav>

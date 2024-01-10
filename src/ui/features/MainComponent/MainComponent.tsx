@@ -19,7 +19,7 @@ const GameScreen = dynamic(() => import('../GameScreen'));
 const MainComponent = () => {
   const refMainComponent = useRef(null);
   const [isFullScreen, setFullScreen] = useState(false);
-  const [theme, setTheme] = useState('')
+  const [theme, setTheme] = useState(window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : '')
 
   const { availableWidth } = useWindowResize();
   const [minimizeMed, setMinimizeMed] = useState(true);
@@ -62,6 +62,10 @@ const MainComponent = () => {
     }
   }
 
+  useEffect(()=>{
+    console.log('theme:initial isDark', window.matchMedia('(prefers-color-scheme: dark)'))
+  },[])
+
   useEffect(() => {
     window.matchMedia('(prefers-color-scheme: dark)')
       .addEventListener('change', ({ matches }) => {
@@ -76,7 +80,7 @@ const MainComponent = () => {
 
   return (
     <div className={`main-component ${theme}`} ref={refMainComponent}>
-      {!isFullScreen && <AppNavigation />}
+      {!isFullScreen && <AppNavigation setTheme={setTheme} />}
 
       <div
         className={cx('main-component-content', {
