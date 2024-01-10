@@ -21,3 +21,5 @@ export const appRoutes = [
 ];
 
 export const updatePasswordRoutes = ['/reset-password', '/update-password'];
+
+export const maxVocalSampleAudioFiles = 5;

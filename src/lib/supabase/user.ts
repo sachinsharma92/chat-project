@@ -1,4 +1,8 @@
-import { IUserPrivateProps, SupabaseResult } from '@/types/supabase';
+import {
+  ICloneAudioProps,
+  IUserPrivateProps,
+  SupabaseResult,
+} from '@/types/supabase';
 import { supabaseClient } from '.';
 import { IUser } from '@/types/auth';
 import { map, omit, trim } from 'lodash';
@@ -76,7 +80,9 @@ export const getUserPrivateDataById = async (
       return {
         ...props,
         appearance: camelcaseKeys(props?.appearance || {}),
-        cloneAudio: camelcaseKeys(props?.cloneAudio || {}),
+        cloneAudio: camelcaseKeys(
+          (props?.cloneAudio || {}) as Record<string, any>,
+        ) as ICloneAudioProps,
       };
     }) as IUserPrivateProps[],
   };
