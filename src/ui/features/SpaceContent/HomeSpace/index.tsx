@@ -111,122 +111,70 @@ const HomeSpace = () => {
   ];
 
   return (
-    <>
-      <form
-        onSubmit={handleSubmit(switchToChat)}
-        className="hidden sm:block z-50"
-      >
-        <div className="flex w-full flex-col">
-          <div className='flex items-center justify-center pb-2'>
-            <h4 className='text-xs uppercase text-[#999]'>everything is imaginary</h4>
-          </div>
-          <div className="greetings px-4">
-            <div className='border-t flex gap-3 pt-2 w-full'>
-              <div className="greetings-bot-avatar">
-                <Avatar height={32} width={32} src={botDisplayImage} />
-              </div>
-              {botChatIsLoading && <p className='msg-text'>{'. . . '}</p>}
-              {!botChatIsLoading && <p className='msg-text'>{greeting}</p>}
+    <form onSubmit={handleSubmit(switchToChat)}>
+      <div className="flex w-full flex-col">
+        <div className='flex items-center justify-center pb-2'>
+          <h4 className='text-xs uppercase text-[#999]'>everything is imaginary</h4>
+        </div>
+        <div className="greetings px-4">
+          <div className='border-t flex gap-3 pt-2 w-full'>
+            <div className="greetings-bot-avatar">
+              <Avatar height={32} width={32} src={botDisplayImage} />
             </div>
+            {botChatIsLoading && <p className='msg-text'>{'. . . '}</p>}
+            {!botChatIsLoading && <p className='msg-text'>{greeting}</p>}
           </div>
+        </div>
 
-          <div className='game-screen-chat-input-container mt-4'>
-            <div className={`flex relative gap-1 w-full px-4 ${isRecording && 'sm:flex-row-reverse'}`}>
-              {!isRecording && (
-                <>
-                  <TextInput
-                    {...register('message', {
-                      required: false,
-                    })}
-                    placeholder="Message...."
-                    className="chat-form-input text-xs"
-                  />
-                  <div>
-                    <Button
-                      className="chat-btn"
-                      onClick={() => {
-                        if (botChatIsLoading || botRoomIsResponding) {
-                          return;
-                        }
-
-                        setValue('message', '');
-                        setIsRecording(true);
-                      }}
-                      isDisabled={botRoomIsResponding || botChatIsLoading}
-                    >
-                      <MicrophoneIcon />
-                    </Button>
-                  </div>
-                </>
-              )}
-              <BottomDropdown resetHandler={onResetChat} />
-
-              {isRecording && (
-                <SpeechToText
-                  stopRecording={() => setIsRecording(false)}
-                  consumeText={text => setValue('message', trimStart(text))}
+        <div className='game-screen-chat-input-container mt-4'>
+          <div className={`flex relative gap-1 w-full px-4 ${isRecording && 'sm:flex-row-reverse'}`}>
+            {!isRecording && (
+              <>
+                <TextInput
+                  {...register('message', {
+                    required: false,
+                  })}
+                  placeholder="Message...."
+                  className="chat-form-input text-xs"
                 />
-              )}
-            </div>
+                <div>
+                  <Button
+                    className="chat-btn"
+                    onClick={() => {
+                      if (botChatIsLoading || botRoomIsResponding) {
+                        return;
+                      }
 
-            <div className="suggestion-section">
-              {badgeData.map((items, index) => (
-                <button key={index} className="suggestion">
-                  {items}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </form>
+                      setValue('message', '');
+                      setIsRecording(true);
+                    }}
+                    isDisabled={botRoomIsResponding || botChatIsLoading}
+                  >
+                    <MicrophoneIcon />
+                  </Button>
+                </div>
+              </>
+            )}
+            <BottomDropdown resetHandler={onResetChat} />
 
-      {/* <form onSubmit={handleSubmit(switchToChat)} className="cta-greeting-chat">
-        <div className="greetings">
-          <div className="greetings-bot-avatar">
-            <Avatar height={32} width={32} src={botDisplayImage} />
-          </div>
-          {botChatIsLoading && <p>{'. . . '}</p>}
-          {!botChatIsLoading && <p>{greeting}</p>}
-        </div>
-
-        <div className="cta-chat-input-container">
-          {!isRecording && (
-            <>
-              <TextInput
-                className="cta-chat-input-container-text-input"
-                {...register('message', {
-                  required: false,
-                })}
-                placeholder="Message...."
-                // @ts-ignore
-                maxLength={120}
+            {isRecording && (
+              <SpeechToText
+                stopRecording={() => setIsRecording(false)}
+                consumeText={text => setValue('message', trimStart(text))}
               />
-              <Button
-                className="mic"
-                onClick={() => {
-                  if (botChatIsLoading || botRoomIsResponding) {
-                    return;
-                  }
+            )}
+          </div>
 
-                  setValue('message', '');
-                  setIsRecording(true);
-                }}
-                isDisabled={botRoomIsResponding || botChatIsLoading}
-              >
-                <Microphone />
-              </Button>
-            </>
-          )}
-
-          {isRecording && (
-            <SpeechToText
-              stopRecording={() => setIsRecording(false)}
-              consumeText={text => setValue('message', trimStart(text))}
-            />
-          )}
+          <div className="suggestion-section">
+            {badgeData.map((items, index) => (
+              <button key={index} className="suggestion">
+                {items}
+              </button>
+            ))}
+          </div>
         </div>
-      </form> */}
-    </>
+      </div>
+    </form>
   );
 };
 

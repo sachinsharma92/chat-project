@@ -1,5 +1,5 @@
 .share-sheet {
-  @apply border-black dark:border-transparent;
+  @apply border-black dark:border-transparent sm:max-w-[375px] sm:w-[375px] sm:ml-[11vw];
   z-index: 2;
   border-width: 0.5px;
   border-style: solid;

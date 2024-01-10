@@ -11,6 +11,7 @@ import cx from 'classnames';
 import dynamic from 'next/dynamic';
 import DesktopFooterLink from './DesktopFooterLink';
 import './MainComponent.css';
+import AppNavigation from '../AppNavigation';
 
 const SpaceContent = dynamic(() => import('../SpaceContent'));
 const GameScreen = dynamic(() => import('../GameScreen'));
@@ -75,6 +76,8 @@ const MainComponent = () => {
 
   return (
     <div className={`main-component ${theme}`} ref={refMainComponent}>
+      <AppNavigation />
+
       <div
         className={cx('main-component-content', {
           'fullWidthStyle': minimizeMed,

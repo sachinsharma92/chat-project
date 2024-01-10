@@ -192,3 +192,13 @@
     transform: translateX(0);
   }
 }
+
+.bot-image-style {
+  @apply border-black p-[3px] flex items-center justify-center h-9 w-9;
+  border-width: 0.5px;
+}
+
+.bot-image-style .avatar-layout {
+  width: 100%;
+  height: 100%;
+}

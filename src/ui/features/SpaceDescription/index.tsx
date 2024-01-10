@@ -1,8 +1,10 @@
 'use client';
 import { BotnetIcon } from '@/icons';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import './SpaceDescription.css';
+import Avatar from '@/components/common/Avatar/Avatar';
+import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 
 
 type SpaceDescriptionProps = {
@@ -14,6 +16,13 @@ const SpaceDescription = (props: SpaceDescriptionProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [canExpand, setCanExpand] = useState(false);
   const textRef = useRef<HTMLParagraphElement | null>(null);
+
+  const { spaceInfo } = useSelectedSpace();
+  const botDisplayImage = useMemo(
+    () =>
+      spaceInfo?.image || spaceInfo?.host?.image || '/assets/aibotavatar.png',
+    [spaceInfo],
+  );
 
   useEffect(() => {
     if (textRef?.current) {
@@ -34,26 +43,25 @@ const SpaceDescription = (props: SpaceDescriptionProps) => {
   };
   return (
     <div className="space-description-container">
-      <div>
-        <p ref={textRef} style={style} className='text-black dark:text-white text-sm mt-2 mb-3'>
+      <div className='mt-2 mb-3'>
+        <p ref={textRef} style={style} className='text-black dark:text-white text-sm'>
           {text}
         </p>
 
         {canExpand && (
           <button
             onClick={toggleExpanded}
-            style={{ marginLeft: '10px' }}
-            className="space-description-container-show-more"
+            className="text-sm"
           >
             {isExpanded ? 'less' : 'more'}
           </button>
         )}
       </div>
 
-      <div className="info-section flex gap-9 justify-between">
-        <div className='info-item flex gap-3 items-start'>
-          <div className="bg-black dark:bg-white min-w-[22px] h-22 min-h-[22px] flex justify-center items-center mt-[2px]">
-            <BotnetIcon className="fill-white dark:fill-black" width={15} />
+      <div className="info-section flex gap-[43px]">
+        <div className='info-item flex gap-2 items-start'>
+          <div className="t-[2px] relative">
+            <Avatar height={22} width={22} src={botDisplayImage} />
           </div>
           <div className='text-black dark:text-white'>
             <h4 className="text-xs font-medium">BOTNET</h4>

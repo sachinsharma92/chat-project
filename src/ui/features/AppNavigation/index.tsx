@@ -1,91 +1,41 @@
 'use client';
 
 import { atlasGrotesk } from '@/app/fonts';
-import { BotnetIcon, CommentIcon, HomeOutlineIcon, NotificationBellIcon, SearchIcon } from '@/icons';
 
+import Avatar from '@/components/common/Avatar/Avatar';
 import Button from '@/components/common/Button';
+import { useSelectedSpace } from '@/hooks/useSelectedSpace';
 import cx from 'classnames';
+import { useMemo } from 'react';
 import './AppNavigation.css';
-import ProfileMenu from './ProfileMenu';
-import { PlusIcon } from 'lucide-react';
-import * as Tooltip from '@radix-ui/react-tooltip';
 
 const AppNavigation = () => {
+  const { spaceInfo } = useSelectedSpace();
+  const botDisplayImage = useMemo(
+    () =>
+      spaceInfo?.image || spaceInfo?.host?.image || '/assets/aibotavatar.png',
+    [spaceInfo],
+  );
+
   return (
-    <div className={cx(atlasGrotesk.className, 'app-nav')}>
-      <div className="left">
-        <Button className="logo flex justify-center">
-          <BotnetIcon />
-        </Button>
+    <div className={cx(atlasGrotesk.className, ' justify-between items-center w-full px-6 h-[52px] hidden sm:flex')}>
+      <div className="greetings-bot-avatar bot-image-style">
+        <Avatar src={botDisplayImage} />
+      </div>
 
-        <div className="center">
-          <Tooltip.Provider>
-            <Tooltip.Root>
-              <Tooltip.Trigger asChild>
-                <Button className="search-icon">
-                  <HomeOutlineIcon />
-                </Button>
-              </Tooltip.Trigger>
-              <Tooltip.Portal>
-                <Tooltip.Content className="TooltipContent" sideOffset={5} side="right">
-                  Home
-                  <Tooltip.Arrow className="TooltipArrow" />
-                </Tooltip.Content>
-              </Tooltip.Portal>
-            </Tooltip.Root>
-
-            <Tooltip.Root>
-              <Tooltip.Trigger asChild>
-                <Button className="search-icon">
-                  <SearchIcon />
-                </Button>
-              </Tooltip.Trigger>
-              <Tooltip.Portal>
-                <Tooltip.Content className="TooltipContent" sideOffset={5} side="right">
-                  Home
-                  <Tooltip.Arrow className="TooltipArrow" />
-                </Tooltip.Content>
-              </Tooltip.Portal>
-            </Tooltip.Root>
-
-            <Tooltip.Root>
-              <Tooltip.Trigger asChild>
-                <Button className="search-icon">
-                  <CommentIcon />
-                </Button>
-              </Tooltip.Trigger>
-              <Tooltip.Portal>
-                <Tooltip.Content className="TooltipContent" sideOffset={5} side="right">
-                  Explore
-                  <Tooltip.Arrow className="TooltipArrow" />
-                </Tooltip.Content>
-              </Tooltip.Portal>
-            </Tooltip.Root>
-
-            <Tooltip.Root>
-              <Tooltip.Trigger asChild>
-                <Button className="search-icon">
-                  <NotificationBellIcon />
-                </Button>
-              </Tooltip.Trigger>
-              <Tooltip.Portal>
-                <Tooltip.Content className="TooltipContent" sideOffset={5} side="right">
-                  Notifications
-                  <Tooltip.Arrow className="TooltipArrow" />
-                </Tooltip.Content>
-              </Tooltip.Portal>
-            </Tooltip.Root>
-          </Tooltip.Provider>
+      <nav className="flex items-center gap-4">
+        <div className='flex items-center text-xs gap-1'>
+          <Button className='uppercase p-0 text-black hover:opacity-60'>Light</Button>
+          /
+          <Button className='uppercase p-0 text-black hover:opacity-60'>Dark</Button>
         </div>
-      </div>
+        <Button className='uppercase text-xs p-0 hover:opacity-60'>login</Button>
+      </nav>
 
-      <div className="right">
-        <Button className="add-icon">
-          <PlusIcon size={18} />
-        </Button>
+      {/* <div className="right">
         <ProfileMenu />
-      </div>
-    </div >
+      </div> */}
+    </div>
   );
 };
 

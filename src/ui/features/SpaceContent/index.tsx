@@ -15,6 +15,7 @@ import ShareSheet from '@/ui/shareSheet';
 import { TriangleDownIcon, TriangleUpIcon } from '@radix-ui/react-icons';
 import LoginAccount from '../Auth/LoginAccount';
 import './SpaceContent.css';
+import Avatar from '@/components/common/Avatar/Avatar';
 
 const HomeSpace = dynamic(() => import('./HomeSpace'), { ssr: false });
 
@@ -31,10 +32,14 @@ const SpaceContent: FC<SpaceContentProps> = ({
   const [isCreateAccount, setCreateAccount] = useState(false);
   const [isLoginAccount, setLoginAccount] = useState(false);
   const [isGiftSelect, setGiftSelect] = useState(false);
-  const [isInfoSection, setInfoSection] = useState(false);
+  const [isInfoSection, setInfoSection] = useState(detectMob() ? false : true);
   const [isDesktopShareModal, setDesktopShareModal] = useState(false);
 
-  const spaceBotInfo = useMemo(() => head(spaceInfo?.bots), [spaceInfo]);
+  const botDisplayImage = useMemo(
+    () =>
+      spaceInfo?.image || spaceInfo?.host?.image || '/assets/aibotavatar.png',
+    [spaceInfo],
+  );
 
   const spaceName = useMemo(
     () => spaceInfo?.host?.displayName || spaceInfo?.spaceName || 'Botnet',
@@ -107,14 +112,8 @@ const SpaceContent: FC<SpaceContentProps> = ({
           </Button>
           <div className="space-content-header-right flex justify-between items-center bg-white dark:bg-black w-full p-[2px] pr-2 sm:pr-0 border sm:border-none border-black dark:border-0">
             <div className="space-content-header-main">
-              <div className="w-[30px] h-[30px] sm:w-[32px] sm:h-[32px]">
-                <img
-                  src={
-                    spaceBotInfo?.background || '/assets/botnet-avatar-bg.jpg'
-                  }
-                  alt="Background preview"
-                  className="h-full w-full"
-                />
+              <div className="greetings-bot-avatar">
+                <Avatar height={32} width={32} src={botDisplayImage} />
               </div>
               <div>
                 <Button
@@ -158,9 +157,9 @@ const SpaceContent: FC<SpaceContentProps> = ({
 
         {/* About Section */}
         {isInfoSection && (
-          <div className="info-card bg-white dark:bg-black p-2 w-full sm:border-b sm:border-black">
+          <div className="info-card ">
             <div className="flex justify-between">
-              <h4 className="text-xs uppercase text-black dark:text-white">
+              <h4 className="text-xs uppercase text-black dark:text-white font-medium">
                 About
               </h4>
               <Button
@@ -227,15 +226,18 @@ const SpaceContent: FC<SpaceContentProps> = ({
       </CustomModal>
 
       {/* Gift component here */}
-      <CustomModal
+      {/* <CustomModal
         modalIsOpen={isGiftSelect}
         closeModal={() => setGiftSelect(false)}
         className="modal-end"
       >
         <GiftCard closeHandler={() => setGiftSelect(false)} />
-      </CustomModal>
+      </CustomModal> */}
 
-      <HomeSpace />
+      <div className='hidden sm:block z-50'>
+        {isGiftSelect ? <GiftCard closeHandler={() => setGiftSelect(false)} /> :
+          <HomeSpace />}
+      </div>
     </div>
   );
 };

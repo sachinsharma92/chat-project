@@ -1,5 +1,5 @@
 .create-account {
-  @apply border-black dark:border-transparent w-full;
+  @apply border-black dark:border-transparent w-full sm:max-w-[375px] sm:w-[375px] sm:ml-[11vw];
   border-width: 0.5px;
   border-style: solid;
 }

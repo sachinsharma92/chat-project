@@ -6,17 +6,9 @@
   inset: 0px;
 }
 
-.modal-center {
-  align-items: center;
-}
-
-.modal-end {
-  align-items: flex-end;
-}
-
 .dialog-section {
+  @apply w-full sm:w-auto;
   animation: contentShow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  width: 100%;
 }
 
 @keyframes contentShow {
@@ -26,5 +18,24 @@
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+.modal-center {
+  @apply items-center sm:justify-center;
+}
+
+.modal-end {
+  align-items: flex-end;
+}
+
+@media screen and (min-width: 768px) {
+  .modal-end .dialog-section {
+    @apply w-full flex justify-end;
+  }
+
+  .modal-end {
+    width: 100%;
+    justify-content: flex-end;
   }
 }

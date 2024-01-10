@@ -39,32 +39,38 @@ const GiftCard: FC<GiftCardProps> = ({ closeHandler }) => {
     },
   ];
   return (
-    <div className="gift-card bg-white dark:bg-black p-4 w-full mt-4 bottom-0 rounded-t-[10px] z-10">
-      <div className="flex justify-between">
+    <div className="gift-card bg-white dark:bg-black p-4 sm:p-0 w-full mt-4 sm:mt-0 bottom-0 rounded-t-[10px] z-10">
+      <div className="flex justify-between sm:hidden">
         <h4 className="text-xs uppercase text-black dark:text-white font-medium">Gift</h4>
         <Button className="text-xs text-black dark:text-white p-0" onClick={closeHandler}>
           Close
         </Button>
       </div>
 
-      <form action="" className="flex flex-col gap-1 mt-4">
-        {inputText.map((items, index) => (
-          <Button
-            key={index}
-            onClick={() => setSelectedGift(index)}
-            className={`text-sm capitalize justify-start ${index === selectedGift ? 'btn-active' : 'btn-gift'
-              }`}
-          >
-            {items.btnText}
+      <form action="" className="flex flex-col gap-1 mt-4 sm:mt-0">
+        <div className='px-4 flex flex-col gap-1 sm:pb-5 buttons-style'>
+          {inputText.map((items, index) => (
+            <Button
+              key={index}
+              onClick={() => setSelectedGift(index)}
+              className={`text-sm capitalize sm:uppercase justify-start ${index === selectedGift ? 'btn-active' : 'btn-gift'
+                }`}
+            >
+              {items.btnText}
+            </Button>
+          ))}
+        </div>
+
+        <div className='bottom-space'>
+          <Button className="text-[22px] bg-black dark:bg-white sm:bg-white rounded-full font-bold h-[36px] mt-[12px] text-white sm:text-black dark:text-black sm:w-full">
+            Pay
           </Button>
-        ))}
-        <Button className="text-[22px] bg-black dark:bg-white rounded-full font-bold h-[36px] mt-[12px] text-white dark:text-black">
-          Pay
-        </Button>
-        <div className="flex justify-center items-center mt-3">
-          <p className="text-black dark:text-white text-xs uppercase">
-            Satisfaction guaranteed.
-          </p>
+
+          <div className="flex justify-center items-center mt-3">
+            <p className="text-black dark:text-white text-xs uppercase sm:text-white">
+              Satisfaction guaranteed.
+            </p>
+          </div>
         </div>
       </form>
     </div>
