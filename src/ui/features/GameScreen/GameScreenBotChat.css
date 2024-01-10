@@ -11,7 +11,7 @@
 }
 
 .game-screen-chat-stream {
-  @apply relative flex items-start justify-end w-full box-border mb-[16px];
+  @apply relative flex items-start justify-end w-full box-border mb-[16px] sm:mb-0;
 
   flex-direction: column;
   max-height: calc(100% - 64px);
@@ -31,11 +31,10 @@
 
   list-style: none;
   list-style-type: none;
-  border-top: 0.5px solid #e5e5e5;
 }
 
 .game-screen-chat-stream > ul > li {
-  @apply relative w-full box-border mt-[8px];
+  @apply relative w-full box-border mt-[8px] sm:border-t sm:py-2;
 }
 
 .game-screen-chat-input-container {

@@ -1,6 +1,5 @@
 .bot-message-container {
-  @apply relative flex justify-start items-end box-border;
-  gap: 4px;
+  @apply relative flex justify-start items-end box-border gap-1 sm:gap-3;
 }
 
 .bot-message-avatar {
@@ -12,16 +11,14 @@
 }
 
 .bot-message-text .msg-box {
+  @apply gap-1;
   display: inline-block;
-  padding: 2px 2px 2px 8px;
   align-items: center;
   flex: 1 0 0;
   color: black;
-  margin-top: 4px;
   font-size: 12px;
   font-weight: 300;
   line-height: 18px;
-  gap: 0 4px;
 }
 
 .bot-message-loading {
@@ -38,6 +35,10 @@
 }
 
 @media screen and (max-width: 767px) {
+  .bot-message-text .msg-box {
+    padding: 2px 2px 2px 8px;
+    margin-top: 4px;
+  }
   .user-message > .msg-box {
     background: rgba(0, 0, 0, 0.64);
     color: white;
